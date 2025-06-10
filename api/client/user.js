@@ -35,7 +35,6 @@ export function useLogin() {
   } = useMutation({
     mutationFn: (data) => api.post(API_ROUTE.user.login, data),
     onSuccess: (response) => {
-        
       setToken(response?.data?.token);
       dispatch(setUserDetails(response?.data?.data));
       navigate("/dashboard");
@@ -52,6 +51,38 @@ export function useLogin() {
     isError,
     reset,
     error,
+    data,
+  };
+}
+
+export function useSignUp() {
+  const navigate = useNavigate();
+
+  const {
+    mutate: userSignUp,
+    isSuccess,
+    isPending,
+    isError,
+    reset,
+    error,
+    data,
+  } = useMutation({
+    mutationFn: (data) => api.post(API_ROUTE.user.signUp, data),
+    onSuccess: (response) => {
+      navigate("/login");
+    },
+    // onError: (response) => {
+    //   console.log("response: ", response);
+    // },
+  });
+
+  return {
+    userSignUp,
+    isSuccess,
+    isPending,
+    isError,
+    reset,
+    error: error?.response?.data?.message,
     data,
   };
 }

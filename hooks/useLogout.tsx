@@ -10,7 +10,7 @@ const useLogout = () => {
     const logout = () => {
         localStorage.removeItem("token");
         dispatch(removeUserDetails());
-        navigate('/login')
+        navigate('/')
     };
 
     return logout;

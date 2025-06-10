@@ -1,6 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { useNavigate } from "react-router-dom";
-import { setToken } from "../../utils/auth";
 
 const initialState = {
   userDetails: null,

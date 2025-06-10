@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { useLogin } from "../../api/client/user";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -12,17 +13,17 @@ const Login = () => {
     email: yup.string()
       .email('Please enter a valid email address')
       .required('Email is required')
-      ,
+    ,
 
     password: yup.string()
-      // .min(6, 'Password must be at least 6 characters')
-      // .max(20, 'Password cannot exceed 20 characters')
-      // .matches(/[a-z]/, 'Password must contain at least one lowercase letter')
-      // .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
-      // .matches(/[0-9]/, 'Password must contain at least one number')
-      // .matches(/[@$!%*?&#]/, 'Password must contain at least one special character')
-      // .required('Password is required')
-      ,
+    // .min(6, 'Password must be at least 6 characters')
+    // .max(20, 'Password cannot exceed 20 characters')
+    // .matches(/[a-z]/, 'Password must contain at least one lowercase letter')
+    // .matches(/[A-Z]/, 'Password must contain at least one uppercase letter')
+    // .matches(/[0-9]/, 'Password must contain at least one number')
+    // .matches(/[@$!%*?&#]/, 'Password must contain at least one special character')
+    // .required('Password is required')
+    ,
   })
 
   const { register, control, handleSubmit, formState: { errors } } = useForm({
@@ -87,6 +88,7 @@ const Login = () => {
           >
             Log In
           </button>
+          <Link to='/signUp'>Sign Up</Link>
         </div>
       </div>
     </div>

@@ -1,7 +1,7 @@
 const API_ROUTE = {
     user: {
         login: 'signIn',
-        signUp: '',
+        signUp: 'signUp',
         checkapi: 'checkapi'
     },
 

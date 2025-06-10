@@ -2,9 +2,10 @@ import { useSelector } from 'react-redux'
 import { useCheck } from '../../api/client/user'
 import useLogout from '../../hooks/useLogout'
 import Banner from '../component/banner'
+import Navbar from '../component/navbar'
 
 function Dashboard() {
-  
+
   const logout = useLogout()
   const { data, error, isSuccess, isPending, isError } = useCheck()
   console.log("data: ", data)
@@ -13,9 +14,11 @@ function Dashboard() {
   console.log("user details: ", selector)
 
   return (
-    <div><p>dashboard</p>
+    <div>
+      <Navbar />
+      <p>dashboard</p>
       <button onClick={logout}>Logout</button>
-      <Banner/>
+      <Banner />
     </div>
   )
 }
