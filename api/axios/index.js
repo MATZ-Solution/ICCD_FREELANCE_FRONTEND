@@ -1,11 +1,11 @@
-
-import axios from 'axios';
+import axios from "axios";
+import { deleteToken } from "../../utils/auth";
 
 const api = axios.create({
   // baseURL: 'https://jsonplaceholder.typicode.com/',
-  baseURL: 'http://localhost:2300/',
+  baseURL: "http://localhost:2300/",
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
   timeout: 10000, // optional timeout
 });
@@ -14,17 +14,30 @@ const api = axios.create({
 api.interceptors.request.use(
   (config) => {
     // For example, attach auth token here
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     if (token) config.headers.Authorization = `Bearer ${token}`;
     return config;
   },
-  (error) => Promise.reject(error)
+
+  (error) => {
+    console.log("err1: ", error)
+    Promise.reject(error);
+  }
 );
 
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    // You can handle global error logging here
+    // console.log("error: ", error.response?.status)
+
+    if (error.response?.status === 401) {
+      const message = error.response?.data?.message;
+      if (message === "Token expired") {
+        deleteToken();
+        window.location.href = "/login";
+      }
+    }
+    // window.location.href = "/login";
     return Promise.reject(error);
   }
 );

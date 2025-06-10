@@ -1,25 +1,24 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice } from "@reduxjs/toolkit";
+import { useNavigate } from "react-router-dom";
+import { setToken } from "../../utils/auth";
 
 const initialState = {
-  value: 0,
-}
+  userDetails: null,
+};
 
-export const counterSlice = createSlice({
-  name: 'counter',
+export const userSlice = createSlice({
+  name: "user",
   initialState,
   reducers: {
-    increment: (state) => {
-      state.value += 1
+    setUserDetails: (state, action) => {
+      state.userDetails = action.payload;
     },
-    decrement: (state) => {
-      state.value -= 1
-    },
-    incrementByAmount: (state, action) => {
-      state.value += action.payload
+    removeUserDetails: (state) => {
+      state.userDetails = null;
     },
   },
-})
+});
 
-export const { increment, decrement, incrementByAmount } = counterSlice.actions
+export const { setUserDetails, removeUserDetails } = userSlice.actions;
 
-export default counterSlice.reducer
+export default userSlice.reducer;
