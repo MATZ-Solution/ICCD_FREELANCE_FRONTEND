@@ -1,10 +1,15 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 export default function Navbar() {
+
+  const navigate = useNavigate()
   const [isOpen, setIsOpen] = useState(false);
   const userDetails = useSelector(state => state.user.userDetails)
   console.log("user details: ", userDetails)
+
+
   const navigation = [
     { name: "Home", href: "#" },
     { name: "Features", href: "#" },
@@ -33,9 +38,14 @@ export default function Navbar() {
           </nav>
           {/* <p className="text-red-300">Become a seller</p> */}
           {userDetails && (<p className="text-red-300">Become a seller</p>)}
-          <button className="ml-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
-            Get Started
-          </button>
+
+          {
+            (userDetails === null) &&
+              <button onClick={()=> navigate('/login')} className="ml-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition cursor-pointer">
+                Sign In
+              </button>
+          }
+          
           {/* Mobile Menu Button */}
           <div className="md:hidden">
             <button

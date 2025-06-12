@@ -7,6 +7,7 @@ import * as yup from "yup";
 const Login = () => {
 
   const { userLogin, isSuccess, isPending, isError, reset, error, data } = useLogin()
+  
 
   const schema = yup.object({
 
@@ -80,6 +81,7 @@ const Login = () => {
             />
 
           </div>
+          <p className="text-red-600">{error}</p>
           <button
             type="submit"
             className="w-full px-4 py-2 font-semibold text-white bg-blue-600 rounded-md hover:bg-blue-700 transition"
@@ -88,7 +90,10 @@ const Login = () => {
           >
             Log In
           </button>
-          <Link to='/signUp'>Sign Up</Link>
+          <div className="flex justify-between">
+            <Link className="underline" to='/signUp'>Sign Up</Link>
+            <Link className="underline" to='/forgot-password'>Forgot Password?</Link>
+          </div>
         </div>
       </div>
     </div>

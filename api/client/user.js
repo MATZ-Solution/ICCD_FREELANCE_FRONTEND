@@ -39,9 +39,6 @@ export function useLogin() {
       dispatch(setUserDetails(response?.data?.data));
       navigate("/dashboard");
     },
-    onError: (response) => {
-      console.log("response: ", response);
-    },
   });
 
   return {
@@ -50,7 +47,7 @@ export function useLogin() {
     isPending,
     isError,
     reset,
-    error,
+    error: error?.response?.data?.message,
     data,
   };
 }
@@ -78,6 +75,66 @@ export function useSignUp() {
 
   return {
     userSignUp,
+    isSuccess,
+    isPending,
+    isError,
+    reset,
+    error: error?.response?.data?.message,
+    data,
+  };
+}
+
+export function useSendOtp() {
+  const navigate = useNavigate();
+
+  const {
+    mutate: handleEmail,
+    isSuccess,
+    isPending,
+    isError,
+    reset,
+    error,
+    data,
+  } = useMutation({
+    mutationFn: (data) => api.post(API_ROUTE.user.sendOtp, data),
+    onSuccess: (response, data) => {
+      navigate("/verify-otp", {
+        state: {email: data?.email},
+      });
+    },
+  });
+
+  return {
+    handleEmail,
+    isSuccess,
+    isPending,
+    isError,
+    reset,
+    error: error?.response?.data?.message,
+    data,
+  };
+}
+
+export function useSubmitOtp() {
+  const navigate = useNavigate();
+
+  const {
+    mutate: handleOtp,
+    isSuccess,
+    isPending,
+    isError,
+    reset,
+    error,
+    data,
+  } = useMutation({
+    mutationFn: (data) => api.post(API_ROUTE.user.submitOtp, data),
+    onSuccess: (response) => {
+      navigate("/change-password");
+    },
+  });
+
+  return {
+    handleOtp,
     isSuccess,
     isPending,
     isError,
