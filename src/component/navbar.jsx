@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Navbar() {
 
@@ -38,6 +38,8 @@ export default function Navbar() {
           </nav>
           {/* <p className="text-red-300">Become a seller</p> */}
           {userDetails && (<p className="text-red-300">Become a seller</p>)}
+
+          {userDetails && (<Link to="/freelancer-profile" className="text-white">Profile</Link>)}
 
           {
             (userDetails === null) &&

@@ -9,6 +9,7 @@ import ForgotPassword from "../src/pages/forgotPass";
 import VerifyOtp from "../src/pages/otpVerification";
 import ChangePassword from "../src/pages/changePass";
 import ProtectedRoute from "../utils/protectRoute";
+import FreelancerProfile from "../src/pages/freelancerProfile";
 
 export const router = createBrowserRouter([
   {
@@ -56,6 +57,14 @@ export const router = createBrowserRouter([
     element: (
       <AuthRoute>
         <Dashboard />
+      </AuthRoute>
+    ),
+  },
+   {
+    path: "/freelancer-profile",
+    element: (
+      <AuthRoute>
+        <FreelancerProfile />
       </AuthRoute>
     ),
   },
