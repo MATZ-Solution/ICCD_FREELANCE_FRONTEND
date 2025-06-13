@@ -8,6 +8,7 @@ import Homepage from "../src/pages/homepage";
 import ForgotPassword from "../src/pages/forgotPass";
 import VerifyOtp from "../src/pages/otpVerification";
 import ChangePassword from "../src/pages/changePass";
+import ProtectedRoute from "../utils/protectRoute";
 
 export const router = createBrowserRouter([
   {
@@ -37,13 +38,17 @@ export const router = createBrowserRouter([
   {
     path: "/verify-otp",
     element:
+    <ProtectedRoute>
       <VerifyOtp />
+    </ProtectedRoute>
     ,
   },
   {
     path: "/change-password",
     element:
-      <ChangePassword />
+     <ProtectedRoute>
+       <ChangePassword />
+     </ProtectedRoute>
     ,
   },
   {

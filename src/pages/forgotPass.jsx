@@ -47,7 +47,7 @@ const ForgotPassword = () => {
           />
           {errors.email && (<p className="mt-4 text-red-600">{errors.email.message}</p>)}
 
-          {error && (<p className="text-red-500">{error}</p>)}
+          {(error && !errors.email) && (<p className="text-red-500">{error}</p>)}
           <button
             type="submit"
             className="w-full py-2 font-semibold text-white bg-blue-600 mt-4 rounded hover:bg-blue-700"

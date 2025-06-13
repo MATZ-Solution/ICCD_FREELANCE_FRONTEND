@@ -38,6 +38,10 @@ export function useLogin() {
       setToken(response?.data?.token);
       dispatch(setUserDetails(response?.data?.data));
       navigate("/dashboard");
+      if (localStorage.get("verify-otp") || localStorage.get("change_pass")) {
+        localStorage.removeItem("verify-otp");
+        localStorage.removeItem("change_pass");
+      }
     },
   });
 
@@ -99,8 +103,9 @@ export function useSendOtp() {
     mutationFn: (data) => api.post(API_ROUTE.user.sendOtp, data),
     onSuccess: (response, data) => {
       navigate("/verify-otp", {
-        state: {email: data?.email},
+        state: { email: data?.email },
       });
+      localStorage.setItem("verify-otp", true);
     },
   });
 
@@ -130,6 +135,7 @@ export function useSubmitOtp() {
     mutationFn: (data) => api.post(API_ROUTE.user.submitOtp, data),
     onSuccess: (response) => {
       navigate("/change-password");
+      localStorage.setItem("change_pass", true);
     },
   });
 
