@@ -84,7 +84,7 @@ const Login = () => {
           <p className="text-red-600">{error}</p>
           <button
             type="submit"
-            className="w-full px-4 py-2 font-semibold text-white bg-blue-600 rounded-md hover:bg-blue-700 transition"
+            className={`w-full px-4 py-2 font-semibold text-white bg-blue-600 rounded-md hover:bg-blue-700 transition bg-blue-600 `}
             onClick={handleSubmit(onSubmit)}
             disabled={isPending ? true : false}
           >

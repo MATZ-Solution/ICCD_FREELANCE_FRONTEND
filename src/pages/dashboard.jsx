@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux'
 import { useCheck } from '../../api/client/user'
 import useLogout from '../../hooks/useLogout'
-import Banner from '../component/banner'
+import Banner1 from '../component/banner1'
 import Navbar from '../component/navbar'
 
 function Dashboard() {
