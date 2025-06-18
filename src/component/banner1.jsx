@@ -10,14 +10,14 @@ const Banner1 = () => {
 
 
         <div className="w-full text-center md:text-left mb-6 md:mb-0">
-          <h1 className="text-2xl font-semibold text-white mb-4 sm:text-4xl md:text-5xl md:w-[90%] md:font-semibold lg:w-[50%]">
+          <h1 className="text-2xl font-semibold text-white mb-4 sm:text-4xl md:text-5xl md:w-[90%] md:font-semibold lg:text-7xl lg:w-[70%]">
             Connecting clients in need to freelancers who deliver
           </h1>
 
-          <div className='w-full bg-[#343434] rounded-xl px-5 py-5 sm:w-full md:max-w-[80%] lg:w-[50%] '>
+          <div className=' w-full bg-[#343434] rounded-xl px-5 py-5 sm:w-full md:max-w-[80%] lg:w-[50%] lg:mt-20'>
             <div className='bg-[#676162] rounded-full flex '>
-              <button className='h-10 text-white w-full rounded-full hover:border-2 hover:border-white'>Find Talent</button>
-              <button className='h-10 text-white w-full rounded-full hover:border-2 hover:border-white'>Browse Job</button>
+              <button className='h-10 text-white w-full rounded-full border-2 border-transparent hover:border-white'>Find Talent</button>
+              <button className='h-10 text-white w-full rounded-full border-2 border-transparent hover:border-white'>Browse Job</button>
             </div>
             <div className='relative mt-5'>
               <input className=' w-full h-12 rounded-full p-5 bg-white' placeholder='Search by role, skills, or keywords' />

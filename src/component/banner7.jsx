@@ -1,5 +1,6 @@
-import EastIcon from '@mui/icons-material/East';
-
+import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import cardImage from '../assets/card_img_1.jpg'
 const Banner7 = () => {
     const data = [
         {
@@ -25,18 +26,24 @@ const Banner7 = () => {
                     <div className='mt-10 w-full grid grid-cols-2 gap-4 sm:grid-cols-2 lg:grid-cols-4 '>
 
                         {/* column 1 */}
-                        <div className='w-full flex flex-col gap-4 '>
+                        <div className='w-full flex flex-col gap-7 '>
                             {
                                 data[0].col_1.map((item, index) => {
                                     const value = index + 1
                                     return (
-                                        <div key={value} className={` ${value % 3 === 0 && 'h-72'} px-5 py-5 bg-gray-300 rounded-xl`}>
-                                            <h1 className='text-lg text-black sm: font-semibold'>{item.name}</h1>
-                                            <div className='mt-5 flex gap-3 items-center justify-center  md:justify-start'>
-                                                <p className='text-black'> text 2 </p>
-                                                <EastIcon className=' text-black' />
+                                        <div key={value} className={` rounded-xl`}>
+                                            <div className={`relative ${value % 3 === 0 ? 'h-72' : 'h-28'} `}>
+                                                <div className='absolute top-3 right-3 rounded-full p-2 bg-white'>
+                                                    <FavoriteBorderOutlinedIcon />
+                                                </div>
+                                                <img className='object-cover h-full w-full rounded-xl' src={cardImage}></img>
+                                            </div>
+                                            <div className='bg-white flex items-center justify-between mt-3'>
+                                                <p className='font-semibold'>Illustration</p>
+                                                <MoreHorizIcon />
                                             </div>
                                         </div>
+
                                     )
                                 })
                             }
@@ -49,13 +56,19 @@ const Banner7 = () => {
                                 data[0].col_1.map((item, index) => {
                                     const value = index + 1
                                     return (
-                                        <div key={index} className={`w-full ${value % 2 === 0 ? 'h-28' : 'h-72'} px-5 py-5 bg-gray-300 rounded-xl`}>
-                                            <h1 className='text-lg text-black sm:text-2xl font-semibold'>{item.name}</h1>
-                                            <div className='mt-5 flex gap-3 items-center justify-center  md:justify-start'>
-                                                <p className='text-black'> text 2 </p>
-                                                <EastIcon className=' text-black' />
+                                        <div key={value} className={` rounded-xl`}>
+                                            <div className={`relative ${value % 2 === 0 ? 'h-28' : 'h-72'} }`}>
+                                                <div className='absolute top-3 right-3 rounded-full p-2 bg-white'>
+                                                    <FavoriteBorderOutlinedIcon />
+                                                </div>
+                                                <img className='object-cover h-full w-full rounded-xl' src={cardImage}></img>
+                                            </div>
+                                            <div className='bg-white flex items-center justify-between mt-3'>
+                                                <p className='font-semibold'>Illustration</p>
+                                                <MoreHorizIcon />
                                             </div>
                                         </div>
+
                                     )
                                 })
                             }
@@ -67,11 +80,16 @@ const Banner7 = () => {
                                 data[0].col_1.map((item, index) => {
                                     const value = index + 1
                                     return (
-                                        <div key={index} className={`w-full ${value % 2 === 0 ? 'h-72' : 'h-28'} px-5 py-5 bg-gray-300 rounded-xl`}>
-                                            <h1 className='text-lg text-black sm:text-2xl font-semibold'>{item.name}</h1>
-                                            <div className='mt-5 flex gap-3 items-center justify-center  md:justify-start'>
-                                                <p className='text-black'> text 2 </p>
-                                                <EastIcon className=' text-black' />
+                                        <div key={value} className={` rounded-xl`}>
+                                            <div className={`relative ${value % 2 === 0 ? 'h-72' : 'h-28'} `}>
+                                                <div className='absolute top-3 right-3 rounded-full p-2 bg-white'>
+                                                    <FavoriteBorderOutlinedIcon />
+                                                </div>
+                                                <img className='object-cover h-full w-full rounded-xl' src={cardImage}></img>
+                                            </div>
+                                            <div className='bg-white flex items-center justify-between mt-3'>
+                                                <p className='font-semibold'>Illustration</p>
+                                                <MoreHorizIcon />
                                             </div>
                                         </div>
                                     )
@@ -85,11 +103,16 @@ const Banner7 = () => {
                                 data[0].col_1.map((item, index) => {
                                     const value = index + 1
                                     return (
-                                        <div key={index} className={`w-full ${value % 3 === 0 ? 'h-28' : 'h-72'} px-5 py-5 bg-gray-300 rounded-xl`}>
-                                            <h1 className='text-lg text-black sm:text-2xl font-semibold'>{item.name}</h1>
-                                            <div className='mt-5 flex gap-3 items-center justify-center  md:justify-start'>
-                                                <p className='text-black'> text 2 </p>
-                                                <EastIcon className=' text-black' />
+                                        <div key={value} className={` rounded-xl`}>
+                                            <div className={`relative ${value % 3 === 0 ? 'h-28' : 'h-72'} `}>
+                                                  <div className='absolute top-3 right-3 rounded-full p-2 bg-white'>
+                                                    <FavoriteBorderOutlinedIcon />
+                                                </div>
+                                                <img className='object-cover h-full w-full rounded-xl' src={cardImage}></img>
+                                            </div>
+                                            <div className='bg-white flex items-center justify-between mt-3'>
+                                                <p className='font-semibold'>Illustration</p>
+                                                <MoreHorizIcon />
                                             </div>
                                         </div>
                                     )

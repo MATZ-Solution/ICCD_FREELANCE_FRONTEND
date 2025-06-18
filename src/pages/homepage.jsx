@@ -6,6 +6,7 @@ import Banner5 from "../component/banner5"
 import Banner6 from "../component/banner6"
 import Banner7 from "../component/banner7"
 import Navbar from "../component/navbar"
+import Footer from "../component/footer"
 
 function Homepage() {
     return (
@@ -18,6 +19,7 @@ function Homepage() {
             <Banner3 />
             <Banner6 />
             <Banner7 />
+            <Footer />
         </div>
     )
 }

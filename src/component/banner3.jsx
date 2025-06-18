@@ -1,5 +1,5 @@
 import bannerImage from '../../src/assets/banner_img_2.png'
-import Card1 from './card1';
+import EastIcon from '@mui/icons-material/East';
 
 const Banner3 = () => {
   return (
@@ -18,21 +18,30 @@ const Banner3 = () => {
           </p>
 
           <div className='w-full grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3'>
-            <Card1
-              text1='Post a job and hire a pro'
-              text2='Talent Marketplace'
-              bgColor='bg-[#15A9B2]'
-            />
-            <Card1
-              text1='Browse and buy projects'
-              text2='Project Catalog'
-              bgColor='bg-[#043A53]'
-            />
-            <Card1
-              text1='Get advice from an Industry expert'
-              text2='Consultations'
-              bgColor='bg-[#263238]'
-            />
+            <div className={`border-2 border-transparent hover:border-white w-full px-10 py-5 bg-[#15A9B2] rounded-xl`}>
+              <h1 className=' text-white text-2xl font-semibold'>Post a job and hire a pro</h1>
+              <div className='mt-5 flex gap-3 items-center justify-center  md:justify-start'>
+                <p className='text-white'> Talent Marketplace </p>
+                <EastIcon className=' text-white' />
+              </div>
+            </div>
+
+             <div className={`border-2 border-transparent hover:border-white w-full px-10 py-5 bg-[#043A53] rounded-xl`}>
+              <h1 className=' text-white text-2xl font-semibold'>Post a job and hire a pro</h1>
+              <div className='mt-5 flex gap-3 items-center justify-center  md:justify-start'>
+                <p className='text-white'> Talent Marketplace </p>
+                <EastIcon className=' text-white' />
+              </div>
+            </div>
+
+             <div className={`border-2 border-transparent hover:border-white w-full px-10 py-5 bg-[#263238] rounded-xl`}>
+              <h1 className=' text-white text-2xl font-semibold'>Post a job and hire a pro</h1>
+              <div className='mt-5 flex gap-3 items-center justify-center  md:justify-start'>
+                <p className='text-white'> Talent Marketplace </p>
+                <EastIcon className=' text-white' />
+              </div>
+            </div>
+
           </div>
         </div>
 

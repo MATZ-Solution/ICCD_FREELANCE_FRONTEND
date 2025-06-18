@@ -1,5 +1,3 @@
-import bannerImage from '../../src/assets/banner_img_3.png'
-import SearchIcon from '@mui/icons-material/Search';
 import EastIcon from '@mui/icons-material/East';
 import icon1 from '../assets/icon1.png'
 import icon2 from '../assets/icon2.png'
@@ -25,14 +23,14 @@ const Banner4 = () => {
 
                     <div className='mt-10 p-4 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4'>
                         {topic.map((item, index) => (
-                            <div key={index} className={`flex flex-col gap-8 items-center justify-center px-7 ${index !== 3 && 'lg:border-r-[#E1E1E1] lg:border-r-2 '}`}>
+                            <div key={index} className={`flex flex-col gap-8 items-center justify-center px-7 ${index !== 3 && 'lg:border-r-[#15A9B2] lg:border-r-2 '}`}>
                                 <img src={item.icon}></img>
                                 <p>{item.name}</p>
                             </div>
                         ))}
                     </div>
                     <div className='mt-10 flex items-center justify-center'>
-                        <button onClick={() => navigate('/login')} className="flex items-center justigy-center gap-5 ml-4 px-4 py-3 bg-[#15A9B2] text-white rounded-full hover:bg-blue-700 transition cursor-pointer font-semibold hidden md:flex">
+                        <button onClick={() => navigate('/login')} className="shadow-xl/20 flex items-center justigy-center gap-5 ml-4 px-4 py-3 bg-[#043A53] text-white rounded-full hover:bg-[#05929c] transition cursor-pointer font-semibold hidden md:flex">
                             <p>Get Started Now</p>
                             <EastIcon />
                         </button>
