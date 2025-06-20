@@ -1,11 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import EastIcon from '@mui/icons-material/East';
-import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import WestOutlinedIcon from '@mui/icons-material/WestOutlined';
 import login_banner from '../assets/login_banner_img.png'
-import logo from '../assets/ICCD-01.png'
 import { useLogin } from "../../api/client/user";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -14,7 +12,6 @@ import * as yup from "yup";
 const Login = () => {
 
   const { userLogin, isSuccess, isPending, isError, reset, error, data } = useLogin()
-
   const [withEmail, setWithEmail] = useState(false)
   const schema = yup.object({
     email: yup.string()
@@ -31,7 +28,6 @@ const Login = () => {
     // .required('Password is required')
     ,
   })
-
   const { register, control, handleSubmit, formState: { errors } } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
@@ -39,70 +35,58 @@ const Login = () => {
       password: ''
     }
   });
-
   const onSubmit = (data) => {
     // console.log("data: ", data)
     userLogin(data)
   };
 
+  useEffect(() => {
+    if (showLogin) {
+      document.body.classList.add("overflow-hidden");
+    } else {
+      document.body.classList.remove("overflow-hidden");
+    }
+    return () => document.body.classList.remove("overflow-hidden");
+  }, [showLogin]);
+
   return (
-    <div className="relative w-full flex items-center justify-center p-5 h-[100vh] lg:p-10">
+    <div className=" w-full flex items-center justify-center p-5 h-[100vh] lg:p-10 fixed z-20 inset-0">
       <div className="absolute inset-0 bg-black/50 z-0"></div>
-      <div className="z-10 rounded-4xl bg-red-300 flex  w-full h-full sm:w-[60%]  md:w-[60%] bg-white lg:w-[80%] shadow-lg">
+      <div className="z-10 rounded-4xl bg-red-300 flex w-full h-full  bg-white lg:w-[80%] shadow-lg">
         <img
           src={login_banner}
           alt="Banner"
-          className="hidden w-full h-full object-fit  lg:flex"
+          className="hidden  w-full h-full object-fit  lg:flex"
         />
-        <div className="px-10 pb-10 rounded-tr-xl rounded-br-xl  w-full flex items-center  flex-col ">
-          <div className={`mt-5 w-full flex items-center  ${!withEmail ? 'justify-end' : 'justify-between flex'}`}>
-            <button
-              onClick={() => setWithEmail(false)}
-              className={`flex items-center gap-2 cursor-pointer ${!withEmail && 'hidden'} `}>
-              <WestOutlinedIcon />
-              <p className="text-black font-semibold">Back</p>
-            </button>
-            <button
-              onClick={() => setWithEmail(false)}
-              className="self-end bg-gray-200 flex p-2 rounded-full items-center gap-2 cursor-pointer">
-              <CloseOutlinedIcon />
-            </button>
-          </div>
+        <div className="px-10 pb-10 rounded-tr-xl rounded-br-xl  w-full flex items-center justify-center flex-col ">
           {
             !withEmail && (
-              <div className="w-full flex h-full items-center justify-center">
-                <div className="w-full flex items-center flex-col ">
-                  <img
-                    src={logo}
-                    alt="Banner"
-                    className=" object-fit lg:hidden"
-                  />
-                  <h2 className="text-2xl font-bold  text-gray-800 md:text-4xl md:font-semibold ">Create a New Account</h2>
-                  <p className="mt-4">Already have an account? <span className="text-[#15A9B2] underline">Sign in</span></p>
-                  <div className="w-full space-y-4 ">
-                    <div className="relative w-full mt-5 text-black hover:text-white">
-                      <EmailOutlinedIcon className="absolute top-2 left-2 " />
-                      <button
-                        type="submit"
-                        className={`border-[1px] border-gray-300 w-full px-4 py-2 font-semibold  bg-white rounded-md  hover:bg-[#01AEAD] transition`}
-                        // onClick={handleSubmit(onSubmit)}
-                        disabled={isPending ? true : false}
-                      >
-                        Continue with Google
-                      </button>
-                    </div>
+              <div className=" ">
+                <h2 className="text-2xl font-bold  text-gray-800 md:text-4xl md:font-semibold ">Create a New Account</h2>
+                <p className="mt-4">Already have an account? <span className="text-[#15A9B2] underline">Sign in</span></p>
+                <div className="w-full space-y-4 ">
+                  <div className="relative w-full mt-5 text-black hover:text-white">
+                    <EmailOutlinedIcon className="absolute top-2 left-2 " />
+                    <button
+                      type="submit"
+                      className={`border-[1px] border-gray-300 w-full px-4 py-2 font-semibold  bg-white rounded-md  hover:bg-[#01AEAD] transition`}
+                      // onClick={handleSubmit(onSubmit)}
+                      disabled={isPending ? true : false}
+                    >
+                      Continue with Google
+                    </button>
+                  </div>
 
-                    <div className="relative w-full mt-5 text-black hover:text-white">
-                      <EmailOutlinedIcon className="absolute top-2 left-2 " />
-                      <button
-                        type="submit"
-                        className={`border-[1px] border-gray-300 w-full px-4 py-2 font-semibold  bg-white rounded-md hover:bg-[#01AEAD] transition`}
-                        onClick={() => setWithEmail(true)}
-                        disabled={isPending ? true : false}
-                      >
-                        Continue with email
-                      </button>
-                    </div>
+                  <div className="relative w-full mt-5 text-black hover:text-white">
+                    <EmailOutlinedIcon className="absolute top-2 left-2 " />
+                    <button
+                      type="submit"
+                      className={`border-[1px] border-gray-300 w-full px-4 py-2 font-semibold  bg-white rounded-md hover:bg-[#01AEAD] transition`}
+                      onClick={() => setWithEmail(true)}
+                      disabled={isPending ? true : false}
+                    >
+                      Continue with email
+                    </button>
                   </div>
                 </div>
               </div>
@@ -111,6 +95,12 @@ const Login = () => {
           {
             withEmail && (
               <div className="w-full mt-5 flex flex-col gap-2">
+                <button
+                  onClick={() => setWithEmail(false)}
+                  className="flex items-center gap-2 cursor-pointer">
+                  <WestOutlinedIcon />
+                  <p className="text-black font-semibold">Back</p>
+                </button>
                 <h2 className="text-2xl font-bold text-gray-800 md:text-2xl md:font-semibold ">Continue with your email</h2>
                 <div className="w-full mt-2">
                   <label className="block text-sm font-medium text-gray-700">Email</label>
@@ -176,13 +166,11 @@ const Login = () => {
               </div>
             )
           }
-          <p className=" mt-10 text-sm text-center">
+          <p className="mt-10 text-sm text-center">
             By joining, you agree to the ICCD Freelance Terms of Service and to occasionally receive emails from us. Please read our Privacy Policy to learn how we use your personal data.
           </p>
         </div>
       </div>
-
-
     </div>
   );
 };

@@ -7,10 +7,11 @@ import Banner6 from "../component/banner6"
 import Banner7 from "../component/banner7"
 import Navbar from "../component/navbar"
 import Footer from "../component/footer"
-
+import Login from "../component/signIn"
 function Homepage() {
     return (
         <div>
+            {/* <Login/> */}
             <Navbar />
             <Banner1 />
             <Banner5 />

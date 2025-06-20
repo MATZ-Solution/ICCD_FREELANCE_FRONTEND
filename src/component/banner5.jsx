@@ -16,7 +16,7 @@ const Banner5 = () => {
             {
               Array.from({ length: 4 }).map((_,index)=>(
                 <div className={`hover:bg-[#15A9B2] hover:text-white text-black w-full px-5 py-5 bg-gray-200 rounded-xl`}>
-                  <h1 className=' text-2xl font-semibold'>Post a job and hire a pro</h1>
+                  <h1 className=' text-xl font-semibold sm:text-2xl'>Post a job and hire a pro</h1>
                   <div className='mt-5 flex gap-3 items-center justify-center  md:justify-start'>
                     <p className=''> Talent Marketplace </p>
                     <EastIcon className=' ' />

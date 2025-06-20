@@ -85,7 +85,7 @@ export default function Navbar() {
               <a
                 key={item.name}
                 href={item.href}
-                className="text-black font-semibold  hover:text-blue-600 transition"
+                className="text-black font-semibold  hover:text-[#15A9B2] transition"
               >
                 {item.name !== 'Login' && item.name}
                 {(item.name !== 'Contact Us' && item.name !== 'Login') && (<KeyboardArrowDownIcon />)}
@@ -100,7 +100,7 @@ export default function Navbar() {
           <div className="show_nav_links_desktop">
             {
               (userDetails === null) &&
-              <button onClick={() => navigate('/login')} className="ml-4 px-4 py-2  text-black font-semibold rounded  cursor-pointer">
+              <button onClick={() => navigate('/login')} className="ml-4 px-4 py-2  text-black font-semibold rounded  cursor-pointer hover:text-[#15A9B2]">
                 Login
               </button>
             }

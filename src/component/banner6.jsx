@@ -7,24 +7,23 @@ const Banner6 = () => {
             Trusted by Leading <span className='text-[#15A9B2]'>Brands and Startups</span>
           </h1>
 
-          <div className='grid gap-5 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 ' >
+          <div className='mt-10 grid gap-5 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 ' >
 
-
-            <div className='mt-10 w-full  '>
+            <div className=' w-full'>
               <div className={`w-full px-5 py-5 bg-[#14416B] rounded-xl`}>
                 <h1 className=' text-white  font-semibold'>“If we didn't have Upwork… the quality of talent wouldn't be as easy to measure, and we wouldn't have the incredible support we get from the Upwork team.”</h1>
                 <p className='mt-5 text-white text-xs'>Jessica Khawaja, VP of People Operations</p>
               </div>
             </div>
 
-            <div className='mt-10 w-full  '>
+            <div className=' w-full  '>
               <div className={`w-full px-5 py-5 bg-[#15A9B2] rounded-xl`}>
                 <h1 className=' text-white  font-semibold'>“If we didn't have Upwork… the quality of talent wouldn't be as easy to measure, and we wouldn't have the incredible support we get from the Upwork team.”</h1>
                 <p className='mt-5 text-white text-xs'>Jessica Khawaja, VP of People Operations</p>
               </div>
             </div>
 
-            <div className='mt-10 w-full '>
+            <div className=' w-full '>
               <div className={`w-full px-5 py-5 bg-[#14416B] rounded-xl`}>
                 <h1 className=' text-white  font-semibold'>“If we didn't have Upwork… the quality of talent wouldn't be as easy to measure, and we wouldn't have the incredible support we get from the Upwork team.”</h1>
                 <p className='mt-5 text-white text-xs'>Jessica Khawaja, VP of People Operations</p>
