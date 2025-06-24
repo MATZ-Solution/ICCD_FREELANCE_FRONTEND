@@ -11,8 +11,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 
 
-function GetProfile() {
-    
+function GetProfile({ modalData, setModalData }) {
+
     const { userLogin, isSuccess, isPending, isError, reset, error, data } = useLogin()
     const schema = yup.object({
         userName: yup.string()
@@ -61,7 +61,7 @@ function GetProfile() {
             <button
                 type="submit"
                 className={`mt-3 w-full flex gap-2 items-center justify-center px-4 py-2 font-semibold text-white bg-[#15A9B2] rounded-full hover:bg-[#05929c] cursor-pointer transition`}
-                // onClick={handleSubmit(onSubmit)}
+                onClick={() => setModalData({ ...modalData, ModalName: 'confirm email' })}
                 disabled={isPending ? true : false}
             >
                 <p>Create my account</p>

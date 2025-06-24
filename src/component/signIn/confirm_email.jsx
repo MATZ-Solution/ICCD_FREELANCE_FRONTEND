@@ -11,8 +11,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import { useState } from "react";
 
-
-function ConfirmEmail() {
+function ConfirmEmail({modalData, setModalData}) {
 
     const { userLogin, isSuccess, isPending, isError, reset, error, data } = useLogin()
     const schema = yup.object({
@@ -33,7 +32,6 @@ function ConfirmEmail() {
     };
 
     const [otp, setOtp] = useState('')
-    console.log("otp: ", otp)
 
     return (
         <div className="px-10 w-full mt-5 flex flex-col gap-2">
@@ -52,11 +50,14 @@ function ConfirmEmail() {
                     ))
                 }
             </div>
-
             <button
                 type="submit"
-                className={`mt-3 w-full flex gap-2 items-center justify-center px-4 py-2 font-semibold text-white bg-[#15A9B2] rounded-full hover:bg-[#05929c] cursor-pointer transition`}
-                // onClick={handleSubmit(onSubmit)}
+                className={` mt-3 flex gap-2 items-center justify-center px-4 py-2 font-semibold text-white bg-[#15A9B2] rounded-full hover:bg-[#05929c] cursor-pointer transition`}
+                onClick={() => setModalData({ ...modalData,
+                     ModalName: 'choose profile',
+                     isShowLeftPic: false,
+                     isShowPolicy: false
+                     })}
                 disabled={isPending ? true : false}
             >
                 <p>Submit</p>
@@ -64,6 +65,7 @@ function ConfirmEmail() {
                     <EastIcon style={{ fontSize: 20 }} />
                 </div>
             </button>
+
         </div>
     )
 }

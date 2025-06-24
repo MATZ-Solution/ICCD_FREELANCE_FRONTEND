@@ -4,7 +4,7 @@ import { useLocation } from 'react-router-dom';
 import WestOutlinedIcon from '@mui/icons-material/WestOutlined';
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
 
-function CreateNewAccount() {
+function CreateNewAccount({ modalData, setModalData }) {
     const location = useLocation()
     const { pathname } = location
     return (
@@ -37,7 +37,7 @@ function CreateNewAccount() {
                             <button
                                 type="submit"
                                 className={`border-[1px] border-gray-300 w-full px-4 py-2 font-semibold  bg-white rounded-md  hover:bg-[#01AEAD] transition`}
-                            // onClick={handleSubmit(onSubmit)}
+                            // onClick={()=> setModalData({...modalData, ModalName: 'continue with email'})}
                             // disabled={isPending ? true : false}
                             >
                                 Continue with Google
@@ -49,7 +49,7 @@ function CreateNewAccount() {
                             <button
                                 type="submit"
                                 className={`border-[1px] border-gray-300 w-full px-4 py-2 font-semibold  bg-white rounded-md hover:bg-[#01AEAD] transition`}
-                            // onClick={() => setWithEmail(true)}
+                                onClick={() => setModalData({ ...modalData, ModalName: 'continue with email' })}
                             // disabled={isPending ? true : false}
                             >
                                 Continue with email

@@ -12,8 +12,12 @@ import * as yup from "yup";
 import { useState } from "react";
 import CheckBoxOutlineBlankOutlinedIcon from '@mui/icons-material/CheckBoxOutlineBlankOutlined';
 import CheckBoxOutlinedIcon from '@mui/icons-material/CheckBoxOutlined';
+import service_pic1 from '../../assets/service_pic1.png'
+import service_pic2 from '../../assets/service_pic2.png'
+import service_pic3 from '../../assets/service_pic3.png'
 
-function Services() {
+
+function Services({ modalData, setModalData }) {
 
     const { userLogin, isSuccess, isPending, isError, reset, error, data } = useLogin()
     const schema = yup.object({
@@ -34,42 +38,58 @@ function Services() {
     };
 
     const [profile, setProfile] = useState('')
-
+    const services_detail = [
+        { name: 'Primary job or business', image: service_pic1 },
+        { name: 'Secondary Business', image: service_pic2 },
+        { name: 'Non-business needs', image: service_pic3 }
+    ]
 
     return (
-        <div className="px-10 w-full mt-5 flex flex-col gap-2">
+        <div className="px-10 w-full mt-5 flex flex-col gap-4">
             <h2 className="text-center  font-bold text-gray-800 md:text-2xl md:font-semibold text-lg sm:text-2xl">What do you plan to order services for? </h2>
             <p className="text-center text-[#656565] text-sm">There’s something for everyone.</p>
-            <div className="w-full mt-2 flex flex-col gap-5 sm:flex-row ">
+            <div className="w-full mt-2 grid grid-cols-1 gap-5 sm:gap-5 sm:grid-cols-3 ">
+                {
+                    services_detail.map((item, index) => (
+                        <button
+                            key={index}
+                            onClick={() => setProfile(item.name)}
+                            className={`flex relative border-2 p-7 rounded-2xl sm:p-10 items-center gap-5 ${profile === item.name ? 'border-black' : 'border-gray-300'
+                                }`}
+                        >
+                            {/* Checkbox in top right corner */}
+                            <div className="absolute right-2 top-2">
+                                {profile === item.name ? <CheckBoxOutlinedIcon /> : <CheckBoxOutlineBlankOutlinedIcon />}
+                            </div>
 
-                <button onClick={() => setProfile('primary job or business')} className={` relative border-2 p-7 rounded-2xl sm:p-10 ${profile === 'primary job or business' ? 'border-black' : 'border-gray-300'}`}>
-                    <div className=" absolute right-2 top-2">
-                        {(profile === 'primary job or business') ? (<CheckBoxOutlinedIcon />) : <CheckBoxOutlineBlankOutlinedIcon />}
-                    </div>
-                    <h1>Primary job or business</h1>
-                   
-                </button>
-                <button onClick={() => setProfile('Secondary Business')} className={` relative border-2  p-7 rounded-2xl sm:p-10 ${profile === 'Secondary Business' ? 'border-black' : 'border-gray-300'}`}>
-                    <div className="absolute right-2 top-2">{(profile === 'Secondary Business') ? (<CheckBoxOutlinedIcon />) : <CheckBoxOutlineBlankOutlinedIcon />}</div>
-                    <h1>Secondary Business</h1>
-                </button>
-                <button onClick={() => setProfile('Non-business needs')} className={` relative border-2  p-7 rounded-2xl sm:p-10 ${profile === 'Non-business needs' ? 'border-black' : 'border-gray-300'}`}>
-                    <div className="absolute right-2 top-2">{(profile === 'Non-business needs') ? (<CheckBoxOutlinedIcon />) : <CheckBoxOutlineBlankOutlinedIcon />}</div>
-                    <h1>Non-business needs</h1>
-                </button>
+                            {/* Row: Image + Text */}
+                            <div className="flex flex-row items-center gap-5 sm:flex-col">
+                                <img
+                                    src={item.image}
+                                    alt="Primary"
+                                    className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 object-contain hidden sm:flex"
+                                />
+                                <h1 className="text-base sm:text-lg font-medium">{item.name}</h1>
+                            </div>
+                        </button>
+                    ))
+                }
+
             </div>
 
-            <button
-                type="submit"
-                className={`mt-3 w-full flex gap-2 items-center justify-center px-4 py-2 font-semibold text-white bg-[#15A9B2] rounded-full hover:bg-[#05929c] cursor-pointer transition`}
-                // onClick={handleSubmit(onSubmit)}
-                disabled={isPending ? true : false}
-            >
-                <p>Submit</p>
-                <div className=' rounded-full px-1 py- bg-[#60cfd6]'>
-                    <EastIcon style={{ fontSize: 20 }} />
-                </div>
-            </button>
+            <div className="flex justify-end">
+                <button
+                    type="submit"
+                    className={`inline-flex gap-2 items-center justify-center px-4 py-2 font-semibold text-white bg-[#15A9B2] rounded-full hover:bg-[#05929c] cursor-pointer transition`}
+                    onClick={() => setModalData({ ...modalData, ModalName: 'total employee' })}
+                    disabled={isPending ? true : false}
+                >
+                    <p>Submit</p>
+                    <div className=' rounded-full px-1 py- bg-[#60cfd6]'>
+                        <EastIcon style={{ fontSize: 20 }} />
+                    </div>
+                </button>
+            </div>
         </div>
     )
 }
