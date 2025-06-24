@@ -35,6 +35,13 @@ function ConfirmEmail({modalData, setModalData}) {
 
     return (
         <div className="px-10 w-full mt-5 flex flex-col gap-2">
+              <div className='w-full flex justify-center lg:justify-start'>
+                            <img
+                                src={logo}
+                                alt="Banner"
+                                className="lg:w-24 lg:h-24 object-fit "
+                            />
+                        </div>
             <h2 className="text-2xl font-bold text-gray-800 md:text-2xl md:font-semibold ">Confirm your email</h2>
             <p className="text-[#656565] text-sm">Enter the verification code we emailed to:</p>
             <p className="text-[#656565] text-sm font-bold">matzsolutions@outlook.com</p>

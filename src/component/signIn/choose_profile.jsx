@@ -40,7 +40,7 @@ function ChooseProfile({ modalData, setModalData }) {
 
     return (
 
-        <div className="px-4 sm:px-10 w-full mt-5 flex flex-col gap-4">
+        <div className="px-4 sm:px-10 w-full mt-5 flex h-full flex-col gap-4 lg:mt-2">
             <h2 className="text-center font-bold text-gray-800 text-lg sm:text-xl md:text-2xl">
                 Talha1122, your account has been created! <br className="hidden sm:block" />
                 What brings you to ICCD Freelance?

@@ -11,8 +11,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 
 
-function ContinueWithEmail({modalData, setModalData}) {
-    
+function ContinueWithEmail({ modalData, setModalData }) {
+
     const { userLogin, isSuccess, isPending, isError, reset, error, data } = useLogin()
     const schema = yup.object({
         email: yup.string()
@@ -45,6 +45,13 @@ function ContinueWithEmail({modalData, setModalData}) {
 
     return (
         <div className="px-10 w-full mt-5 flex flex-col gap-2">
+            <div className='w-full flex justify-center lg:justify-start'>
+                <img
+                    src={logo}
+                    alt="Banner"
+                    className="lg:w-24 lg:h-24 object-fit "
+                />
+            </div>
             <h2 className="text-2xl font-bold text-gray-800 md:text-2xl md:font-semibold ">Continue with your email</h2>
             <div className="w-full mt-2">
                 <label className="block text-sm font-medium text-gray-700">Email</label>
