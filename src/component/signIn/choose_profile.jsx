@@ -36,7 +36,7 @@ function ChooseProfile({ modalData, setModalData }) {
     };
 
     const [profile, setProfile] = useState('')
-
+    console.log("profile: ", profile)
 
     return (
 
@@ -86,9 +86,14 @@ function ChooseProfile({ modalData, setModalData }) {
             <div className="flex justify-center sm:justify-end">
                 <button
                     type="submit"
-                    onClick={() => setModalData({ ...modalData, ModalName: 'services' })}
+                    onClick={() => setModalData({
+                        ...modalData,
+                        ModalName: profile === 'freelancer' ? 'freelancer type' : 'services',
+                        isShowLeftPic: false,
+                        isShowPolicy: false
+                    })}
                     className={`mt-4 inline-flex gap-2 items-center justify-center px-5 py-2 font-semibold text-white bg-[#043A53] rounded-full hover:bg-[#05929c] transition`}
-                    disabled={isPending}
+                    disabled={profile ? false : true}
                 >
                     <p>Submit</p>
                     <div className="rounded-full px-1 bg-[#60cfd6]">

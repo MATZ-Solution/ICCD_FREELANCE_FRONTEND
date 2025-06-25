@@ -8,6 +8,8 @@ import Services from '../signIn/services'
 import Total_Emp from '../signIn/total_emp';
 import Start_Journey from '../signIn/start_journey';
 import { useState } from 'react';
+import Freelancer_Type from '../signIn/freelancer_type';
+import Freelancing_Experience from '../signIn/freelancing_experience';
 
 function SignIn_modal1() {
 
@@ -31,6 +33,8 @@ function SignIn_modal1() {
                         {modalData.ModalName === 'get profile' && (<GetProfile modalData={modalData} setModalData={setModalData} />)}
                         {modalData.ModalName === 'confirm email' && (<ConfirmEmail modalData={modalData} setModalData={setModalData} />)}
                         {modalData.ModalName === 'choose profile' && (<ChooseProfile modalData={modalData} setModalData={setModalData} />)}
+                        {modalData.ModalName === 'freelancer type' && (<Freelancer_Type modalData={modalData} setModalData={setModalData} />)}
+                        {modalData.ModalName === 'freelancer experience' && (<Freelancing_Experience modalData={modalData} setModalData={setModalData} />)}
                         {modalData.ModalName === 'services' && (<Services modalData={modalData} setModalData={setModalData} />)}
                         {modalData.ModalName === 'total employee' && (<Total_Emp modalData={modalData} setModalData={setModalData} />)}
                         {modalData.ModalName === 'start journey' && (<Start_Journey modalData={modalData} setModalData={setModalData} />)}
@@ -40,7 +44,6 @@ function SignIn_modal1() {
                     </p>
                     )
                     }
-
                 </div>
             </div>
         </div>
