@@ -8,7 +8,7 @@ function CreateNewAccount({ modalData, setModalData }) {
     const location = useLocation()
     const { pathname } = location
     return (
-        <div className='w-full h-full'>
+        <div className='w-full h-full '>
             {/* <div className={`mt-5 w-full pr-5 flex items-center  ${pathname === '/login' ? 'justify-end' : 'justify-between flex'}`}>
                 <button
                     onClick={() => setWithEmail(false)}

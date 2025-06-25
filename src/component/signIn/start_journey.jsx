@@ -36,7 +36,7 @@ function Start_Journey() {
     const [profile, setProfile] = useState('')
 
     return (
-        <div className=" px-10 w-full mt-5 flex flex-col gap-2">
+        <div className="h-full px-10 w-full mt-5 flex items-center justify-center flex-col gap-2">
             <div className="w-full flex items-center justify-center overflow-hidden">
                 <img
                     src={start_exploring_pic}

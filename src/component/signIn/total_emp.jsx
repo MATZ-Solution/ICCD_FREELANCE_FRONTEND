@@ -49,28 +49,28 @@ function Total_Emp({ modalData, setModalData }) {
         { amount: '51-100', image: fifty_one_five_hundred },
         { amount: '500+', image: five_hundred_plus }]
     return (
-        <div className="px-10 w-full mt-5 flex flex-col gap-3">
+        <div className="h-full px-10 w-full mt-5 flex items-center justify-center flex-col gap-3">
             <h2 className="text-center font-bold text-gray-800 md:text-2xl md:font-semibold text-lg sm:text-2xl">
                 How many people work at your company?
             </h2>
             <p className="text-center text-[#656565] text-sm">There’s something for everyone.</p>
 
-            <div className="w-full mt-2 flex flex-col gap-5 sm:flex-row justify-center">
+            <div className="w-full mt-2 flex flex-col gap-5 justify-center sm:flex-row sm:flex-wrap md:flex-wrap">
                 {emp_data.map((item, index) => (
                     <button
                         key={index}
                         onClick={() => setProfile(item.amount)}
-                        className={`flex flex-col items-center gap-4 relative border-2 p-5 rounded-2xl sm:p-6 cursor-pointer transition ${profile === item.amount ? 'border-black' : 'border-gray-300'}`}
+                        className={`flex flex-col items-center gap-4 relative border-2 p-5 rounded-2xl cursor-pointer transition sm:p-10 md:p-5  lg:p-6 ${profile === item.amount ? 'border-black' : 'border-gray-300'}`}
                     >
                         <div className="absolute right-2 top-2">
                             {profile === item.amount ? <CheckBoxOutlinedIcon /> : <CheckBoxOutlineBlankOutlinedIcon />}
                         </div>
                         <div className="flex sm:flex-col">
                             <img
-                                className="w-24 h-24 object-contain hidden sm:flex"
+                                className="w-16 h-16 object-contain hidden sm:w-20 sm:h-20 md:w-24 md:h-24 md:flex"
                                 src={item.image}
                             />
-                            <h1 className="text-center text-sm sm:text-base font-semibold">{item.amount}</h1>
+                            <h1 className="text-base sm:text-lg font-medium">{item.amount}</h1>
 
                         </div>
                     </button>

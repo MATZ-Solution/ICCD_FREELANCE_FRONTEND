@@ -45,7 +45,7 @@ function Services({ modalData, setModalData }) {
     ]
 
     return (
-        <div className="px-10 w-full mt-5 flex flex-col gap-4">
+        <div className="px-10 w-full mt-5 flex justify-center items-center h-full flex-col gap-4">
             <h2 className="text-center  font-bold text-gray-800 md:text-2xl md:font-semibold text-lg sm:text-2xl">What do you plan to order services for? </h2>
             <p className="text-center text-[#656565] text-sm">There’s something for everyone.</p>
             <div className="w-full mt-2 grid grid-cols-1 gap-5 sm:gap-5 sm:grid-cols-3 ">
@@ -67,7 +67,7 @@ function Services({ modalData, setModalData }) {
                                 <img
                                     src={item.image}
                                     alt="Primary"
-                                    className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 object-contain hidden sm:flex"
+                                    className="w-16 h-16 object-contain hidden sm:w-20 sm:h-20 md:w-24 md:h-24 md:flex"
                                 />
                                 <h1 className="text-base sm:text-lg font-medium">{item.name}</h1>
                             </div>

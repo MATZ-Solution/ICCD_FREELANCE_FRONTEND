@@ -22,7 +22,7 @@ function SignIn_modal1() {
     return (
         <div className="w-full flex fixed z-20 inset-0 sm:p-5 sm:items-center sm:justify-center lg:p-10 ">
             <div className="absolute inset-0 bg-black/50 z-0"></div>
-            <div className={`z-10 flex w-full h-full flex-col bg-white sm:rounded-xl sm:w-lg md:w-lg lg:flex-row lg:w-[80%] shadow-lg `}>
+            <div className={`z-10 flex w-full h-full flex-col bg-white sm:rounded-4xl sm:w-xl md:w-xl lg:flex-row lg:min-w-5xl shadow-lg `}>
                 {modalData.isShowLeftPic && (<img src={login_banner} alt="Banner" className="hidden w-full h-full object-fit lg:flex" />)}
                 <div className='w-full flex flex-col h-full'>
                     <div className="pb-10 rounded-tr-xl rounded-br-xl w-full h-full flex flex-col sm:items-center sm:justify-center">
