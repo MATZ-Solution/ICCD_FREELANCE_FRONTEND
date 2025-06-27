@@ -10,6 +10,12 @@ import VerifyOtp from "../src/pages/otpVerification";
 import ChangePassword from "../src/pages/changePass";
 import ProtectedRoute from "../utils/protectRoute";
 import FreelancerProfile from "../src/pages/freelancerProfile";
+import Overview from "../src/pages/freelancer/overview";
+import Description from "../src/pages/freelancer/description";
+import Requirement from "../src/pages/freelancer/requirement";
+import Gallery from "../src/pages/freelancer/gallery";
+import Publish from "../src/pages/freelancer/publish";
+import MainTemplate from "../src/templates/mainTemplate";
 
 export const router = createBrowserRouter([
   {
@@ -39,17 +45,17 @@ export const router = createBrowserRouter([
   {
     path: "/verify-otp",
     element:
-    <ProtectedRoute>
-      <VerifyOtp />
-    </ProtectedRoute>
+      <ProtectedRoute>
+        <VerifyOtp />
+      </ProtectedRoute>
     ,
   },
   {
     path: "/change-password",
     element:
-     <ProtectedRoute>
-       <ChangePassword />
-     </ProtectedRoute>
+      <ProtectedRoute>
+        <ChangePassword />
+      </ProtectedRoute>
     ,
   },
   {
@@ -60,12 +66,62 @@ export const router = createBrowserRouter([
       </AuthRoute>
     ),
   },
-   {
+  {
     path: "/freelancer-profile",
     element: (
       <AuthRoute>
         <FreelancerProfile />
       </AuthRoute>
+    ),
+  },
+  {
+    path: "/freelancer-profile/overview",
+    element: (
+      // <AuthRoute>
+      <MainTemplate isShowFooter={false}>
+        <Overview />
+      </MainTemplate>
+      // </AuthRoute>
+    ),
+  },
+  {
+    path: "/freelancer-profile/description",
+    element: (
+      // <AuthRoute>
+      <MainTemplate isShowFooter={false}>
+        <Description />
+      </MainTemplate>
+      // </AuthRoute>
+    ),
+  },
+  {
+    path: "/freelancer-profile/requirements",
+    element: (
+      // <AuthRoute>
+      <MainTemplate isShowFooter={false}>
+        <Requirement />
+      </MainTemplate>
+      // </AuthRoute>
+    ),
+  },
+  {
+    path: "/freelancer-profile/gallery",
+    element: (
+      // <AuthRoute>
+      <MainTemplate isShowFooter={false}>
+        <Gallery />
+      </MainTemplate>
+      // </AuthRoute>
+    ),
+  },
+  {
+    path: "/freelancer-profile/publish",
+    element: (
+      // <AuthRoute>
+      <MainTemplate isShowFooter={false}>
+        <Publish />
+      </MainTemplate>
+      // </AuthRoute>
     ),
   },
 ]);

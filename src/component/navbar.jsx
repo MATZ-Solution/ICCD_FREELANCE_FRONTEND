@@ -30,13 +30,13 @@ export default function Navbar() {
   }, [isOpen]);
 
   return (
-    <header className="bg-white shadow fontFamily-montreal">
-      <div className="max-w-7xl mx-auto px-4 py-4 sm:px-6 sm:py-4 lg:px-8 lg:py-4 ">
+    <header className="bg-white shadow fontFamily-montreal border-b-[1px] border-b-[#c4c4c4]">
+      <div className="max-w-7xl mx-auto px-6 sm:px-12">
         <div className="flex justify-between items-center ">
 
           {/* logo */}
-          <div className=" w-32 object-contain">
-            <img className="" src={logo} />
+          <div className="w-20 h-20 md:w-24 md:h-24">
+            <img className="w-full h-full object-contain" src={logo} />
           </div>
 
           {/* Mobile Menu Button */}
