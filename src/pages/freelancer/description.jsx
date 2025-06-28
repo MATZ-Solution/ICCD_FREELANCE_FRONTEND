@@ -1,8 +1,12 @@
 import { useState } from 'react';
 import Profile from '../../component/freelancers/profile';
 import Button from '../../component/button';
+import { useNavigate } from 'react-router-dom';
+
 
 function Description() {
+      const navigate = useNavigate()
+    
     return (
         <Profile>
             <div className='font-semibold text-2xl py-2 sm:border-b-[1px] sm:border-b-[#c4c4c4] sm:py-5'>
@@ -15,7 +19,7 @@ function Description() {
                 </div>
             </div>
             <div className="mt-5 flex sm:justify-end">
-                <Button className=''>Save & Continue</Button>
+                <Button className='' onClick={() => navigate('/freelancer-profile/requirements')}>Save & Continue</Button>
             </div>
         </Profile>
     )

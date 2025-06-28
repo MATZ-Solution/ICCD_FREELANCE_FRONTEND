@@ -2,8 +2,10 @@ import { useState } from 'react';
 import ReactSelect from '../../component/buttonSelect';
 import Profile from '../../component/freelancers/profile';
 import Button from '../../component/button';
+import { useNavigate } from 'react-router-dom';
 
 function Overview() {
+  const navigate = useNavigate()
   let data = [
     { name: 'Gig title', details: 'As your Gig storefront, your title is the most important place to include keywords that buyers would likely use to search for a service like yours.' },
     { name: 'Category', details: 'Choose the category and sub-category most suitable for your Gig.' },
@@ -22,8 +24,8 @@ function Overview() {
       <div className='flex flex-col rounded-md mt-7 gap-6 sm:border-[#AFAFAF] sm:border-[1px] sm:mt-20 sm:gap-10 sm:p-10'>
         {
           data.map((item, index) => (
-            <div className='flex flex-col gap-4 sm:gap-10 sm:flex-row'>
-              <div key={index} className='flex flex-col sm:w-80 sm:gap-2'>
+            <div key={index} className='flex flex-col gap-4 sm:gap-10 sm:flex-row'>
+              <div className='flex flex-col sm:w-80 sm:gap-2'>
                 <p className='font-semibold sm:text-lg'>{item.name}</p>
                 <p className='text-sm'>{item.details}</p>
               </div>
@@ -61,7 +63,7 @@ function Overview() {
         }
       </div>
       <div className="mt-5 flex sm:justify-end">
-        <Button className=''>Save & Continue</Button>
+        <Button className='' onClick={() => navigate('/freelancer-profile/description')}>Save & Continue</Button>
       </div>
     </Profile>
   )

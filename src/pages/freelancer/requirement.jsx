@@ -3,8 +3,11 @@ import Profile from '../../component/freelancers/profile';
 import ReactSelect from '../../component/buttonSelect';
 import { useState } from 'react';
 import Button from '../../component/button';
+import { useNavigate } from 'react-router-dom';
 
 function Requirement() {
+  const navigate = useNavigate()
+
     const options = [
         { value: 'chocolate', label: 'Chocolate' },
         { value: 'strawberry', label: 'Strawberry' },
@@ -78,7 +81,7 @@ function Requirement() {
             </div>
 
             <div className="mt-5 flex sm:justify-end">
-                <Button className=''>Save & Continue</Button>
+                <Button className='' onClick={() => navigate('/freelancer-profile/gallery')}>Save & Continue</Button>
             </div>
         </Profile>
     )

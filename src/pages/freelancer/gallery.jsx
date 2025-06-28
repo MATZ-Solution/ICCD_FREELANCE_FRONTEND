@@ -6,8 +6,11 @@ import Button from '../../component/button';
 import CollectionsIcon from '@mui/icons-material/Collections';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import { useNavigate } from 'react-router-dom';
 
 function Gallery() {
+  const navigate = useNavigate()
+
     const options = [
         { value: 'chocolate', label: 'Chocolate' },
         { value: 'strawberry', label: 'Strawberry' },
@@ -91,7 +94,7 @@ function Gallery() {
             </div>
 
             <div className="mt-5 flex sm:justify-end">
-                <Button className=''>Save & Continue</Button>
+                <Button className='' onClick={() => navigate('/freelancer-profile/publish')}>Save & Continue</Button>
             </div>
         </Profile>
     )

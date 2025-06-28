@@ -5,6 +5,10 @@ import logo from '../assets/ICCD-01.png'
 import EastIcon from '@mui/icons-material/East';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import '../../src/css/navbar.css'
+import SearchIcon from '@mui/icons-material/Search';
+import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
+import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
+import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 
 export default function Navbar() {
 
@@ -32,8 +36,9 @@ export default function Navbar() {
   return (
     <header className="bg-white shadow fontFamily-montreal border-b-[1px] border-b-[#c4c4c4]">
       <div className="max-w-7xl mx-auto px-6 sm:px-12">
-        <div className="flex justify-between items-center ">
 
+
+        <div className="flex justify-between items-center ">
           {/* logo */}
           <div className="w-20 h-20 md:w-24 md:h-24">
             <img className="w-full h-full object-contain" src={logo} />
@@ -79,43 +84,66 @@ export default function Navbar() {
             </button>
           </div>
 
-          {/* Desktop Navigation */}
-          <nav className="show_nav_links_desktop space-x-6 items-center">
-            {navigation.map((item) => (
-              <a
-                key={item.name}
-                href={item.href}
-                className="text-black font-semibold  hover:text-[#15A9B2] transition"
-              >
-                {item.name !== 'Login' && item.name}
-                {(item.name !== 'Contact Us' && item.name !== 'Login') && (<KeyboardArrowDownIcon />)}
-              </a>
-            ))}
-          </nav>
+          {/* Desktop middle Section */}
+          {false ?
+            <div className="relative ">
+              <input placeholder="What services are you looking for today " className="rounded w-xl h-10 p-3 border-[1px] border-gray-400"></input>
+              <div className="rounded absolute w-10 h-10 top-0 right-0 flex items-center justify-center bg-black">
+                <SearchIcon className="text-white" />
+              </div>
+            </div>
+            :
+            <nav className="show_nav_links_desktop space-x-6 items-center">
+              {navigation.map((item) => (
+                <a
+                  key={item.name}
+                  href={item.href}
+                  className="text-black font-semibold  hover:text-[#15A9B2] transition"
+                >
+                  {item.name !== 'Login' && item.name}
+                  {(item.name !== 'Contact Us' && item.name !== 'Login') && (<KeyboardArrowDownIcon />)}
+                </a>
+              ))}
+            </nav>
+          }
 
           {userDetails && (<p className="text-red-300">Become a seller</p>)}
           {userDetails && (<Link to="/freelancer-profile" className="text-white">Profile</Link>)}
 
-          {/* Desktop Navigation Right Section*/}
-          <div className="show_nav_links_desktop">
-            {
-              (userDetails === null) &&
-              <button onClick={() => navigate('/login')} className="ml-4 px-4 py-2  text-black font-semibold rounded  cursor-pointer hover:text-[#15A9B2]">
-                Login
-              </button>
-            }
+          {/* Desktop Right Section*/}
 
-            <button onClick={() => navigate('/login')} className="shadow-xl/20 flex items-center justigy-center gap-5 ml-4 px-4 py-2 bg-[#15A9B2] text-white rounded-full hover:bg-[#05929c] transition cursor-pointer font-semibold hidden md:flex">
-              <p>Get Started Now</p>
-              <div className=' rounded-full px-2 py-1 bg-[#60cfd6]'>
-                <EastIcon style={{ fontSize: 20 }} />
+          {
+            false ?
+              <div className="flex items-center gap-20">
+                <div className="flex gap-4">
+                  <NotificationsNoneOutlinedIcon style={{ scale: 1.2 }} className="text-gray-600" />
+                  <EmailOutlinedIcon style={{ scale: 1.2 }} className="text-gray-600" />
+                  <FavoriteBorderOutlinedIcon style={{ scale: 1.2 }} className="text-gray-600" />
+                  <label className="text-gray-700 font-semibold text-medium">Orders</label>
+                </div>
+                <div className=" w-10 h-10 bg-gray-500 rounded-full">
+                  </div>
               </div>
-            </button>
-          </div>
+              :
+              <div className="show_nav_links_desktop">
+                {
+                  (userDetails === null) &&
+                  <button onClick={() => navigate('/login')} className="ml-4 px-4 py-2  text-black font-semibold rounded  cursor-pointer hover:text-[#15A9B2]">
+                    Login
+                  </button>
+                }
+
+                <button onClick={() => navigate('/login')} className="shadow-xl/20 flex items-center justigy-center gap-5 ml-4 px-4 py-2 bg-[#15A9B2] text-white rounded-full hover:bg-[#05929c] transition cursor-pointer font-semibold hidden md:flex">
+                  <p>Get Started Now</p>
+                  <div className=' rounded-full px-2 py-1 bg-[#60cfd6]'>
+                    <EastIcon style={{ fontSize: 20 }} />
+                  </div>
+                </button>
+              </div>
+          }
 
         </div>
       </div>
-
       {/* Mobile Menu */}
       {isOpen && (
         <div className={`show_nav_links_mobile h-[80vh] px-4 pb-4 space-y-2 flex flex-col`}>
