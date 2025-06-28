@@ -1,80 +1,91 @@
-const invoices = [
-  {
-    invoice: "INV001",
-    paymentStatus: "Paid",
-    totalAmount: "$250.00",
-    paymentMethod: "Credit Card",
+import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import { useState } from 'react';
+
+const services = [
+   {
+    name: ""
+  },
+   {
+    name: ""
+  },
+   {
+    name: ""
   },
   {
-    invoice: "INV002",
-    paymentStatus: "Pending",
-    totalAmount: "$150.00",
-    paymentMethod: "PayPal",
+    name: "Revisions"
   },
   {
-    invoice: "INV003",
-    paymentStatus: "Unpaid",
-    totalAmount: "$350.00",
-    paymentMethod: "Bank Transfer",
+    name: "Number of concepts included"
   },
   {
-    invoice: "INV004",
-    paymentStatus: "Paid",
-    totalAmount: "$450.00",
-    paymentMethod: "Credit Card",
+    name: "Logo tansparency"
   },
   {
-    invoice: "INV005",
-    paymentStatus: "Paid",
-    totalAmount: "$550.00",
-    paymentMethod: "PayPal",
+    name: "Vector files"
   },
   {
-    invoice: "INV006",
-    paymentStatus: "Pending",
-    totalAmount: "$200.00",
-    paymentMethod: "Bank Transfer",
+    name: "Printable files"
   },
   {
-    invoice: "INV007",
-    paymentStatus: "Unpaid",
-    totalAmount: "$300.00",
-    paymentMethod: "Credit Card",
+    name: "3D Mockups"
   },
+  {
+    name: "Source file"
+  },
+  {
+    name: "Stationary Design"
+  },
+
 ];
 
-export function TableDemo() {
+function Table() {
+  const table_head = ['BASIC', 'STANDARD', 'PREMIUM']
+  const [package_name, setPackageName] = useState([])
+  console.log("package name: ", package_name)
+
+  const handleService = (name, services) => {
+    setPackageName([...package_name, { name: name, services: [services] }])
+    console.log("a: ", a)
+  }
   return (
     <div className="overflow-x-auto w-full">
       <div className="text-sm text-gray-500 mb-2">A list of your recent invoices.</div>
       <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-        <thead className="bg-gray-100 dark:bg-gray-800">
+        <thead className="bg-gray-500 ">
           <tr>
-            <th scope="col" className="px-4 py-3 text-left text-sm font-medium text-gray-700 dark:text-gray-300 w-[100px]">
-              Invoice
-            </th>
-            <th scope="col" className="px-4 py-3 text-left text-sm font-medium text-gray-700 dark:text-gray-300">
-              Status
-            </th>
-            <th scope="col" className="px-4 py-3 text-left text-sm font-medium text-gray-700 dark:text-gray-300">
-              Method
-            </th>
-            <th scope="col" className="px-4 py-3 text-right text-sm font-medium text-gray-700 dark:text-gray-300">
-              Amount
-            </th>
+            <th></th>
+            {
+              table_head.map((data, index) => (
+                <th key={index} scope="col" className="text-center px-4 py-3 text-sm font-medium text-gray-700 dark:text-gray-300 w-[100px]">
+                  {data}
+                </th>
+              ))
+            }
           </tr>
         </thead>
-        <tbody className="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700">
-          {invoices.map((invoice) => (
-            <tr key={invoice.invoice} className="hover:bg-gray-50 dark:hover:bg-gray-800">
-              <td className="px-4 py-3 font-medium text-gray-900 dark:text-white">{invoice.invoice}</td>
-              <td className="px-4 py-3 text-gray-700 dark:text-gray-300">{invoice.paymentStatus}</td>
-              <td className="px-4 py-3 text-gray-700 dark:text-gray-300">{invoice.paymentMethod}</td>
-              <td className="px-4 py-3 text-right text-gray-700 dark:text-gray-300">{invoice.totalAmount}</td>
+        <tbody className="bg-gray-400 divide-x-2 divide-y-2 divide-gray-200">
+          {services.map((invoice, rowIndex) => (
+            <tr key={rowIndex}>
+              <td className="w-24 h-16 text-center font-medium text-gray-900 dark:text-white">
+                {invoice.name}
+              </td>
+              {table_head.map((data, index) => (
+                <td
+                  key={index}
+                  className="w-24 h-16 text-center text-gray-700 dark:text-gray-300"
+                >
+                  <CheckBoxOutlineBlankIcon
+                    onClick={() => handleService(invoice.name, data)}
+                    className="cursor-pointer"
+                  />
+                </td>
+              ))}
             </tr>
           ))}
         </tbody>
-        <tfoot className="bg-gray-100 dark:bg-gray-800">
+
+        {/* <tfoot className="bg-gray-500 ">
           <tr>
             <td colSpan={3} className="px-4 py-3 font-medium text-gray-900 dark:text-white">
               Total
@@ -83,8 +94,10 @@ export function TableDemo() {
               $2,500.00
             </td>
           </tr>
-        </tfoot>
+        </tfoot> */}
       </table>
     </div>
   );
 }
+
+export default Table;

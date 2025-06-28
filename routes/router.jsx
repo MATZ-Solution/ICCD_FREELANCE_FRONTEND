@@ -16,6 +16,7 @@ import Requirement from "../src/pages/freelancer/requirement";
 import Gallery from "../src/pages/freelancer/gallery";
 import Publish from "../src/pages/freelancer/publish";
 import MainTemplate from "../src/templates/mainTemplate";
+import Pricing from "../src/pages/freelancer/pricing";
 
 export const router = createBrowserRouter([
   {
@@ -120,6 +121,16 @@ export const router = createBrowserRouter([
       // <AuthRoute>
       <MainTemplate isShowFooter={false}>
         <Publish />
+      </MainTemplate>
+      // </AuthRoute>
+    ),
+  },
+    {
+    path: "/freelancer-profile/pricing",
+    element: (
+      // <AuthRoute>
+      <MainTemplate isShowFooter={false}>
+        <Pricing />
       </MainTemplate>
       // </AuthRoute>
     ),

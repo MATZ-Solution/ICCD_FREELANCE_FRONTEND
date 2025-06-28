@@ -20,7 +20,7 @@ function Requirement() {
                 </div>
 
                 <div className='relative flex items-center justify-center'>
-                    <p className='z-10 text-sm font-semibold bg-white px-3 text-gray-600'>FIVER QUESTIONS</p>
+                    <p className='z-10 text-sm font-semibold bg-[#F8F8F8] px-3 text-gray-600'>FIVER QUESTIONS</p>
                     <div className='z-0 absolute w-full border-[1px] border-[#AFAFAF]'></div>
                 </div>
 
@@ -39,7 +39,7 @@ function Requirement() {
                 </div>
 
                 <div className='relative flex items-center justify-center'>
-                    <p className='z-10 text-sm font-semibold bg-white px-3 capitalize'>YOUR QUESTIONS</p>
+                    <p className='z-10 text-sm font-semibold bg-[#F8F8F8] px-3 capitalize'>YOUR QUESTIONS</p>
                     <div className='z-0 absolute w-full border-[1px] border-[#AFAFAF]'></div>
                 </div>
 

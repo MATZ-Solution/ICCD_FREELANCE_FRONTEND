@@ -1,6 +1,9 @@
 import { useState } from 'react';
 import ReactSelect from '../../component/buttonSelect';
 import Profile from '../../component/freelancers/profile';
+import Table from '../../component/table'
+import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
 
 function Pricing() {
   let data = [
@@ -18,45 +21,13 @@ function Pricing() {
 
   return (
     <Profile>
-      {
-        data.map((item, index) => (
-          <div className='flex flex-col gap-4 sm:gap-10 sm:flex-row'>
-            <div key={index} className='flex flex-col sm:w-80 sm:gap-2'>
-              <p className='font-semibold sm:text-lg'>{item.name}</p>
-              <p className='text-sm'>{item.details}</p>
-            </div>
-            {item.name === 'Gig title' &&
-              (<textarea placeholder="I will do something I'm really good at" className='w-full h-36 border-[#B8B8B8] border-[1px] p-3 rounded-md sm:p-5' ></textarea>)
-            }
-            {item.name === 'Category' &&
-              (
-                <div className='w-full items-center justify-center flex flex-col gap-5 sm:flex-row sm:gap-1'>
-                  <ReactSelect
-                    selectedOption={selectedOption1}
-                    setSelectedOption={setSelectedOption1}
-                    option={options}
-                  />
-                  <ReactSelect
-                    selectedOption={selectedOption2}
-                    setSelectedOption={setSelectedOption2}
-                    option={options}
-                  />
-                </div>
-              )
-            }
-            {item.name === 'Search tags' &&
-              (
-                <div className='w-full flex flex-col gap-1'>
-                  <p className='font-semibold sm:text-lg'>Positive keywords</p>
-                  <p className='text-sm'>Enter search terms you feel your buyers will use when looking for your service.</p>
-                  <textarea placeholder="I will do something I'm really good at" className='w-full h-36 border-[#B8B8B8] border-[1px] focus:none p-5 rounded-md'></textarea>
-                  <p className='text-sm'>5 tags maximum. Use letters and numbers only.</p>
-                </div>
-              )
-            }
-          </div>
-        ))
-      }
+      <div className='font-semibold text-2xl py-2 sm:border-b-[1px] sm:border-b-[#c4c4c4] sm:py-5'>
+        <p className=''>Scope & Pricing</p>
+      </div>
+      <div className='mt-5'>
+        <p className='text-gray-600 font-semibold'>Packages</p>
+        <Table />
+      </div>
     </Profile>
   )
 }

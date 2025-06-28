@@ -7,7 +7,7 @@ function BreadCrumbs() {
   const location = useLocation();
   const pathName = location.pathname.split("/")[2]
   return (
-    <div className="flex flex-wrap items-center gap-4 sm:gap-6 md:gap-7">
+    <div className="flex flex-wrap items-center  gap-4 sm:gap-6 md:gap-7">
       {data.map((item, index) => {
         const getIndex = data.indexOf(pathName)
         return (

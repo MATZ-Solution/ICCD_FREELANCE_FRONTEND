@@ -14,6 +14,7 @@ import * as yup from "yup";
 function ContinueWithEmail({ modalData, setModalData }) {
 
     const { userLogin, isSuccess, isPending, isError, reset, error, data } = useLogin()
+    
     const schema = yup.object({
         email: yup.string()
             .email('Please enter a valid email address')
