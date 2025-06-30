@@ -1,17 +1,30 @@
+import { useNavigate } from "react-router-dom";
 import SellingImage from "../../assets/image 17.png";
-import { useNavigate } from 'react-router-dom';
-import checkImage from '../../assets/check.png';
-
+import logo from "../../assets/ICCD-01.png";
+import Icon1 from "../../assets/1.png";
+import Icon2 from "../../assets/2.png";
+import Icon3 from "../../assets/3.png";
+// import ArrowIcon from "../../assets/arrow.png";
 
 export default function StartSelling() {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
   return (
     <div className="min-h-screen flex flex-col bg-white">
+      {/* Top Logo */}
+      {/* <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 pt-8 pb-4">
+        <div className="w-full flex justify-center lg:justify-start">
+          <img src={logo} alt="ICCD Logo" className="h-16 sm:h-20 w-auto" />
+        </div>
+      </div> */}
+
+      {/* Main Content */}
       <div className="flex-1 flex items-center justify-center">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 w-full">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center min-h-[70vh]">
-            <div className=" sm:space-y-8 flex flex-col items-center justify-center  lg:items-start lg:text-left">
+            
+            {/* Left Text Section */}
+            <div className="sm:space-y-8 flex flex-col items-center justify-center lg:items-start lg:text-left">
               <div>
                 <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 mb-2">
                   Ready to start selling on ICCD Freelance?
@@ -22,9 +35,14 @@ export default function StartSelling() {
               </div>
 
               <div className="space-y-3 mt-2 sm:space-y-8 w-full max-w-md">
+                
+                {/* Step 1 */}
                 <div className="flex items-start gap-3 sm:gap-4">
                   <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <div style={{ backgroundImage: `url(${checkImage})` }} className="w-8 h-8 sm:w-10 sm:h-10  bg-contain bg-no-repeat" />
+                    <div
+                      className="w-8 h-8 sm:w-10 sm:h-10 bg-contain bg-no-repeat"
+                      style={{ backgroundImage: `url(${Icon1})` }}
+                    />
                   </div>
                   <div>
                     <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-1">
@@ -36,9 +54,13 @@ export default function StartSelling() {
                   </div>
                 </div>
 
+                {/* Step 2 */}
                 <div className="flex items-start gap-3 sm:gap-4">
                   <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <div className="w-8 h-8 sm:w-10 sm:h-10 bg-[url('src/assets/2.png')] bg-contain bg-no-repeat" />
+                    <div
+                      className="w-8 h-8 sm:w-10 sm:h-10 bg-contain bg-no-repeat"
+                      style={{ backgroundImage: `url(${Icon2})` }}
+                    />
                   </div>
                   <div>
                     <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-1">
@@ -50,9 +72,13 @@ export default function StartSelling() {
                   </div>
                 </div>
 
+                {/* Step 3 */}
                 <div className="flex items-start gap-3 sm:gap-4">
                   <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <div className="w-8 h-8 sm:w-10 sm:h-10 bg-[url('src/assets/3.png')] bg-contain bg-no-repeat" />
+                    <div
+                      className="w-8 h-8 sm:w-10 sm:h-10 bg-contain bg-no-repeat"
+                      style={{ backgroundImage: `url(${Icon3})` }}
+                    />
                   </div>
                   <div>
                     <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-1">
@@ -65,23 +91,28 @@ export default function StartSelling() {
                 </div>
               </div>
 
-             <button
-                onClick={() => navigate('/profile-tips')}
+              {/* Continue Button */}
+              <button
+                onClick={() => navigate("/profile-tips")}
                 className="bg-[#043A53] flex items-center justify-center gap-x-2 hover:bg-teal-900 text-white px-6 sm:px-8 py-3 w-28 h-10 sm:w-48 rounded-full transition-colors duration-200 mt-4"
-                >
+              >
                 Continue
-                <span className="w-16 h-5 sm:w-6 sm:h-6 bg-[url('src/assets/profile-icons/arrow.png')] bg-contain bg-no-repeat" />
-                </button>
-
+                {/* <span
+                  className="w-16 h-5 sm:w-6 sm:h-6 bg-contain bg-no-repeat"
+                  style={{ backgroundImage: `url(${ArrowIcon})` }}
+                /> */}
+              </button>
             </div>
 
-            <div className=" mb-11 lg:flex lg:items-center lg:justify-center relative w-full h-full">
+            {/* Right Image */}
+            <div className="mb-11 lg:flex md:flex md:flex-col md:items-center sm:flex sm:flex-col sm:items-center  lg:items-center lg:justify-center relative w-full h-full">
               <img
                 src={SellingImage}
                 alt="Start Selling"
                 className="w-full max-w-md xl:max-w-lg object-contain"
               />
             </div>
+
           </div>
         </div>
       </div>
