@@ -10,13 +10,16 @@ import VerifyOtp from "../src/pages/otpVerification";
 import ChangePassword from "../src/pages/changePass";
 import ProtectedRoute from "../utils/protectRoute";
 import FreelancerProfile from "../src/pages/freelancerProfile";
-import Overview from "../src/pages/freelancer/overview";
-import Description from "../src/pages/freelancer/description";
-import Requirement from "../src/pages/freelancer/requirement";
-import Gallery from "../src/pages/freelancer/gallery";
-import Publish from "../src/pages/freelancer/publish";
+import Overview from "../src/pages/freelancer_gigs/overview";
+import Description from "../src/pages/freelancer_gigs/description";
+import Requirement from "../src/pages/freelancer_gigs/requirement";
+import Gallery from "../src/pages/freelancer_gigs/gallery";
+import Publish from "../src/pages/freelancer_gigs/publish";
 import MainTemplate from "../src/templates/mainTemplate";
-import Pricing from "../src/pages/freelancer/pricing";
+import Pricing from "../src/pages/freelancer_gigs/pricing";
+import Orders from "../src/pages/freelancer_dashboard/orders";
+import StartSelling from "../src/pages/freelancer_profile/guideline1";
+import ManageGigsAndProjects from "../src/pages/freelancer_dashboard/gig_projects";
 
 export const router = createBrowserRouter([
   {
@@ -131,6 +134,36 @@ export const router = createBrowserRouter([
       // <AuthRoute>
       <MainTemplate isShowFooter={false}>
         <Pricing />
+      </MainTemplate>
+      // </AuthRoute>
+    ),
+  },
+     {
+    path: "/freelancer/orders",
+    element: (
+      // <AuthRoute>
+      <MainTemplate isShowFooter={false}>
+        <Orders />
+      </MainTemplate>
+      // </AuthRoute>
+    ),
+  },
+       {
+    path: "/freelancer/start-selling",
+    element: (
+      // <AuthRoute>
+      <MainTemplate isShowFooter={false}>
+        <StartSelling />
+      </MainTemplate>
+      // </AuthRoute>
+    ),
+  },
+        {
+    path: "/freelancer/manage-gigs-projects",
+    element: (
+      // <AuthRoute>
+      <MainTemplate isShowFooter={false}>
+        <ManageGigsAndProjects />
       </MainTemplate>
       // </AuthRoute>
     ),

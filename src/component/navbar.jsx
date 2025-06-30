@@ -133,7 +133,7 @@ export default function Navbar() {
                   </button>
                 }
 
-                <button onClick={() => navigate('/login')} className="shadow-xl/20 flex items-center justigy-center gap-5 ml-4 px-4 py-2 bg-[#15A9B2] text-white rounded-full hover:bg-[#05929c] transition cursor-pointer font-semibold hidden md:flex">
+                <button onClick={() => navigate('/login')} className="shadow-xl flex items-center justigy-center gap-5 ml-4 px-4 py-2 bg-[#15A9B2] text-white rounded-full hover:bg-[#05929c] transition cursor-pointer font-semibold hidden md:flex">
                   <p>Get Started Now</p>
                   <div className=' rounded-full px-2 py-1 bg-[#60cfd6]'>
                     <EastIcon style={{ fontSize: 20 }} />
