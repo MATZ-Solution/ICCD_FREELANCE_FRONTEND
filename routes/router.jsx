@@ -20,6 +20,7 @@ import Pricing from "../src/pages/freelancer_gigs/pricing";
 import Orders from "../src/pages/freelancer_dashboard/orders";
 import StartSelling from "../src/pages/freelancer_profile/guideline1";
 import ManageGigsAndProjects from "../src/pages/freelancer_dashboard/gig_projects";
+import Jobs from "../src/pages/freelancer_dashboard/jobs";
 
 export const router = createBrowserRouter([
   {
@@ -128,7 +129,7 @@ export const router = createBrowserRouter([
       // </AuthRoute>
     ),
   },
-    {
+  {
     path: "/freelancer-profile/pricing",
     element: (
       // <AuthRoute>
@@ -138,7 +139,7 @@ export const router = createBrowserRouter([
       // </AuthRoute>
     ),
   },
-     {
+  {
     path: "/freelancer/orders",
     element: (
       // <AuthRoute>
@@ -148,7 +149,7 @@ export const router = createBrowserRouter([
       // </AuthRoute>
     ),
   },
-       {
+  {
     path: "/freelancer/start-selling",
     element: (
       // <AuthRoute>
@@ -158,12 +159,22 @@ export const router = createBrowserRouter([
       // </AuthRoute>
     ),
   },
-        {
+  {
     path: "/freelancer/manage-gigs-projects",
     element: (
       // <AuthRoute>
       <MainTemplate isShowFooter={false}>
         <ManageGigsAndProjects />
+      </MainTemplate>
+      // </AuthRoute>
+    ),
+  },
+  {
+    path: "/freelancer/jobs",
+    element: (
+      // <AuthRoute>
+      <MainTemplate isShowFooter={false}>
+        <Jobs />
       </MainTemplate>
       // </AuthRoute>
     ),
