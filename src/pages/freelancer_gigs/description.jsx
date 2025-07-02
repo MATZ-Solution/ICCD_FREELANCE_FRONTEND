@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import Profile from '../../component/freelancers/profile';
+import Profile from '../../component/freelancers_gigs/profile';
 import Button from '../../component/button';
 import { useNavigate } from 'react-router-dom';
 

@@ -1,11 +1,12 @@
 import React from 'react'
-import Profile from '../../component/freelancers/profile';
+import Profile from '../../component/freelancers_gigs/profile';
 import ReactSelect from '../../component/buttonSelect';
 import { useState } from 'react';
 import Button from '../../component/button';
 import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
 import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
-import publish_pic from '../../assets/publish_pic.png'
+import publish_pic from '../../assets/freelancer_gigs/publish_pic.png'
+
 function Publish() {
     const options = [
         { value: 'chocolate', label: 'Chocolate' },

@@ -1,5 +1,4 @@
-import React from 'react'
-import Profile from '../../component/freelancers/profile';
+import Profile from '../../component/freelancers_gigs/profile';
 import ReactSelect from '../../component/buttonSelect';
 import { useState } from 'react';
 import Button from '../../component/button';

@@ -1,6 +1,4 @@
-import React from 'react'
-import Profile from '../../component/freelancers/profile';
-import ReactSelect from '../../component/buttonSelect';
+import Profile from '../../component/freelancers_gigs/profile';
 import { useState } from 'react';
 import Button from '../../component/button';
 import CollectionsIcon from '@mui/icons-material/Collections';

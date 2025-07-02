@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import ReactSelect from '../../component/buttonSelect';
-import Profile from '../../component/freelancers/profile';
+import Profile from '../../component/freelancers_gigs/profile';
 import Table from '../../component/table'
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';

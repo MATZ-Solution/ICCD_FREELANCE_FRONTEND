@@ -1,7 +1,7 @@
-import order_logo from '../assets/order_logo.png';
-import client_img from '../assets/client_img.png';
+import order_logo from '../../assets/freelancer_dashboard/order_logo.png';
+import client_img from '../../assets/freelancer_dashboard/client_img.png';
 
-const Table2 = () => {
+const OrderTable = () => {
     const data = [
         {
             id: 1,
@@ -133,4 +133,4 @@ const Table2 = () => {
     );
 };
 
-export default Table2;
+export default OrderTable;

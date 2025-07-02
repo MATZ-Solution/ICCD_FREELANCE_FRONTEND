@@ -1,16 +1,12 @@
-import bannerImage from '../../assets/banner_img_1.png'
 import EastIcon from '@mui/icons-material/East';
-import job_opp_pic from '../../assets/job_opp_pic.png'
+import job_opp_pic from '../../assets/freelancer_dashboard/job_opp_pic.png'
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import LinkIcon from '@mui/icons-material/Link';
-import CloseIcon from '@mui/icons-material/Close';
 import PaymentIcon from '@mui/icons-material/Payment';
 import CasesIcon from '@mui/icons-material/Cases';
 import { useState } from 'react';
-import Dialog from '../../component/dialog';
-import SignIn_modal1 from '../../component/modal/signIn_Modal1';
 import Modal from '../../component/modal';
 
 function Jobs() {

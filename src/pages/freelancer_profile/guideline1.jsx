@@ -1,25 +1,19 @@
 import { useNavigate } from "react-router-dom";
-import SellingImage from "../../assets/image 17.png";
-import logo from "../../assets/ICCD-01.png";
-import Icon1 from "../../assets/1.png";
-import Icon2 from "../../assets/2.png";
-import Icon3 from "../../assets/3.png";
+import SellingImage from "../../assets/freelancer_profile/image 17.png";
+import Icon1 from "../../assets/freelancer_profile/1.png";
+import Icon2 from "../../assets/freelancer_profile/2.png";
+import Icon3 from "../../assets/freelancer_profile/3.png";
 // import ArrowIcon from "../../assets/arrow.png";
 
 export default function StartSelling() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen flex flex-col bg-white">
+    <div className="mt-12 px-10 min-h-screen flex flex-col bg-white">
       {/* Top Logo */}
-      {/* <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 pt-8 pb-4">
-        <div className="w-full flex justify-center lg:justify-start">
-          <img src={logo} alt="ICCD Logo" className="h-16 sm:h-20 w-auto" />
-        </div>
-      </div> */}
 
       {/* Main Content */}
-      <div className="flex-1 flex items-center justify-center">
+      <div className="flex-1 flex xjustify-center">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 w-full">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center min-h-[70vh]">
             

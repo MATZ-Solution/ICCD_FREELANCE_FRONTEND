@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Table2 from "../../component/table2"
+import OrderTable from "../../component/freelancer_dashboard/order_table"
 import SearchIcon from '@mui/icons-material/Search';
 
 function Orders() {
@@ -26,7 +26,7 @@ function Orders() {
             </div>
             {/* table */}
             <div>
-                <Table2 />
+                <OrderTable />
             </div>
         </div>
     )

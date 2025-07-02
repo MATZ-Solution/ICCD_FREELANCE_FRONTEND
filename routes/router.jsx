@@ -21,6 +21,8 @@ import Orders from "../src/pages/freelancer_dashboard/orders";
 import StartSelling from "../src/pages/freelancer_profile/guideline1";
 import ManageGigsAndProjects from "../src/pages/freelancer_dashboard/gig_projects";
 import Jobs from "../src/pages/freelancer_dashboard/jobs";
+import ICCDProfileTipsPage from "../src/pages/freelancer_profile/guideline2";
+import ICCDGuidelinesPage from "../src/pages/freelancer_profile/guideline3";
 
 export const router = createBrowserRouter([
   {
@@ -150,11 +152,31 @@ export const router = createBrowserRouter([
     ),
   },
   {
-    path: "/freelancer/start-selling",
+    path: "/freelancer/start-selling/1",
     element: (
       // <AuthRoute>
       <MainTemplate isShowFooter={false}>
         <StartSelling />
+      </MainTemplate>
+      // </AuthRoute>
+    ),
+  },
+  {
+    path: "/freelancer/start-selling/2",
+    element: (
+      // <AuthRoute>
+      <MainTemplate isShowFooter={false}>
+        <ICCDProfileTipsPage />
+      </MainTemplate>
+      // </AuthRoute>
+    ),
+  },
+  {
+    path: "/freelancer/start-selling/3",
+    element: (
+      // <AuthRoute>
+      <MainTemplate isShowFooter={false}>
+        <ICCDGuidelinesPage />
       </MainTemplate>
       // </AuthRoute>
     ),
