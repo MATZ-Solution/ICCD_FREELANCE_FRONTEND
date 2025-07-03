@@ -23,6 +23,11 @@ import ManageGigsAndProjects from "../src/pages/freelancer_dashboard/gig_project
 import Jobs from "../src/pages/freelancer_dashboard/jobs";
 import ICCDProfileTipsPage from "../src/pages/freelancer_profile/guideline2";
 import ICCDGuidelinesPage from "../src/pages/freelancer_profile/guideline3";
+import Add_resume from "../src/pages/freelancer_dashboard/add_resume";
+import Success from "../src/component/freelancer_dashboard/success";
+import Job_experience from "../src/component/freelancer_dashboard/job_experience";
+import ClientDashboard from "../src/pages/client_dashboard/dashboard";
+import FreelancerDashboard from "../src/pages/freelancer_dashboard/dashboard";
 
 export const router = createBrowserRouter([
   {
@@ -152,6 +157,16 @@ export const router = createBrowserRouter([
     ),
   },
   {
+    path: "/freelancer/dashboard",
+    element: (
+      // <AuthRoute>
+      <MainTemplate isShowFooter={false}>
+        <FreelancerDashboard />
+      </MainTemplate>
+      // </AuthRoute>
+    ),
+  },
+  {
     path: "/freelancer/start-selling/1",
     element: (
       // <AuthRoute>
@@ -201,4 +216,47 @@ export const router = createBrowserRouter([
       // </AuthRoute>
     ),
   },
+  {
+    path: "/freelancer/add-resume",
+    element: (
+      // <AuthRoute>
+      <MainTemplate isShowFooter={false}>
+        <Add_resume />
+      </MainTemplate>
+      // </AuthRoute>
+    ),
+  },
+  {
+    path: "/freelancer/success",
+    element: (
+      // <AuthRoute>
+      <MainTemplate isShowFooter={false}>
+        <Success />
+      </MainTemplate>
+      // </AuthRoute>
+    ),
+  },
+
+  {
+    path: "/freelancer/job-experience",
+    element: (
+      // <AuthRoute>
+      <MainTemplate isShowFooter={false}>
+        <Job_experience />
+      </MainTemplate>
+      // </AuthRoute>
+    ),
+  },
+
+  {
+    path: "/client/dashboard",
+    element: (
+      // <AuthRoute>
+      <MainTemplate isShowFooter={false}>
+        <ClientDashboard />
+      </MainTemplate>
+      // </AuthRoute>
+    ),
+  },
+
 ]);

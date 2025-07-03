@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import logo from '../assets/ICCD-01.png'
 import EastIcon from '@mui/icons-material/East';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
@@ -9,13 +9,20 @@ import SearchIcon from '@mui/icons-material/Search';
 import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
+import { Bell, Mail, HelpCircle, Star, TrendingUp, FileText, Users, Filter, X, Menu } from "lucide-react";
+
 
 export default function Navbar() {
 
+  const location = useLocation()
   const navigate = useNavigate()
   const [isOpen, setIsOpen] = useState(false);
   const userDetails = useSelector(state => state.user.userDetails)
-  console.log("user details: ", userDetails)
+  const { pathname } = location
+  const [notifications, setNotifications] = useState(3);
+  const [messages, setMessages] = useState(5);
+  const [showProfileMenu, setShowProfileMenu] = useState(false);
+
 
 
   const navigation = [
@@ -24,6 +31,20 @@ export default function Navbar() {
     { name: "Why ICCD Freelance", href: "#" },
     { name: "Contact Us", href: "#" },
     { name: "Login", href: "#" },
+  ];
+
+  const navTabsClientDashboard = [
+    { name: "Dashboard", path: '/client/dashboard' },
+    { name: "Orders", path: '' },
+    { name: "Messages", path: '' },
+    { name: "Jobs", path: '' }
+  ];
+
+  const navTabsFreelancerDashboard = [
+    { name: "Dashboard", path: '/freelancer/dashboard' },
+    { name: "Gigs and Projects", path: '/freelancer/manage-gigs-projects' },
+    { name: "Analytics", path: '/freelancer/analytics' },
+    { name: "Jobs", path: '/freelancer/jobs' }
   ];
 
   useEffect(() => {
@@ -36,7 +57,6 @@ export default function Navbar() {
   return (
     <header className="bg-white shadow fontFamily-montreal border-b-[1px] border-b-[#c4c4c4]">
       <div className="max-w-7xl mx-auto px-6 sm:px-12">
-
 
         <div className="flex justify-between items-center ">
           {/* logo */}
@@ -85,7 +105,7 @@ export default function Navbar() {
           </div>
 
           {/* Desktop middle Section */}
-          {false ?
+          {/* {false ?
             <div className="relative ">
               <input placeholder="What services are you looking for today " className="rounded w-xl h-10 p-3 border-[1px] border-gray-400"></input>
               <div className="rounded absolute w-10 h-10 top-0 right-0 flex items-center justify-center bg-black">
@@ -105,7 +125,22 @@ export default function Navbar() {
                 </a>
               ))}
             </nav>
-          }
+          } */}
+
+          <nav className=" ml-10 sm:flex space-x-1">
+            {navTabsFreelancerDashboard.map((data, index) => (
+              <button
+                key={index}
+                onClick={() => navigate(`${data.path}`)}
+                className={`px-3 py-2 text-sm font-medium rounded-md ${pathname === data.path
+                  ? "text-cyan-500 bg-cyan-50"
+                  : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
+                  }`}
+              >
+                {data.name}
+              </button>
+            ))}
+          </nav>
 
           {userDetails && (<p className="text-red-300">Become a seller</p>)}
           {userDetails && (<Link to="/freelancer-profile" className="text-white">Profile</Link>)}
@@ -122,7 +157,7 @@ export default function Navbar() {
                   <label className="text-gray-700 font-semibold text-medium">Orders</label>
                 </div>
                 <div className=" w-10 h-10 bg-gray-500 rounded-full">
-                  </div>
+                </div>
               </div>
               :
               <div className="show_nav_links_desktop">
@@ -141,6 +176,43 @@ export default function Navbar() {
                 </button>
               </div>
           }
+
+          <div className="flex items-center gap-2">
+                      <button onClick={() => setNotifications(0)} className="p-2 hover:bg-gray-100 rounded-md relative">
+                        <Bell className="h-5 w-5 text-gray-600" />
+                        {notifications > 0 && (
+                          <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                            {notifications}
+                          </span>
+                        )}
+                      </button>
+                      <button onClick={() => setMessages(0)} className="p-2 hover:bg-gray-100 rounded-md relative">
+                        <Mail className="h-5 w-5 text-gray-600" />
+                        {messages > 0 && (
+                          <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                            {messages}
+                          </span>
+                        )}
+                      </button>
+                      <button className="p-2 hover:bg-gray-100 rounded-md">
+                        <HelpCircle className="h-5 w-5 text-gray-600" />
+                      </button>
+                      <div className="relative">
+                        <button
+                          onClick={() => setShowProfileMenu(!showProfileMenu)}
+                          className="w-8 h-8 bg-gradient-to-br from-purple-400 to-purple-600 rounded-full"
+                        />
+                        {showProfileMenu && (
+                          <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg  py-1 z-50">
+                            {["View Profile", "Settings", "Logout"].map(action => (
+                              <button key={action} className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
+                                {action}
+                              </button>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    </div>
 
         </div>
       </div>
