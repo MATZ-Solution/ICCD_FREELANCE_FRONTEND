@@ -1,8 +1,10 @@
 import React from 'react'
 import thank_you_pic from '../../assets/freelancer_dashboard/thank_you_pic.png'
 import Button from '../button'
+import { useNavigate } from 'react-router-dom';
 
 function Job_experience() {
+    const navigate = useNavigate()
     return (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
             <div className="flex flex-col  bg-white rounded-lg w-full sm:w-[70%]  lg:w-[50%] mx-4 p-6">
@@ -23,7 +25,7 @@ function Job_experience() {
                         className="w-full border-[1px] border-[#B8B8B8] rounded-md px-3 py-2 text-sm "
                     />
                 </div>
-                <Button className='mt-4'>Continue</Button>
+                <Button onClick={()=> navigate('/freelancer/success')} className='mt-4'>Continue</Button>
                 <p className='w-[90%] text-sm text-center text-[#767676] mt-6 '>This site is protected by reCAPTCHA and the Google Privacy Policy
                     and Terms of Service apply.</p>
             </div>

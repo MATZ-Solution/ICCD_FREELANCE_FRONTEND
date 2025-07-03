@@ -8,8 +8,10 @@ import PaymentIcon from '@mui/icons-material/Payment';
 import CasesIcon from '@mui/icons-material/Cases';
 import { useState } from 'react';
 import Modal from '../../component/modal';
+import { useNavigate } from 'react-router-dom';
 
 function Jobs() {
+    const navigate = useNavigate()
     const filter = ['Pay', 'Company', 'Job Type', 'Job Language', 'Location', 'Date Posted']
     const [jobsData, setJobData] = useState([])
     const companyData = [
@@ -100,7 +102,9 @@ function Jobs() {
                             </div>
 
                             <div className='mt-3 flex gap-4 items-center'>
-                                <button className='bg-[#15A9B2] rounded-md text-white px-7 py-2'>Apply Now</button>
+                                <button
+                                onClick={()=> navigate('/freelancer/add-resume')}
+                                 className='bg-[#15A9B2] rounded-md text-white px-7 py-2'>Apply Now</button>
                                 <button className=' bg-gray-300 p-1 rounded-md'>
                                     <BookmarkBorderIcon className=' text-black rounded-md' />
                                 </button>

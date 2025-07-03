@@ -23,8 +23,6 @@ export default function Navbar() {
   const [messages, setMessages] = useState(5);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
 
-
-
   const navigation = [
     { name: "Find Talent", href: "#" },
     { name: "Find Work", href: "#" },
@@ -60,7 +58,7 @@ export default function Navbar() {
 
         <div className="flex justify-between items-center ">
           {/* logo */}
-          <div className="w-20 h-20 md:w-24 md:h-24">
+          <div onClick={()=> navigate('/')} className="w-20 h-20 md:w-24 md:h-24">
             <img className="w-full h-full object-contain" src={logo} />
           </div>
 
@@ -148,15 +146,41 @@ export default function Navbar() {
           {/* Desktop Right Section*/}
 
           {
-            false ?
-              <div className="flex items-center gap-20">
-                <div className="flex gap-4">
-                  <NotificationsNoneOutlinedIcon style={{ scale: 1.2 }} className="text-gray-600" />
-                  <EmailOutlinedIcon style={{ scale: 1.2 }} className="text-gray-600" />
-                  <FavoriteBorderOutlinedIcon style={{ scale: 1.2 }} className="text-gray-600" />
-                  <label className="text-gray-700 font-semibold text-medium">Orders</label>
-                </div>
-                <div className=" w-10 h-10 bg-gray-500 rounded-full">
+            true ?
+              <div className="flex items-center gap-2">
+                <button onClick={() => setNotifications(0)} className="p-2 hover:bg-gray-100 rounded-md relative">
+                  <Bell className="h-5 w-5 text-gray-600" />
+                  {notifications > 0 && (
+                    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                      {notifications}
+                    </span>
+                  )}
+                </button>
+                <button onClick={() => setMessages(0)} className="p-2 hover:bg-gray-100 rounded-md relative">
+                  <Mail className="h-5 w-5 text-gray-600" />
+                  {messages > 0 && (
+                    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                      {messages}
+                    </span>
+                  )}
+                </button>
+                <button className="p-2 hover:bg-gray-100 rounded-md">
+                  <HelpCircle className="h-5 w-5 text-gray-600" />
+                </button>
+                <div className="relative">
+                  <button
+                    onClick={() => setShowProfileMenu(!showProfileMenu)}
+                    className="w-8 h-8 bg-gradient-to-br from-purple-400 to-purple-600 rounded-full"
+                  />
+                  {showProfileMenu && (
+                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg  py-1 z-50">
+                      {["View Profile", "Settings", "Logout"].map(action => (
+                        <button key={action} className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
+                          {action}
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
               :
@@ -176,43 +200,6 @@ export default function Navbar() {
                 </button>
               </div>
           }
-
-          <div className="flex items-center gap-2">
-                      <button onClick={() => setNotifications(0)} className="p-2 hover:bg-gray-100 rounded-md relative">
-                        <Bell className="h-5 w-5 text-gray-600" />
-                        {notifications > 0 && (
-                          <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                            {notifications}
-                          </span>
-                        )}
-                      </button>
-                      <button onClick={() => setMessages(0)} className="p-2 hover:bg-gray-100 rounded-md relative">
-                        <Mail className="h-5 w-5 text-gray-600" />
-                        {messages > 0 && (
-                          <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                            {messages}
-                          </span>
-                        )}
-                      </button>
-                      <button className="p-2 hover:bg-gray-100 rounded-md">
-                        <HelpCircle className="h-5 w-5 text-gray-600" />
-                      </button>
-                      <div className="relative">
-                        <button
-                          onClick={() => setShowProfileMenu(!showProfileMenu)}
-                          className="w-8 h-8 bg-gradient-to-br from-purple-400 to-purple-600 rounded-full"
-                        />
-                        {showProfileMenu && (
-                          <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg  py-1 z-50">
-                            {["View Profile", "Settings", "Logout"].map(action => (
-                              <button key={action} className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
-                                {action}
-                              </button>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                    </div>
 
         </div>
       </div>

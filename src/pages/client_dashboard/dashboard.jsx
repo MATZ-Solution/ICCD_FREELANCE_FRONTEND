@@ -11,7 +11,7 @@ import {
   X,
   Menu,
 } from "lucide-react";
-import DCard from "../freelancer_dashboard/cards";
+import DCard from "../../component/freelancer_dashboard/cards";
 import logo from "../../assets/ICCD-01.png";
 import dp from "../../assets/client_dashboard/clientdp.png";
 import GigCard from "../../component/client_dashboard/gig_card";

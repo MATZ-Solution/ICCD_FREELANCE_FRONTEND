@@ -1,4 +1,4 @@
-export default function OverviewChart({ salesData, ordersData, height = 150, width = 400 }) {
+export function OverviewChartF({ salesData, ordersData, height = 150, width = 400 }) {
   const generateChartPath = (data, height, width) => {
     const points = data.map((value, index) => {
       const x = (index / (data.length - 1)) * width
@@ -54,3 +54,5 @@ export default function OverviewChart({ salesData, ordersData, height = 150, wid
     </div>
   )
 }
+
+export default OverviewChartF;

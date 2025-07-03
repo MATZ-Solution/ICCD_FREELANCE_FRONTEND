@@ -28,6 +28,7 @@ import Success from "../src/component/freelancer_dashboard/success";
 import Job_experience from "../src/component/freelancer_dashboard/job_experience";
 import ClientDashboard from "../src/pages/client_dashboard/dashboard";
 import FreelancerDashboard from "../src/pages/freelancer_dashboard/dashboard";
+import FreelancerAnalytics from "../src/pages/freelancer_dashboard/analytics";
 
 export const router = createBrowserRouter([
   {
@@ -162,6 +163,16 @@ export const router = createBrowserRouter([
       // <AuthRoute>
       <MainTemplate isShowFooter={false}>
         <FreelancerDashboard />
+      </MainTemplate>
+      // </AuthRoute>
+    ),
+  },
+   {
+    path: "/freelancer/analytics",
+    element: (
+      // <AuthRoute>
+      <MainTemplate isShowFooter={false}>
+        <FreelancerAnalytics />
       </MainTemplate>
       // </AuthRoute>
     ),

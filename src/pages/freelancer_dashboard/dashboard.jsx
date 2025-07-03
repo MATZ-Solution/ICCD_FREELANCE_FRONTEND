@@ -1,8 +1,8 @@
 
 import { useState } from "react";
 import { Bell, Mail, HelpCircle, Star, TrendingUp, FileText, Users, Filter, X, Menu } from "lucide-react";
-import OverviewChart from "../../component/freelancer_dashboard/chart";
-import DCard from "./cards";
+import OverviewChart from "../../component/freelancer_dashboard/overview";
+import DCard from "../../component/freelancer_dashboard/cards";
 import logo from "../../assets/ICCD-01.png";
 import dp from "../../assets/client_dashboard/clientdp.png"
 import Table from "../freelancer_gigs/table";
@@ -52,65 +52,17 @@ export default function FreelancerDashboard() {
   return (
     <div className="min-h-screen px-4  sm:px-6  bg-white">
       {/* Header */}
-      <header className="bg-white ml-4  py-3 sm:px-6">
-        <div className="flex items-center justify-between flex-wrap gap-4">
-          <div className="flex items-center gap-4">
-            <img src={logo} alt="Logo" className="w-16 h-16 sm:w-16 sm:h-16" />
-            <button className="lg:hidden " onClick={() => setShowMobileSidebar(!showMobileSidebar)}>
-              <Menu className="h-6 w-6 text-gray-600" />
-            </button>
-          </div>
 
-          {/* <div className="flex items-center gap-2">
-            <button onClick={() => setNotifications(0)} className="p-2 hover:bg-gray-100 rounded-md relative">
-              <Bell className="h-5 w-5 text-gray-600" />
-              {notifications > 0 && (
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                  {notifications}
-                </span>
-              )}
-            </button>
-            <button onClick={() => setMessages(0)} className="p-2 hover:bg-gray-100 rounded-md relative">
-              <Mail className="h-5 w-5 text-gray-600" />
-              {messages > 0 && (
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                  {messages}
-                </span>
-              )}
-            </button>
-            <button className="p-2 hover:bg-gray-100 rounded-md">
-              <HelpCircle className="h-5 w-5 text-gray-600" />
-            </button>
-            <div className="relative">
-              <button
-                onClick={() => setShowProfileMenu(!showProfileMenu)}
-                className="w-8 h-8 bg-gradient-to-br from-purple-400 to-purple-600 rounded-full"
-              />
-              {showProfileMenu && (
-                <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg  py-1 z-50">
-                  {["View Profile", "Settings", "Logout"].map(action => (
-                    <button key={action} className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
-                      {action}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div> */}
-
-        </div>
-      </header>
       {showMobileSidebar && (
         <div
           onClick={() => setShowMobileSidebar(false)}
           className="fixed top-0 left-0 w-full h-full bg-black/20 backdrop-blur-sm z-40 cursor-pointer"
         />
       )}
-      <div className="flex  flex-col sm:flex-row">
+      <div className="flex flex-col sm:flex-row">
         {/* Sidebar */}
         <aside
-          className={`${showMobileSidebar ? "block" : "hidden"
-            } fixed top-0  left-0 w-full sm:w-80 h-full bg-[#F8F8F8] lg:bg-white backdrop-blur-3xl p-4 sm:p-6 z-50 transition-all duration-700 lg:static lg:block lg:h-auto `}
+          className={`${showMobileSidebar ? "block" : "hidden"} fixed top-0 left-0 w-full sm:w-80 h-full bg-[#F8F8F8] lg:bg-white backdrop-blur-3xl p-4 sm:p-6 z-50 transition-all duration-700 lg:static lg:block lg:h-auto `}
         >
           <div className="flex justify-end mb-4 lg:hidden">
             <button onClick={() => setShowMobileSidebar(false)}>
@@ -186,7 +138,7 @@ export default function FreelancerDashboard() {
 
         </aside>
         {/* Main Content */}
-        <main className="flex-1 ">
+        <main className="mt-10 flex-1 ">
           <div className="mb-6">
             <h1 className="text-2xl font-bold mb-2">Welcome,  Muhammad Talha</h1>
             <p className="text-xs text-gray-600 mb-4">
