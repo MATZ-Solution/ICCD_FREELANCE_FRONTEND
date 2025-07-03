@@ -6,6 +6,7 @@ import DCard from "../../component/freelancer_dashboard/cards";
 import logo from "../../assets/ICCD-01.png";
 import dp from "../../assets/client_dashboard/clientdp.png"
 import Table from "../freelancer_gigs/table";
+import PricingTable from "../../component/pricing_table";
 
 export default function FreelancerDashboard() {
   const [activeNavTab, setActiveNavTab] = useState("Dashboard");
