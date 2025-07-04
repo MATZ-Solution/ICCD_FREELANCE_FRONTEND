@@ -37,11 +37,11 @@ export function useLogin() {
     onSuccess: (response) => {
       setToken(response?.data?.token);
       dispatch(setUserDetails(response?.data?.data));
-      navigate("/dashboard");
-      if (localStorage.get("verify-otp") || localStorage.get("change_pass")) {
-        localStorage.removeItem("verify-otp");
-        localStorage.removeItem("change_pass");
-      }
+      navigate("/freelancer/dashboard");
+      // if (localStorage.get("verify-otp") || localStorage.get("change_pass")) {
+      //   localStorage.removeItem("verify-otp");
+      //   localStorage.removeItem("change_pass");
+      // }
     },
   });
 

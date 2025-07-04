@@ -1,9 +1,8 @@
 // src/routes/router.tsx
 import { createBrowserRouter } from "react-router-dom";
-import Login from "../src/pages/signIn";
+import Login from "../src/pages/signIn/signIn";
 import Dashboard from "../src/pages/dashboard";
 import AuthRoute from "../utils/authRoute";
-import Signup from "../src/pages/signUp";
 import Homepage from "../src/pages/homepage";
 import ForgotPassword from "../src/pages/forgotPass";
 import VerifyOtp from "../src/pages/otpVerification";
@@ -29,6 +28,7 @@ import Job_experience from "../src/component/freelancer_dashboard/job_experience
 import ClientDashboard from "../src/pages/client_dashboard/dashboard";
 import FreelancerDashboard from "../src/pages/freelancer_dashboard/dashboard";
 import FreelancerAnalytics from "../src/pages/freelancer_dashboard/analytics";
+import SignUp from "../src/pages/signUp";
 
 export const router = createBrowserRouter([
   {
@@ -46,7 +46,7 @@ export const router = createBrowserRouter([
   {
     path: "/signUp",
     element:
-      <Signup />
+      <SignUp />
     ,
   },
   {
@@ -160,14 +160,14 @@ export const router = createBrowserRouter([
   {
     path: "/freelancer/dashboard",
     element: (
-      // <AuthRoute>
-      <MainTemplate isShowFooter={false}>
-        <FreelancerDashboard />
-      </MainTemplate>
-      // </AuthRoute>
+      <AuthRoute>
+        <MainTemplate isShowFooter={false}>
+          <FreelancerDashboard />
+        </MainTemplate>
+      </AuthRoute>
     ),
   },
-   {
+  {
     path: "/freelancer/analytics",
     element: (
       // <AuthRoute>

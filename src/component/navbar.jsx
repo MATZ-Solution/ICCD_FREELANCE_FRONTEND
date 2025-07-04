@@ -10,7 +10,7 @@ import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNone
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 import { Bell, Mail, HelpCircle, Star, TrendingUp, FileText, Users, Filter, X, Menu } from "lucide-react";
-
+import useLogout from "../../hooks/useLogout";
 
 export default function Navbar() {
 
@@ -22,6 +22,8 @@ export default function Navbar() {
   const [notifications, setNotifications] = useState(3);
   const [messages, setMessages] = useState(5);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
+
+  const logout = useLogout()
 
   const navigation = [
     { name: "Find Talent", href: "#" },
@@ -58,7 +60,7 @@ export default function Navbar() {
 
         <div className="flex justify-between items-center ">
           {/* logo */}
-          <div onClick={()=> navigate('/')} className="w-20 h-20 md:w-24 md:h-24">
+          <div onClick={() => navigate('/')} className="w-20 h-20 md:w-24 md:h-24">
             <img className="w-full h-full object-contain" src={logo} />
           </div>
 
@@ -125,20 +127,36 @@ export default function Navbar() {
             </nav>
           } */}
 
-          <nav className=" ml-10 sm:flex space-x-1">
-            {navTabsFreelancerDashboard.map((data, index) => (
-              <button
-                key={index}
-                onClick={() => navigate(`${data.path}`)}
-                className={`px-3 py-2 text-sm font-medium rounded-md ${pathname === data.path
-                  ? "text-cyan-500 bg-cyan-50"
-                  : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
-                  }`}
-              >
-                {data.name}
-              </button>
-            ))}
-          </nav>
+          {
+            pathname.includes('/freelancer') ?
+              <nav className=" ml-10 sm:flex space-x-1">
+                {navTabsFreelancerDashboard.map((data, index) => (
+                  <button
+                    key={index}
+                    onClick={() => navigate(`${data.path}`)}
+                    className={`px-3 py-2 text-sm font-medium rounded-md ${pathname === data.path
+                      ? "text-cyan-500 bg-cyan-50"
+                      : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
+                      }`}
+                  >
+                    {data.name}
+                  </button>
+                ))}
+              </nav>
+              :
+              <nav className="show_nav_links_desktop space-x-6 items-center">
+                {navigation.map((item) => (
+                  <a
+                    key={item.name}
+                    href={item.href}
+                    className="text-black font-semibold  hover:text-[#15A9B2] transition"
+                  >
+                    {item.name !== 'Login' && item.name}
+                    {(item.name !== 'Contact Us' && item.name !== 'Login') && (<KeyboardArrowDownIcon />)}
+                  </a>
+                ))}
+              </nav>
+          }
 
           {userDetails && (<p className="text-red-300">Become a seller</p>)}
           {userDetails && (<Link to="/freelancer-profile" className="text-white">Profile</Link>)}
@@ -146,7 +164,7 @@ export default function Navbar() {
           {/* Desktop Right Section*/}
 
           {
-            true ?
+            pathname.includes('/freelancer') ?
               <div className="flex items-center gap-2">
                 <button onClick={() => setNotifications(0)} className="p-2 hover:bg-gray-100 rounded-md relative">
                   <Bell className="h-5 w-5 text-gray-600" />
@@ -174,9 +192,15 @@ export default function Navbar() {
                   />
                   {showProfileMenu && (
                     <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg  py-1 z-50">
-                      {["View Profile", "Settings", "Logout"].map(action => (
-                        <button key={action} className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
-                          {action}
+                      {[
+                        { name: "View Profile", action: () => navigate("/profile") },
+                        { name: "Settings", action: () => navigate("/settings") },
+                        { name: "Logout", action: logout },
+                      ].map((data, index) => (
+                        <button key={index} className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                        onClick={data.action}
+                        >
+                          {data.name}
                         </button>
                       ))}
                     </div>
@@ -187,20 +211,22 @@ export default function Navbar() {
               <div className="show_nav_links_desktop">
                 {
                   (userDetails === null) &&
-                  <button onClick={() => navigate('/login')} className="ml-4 px-4 py-2  text-black font-semibold rounded  cursor-pointer hover:text-[#15A9B2]">
-                    Login
-                  </button>
+                  (
+                    <>
+                      <button onClick={() => navigate('/login')} className="ml-4 px-4 py-2  text-black font-semibold rounded  cursor-pointer hover:text-[#15A9B2]">
+                        Login
+                      </button>
+                      <button onClick={() => navigate('/login')} className="shadow-xl flex items-center justigy-center gap-5 ml-4 px-4 py-2 bg-[#15A9B2] text-white rounded-full hover:bg-[#05929c] transition cursor-pointer font-semibold hidden md:flex">
+                        <p>Get Started Now</p>
+                        <div className=' rounded-full px-2 py-1 bg-[#60cfd6]'>
+                          <EastIcon style={{ fontSize: 20 }} />
+                        </div>
+                      </button>
+                    </>
+                  )
                 }
-
-                <button onClick={() => navigate('/login')} className="shadow-xl flex items-center justigy-center gap-5 ml-4 px-4 py-2 bg-[#15A9B2] text-white rounded-full hover:bg-[#05929c] transition cursor-pointer font-semibold hidden md:flex">
-                  <p>Get Started Now</p>
-                  <div className=' rounded-full px-2 py-1 bg-[#60cfd6]'>
-                    <EastIcon style={{ fontSize: 20 }} />
-                  </div>
-                </button>
               </div>
           }
-
         </div>
       </div>
       {/* Mobile Menu */}
