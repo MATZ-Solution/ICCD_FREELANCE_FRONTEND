@@ -29,6 +29,7 @@ import ClientDashboard from "../src/pages/client_dashboard/dashboard";
 import FreelancerDashboard from "../src/pages/freelancer_dashboard/dashboard";
 import FreelancerAnalytics from "../src/pages/freelancer_dashboard/analytics";
 import SignUp from "../src/pages/signUp";
+import Post_job from "../src/pages/client_dashboard/post_job";
 
 export const router = createBrowserRouter([
   {
@@ -265,6 +266,16 @@ export const router = createBrowserRouter([
       // <AuthRoute>
       <MainTemplate isShowFooter={false}>
         <ClientDashboard />
+      </MainTemplate>
+      // </AuthRoute>
+    ),
+  },
+    {
+    path: "/client/post-job",
+    element: (
+      // <AuthRoute>
+      <MainTemplate isShowFooter={false}>
+        <Post_job />
       </MainTemplate>
       // </AuthRoute>
     ),
