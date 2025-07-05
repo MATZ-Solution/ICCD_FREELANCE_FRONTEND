@@ -5,6 +5,7 @@ import * as yup from "yup";
 import { Briefcase } from "lucide-react";
 import hirefast from "../../assets/client_dashboard/hirefast.png";
 import backgroundd from "../../assets/client_dashboard/Group.png";
+import { useState } from "react";
 
 const schema = yup.object({
   companyName: yup.string().required("Company name is required"),
@@ -43,7 +44,7 @@ const schema = yup.object({
   payType: yup.string().required("Pay type is required"),
   jobDescription: yup
     .string()
-    .min(50, "Description must be at least 50 characters")
+    // .min(50, "Description must be at least 50 characters")
     .required("Job description is required"),
   dailyUpdateEmail: yup
     .string()
@@ -101,9 +102,31 @@ export default function JobForm() {
     },
   });
 
+  let [images, setImages] = useState([])
+  const handleImage = (e) => {
+    const files = Array.from(e.target.files);
+    setImages((prev) => [...prev, ...files]);
+  };
+  const handleDeleteImage = (indexToDelete) => {
+    setImages((prevImages) => prevImages.filter((_, index) => index !== indexToDelete));
+  };
+  console.log("images: ", images)
+  // setImages([...images, cameraResult.assets[0].uri]);
+
   const onSubmit = (data) => {
-    console.log("Form submitted:", data);
-    alert("Form Submitted Successfully");
+    const formData = new FormData();
+    for (const key in data) {
+      formData.append(key, data[key])
+      console.log("key: ", key)
+    }
+
+    if (images && images.length > 0) {
+      for (let i = 0; i < data.files.length; i++) {
+        formData.append("files", data.files[i]);
+      }
+    }
+    console.log("Form data: ", formData)
+
   };
 
   // Predefined job post options for English-language jobs in Pakistan
@@ -142,6 +165,28 @@ export default function JobForm() {
       className="min-h-screen bg-cover bg-center"
       style={{ backgroundImage: `url(${backgroundd})` }}
     >
+
+      {/* <div className="p-4">
+        <input
+          type="file"
+          accept="image/*"
+          multiple
+          onChange={handleImage}
+        />
+
+        <div className="mt-4 flex gap-4 flex-wrap">
+          {images.map((img, index) => (
+            <img
+              key={index}
+              src={URL.createObjectURL(img)}
+              alt={`Preview ${index}`}
+              className="w-32 h-32 object-cover rounded"
+            />
+          ))}
+
+        </div>
+      </div> */}
+
       {/* Hero Section */}
       <div className="max-w-4xl rounded-xl mx-auto p-12 bg-white">
         <div className="grid md:grid-cols-2 gap-8 items-center">
@@ -190,11 +235,10 @@ export default function JobForm() {
                           id="companyName"
                           type="text"
                           placeholder="Enter company name"
-                          className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 ${
-                            errors.companyName
-                              ? "border-red-500"
-                              : "border-gray-300"
-                          }`}
+                          className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 ${errors.companyName
+                            ? "border-red-500"
+                            : "border-gray-300"
+                            }`}
                         />
                       )}
                     />
@@ -220,9 +264,8 @@ export default function JobForm() {
                           id="fullname"
                           type="text"
                           placeholder="First name and last name"
-                          className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 ${
-                            errors.fullname ? "border-red-500" : "border-gray-300"
-                          }`}
+                          className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 ${errors.fullname ? "border-red-500" : "border-gray-300"
+                            }`}
                         />
                       )}
                     />
@@ -250,11 +293,10 @@ export default function JobForm() {
                           id="howdidyouhear"
                           type="text"
                           placeholder="How did you hear about us?"
-                          className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 ${
-                            errors.howdidyouhear
-                              ? "border-red-500"
-                              : "border-gray-300"
-                          }`}
+                          className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 ${errors.howdidyouhear
+                            ? "border-red-500"
+                            : "border-gray-300"
+                            }`}
                         />
                       )}
                     />
@@ -280,11 +322,10 @@ export default function JobForm() {
                           id="phonenumber"
                           type="tel"
                           placeholder="Phone number"
-                          className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 ${
-                            errors.phonenumber
-                              ? "border-red-500"
-                              : "border-gray-300"
-                          }`}
+                          className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 ${errors.phonenumber
+                            ? "border-red-500"
+                            : "border-gray-300"
+                            }`}
                         />
                       )}
                     />
@@ -319,9 +360,8 @@ export default function JobForm() {
                         <select
                           {...field}
                           id="jobPost"
-                          className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 ${
-                            errors.jobPost ? "border-red-500" : "border-gray-300"
-                          }`}
+                          className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 ${errors.jobPost ? "border-red-500" : "border-gray-300"
+                            }`}
                         >
                           <option value="">Select a job post</option>
                           {jobPostOptions.map((option) => (
@@ -354,9 +394,8 @@ export default function JobForm() {
                           id="jobTitle"
                           type="text"
                           placeholder="Job Title"
-                          className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 ${
-                            errors.jobTitle ? "border-red-500" : "border-gray-300"
-                          }`}
+                          className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 ${errors.jobTitle ? "border-red-500" : "border-gray-300"
+                            }`}
                         />
                       )}
                     />
@@ -381,9 +420,8 @@ export default function JobForm() {
                       <select
                         {...field}
                         id="location"
-                        className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 ${
-                          errors.location ? "border-red-500" : "border-gray-300"
-                        }`}
+                        className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 ${errors.location ? "border-red-500" : "border-gray-300"
+                          }`}
                       >
                         <option value="">Select a location</option>
                         {locationOptions.map((option) => (
@@ -460,11 +498,10 @@ export default function JobForm() {
                           <select
                             {...field}
                             id="fixedhours"
-                            className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 ${
-                              errors.fixedhours
-                                ? "border-red-500"
-                                : "border-gray-300"
-                            }`}
+                            className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 ${errors.fixedhours
+                              ? "border-red-500"
+                              : "border-gray-300"
+                              }`}
                             onChange={(e) => field.onChange(Number(e.target.value))}
                           >
                             <option value="">Select fixed hours</option>
@@ -494,11 +531,10 @@ export default function JobForm() {
                             {...field}
                             type="number"
                             placeholder="Hours per week"
-                            className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 ${
-                              errors.hoursperweek
-                                ? "border-red-500"
-                                : "border-gray-300"
-                            }`}
+                            className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 ${errors.hoursperweek
+                              ? "border-red-500"
+                              : "border-gray-300"
+                              }`}
                             onChange={(e) => field.onChange(Number(e.target.value))}
                           />
                         )}
@@ -538,9 +574,8 @@ export default function JobForm() {
                         <select
                           {...field}
                           id="payType"
-                          className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 ${
-                            errors.payType ? "border-red-500" : "border-gray-300"
-                          }`}
+                          className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 ${errors.payType ? "border-red-500" : "border-gray-300"
+                            }`}
                         >
                           <option value="">Select pay type</option>
                           <option value="hourly">Hourly</option>
@@ -570,9 +605,8 @@ export default function JobForm() {
                           {...field}
                           type="number"
                           placeholder="Rs"
-                          className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 ${
-                            errors.salaryMin ? "border-red-500" : "border-gray-300"
-                          }`}
+                          className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 ${errors.salaryMin ? "border-red-500" : "border-gray-300"
+                            }`}
                           onChange={(e) => field.onChange(Number(e.target.value))}
                         />
                       )}
@@ -598,9 +632,8 @@ export default function JobForm() {
                           {...field}
                           type="number"
                           placeholder="Rs"
-                          className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 ${
-                            errors.salaryMax ? "border-red-500" : "border-gray-300"
-                          }`}
+                          className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 ${errors.salaryMax ? "border-red-500" : "border-gray-300"
+                            }`}
                           onChange={(e) => field.onChange(Number(e.target.value))}
                         />
                       )}
@@ -625,9 +658,8 @@ export default function JobForm() {
                         <select
                           {...field}
                           id="rate"
-                          className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 ${
-                            errors.rate ? "border-red-500" : "border-gray-300"
-                          }`}
+                          className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 ${errors.rate ? "border-red-500" : "border-gray-300"
+                            }`}
                         >
                           <option value="">Select rate</option>
                           <option value="month">Per month</option>
@@ -668,11 +700,10 @@ export default function JobForm() {
                       id="jobDescription"
                       rows={8}
                       placeholder="Describe the role, responsibilities, requirements, and what makes your company great..."
-                      className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 resize-y ${
-                        errors.jobDescription
-                          ? "border-red-500"
-                          : "border-gray-300"
-                      }`}
+                      className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 resize-y ${errors.jobDescription
+                        ? "border-red-500"
+                        : "border-gray-300"
+                        }`}
                     />
                   )}
                 />
@@ -706,11 +737,10 @@ export default function JobForm() {
                           {...field}
                           type="email"
                           placeholder="Enter email"
-                          className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 ${
-                            errors.dailyUpdateEmail
-                              ? "border-red-500"
-                              : "border-gray-300"
-                          }`}
+                          className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 ${errors.dailyUpdateEmail
+                            ? "border-red-500"
+                            : "border-gray-300"
+                            }`}
                         />
                         {errors.dailyUpdateEmail && (
                           <p className="text-red-500 text-sm mt-1">
@@ -831,11 +861,10 @@ export default function JobForm() {
                       <>
                         <select
                           {...field}
-                          className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 ${
-                            errors.hiringTimeline
-                              ? "border-red-500"
-                              : "border-gray-300"
-                          }`}
+                          className={`w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 ${errors.hiringTimeline
+                            ? "border-red-500"
+                            : "border-gray-300"
+                            }`}
                         >
                           <option value="">Select timeline</option>
                           <option value="1-3">1 to 3 days</option>

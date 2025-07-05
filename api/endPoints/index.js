@@ -6,6 +6,16 @@ const API_ROUTE = {
         submitOtp: 'submitOtp',
         checkapi: 'checkapi'
     },
+    project: {
+        getProject: '/project/getProject',
+        getProjectById: '/project/getProjectById',
+        addProject: '/project/addProject'
+    },
+    job: {
+        getJob: '/job/getJob',
+        getJobById: '/job/getJobById',
+        addJob: '/job/addJob'
+    }
 
 }
 
