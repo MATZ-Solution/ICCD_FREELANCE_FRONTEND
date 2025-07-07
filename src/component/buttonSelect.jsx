@@ -1,6 +1,6 @@
 import Select from 'react-select';
 
-function ReactSelect({ selectedOption = null, setSelectedOption, option = [] }) {
+function ReactSelect({ selectedOption = null, setSelectedOption, option = [], placeholder='select' }) {
     const customStyles = {
         container: (base) => ({
             ...base,
@@ -9,7 +9,7 @@ function ReactSelect({ selectedOption = null, setSelectedOption, option = [] }) 
         option: (provided, state) => ({
             ...provided,
             cursor: "pointer",
-            
+
         }),
 
         control: (provided, state) => ({
@@ -20,6 +20,7 @@ function ReactSelect({ selectedOption = null, setSelectedOption, option = [] }) 
     };
     return (
         <Select
+            placeholder={placeholder}
             defaultValue={selectedOption}
             onChange={setSelectedOption}
             options={option}

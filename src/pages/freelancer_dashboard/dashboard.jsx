@@ -88,8 +88,6 @@ export default function FreelancerDashboard() {
             </button>
           </div>
 
-
-
           <div className="mb-6  bg-[#F8F8F8] rounded-lg p-4 ">
             <h4 className="font-semibold mb-4 text-sm">Level Overview</h4>
             <div className="space-y-3 text-xs">

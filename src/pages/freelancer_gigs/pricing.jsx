@@ -1,11 +1,14 @@
 import { useState } from 'react';
 import ReactSelect from '../../component/buttonSelect';
 import Profile from '../../component/freelancers_gigs/profile';
-import Table from '../../component/table'
+import Table from '../../component/freelancers_gigs/gigPricingTable'
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import Button from '../../component/button';
+import { useNavigate } from 'react-router-dom';
 
 function Pricing() {
+  const navigate = useNavigate()
   let data = [
     { name: 'Gig title', details: 'As your Gig storefront, your title is the most important place to include keywords that buyers would likely use to search for a service like yours.' },
     { name: 'Category', details: 'Choose the category and sub-category most suitable for your Gig.' },
@@ -27,6 +30,9 @@ function Pricing() {
       <div className='mt-5'>
         <p className='text-gray-600 font-semibold'>Packages</p>
         <Table />
+      </div>
+      <div className="mt-5 flex sm:justify-end">
+        <Button className='px-5 py-2' onClick={() => navigate('/freelancer/manage-gigs/description')}>Save & Continue</Button>
       </div>
     </Profile>
   )

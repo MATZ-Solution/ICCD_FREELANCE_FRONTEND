@@ -19,7 +19,7 @@ function Description() {
                 </div>
             </div>
             <div className="mt-5 flex sm:justify-end">
-                <Button className='' onClick={() => navigate('/freelancer-profile/requirements')}>Save & Continue</Button>
+                <Button className='px-5 py-2' onClick={() => navigate('/freelancer/manage-gigs/gallery')}>Save & Continue</Button>
             </div>
         </Profile>
     )

@@ -30,6 +30,8 @@ import FreelancerDashboard from "../src/pages/freelancer_dashboard/dashboard";
 import FreelancerAnalytics from "../src/pages/freelancer_dashboard/analytics";
 import SignUp from "../src/pages/signUp";
 import Post_job from "../src/pages/client_dashboard/post_job";
+import ClientOrders from "../src/component/client_order/order";
+import Gigs_details from "../src/pages/client_dashboard/gigs_details";
 
 export const router = createBrowserRouter([
   {
@@ -75,21 +77,21 @@ export const router = createBrowserRouter([
   {
     path: "/dashboard",
     element: (
-      <AuthRoute>
-        <Dashboard />
-      </AuthRoute>
+      // <AuthRoute>
+      <Dashboard />
+      // </AuthRoute>
     ),
   },
   {
     path: "/freelancer-profile",
     element: (
-      <AuthRoute>
-        <FreelancerProfile />
-      </AuthRoute>
+      // <AuthRoute>
+      <FreelancerProfile />
+      // </AuthRoute>
     ),
   },
   {
-    path: "/freelancer-profile/overview",
+    path: "/freelancer/manage-gigs/overview",
     element: (
       // <AuthRoute>
       <MainTemplate isShowFooter={false}>
@@ -99,7 +101,7 @@ export const router = createBrowserRouter([
     ),
   },
   {
-    path: "/freelancer-profile/description",
+    path: "/freelancer/manage-gigs/description",
     element: (
       // <AuthRoute>
       <MainTemplate isShowFooter={false}>
@@ -109,7 +111,7 @@ export const router = createBrowserRouter([
     ),
   },
   {
-    path: "/freelancer-profile/requirements",
+    path: "/freelancer/manage-gigs/requirements",
     element: (
       // <AuthRoute>
       <MainTemplate isShowFooter={false}>
@@ -119,7 +121,7 @@ export const router = createBrowserRouter([
     ),
   },
   {
-    path: "/freelancer-profile/gallery",
+    path: "/freelancer/manage-gigs/gallery",
     element: (
       // <AuthRoute>
       <MainTemplate isShowFooter={false}>
@@ -129,7 +131,7 @@ export const router = createBrowserRouter([
     ),
   },
   {
-    path: "/freelancer-profile/publish",
+    path: "/freelancer/manage-gigs/publish",
     element: (
       // <AuthRoute>
       <MainTemplate isShowFooter={false}>
@@ -139,7 +141,7 @@ export const router = createBrowserRouter([
     ),
   },
   {
-    path: "/freelancer-profile/pricing",
+    path: "/freelancer/manage-gigs/pricing",
     element: (
       // <AuthRoute>
       <MainTemplate isShowFooter={false}>
@@ -161,11 +163,11 @@ export const router = createBrowserRouter([
   {
     path: "/freelancer/dashboard",
     element: (
-      <AuthRoute>
-        <MainTemplate isShowFooter={false}>
-          <FreelancerDashboard />
-        </MainTemplate>
-      </AuthRoute>
+      // <AuthRoute>
+      <MainTemplate isShowFooter={false}>
+        <FreelancerDashboard />
+      </MainTemplate>
+      // </AuthRoute>
     ),
   },
   {
@@ -270,12 +272,32 @@ export const router = createBrowserRouter([
       // </AuthRoute>
     ),
   },
-    {
+  {
     path: "/client/post-job",
     element: (
       // <AuthRoute>
       <MainTemplate isShowFooter={false}>
         <Post_job />
+      </MainTemplate>
+      // </AuthRoute>
+    ),
+  },
+  {
+    path: "/client/orders",
+    element: (
+      // <AuthRoute>
+      <MainTemplate isShowFooter={false}>
+        <ClientOrders  />
+      </MainTemplate>
+      // </AuthRoute>
+    ),
+  },
+   {
+    path: "/client/gigs/gigs_details",
+    element: (
+      // <AuthRoute>
+      <MainTemplate isShowFooter={false}>
+        <Gigs_details />
       </MainTemplate>
       // </AuthRoute>
     ),

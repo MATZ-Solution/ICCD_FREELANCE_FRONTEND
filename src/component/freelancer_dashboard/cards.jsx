@@ -32,11 +32,11 @@ export default function DCard({
         <div className="bg-white/50 w-1/5 h-[40%]"></div>
       </div>
 
-   
+
 
       {/* MAIN CONTENT */}
       <div className="relative mb-2 z-10 flex items-start gap-3">
-        
+
         {icon && (
           <div className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center flex-shrink-0">
             {icon}
@@ -52,7 +52,7 @@ export default function DCard({
           {month && subtitle && (
             <div className="flex mb-4 text-wrap items-center gap-2">
               <span className="text-xs text-white/70">{subtitle} <span className="font-bold" >{month}</span> </span>
-             
+
             </div>
           )}
 
@@ -60,13 +60,13 @@ export default function DCard({
             <p className="text-xs text-white/70 mt-2">{bottomText}</p>
           )}
 
-             {/* Sort Icon Button */}
-      <div className="flex flex-wrap   z-10">
-        <button className="flex  gap-1 bg-white/10 text-white text-xs rounded-md hover:bg-white/20 transition">
-          <CalendarMonthIcon className="text-sm" />
-          Sort by
-        </button>
-      </div>
+          {/* Sort Icon Button */}
+          {/* <div className="flex flex-wrap   z-10">
+            <button className="flex  gap-1 bg-white/10 text-white text-xs rounded-md hover:bg-white/20 transition">
+              <CalendarMonthIcon className="text-sm" />
+              Sort by
+            </button>
+          </div> */}
         </div>
       </div>
     </div>

@@ -39,11 +39,14 @@ function Overview() {
                       selectedOption={selectedOption1}
                       setSelectedOption={setSelectedOption1}
                       option={options}
+                      placeholder='Select Category'
                     />
                     <ReactSelect
                       selectedOption={selectedOption2}
                       setSelectedOption={setSelectedOption2}
                       option={options}
+                      placeholder='Select Sub Category'
+
                     />
                   </div>
                 )
@@ -63,7 +66,7 @@ function Overview() {
         }
       </div>
       <div className="mt-5 flex sm:justify-end">
-        <Button className='' onClick={() => navigate('/freelancer-profile/description')}>Save & Continue</Button>
+        <Button className='px-5 py-2' onClick={() => navigate('/freelancer/manage-gigs/pricing')}>Save & Continue</Button>
       </div>
     </Profile>
   )

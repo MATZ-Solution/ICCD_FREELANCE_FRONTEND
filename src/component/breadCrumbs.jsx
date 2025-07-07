@@ -3,14 +3,21 @@ import { useLocation } from 'react-router-dom';
 
 function BreadCrumbs() {
 
-  const data = ['overview', 'pricing', 'description', 'requirements', 'gallery', 'publish'];
+  // const data = ['overview', 'pricing', 'description', 'requirements', 'gallery', 'publish'];
+  const data = [
+    { id: 0, name: 'overview', path: '/freelancer/manage-gigs/overview' },
+    { id: 1, name: 'pricing', path: '/freelancer/manage-gigs/pricing' },
+    { id: 2, name: 'description', path: '/freelancer/manage-gigs/description' },
+    { id: 3, name: 'gallery', path: '/freelancer/manage-gigs/gallery' }];
+
   const location = useLocation();
-  const pathName = location.pathname.split("/")[2]
+  const pathName = location.pathname.split("/")[3]
 
   return (
     <div className="flex flex-wrap items-center  gap-4 sm:gap-6 md:gap-7">
       {data.map((item, index) => {
-        const getIndex = data.indexOf(pathName)
+        const getIndex = data.findIndex(item => item.name === pathName)
+        console.log("getIndex: ", getIndex)
         return (
           <div key={index} className="flex items-center gap-2">
             {/* Circle */}
@@ -26,7 +33,7 @@ function BreadCrumbs() {
               className={`flex items-center text-sm 
                 ${getIndex >= index ? 'text-black' : 'text-[#8D8C8C]'}`}
             >
-              <p className="whitespace-nowrap capitalize text-xs sm:text-sm">{item}</p>
+              <p className={`font-semibold whitespace-nowrap capitalize text-xs sm:text-sm ${getIndex >= index && 'hover:underline cursor-pointer'} `}>{item.name}</p>
 
               {/* Hide arrow on last item */}
               {index < data.length - 1 && (

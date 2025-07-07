@@ -35,16 +35,16 @@ export default function Navbar() {
 
   const navTabsClientDashboard = [
     { name: "Dashboard", path: '/client/dashboard' },
-    { name: "Orders", path: '' },
-    { name: "Messages", path: '' },
+    { name: "Orders", path: '/client/orders' },
+    { name: "Projects", path: '' },
     { name: "Jobs", path: '' }
   ];
 
   const navTabsFreelancerDashboard = [
-    { name: "Dashboard", path: '/freelancer/dashboard' },
-    { name: "Gigs and Projects", path: '/freelancer/manage-gigs-projects' },
-    { name: "Analytics", path: '/freelancer/analytics' },
-    { name: "Jobs", path: '/freelancer/jobs' }
+    { name: "Dashboard", path: '/freelancer/dashboard', action: () => navigate('') },
+    { name: "Gigs and Projects", path: '/freelancer/manage-gigs-projects', action: () => navigate('/freelancer/manage-gigs-projects') },
+    { name: "Analytics", path: '/freelancer/analytics', action: () => navigate('/freelancer/analytics') },
+    { name: "Jobs", path: '/freelancer/jobs', action: () => navigate('/freelancer/jobs') }
   ];
 
   useEffect(() => {
@@ -53,6 +53,14 @@ export default function Navbar() {
       document.body.style.overflow = '';
     };
   }, [isOpen]);
+
+  const handleSwitchClient = () => {
+    if (location.pathname === '/freelancer/dashboard') {
+      navigate('/client/dashboard')
+    } else {
+      navigate('/freelancer/dashboard')
+    }
+  }
 
   return (
     <header className="bg-white shadow fontFamily-montreal border-b-[1px] border-b-[#c4c4c4]">
@@ -127,14 +135,15 @@ export default function Navbar() {
             </nav>
           } */}
 
+          {/* Nav links middle section */}
           {
-            pathname.includes('/freelancer') ?
+            (pathname.includes('/freelancer')) ?
               <nav className=" ml-10 sm:flex space-x-1">
                 {navTabsFreelancerDashboard.map((data, index) => (
                   <button
                     key={index}
                     onClick={() => navigate(`${data.path}`)}
-                    className={`px-3 py-2 text-sm font-medium rounded-md ${pathname === data.path
+                    className={`cursor-pointer px-3 py-2 text-sm font-medium rounded-md ${pathname === data.path
                       ? "text-cyan-500 bg-cyan-50"
                       : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
                       }`}
@@ -144,27 +153,43 @@ export default function Navbar() {
                 ))}
               </nav>
               :
-              <nav className="show_nav_links_desktop space-x-6 items-center">
-                {navigation.map((item) => (
-                  <a
-                    key={item.name}
-                    href={item.href}
-                    className="text-black font-semibold  hover:text-[#15A9B2] transition"
-                  >
-                    {item.name !== 'Login' && item.name}
-                    {(item.name !== 'Contact Us' && item.name !== 'Login') && (<KeyboardArrowDownIcon />)}
-                  </a>
-                ))}
-              </nav>
+              pathname.includes('/client') ?
+                <nav className=" ml-10 sm:flex space-x-1">
+                  {navTabsClientDashboard.map((data, index) => (
+                    <button
+                      key={index}
+                      onClick={() => navigate(`${data.path}`)}
+                      className={`cursor-pointer px-3 py-2 text-sm font-medium rounded-md ${pathname === data.path
+                        ? "text-cyan-500 bg-cyan-50"
+                        : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
+                        }`}
+                    >
+                      {data.name}
+                    </button>
+                  ))}
+                </nav>
+                :
+                <nav className="show_nav_links_desktop space-x-6 items-center">
+                  {navigation.map((item) => (
+                    <a
+                      key={item.name}
+                      href={item.href}
+                      className="text-black font-semibold  hover:text-[#15A9B2] transition"
+                    >
+                      {item.name !== 'Login' && item.name}
+                      {(item.name !== 'Contact Us' && item.name !== 'Login') && (<KeyboardArrowDownIcon />)}
+                    </a>
+                  ))}
+                </nav>
           }
 
-          {userDetails && (<p className="text-red-300">Become a seller</p>)}
-          {userDetails && (<Link to="/freelancer-profile" className="text-white">Profile</Link>)}
+          {/* {userDetails && (<p className="text-red-300">Become a seller</p>)}
+          {userDetails && (<Link to="/freelancer-profile" className="text-white">Profile</Link>)} */}
 
           {/* Desktop Right Section*/}
 
           {
-            pathname.includes('/freelancer') ?
+            (pathname.includes('/freelancer') || pathname.includes('/client')) ?
               <div className="flex items-center gap-2">
                 <button onClick={() => setNotifications(0)} className="p-2 hover:bg-gray-100 rounded-md relative">
                   <Bell className="h-5 w-5 text-gray-600" />
@@ -191,14 +216,17 @@ export default function Navbar() {
                     className="w-8 h-8 bg-gradient-to-br from-purple-400 to-purple-600 rounded-full"
                   />
                   {showProfileMenu && (
-                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg  py-1 z-50">
+                    <div className="px-3 border-[1px] border-gray-300 absolute right-0 mt-2 w-52 bg-white rounded-md shadow-lg  py-1 z-50">
+                      <button className="cursor-pointer border-[1px] rounded-md border-black block w-full text-left px-4 py-2 text-sm text-black font-semibold hover:bg-[#222325] hover:text-white"
+                        onClick={handleSwitchClient}
+                      >Switch to {pathname.includes('freelancer') ? 'client' : 'freelancer'}</button>
                       {[
                         { name: "View Profile", action: () => navigate("/profile") },
                         { name: "Settings", action: () => navigate("/settings") },
                         { name: "Logout", action: logout },
                       ].map((data, index) => (
-                        <button key={index} className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
-                        onClick={data.action}
+                        <button key={index} className="text-black block w-full text-left px-4 py-2 text-sm  hover:bg-gray-50 cursor-pointer"
+                          onClick={data.action}
                         >
                           {data.name}
                         </button>

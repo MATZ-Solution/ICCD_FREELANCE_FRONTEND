@@ -1,6 +1,6 @@
 
 import DonutChartCard from "../../component/freelancer_dashboard/donutChart";
-// import OverviewChartF from "../../component/freelancer_dashboard/overviewChart";
+import OverviewChart from "../../component/freelancer_dashboard/overview";
 import Widgets from "../../component/freelancer_dashboard/widget";
 import Table from "../../component/freelancer_dashboard/table";
 import SearchIcon from '@mui/icons-material/Search';
@@ -56,10 +56,10 @@ const FreelancerAnalytics = () => {
       {/* Overview Charts */}
       <div className="grid lg:grid-cols-2 gap-6 mb-6">
         <div className="bg-[#F8F8F8] rounded-2xl p-4">
-          {/* <OverviewChartF period="Monthly" colorScheme="purple" /> */}
+          <OverviewChart period="Monthly" colorScheme="purple" />
         </div>
         <div className="bg-[#F8F8F8] rounded-2xl p-4">
-          {/* <OverviewChartF period="Weekly" colorScheme="green" /> */}
+          <OverviewChart period="Weekly" colorScheme="green" />
         </div>
       </div>
 
@@ -95,7 +95,7 @@ const FreelancerAnalytics = () => {
       </div>
 
       {/* Widgets */}
-      <div className="flex mt-4 ml-6 flex-col lg:flex-row gap-4">
+      <div className="flex mt-4 ml-6 flex-col gap-4 lg:flex-row lg:flex-wrap ">
         <Widgets
           heading="Sales Analytics"
           subheading1="Earned This Month"
