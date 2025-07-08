@@ -34,7 +34,7 @@ api.interceptors.response.use(
       const message = error.response?.data?.message;
       if (message === "Token expired") {
         deleteToken();
-        window.location.href = "/login";
+        window.location.href = "/";
       }
     }
     // window.location.href = "/login";

@@ -1,26 +1,40 @@
 import { useState } from 'react';
-import ReactSelect from '../../component/buttonSelect';
 import Profile from '../../component/freelancers_gigs/profile';
 import Table from '../../component/freelancers_gigs/gigPricingTable'
-import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
-import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import Button from '../../component/button';
 import { useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+
+const packages = ["basic", "standard", "premium"];
+const features = [
+  { label: "Title", type: "text", field: "title" },
+  { label: "Description", type: "textarea", field: "description" },
+  { label: "Delivery Days", type: "select", field: "delivery", options: ["2", "4", "6", "10"] },
+  { label: "Revisions", type: "select", field: "revisions", options: ["0", "2", "4", "6"] },
+];
 
 function Pricing() {
+
   const navigate = useNavigate()
-  let data = [
-    { name: 'Gig title', details: 'As your Gig storefront, your title is the most important place to include keywords that buyers would likely use to search for a service like yours.' },
-    { name: 'Category', details: 'Choose the category and sub-category most suitable for your Gig.' },
-    { name: 'Search tags', details: 'Tag your Gig with buzz words that are relevant to the services you offer. Use all 5 tags to get found.' },
-  ]
-  const options = [
-    { value: 'chocolate', label: 'Chocolate' },
-    { value: 'strawberry', label: 'Strawberry' },
-    { value: 'vanilla', label: 'Vanilla' },
-  ];
-  const [selectedOption1, setSelectedOption1] = useState(null);
-  const [selectedOption2, setSelectedOption2] = useState(null);
+  const location = useLocation()
+  const formData = location.state
+  console.log("formData: ", formData)
+
+  const [pricing, setPricing] = useState({
+    basic: { name: 'basic' }, standard: { name: 'standard' }, premium: { name: 'premium' }
+  });
+
+  const handleChange = (pkg, field, value) => {
+    setPricing(prev => ({
+      ...prev,
+      [pkg]: { ...prev[pkg], [field]: value }
+    }));
+  };
+
+  const handleSubmit = () => {
+    navigate('/freelancer/manage-gigs/description', { state: {...formData, packages : pricing} })
+
+  }
 
   return (
     <Profile>
@@ -29,10 +43,70 @@ function Pricing() {
       </div>
       <div className='mt-5'>
         <p className='text-gray-600 font-semibold'>Packages</p>
-        <Table />
+        <div className="overflow-x-auto mt-6">
+          <table className="table-auto w-full border border-gray-300 text-sm shadow-md">
+            <thead>
+              <tr className="bg-gray-100">
+                <th className="p-4 text-left font-semibold w-64">Packages</th>
+                {packages.map(pkg => (
+                  <th key={pkg} className="p-4 text-center font-semibold border-l border-gray-300">{pkg}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {features.map(({ label, type, field, options }) => (
+                <tr key={field} className="border-t border-gray-200">
+                  <td className="p-3 font-medium">{label}</td>
+                  {packages.map(pkg => (
+                    <td key={pkg} className="p-2 text-center">
+                      {type === "text" && (
+                        <input
+                          type="text"
+                          className="w-full px-2 py-1 border rounded"
+                          value={pricing[pkg]?.[field] || ""}
+                          onChange={(e) => handleChange(pkg, field, e.target.value)}
+                        />
+                      )}
+                      {type === "textarea" && (
+                        <textarea
+                          className="w-full px-2 py-1 border rounded"
+                          value={pricing[pkg]?.[field] || ""}
+                          rows={2}
+                          onChange={(e) => handleChange(pkg, field, e.target.value)}
+                        />
+                      )}
+                      {type === "select" && (
+                        <select
+                          className="w-full px-2 py-1 border rounded"
+                          value={pricing[pkg]?.[field] || ""}
+                          onChange={(e) => handleChange(pkg, field, e.target.value)}
+                        >
+                          <option value="">SELECT</option>
+                          {options.map(opt => (
+                            <option key={opt} value={opt}>
+                              {opt}
+                            </option>
+                          ))}
+                        </select>
+                      )}
+                      {type === "checkbox" && (
+                        <input
+                          type="checkbox"
+                          className="w-4 h-4"
+                          checked={!!pricing[pkg]?.[field]}
+                          onChange={(e) => handleChange(pkg, field, e.target.checked)}
+                        />
+                      )}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
       <div className="mt-5 flex sm:justify-end">
-        <Button className='px-5 py-2' onClick={() => navigate('/freelancer/manage-gigs/description')}>Save & Continue</Button>
+        <Button className='px-5 py-2' onClick={handleSubmit}>Save & Continue</Button>
       </div>
     </Profile>
   )

@@ -9,8 +9,9 @@ const features = [
 ];
 
 export default function PricingTable() {
+
   const [pricing, setPricing] = useState({
-    Basic: {}, Standard: {}, Premium: {}
+    basic: { name: 'basic' }, standard: { name: 'standard' }, premium: { name: 'premium' }
   });
 
   const handleChange = (pkg, field, value) => {
@@ -85,7 +86,6 @@ export default function PricingTable() {
           ))}
         </tbody>
       </table>
-
     </div>
   );
 }

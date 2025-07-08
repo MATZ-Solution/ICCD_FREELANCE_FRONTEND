@@ -17,7 +17,6 @@ function BreadCrumbs() {
     <div className="flex flex-wrap items-center  gap-4 sm:gap-6 md:gap-7">
       {data.map((item, index) => {
         const getIndex = data.findIndex(item => item.name === pathName)
-        console.log("getIndex: ", getIndex)
         return (
           <div key={index} className="flex items-center gap-2">
             {/* Circle */}

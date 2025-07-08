@@ -62,6 +62,7 @@ export default function Navbar() {
     }
   }
 
+
   return (
     <header className="bg-white shadow fontFamily-montreal border-b-[1px] border-b-[#c4c4c4]">
       <div className="max-w-7xl mx-auto px-6 sm:px-12">
@@ -189,7 +190,7 @@ export default function Navbar() {
           {/* Desktop Right Section*/}
 
           {
-            (pathname.includes('/freelancer') || pathname.includes('/client')) ?
+            userDetails ?
               <div className="flex items-center gap-2">
                 <button onClick={() => setNotifications(0)} className="p-2 hover:bg-gray-100 rounded-md relative">
                   <Bell className="h-5 w-5 text-gray-600" />

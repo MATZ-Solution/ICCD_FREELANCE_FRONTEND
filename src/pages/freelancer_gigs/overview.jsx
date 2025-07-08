@@ -3,9 +3,29 @@ import ReactSelect from '../../component/buttonSelect';
 import Profile from '../../component/freelancers_gigs/profile';
 import Button from '../../component/button';
 import { useNavigate } from 'react-router-dom';
+import { useForm, Controller } from "react-hook-form";
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from "yup";
 
 function Overview() {
+
   const navigate = useNavigate()
+
+  const schema = yup.object({
+    gigsTitle: yup.string().required("title not selected"),
+    category: yup.string().required("category not selected"),
+    subCategory: yup.string().required("sub category not selected"),
+  })
+
+  const { register, control, handleSubmit, formState: { errors } } = useForm({
+    resolver: yupResolver(schema),
+    defaultValues: {
+      gigsTitle: '',
+      category: null,
+      subCategory: null
+    }
+  });
+
   let data = [
     { name: 'Gig title', details: 'As your Gig storefront, your title is the most important place to include keywords that buyers would likely use to search for a service like yours.' },
     { name: 'Category', details: 'Choose the category and sub-category most suitable for your Gig.' },
@@ -16,8 +36,11 @@ function Overview() {
     { value: 'strawberry', label: 'Strawberry' },
     { value: 'vanilla', label: 'Vanilla' },
   ];
-  const [selectedOption1, setSelectedOption1] = useState(null);
-  const [selectedOption2, setSelectedOption2] = useState(null);
+
+  const onSubmit = (data) => {
+    console.log("data: ", data)
+    navigate('/freelancer/manage-gigs/pricing', { state: data })
+  }
 
   return (
     <Profile>
@@ -30,24 +53,59 @@ function Overview() {
                 <p className='text-sm'>{item.details}</p>
               </div>
               {item.name === 'Gig title' &&
-                (<textarea placeholder="I will do something I'm really good at" className='w-full h-36 border-[#B8B8B8] border-[1px] p-3 rounded-md sm:p-5' ></textarea>)
+                (
+                  <div className='w-full flex flex-col gap-1'>
+                    <Controller
+                      control={control}
+                      name="gigsTitle"
+                      render={({ field: { onChange, onBlur, value } }) => (
+                        <textarea
+                          placeholder="I will do something I'm really good at"
+                          className='w-full h-36 border-[#B8B8B8] border-[1px] p-3 rounded-md sm:p-5'
+                          name="gigsTitle"
+                          type="text"
+                          value={value}
+                          onChange={onChange}
+                        />
+                      )}
+                    />
+                    {errors?.gigsTitle && (<p className="mt-1 text-red-600">{errors?.gigsTitle?.message}</p>)}
+                  </div>
+                )
               }
               {item.name === 'Category' &&
                 (
                   <div className='w-full items-center justify-center flex flex-col gap-5 sm:flex-row sm:gap-1'>
-                    <ReactSelect
-                      selectedOption={selectedOption1}
-                      setSelectedOption={setSelectedOption1}
-                      option={options}
-                      placeholder='Select Category'
-                    />
-                    <ReactSelect
-                      selectedOption={selectedOption2}
-                      setSelectedOption={setSelectedOption2}
-                      option={options}
-                      placeholder='Select Sub Category'
-
-                    />
+                    <div className='w-full flex flex-col gap-1'>
+                      <Controller
+                        control={control}
+                        name="category"
+                        render={({ field: { onChange, onBlur, value, } }) => (
+                          <ReactSelect
+                            placeholder='Select Category'
+                            onChange={(selectedOption) => onChange(selectedOption?.value || '')}
+                            option={options}
+                            value={options.find(option => option.value === value) || null}
+                          />
+                        )}
+                      />
+                      {errors?.category && (<p className="mt-1 text-red-600">{errors?.category?.message}</p>)}
+                    </div>
+                    <div className='w-full flex flex-col gap-1'>
+                      <Controller
+                        control={control}
+                        name="subCategory"
+                        render={({ field: { onChange, onBlur, value, } }) => (
+                          <ReactSelect
+                            placeholder='Select Category'
+                            onChange={(selectedOption) => onChange(selectedOption?.value || '')}
+                            option={options}
+                            value={options.find(option => option.value === value) || null}
+                          />
+                        )}
+                      />
+                      {errors?.subCategory && (<p className="mt-1 text-red-600">{errors?.subCategory?.message}</p>)}
+                    </div>
                   </div>
                 )
               }
@@ -66,7 +124,9 @@ function Overview() {
         }
       </div>
       <div className="mt-5 flex sm:justify-end">
-        <Button className='px-5 py-2' onClick={() => navigate('/freelancer/manage-gigs/pricing')}>Save & Continue</Button>
+        <Button
+
+          className='px-5 py-2' onClick={handleSubmit(onSubmit)}>Save & Continue</Button>
       </div>
     </Profile>
   )
