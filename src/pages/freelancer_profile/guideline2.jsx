@@ -11,8 +11,11 @@ export default function ICCDProfileTipsPage() {
   const navigate = useNavigate();
 
   return (
-    <main className="mt-16 min-h-screen bg-white flex flex-col space-y-8">
+    <main className="min-h-screen bg-white flex flex-col space-y-8">
       {/* Logo */}
+      <header className="max-w-7xl mx-auto px-4 pt-8 pb-4 flex justify-center lg:justify-start">
+        {/* <img src={logo} alt="Logo" className="h-16 sm:h-20 w-auto" /> */}
+      </header>
 
       {/* Content */}
       <section className="max-w-7xl mx-auto w-full flex flex-col lg:flex-row items-center justify-center gap-10 px-4 md:px-8">

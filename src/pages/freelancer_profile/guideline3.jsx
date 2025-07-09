@@ -12,6 +12,9 @@ export default function ICCDGuidelinesPage() {
   return (
     <div className="min-h-screen p-4 sm:p-6 bg-white flex flex-col">
       {/* Logo */}
+      <div className="w-full flex justify-center p-4">
+        {/* <img src={logo} alt="Logo" className="h-12 sm:h-16 w-auto max-w-[150px] sm:max-w-[200px]" /> */}
+      </div>
 
       {/* Grid Parent */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 p-4 sm:p-6 max-w-7xl mx-auto w-full">

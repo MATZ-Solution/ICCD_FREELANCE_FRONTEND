@@ -32,6 +32,12 @@ import SignUp from "../src/pages/signUp";
 import Post_job from "../src/pages/client_dashboard/post_job";
 import ClientOrders from "../src/component/client_order/order";
 import Gigs_details from "../src/pages/client_dashboard/gigs_details";
+import MultiStepForm from "../src/pages/freelancer_profile/form1";
+import ProfessionalInfoStep from "../src/pages/freelancer_profile/form2";
+import AccountSecurityStep from "../src/pages/freelancer_profile/form3";
+import ProjectForm from "../src/pages/client_dashboard/post_project";
+import Payment from "../src/pages/payment/payment";
+import PricingForm from "../src/component/gigs_pricing_scope";
 
 export const router = createBrowserRouter([
   {
@@ -210,6 +216,36 @@ export const router = createBrowserRouter([
       // </AuthRoute>
     ),
   },
+    {
+    path: "/freelancer/profile-form/1",
+    element: (
+      // <AuthRoute>
+      <MainTemplate isShowFooter={false}>
+        <MultiStepForm />
+      </MainTemplate>
+      // </AuthRoute>
+    ),
+  },
+      {
+    path: "/freelancer/profile-form/2",
+    element: (
+      // <AuthRoute>
+      <MainTemplate isShowFooter={false}>
+        <ProfessionalInfoStep />
+      </MainTemplate>
+      // </AuthRoute>
+    ),
+  },
+       {
+    path: "/freelancer/profile-form/3",
+    element: (
+      // <AuthRoute>
+      <MainTemplate isShowFooter={false}>
+        <AccountSecurityStep />
+      </MainTemplate>
+      // </AuthRoute>
+    ),
+  },
   {
     path: "/freelancer/manage-gigs-projects",
     element: (
@@ -283,6 +319,16 @@ export const router = createBrowserRouter([
     ),
   },
   {
+    path: "/client/post-project",
+    element: (
+      // <AuthRoute>
+      <MainTemplate isShowFooter={false}>
+        <ProjectForm />
+      </MainTemplate>
+      // </AuthRoute>
+    ),
+  },
+  {
     path: "/client/orders",
     element: (
       // <AuthRoute>
@@ -302,5 +348,17 @@ export const router = createBrowserRouter([
       // </AuthRoute>
     ),
   },
+
+    {
+    path: "/payment",
+    element: (
+      // <AuthRoute>
+      <MainTemplate isShowFooter={false}>
+        <Payment />
+      </MainTemplate>
+      // </AuthRoute>
+    ),
+  },
+
 
 ]);
