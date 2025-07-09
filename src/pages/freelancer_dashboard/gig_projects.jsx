@@ -4,11 +4,16 @@ import Tabs from "../../component/freelancer_dashboard/tabs";
 import Gigs_table from "../../component/freelancers_gigs/gigs_table";
 import Button from "../../component/button";
 import { useNavigate } from "react-router-dom";
+import { useGetGigsByUser } from "../../../api/client/gigs";
 
 function ManageGigsAndProjects() {
+
     const navigate = useNavigate()
     const [active, setActive] = useState('Active')
     const datas = ['Active', 'Pending Approval', 'Requires Modification', 'Draft', 'Denied', 'Paused']
+
+      const { data, isSuccess, isPending, isError, isLoading } = useGetGigsByUser()
+      console.log("data: ", data)
 
     return (
         <div className="px-5 sm:px-5 lg:px-10">
@@ -29,7 +34,8 @@ function ManageGigsAndProjects() {
             </div>
 
             {/* table */}
-            <Gigs_table />
+            {data && (<Gigs_table data={data}/>)}
+            
         </div>
     )
 }

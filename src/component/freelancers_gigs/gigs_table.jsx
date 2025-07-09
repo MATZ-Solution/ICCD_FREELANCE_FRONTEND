@@ -1,8 +1,7 @@
 import order_logo from '../../assets/freelancer_dashboard/order_logo.png';
-import { data } from '../../../data/freelancer_dashboard'
 
-function Gigs_table() {
-  
+function Gigs_table({data}) {
+
   const statusColors = {
     'IN PROGRESS': 'bg-[#1467B0]',
     PENDING: 'bg-yellow-500',
@@ -10,6 +9,8 @@ function Gigs_table() {
     'IN REVIEW': 'bg-purple-500',
     'ON HOLD': 'bg-red-500',
   };
+
+  console.log("data: ", data)
 
   return (
     <div className="py-6">
@@ -23,7 +24,7 @@ function Gigs_table() {
                     <div className="w-full bg-[#F8F8F8] shadow-sm rounded-xl flex items-center justify-between px-4 py-3 gap-4 min-w-[1000px]">
                       {/* First Column */}
                       <div className="flex items-center gap-5 w-[20%]">
-                        <img src={order_logo} className="w-40 h-20" />
+                        <img src={item?.gigsFiles} className="w-40 h-20" />
                       </div>
 
                       {/* Second Column */}
@@ -31,13 +32,13 @@ function Gigs_table() {
                         <p className="text-[#737373]">
                           Title:
                         </p>
-                        <p className="font-semibold text-lg text-[#043A53]">{item.project}</p>
+                        <p className="font-semibold text-lg text-[#043A53]">{item?.title}</p>
                       </div>
 
                       {/* Price */}
                       <div className="w-[15%]">
-                        <p className="text-[#737373]">Impression</p>
-                        <p className="text-[#043A53] text-lg font-semibold">${item.price}</p>
+                        <p className="text-[#737373]">Category</p>
+                        <p className="text-[#043A53] text-lg font-semibold">{item?.category}</p>
                       </div>
 
                       {/* Due */}
@@ -50,14 +51,6 @@ function Gigs_table() {
                       <div className="w-[15%]">
                         <p className="text-[#737373]">Orders</p>
                         <p className="text-[#043A53] text-lg font-semibold">{item.due}</p>
-                      </div>
-
-                      {/* Status */}
-                      <div className="w-[12%]">
-                        <p className="text-[#737373]">Status</p>
-                        <div className={` flex justify-center items-center mt-2 ${statusColors[item.status] || 'bg-gray-500'} rounded-2xl py-1`}>
-                          <span className="text-white text-sm font-semibold">{item.status}</span>
-                        </div>
                       </div>
 
                       {/* View */}

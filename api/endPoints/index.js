@@ -21,6 +21,7 @@ const API_ROUTE = {
     getGigsById: "/gigs/getGigsById",
     addGigs: "/gigs/addGigs",
     getSingleGigs: "/gigs/getSingleGigs",
+    getGigsByUserId: "/gigs/getGigsByUser"
   },
 };
 

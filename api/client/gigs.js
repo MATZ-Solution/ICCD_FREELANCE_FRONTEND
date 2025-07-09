@@ -1,11 +1,11 @@
 import API_ROUTE from "../endpoints";
 import { useMutation } from "@tanstack/react-query";
 import api from "../axios/index";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 export function useAddGigs() {
   // const pathname = usePathname();
-  // const queryClient = useQueryClient();
+  const queryClient = useQueryClient();
   // const { dispatch } = useGlobalState();
 
   const {
@@ -23,7 +23,11 @@ export function useAddGigs() {
         },
         timeout: 30000,
       }),
-    onSuccess: (data) => {},
+    onSuccess: (data) => {
+       queryClient.invalidateQueries({
+        queryKey: [API_ROUTE.gigs.getGigsByUserId],
+      });
+    },
     onError: (error) => {
       // Toast.show({
       //     type: "error",
@@ -56,6 +60,21 @@ export function useGetSingleGigs(id) {
     // refetchOnWindowFocus: true,
     // staleTime: 0,
     // refetchOnMount: true,
+  });
+  return {
+    data: data?.data?.data,
+    isSuccess,
+    isPending,
+    isError,
+    isLoading,
+  };
+}
+
+
+export function useGetGigsByUser() {
+  const { data, isSuccess, isPending, isError, isLoading } = useQuery({
+    queryKey: [API_ROUTE.gigs.getGigsByUserId],
+    queryFn: async () => await api.get(`${API_ROUTE.gigs.getGigsByUserId}`),
   });
   return {
     data: data?.data?.data,

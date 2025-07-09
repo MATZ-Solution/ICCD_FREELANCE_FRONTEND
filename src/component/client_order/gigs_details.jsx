@@ -104,7 +104,7 @@ export default function ServicePage() {
             <div className="mb-8">
               <div className="relative aspect-video rounded-lg overflow-hidden bg-gray-100">
                 <img
-                  src={blog1}
+                  src={data?.gigsFiles[0]}
                   alt="Figma UI/UX Design Service Banner"
                   className="object-cover w-full h-full"
                 />
@@ -244,18 +244,18 @@ export default function ServicePage() {
                 {activeNavTab === "Basic" && (
                   <SidebarCard
                     price="21,00"
-                    description="Single page 1 page PSD template/PSD template designed with professional quality"
-                    deliverytime="3"
+                    description={data?.packages[0]?.packageTitle}
+                    deliverytime={data?.packages[0]?.deliveryTime}
                     Revisions="Unlimited"
                     pages="1"
                   />
                 )}
 
                 {activeNavTab === "Standard" && (
-                  <SidebarCard
-                    price="50,000"
-                    description="Multiple page PSD template designed with professional quality + Source Code"
-                    deliverytime="7"
+                 <SidebarCard
+                    price="21,00"
+                    description={data?.packages[1]?.packageTitle}
+                    deliverytime={data?.packages[1]?.deliveryTime}
                     Revisions="Unlimited"
                     pages="1"
                   />
@@ -263,11 +263,11 @@ export default function ServicePage() {
 
                 {activeNavTab === "Premium" && (
                   <SidebarCard
-                    price="90,000"
-                    description="Unlimited page PSD template designed with professional quality + Source Code"
-                    deliverytime="14"
+                    price="21,00"
+                    description={data?.packages[2]?.packageTitle}
+                    deliverytime={data?.packages[2]?.deliveryTime}
                     Revisions="Unlimited"
-                    pages="unlimited"
+                    pages="1"
                   />
                 )}
               </div>
