@@ -18,6 +18,7 @@ import GigCard from "../../component/client_dashboard/gig_card";
 import blog1 from "../../assets/client_dashboard/blog1.png";
 import { useGetGigs } from "../../../api/client/gigs";
 import { useNavigate } from "react-router-dom";
+import useDebounce from "../../../hooks/useDebounce";
 
 export default function ClientDashboard() {
   const [activeNavTab, setActiveNavTab] = useState("Dashboard");
@@ -40,9 +41,13 @@ export default function ClientDashboard() {
     setProjectIsAvailable((prev) => !prev);
   const toggleJobAvailability = () => setJobIsAvailable((prev) => !prev);
 
+
   const navigate = useNavigate()
-   const { gigs, error, isLoading, isError } = useGetGigs()
-   console.log("gigs: ", gigs)
+  let [search, setSearch] = useState('')
+  const debouncedSearch = useDebounce(search, 500);
+  const { gigs, error, isLoading, isError } = useGetGigs({search: debouncedSearch})
+  console.log("Search: ", search)
+
 
   return (
     <div className="min-h-screen px-4 bg-white">
@@ -58,9 +63,8 @@ export default function ClientDashboard() {
       <div className="flex flex-col sm:flex-row">
         {/* Sidebar */}
         <aside
-          className={`${
-            showMobileSidebar ? "block" : "hidden"
-          } fixed top-0 left-0 w-full sm:w-80 h-full bg-[#F8F8F8] lg:bg-white backdrop-blur-3xl p-4 sm:p-6 z-50 transition-all duration-700 lg:static lg:block lg:h-auto lg:w-auto`}
+          className={`${showMobileSidebar ? "block" : "hidden"
+            } fixed top-0 left-0 w-full sm:w-80 h-full bg-[#F8F8F8] lg:bg-white backdrop-blur-3xl p-4 sm:p-6 z-50 transition-all duration-700 lg:static lg:block lg:h-auto lg:w-auto`}
         >
           <div className="flex justify-end mb-4 lg:hidden">
             <button onClick={() => setShowMobileSidebar(false)}>
@@ -92,11 +96,10 @@ export default function ClientDashboard() {
             </p>
             <button
               onClick={toggleProjectAvailability}
-              className={`w-full px-4 py-2 text-sm rounded-md font-medium ${
-                projectIsAvailable
+              className={`w-full px-4 py-2 text-sm rounded-md font-medium ${projectIsAvailable
                   ? "bg-blue-500 hover:bg-blue-300 text-white"
                   : "border border-[#01AEAD] hover:bg-green-600 hover:text-white text-gray-700"
-              }`}
+                }`}
             >
               {projectIsAvailable ? "Project Posted" : "Post a Project"}
             </button>
@@ -116,11 +119,10 @@ export default function ClientDashboard() {
             </p>
             <button
               onClick={toggleJobAvailability}
-              className={`w-full px-4 py-2 text-sm rounded-md font-medium ${
-                jobIsAvailable
+              className={`w-full px-4 py-2 text-sm rounded-md font-medium ${jobIsAvailable
                   ? "bg-red-500 hover:bg-blue-300 text-white"
                   : "border border-[#01AEAD] hover:bg-green-600 hover:text-white text-gray-700"
-              }`}
+                }`}
             >
               {jobIsAvailable ? "Job Posted" : "Post a Job"}
             </button>
@@ -173,8 +175,11 @@ export default function ClientDashboard() {
             )}
           </div>
 
+          <input
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Search gigs" className="p-2 w-52 h-12 border-[1px] border-black rounded-md"></input>
           {/* Stats Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+          <div className="mt-5 grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
             <DCard
               title="Total Projects"
               value="$50,000"
@@ -211,10 +216,10 @@ export default function ClientDashboard() {
           {/* Gig Cards Section */}
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-6">
             {
-              gigs?.map((data, index)=> (
+              gigs?.map((data, index) => (
                 <GigCard
                   key={index}
-                  onClick={()=> navigate(`/client/gigs/gigs_details/${data?.id}`)}
+                  onClick={() => navigate(`/client/gigs/gigs_details/${data?.id}`)}
                   image={data?.fileUrls.split(',')[0]}
                   title={data.title}
                   author={data.name}

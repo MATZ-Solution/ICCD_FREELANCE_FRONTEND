@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import blog1 from "../../assets/client_dashboard/blog1.png";
 import { Star, Stars } from "lucide-react";
 import SidebarCard from "./sidebarcard";
 import { useGetSingleGigs } from "../../../api/client/gigs";
 import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 export default function ServicePage() {
   const [activeNavTab, setActiveNavTab] = useState("Basic");
@@ -52,7 +53,41 @@ export default function ServicePage() {
 
   const { id } = useParams();
   const { data, isSuccess, isPending, isError, isLoading } = useGetSingleGigs(id)
-  console.log("data: ", data)
+  // console.log("data: ", data)
+  const userDetails = useSelector(state => state.user.userDetails)
+  // console.log("userDetails: ", userDetails)
+  let [orderDetails, setOrderDetails] = useState({
+    status: 'pending',
+    ordered: 'true',
+    payment_status: 'true',
+    gigID: data?.gigsID,
+    clientID: userDetails.id,
+    freelancerID: data?.freelancerID,
+    packageID: data?.packages?.find(item => item?.name === 'basic').packageID
+  })
+
+  useEffect(() => {
+    if (
+      isSuccess &&
+      data &&
+      userDetails &&
+      data.packages?.length
+    ) {
+      const basicPackage = data.packages.find(p => p.name === 'basic');
+
+      setOrderDetails({
+        status: 'pending',
+        ordered: 'true',
+        payment_status: 'true',
+        gigID: data.gigsID,
+        clientID: userDetails.id,
+        freelancerID: data.freelancerID,
+        packageID: basicPackage?.packageID || null
+      });
+    }
+  }, [isSuccess, data, userDetails]);
+
+  console.log("orderDetails: ", orderDetails)
 
   return (
     <div className="min-h-screen bg-white">
@@ -63,7 +98,7 @@ export default function ServicePage() {
             {/* Service Title */}
             <div className="mb-6">
               <h1 className="text-2xl font-semibold text-gray-900 mb-4">
-               {data?.title}
+                {data?.title}
               </h1>
 
               <div className="flex lg:flex-row md:flex-row flex-col items-center space-x-4 mb-4">
@@ -74,29 +109,29 @@ export default function ServicePage() {
 
                   <div >
                     <div className="flex flex-row space-x-2" >
-                    <h1 className="font-semibold">{data?.username} </h1>
-                    <h2>Level 2 + +</h2>
-                    <h3 className="text-gray-500" >7 orders in queue </h3>
+                      <h1 className="font-semibold">{data?.username} </h1>
+                      <h2>Level 2 + +</h2>
+                      <h3 className="text-gray-500" >7 orders in queue </h3>
 
                     </div>
 
                     <div className="flex space-x-1 flex-row">
-                    <h2 className="font-semibold" >Ui designer</h2>
+                      <h2 className="font-semibold" >Ui designer</h2>
                       {[1, 2, 3, 4, 5].map((star) => (
-                    <svg
-                      key={star}
-                      className="w-4 h-4 mt-1 fill-yellow-400 text-yellow-400"
-                      viewBox="0 0 20 20"
-                    >
-                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                    </svg>
-                  ))}
-                  <span>4.7 <span className="text-gray-500" >(188 reviews)</span> </span>
+                        <svg
+                          key={star}
+                          className="w-4 h-4 mt-1 fill-yellow-400 text-yellow-400"
+                          viewBox="0 0 20 20"
+                        >
+                          <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                        </svg>
+                      ))}
+                      <span>4.7 <span className="text-gray-500" >(188 reviews)</span> </span>
+                    </div>
                   </div>
-                  </div>
-               
+
                 </div>
-               
+
               </div>
             </div>
 
@@ -165,7 +200,7 @@ export default function ServicePage() {
                               {expandedReviews[review.id]
                                 ? review.text
                                 : review.text.slice(0, 100) +
-                                  (review.text.length > 100 ? "..." : "")}{" "}
+                                (review.text.length > 100 ? "..." : "")}{" "}
                               {review.text.length > 100 && (
                                 <span
                                   className="text-black underline cursor-pointer hover:underline"
@@ -192,7 +227,7 @@ export default function ServicePage() {
               <h3 className="text-lg font-semibold mb-4">About this gig</h3>
               <div className="prose prose-gray max-w-none">
                 <p className="text-gray-700 mb-4">
-                 {data?.description}
+                  {data?.description}
                 </p>
               </div>
             </div>
@@ -207,34 +242,41 @@ export default function ServicePage() {
                   <div className="flex">
                     <button
                       id="Basic"
-                      onClick={() => setActiveNavTab("Basic")}
-                      className={`flex-1 py-3 px-4 text-center text-sm font-medium border-b-2 ${
-                        activeNavTab === "Basic"
-                          ? "border-black text-black bg-green-50"
-                          : "border-transparent text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-colors"
-                      }`}
+                      onClick={() => {
+                        setActiveNavTab("Basic")
+                        setOrderDetails({ ...orderDetails, packageID: data?.packages?.find(item => item?.name === 'basic').packageID })
+                      }
+                      }
+                      className={`flex-1 py-3 px-4 text-center text-sm font-medium border-b-2 ${activeNavTab === "Basic"
+                        ? "border-black text-black bg-green-50"
+                        : "border-transparent text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-colors"
+                        }`}
                     >
                       Basic
                     </button>
                     <button
                       id="Standard"
-                      onClick={() => setActiveNavTab("Standard")}
-                      className={`flex-1 py-3 px-4 text-center text-sm font-medium border-b-2 ${
-                        activeNavTab === "Standard"
-                          ? "border-black text-black bg-green-50"
-                          : "border-transparent text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-colors"
-                      }`}
+                      onClick={() => {
+                        setActiveNavTab("Standard")
+                        setOrderDetails({ ...orderDetails, packageID: data?.packages?.find(item => item?.name === 'standard').packageID })
+                      }}
+                      className={`flex-1 py-3 px-4 text-center text-sm font-medium border-b-2 ${activeNavTab === "Standard"
+                        ? "border-black text-black bg-green-50"
+                        : "border-transparent text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-colors"
+                        }`}
                     >
                       Standard
                     </button>
                     <button
                       id="Premium"
-                      onClick={() => setActiveNavTab("Premium")}
-                      className={`flex-1 py-3 px-4 text-center text-sm font-medium border-b-2 ${
-                        activeNavTab === "Premium"
-                          ? "border-black text-black bg-green-50"
-                          : "border-transparent text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-colors"
-                      }`}
+                      onClick={() => {
+                        setActiveNavTab("Premium")
+                        setOrderDetails({ ...orderDetails, packageID: data?.packages?.find(item => item?.name === 'premium').packageID })
+                      }}
+                      className={`flex-1 py-3 px-4 text-center text-sm font-medium border-b-2 ${activeNavTab === "Premium"
+                        ? "border-black text-black bg-green-50"
+                        : "border-transparent text-gray-600 hover:text-gray-900 hover:bg-gray-50 transition-colors"
+                        }`}
                     >
                       Premium
                     </button>
@@ -244,18 +286,18 @@ export default function ServicePage() {
                 {activeNavTab === "Basic" && (
                   <SidebarCard
                     price="21,00"
-                    description={data?.packages[0]?.packageTitle}
-                    deliverytime={data?.packages[0]?.deliveryTime}
+                    description={data?.packages?.find(item => item?.name === 'basic').packageTitle}
+                    deliverytime={data?.packages?.find(item => item?.name === 'basic').deliveryTime}
                     Revisions="Unlimited"
                     pages="1"
                   />
                 )}
 
                 {activeNavTab === "Standard" && (
-                 <SidebarCard
+                  <SidebarCard
                     price="21,00"
-                    description={data?.packages[1]?.packageTitle}
-                    deliverytime={data?.packages[1]?.deliveryTime}
+                    description={data?.packages?.find(item => item?.name === 'standard').packageTitle}
+                    deliverytime={data?.packages?.find(item => item?.name === 'standard').deliveryTime}
                     Revisions="Unlimited"
                     pages="1"
                   />
@@ -264,8 +306,8 @@ export default function ServicePage() {
                 {activeNavTab === "Premium" && (
                   <SidebarCard
                     price="21,00"
-                    description={data?.packages[2]?.packageTitle}
-                    deliverytime={data?.packages[2]?.deliveryTime}
+                    description={data?.packages?.find(item => item?.name === 'premium').packageTitle}
+                    deliverytime={data?.packages?.find(item => item?.name === 'premium').deliveryTime}
                     Revisions="Unlimited"
                     pages="1"
                   />
