@@ -2,6 +2,8 @@ import { useState } from "react";
 import blog1 from "../../assets/client_dashboard/blog1.png";
 import { Star, Stars } from "lucide-react";
 import SidebarCard from "./sidebarcard";
+import { useGetSingleGigs } from "../../../api/client/gigs";
+import { useParams } from "react-router-dom";
 
 export default function ServicePage() {
   const [activeNavTab, setActiveNavTab] = useState("Basic");
@@ -48,6 +50,10 @@ export default function ServicePage() {
     },
   ];
 
+  const { id } = useParams();
+  const { data, isSuccess, isPending, isError, isLoading } = useGetSingleGigs(id)
+  console.log("data: ", data)
+
   return (
     <div className="min-h-screen bg-white">
       <div className="max-w-7xl mx-auto px-4 py-6">
@@ -57,7 +63,7 @@ export default function ServicePage() {
             {/* Service Title */}
             <div className="mb-6">
               <h1 className="text-2xl font-semibold text-gray-900 mb-4">
-                I will create figma ui ux design website mockup and figma website design
+               {data?.title}
               </h1>
 
               <div className="flex lg:flex-row md:flex-row flex-col items-center space-x-4 mb-4">
@@ -68,7 +74,7 @@ export default function ServicePage() {
 
                   <div >
                     <div className="flex flex-row space-x-2" >
-                    <h1 className="font-semibold">Saba Akbar </h1>
+                    <h1 className="font-semibold">{data?.username} </h1>
                     <h2>Level 2 + +</h2>
                     <h3 className="text-gray-500" >7 orders in queue </h3>
 
@@ -186,41 +192,8 @@ export default function ServicePage() {
               <h3 className="text-lg font-semibold mb-4">About this gig</h3>
               <div className="prose prose-gray max-w-none">
                 <p className="text-gray-700 mb-4">
-                  <strong>
-                    Professional Figma UI UX Designer | Stunning Figma Website Mockups
-                  </strong>
+                 {data?.description}
                 </p>
-                <p className="text-gray-700 mb-4">
-                  Are you looking for a modern, conversion-focused Figma website mockup that not only looks stunning but
-                  also attracts customers and boosts sales? You're in the right place!
-                </p>
-                <p className="text-gray-700 mb-4">
-                  I specialize in high-quality, custom-designed Figma UI UX mockups for startups, businesses, and
-                  individuals. Whether you need a landing page, web template, app UI, or full web design, I create
-                  designs that are both visually appealing and user-friendly.
-                </p>
-                <h4 className="font-semibold text-gray-900 mb-2">Why Choose Me?</h4>
-                <ul className="list-disc list-inside text-gray-700 space-y-1 mb-4">
-                  <li>Proven Expertise with 5+ Years</li>
-                  <li>100% Custom Design - No Generic Templates</li>
-                  <li>SEO Friendly Files</li>
-                  <li>
-                    Unlimited Revisions -{" "}
-                    <span className="bg-orange-100 italic">
-                      Your Satisfaction is My Priority!
-                    </span>
-                  </li>
-                  <li>Fast Delivery</li>
-                </ul>
-                <h4 className="font-semibold text-gray-900 mb-2">
-                  My Expertise Includes:
-                </h4>
-                <ul className="list-disc list-inside text-gray-700 space-y-1">
-                  <li>Landing Page Design & Business</li>
-                  <li>E-commerce Website Design</li>
-                  <li>Mobile App UI/UX Design</li>
-                  <li>Dashboard & Admin Panel Design</li>
-                </ul>
               </div>
             </div>
           </div>

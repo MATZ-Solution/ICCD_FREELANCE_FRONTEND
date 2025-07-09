@@ -339,7 +339,7 @@ export const router = createBrowserRouter([
     ),
   },
    {
-    path: "/client/gigs/gigs_details",
+    path: "/client/gigs/gigs_details/:id",
     element: (
       // <AuthRoute>
       <MainTemplate isShowFooter={false}>

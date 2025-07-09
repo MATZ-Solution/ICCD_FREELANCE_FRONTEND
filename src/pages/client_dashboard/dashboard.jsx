@@ -16,6 +16,8 @@ import logo from "../../assets/ICCD-01.png";
 import dp from "../../assets/client_dashboard/clientdp.png";
 import GigCard from "../../component/client_dashboard/gig_card";
 import blog1 from "../../assets/client_dashboard/blog1.png";
+import { useGetGigs } from "../../../api/client/gigs";
+import { useNavigate } from "react-router-dom";
 
 export default function ClientDashboard() {
   const [activeNavTab, setActiveNavTab] = useState("Dashboard");
@@ -37,6 +39,10 @@ export default function ClientDashboard() {
   const toggleProjectAvailability = () =>
     setProjectIsAvailable((prev) => !prev);
   const toggleJobAvailability = () => setJobIsAvailable((prev) => !prev);
+
+  const navigate = useNavigate()
+   const { gigs, error, isLoading, isError } = useGetGigs()
+   console.log("gigs: ", gigs)
 
   return (
     <div className="min-h-screen px-4 bg-white">
@@ -204,46 +210,22 @@ export default function ClientDashboard() {
 
           {/* Gig Cards Section */}
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-6">
-            <GigCard
-              image={blog1}
-              title="I will create figma UI UX design for website mockup"
-              author="Saba Akbar"
-              level="Level 2++"
-              rating={4.7}
-              reviews={187}
-              price={2977}
-              offersVideoConsultation={true}
-            />
-            <GigCard
-              image={blog1}
-              title="I will design, redesign, and develop a responsive wordpress..."
-              author="Swapnil Halder"
-              level="Level 1++"
-              rating={5.0}
-              reviews={39}
-              price={5953}
-              offersVideoConsultation={false}
-            />
-            <GigCard
-              image={blog1}
-              title="I will do figma UI UX design for figma website, mobile app..."
-              author="Visual Voyage"
-              level="Level 1++"
-              rating={4.8}
-              reviews={30}
-              price={2977}
-              offersVideoConsultation={false}
-            />
-            <GigCard
-              image={blog1}
-              title="I will do responsive wordpress website design and develop..."
-              author="Muhammad I"
-              level="Level 1++"
-              rating={5.0}
-              reviews={209}
-              price={29810}
-              offersVideoConsultation={true}
-            />
+            {
+              gigs?.map((data, index)=> (
+                <GigCard
+                  key={index}
+                  onClick={()=> navigate(`/client/gigs/gigs_details/${data?.id}`)}
+                  image={data?.fileUrls.split(',')[0]}
+                  title={data.title}
+                  author={data.name}
+                  level="Level 2++"
+                  rating={4.7}
+                  reviews={187}
+                  price={2977}
+                  offersVideoConsultation={true}
+                />
+              ))
+            }
           </div>
         </main>
       </div>
