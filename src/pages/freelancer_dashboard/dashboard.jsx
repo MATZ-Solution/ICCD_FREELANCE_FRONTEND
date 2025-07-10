@@ -7,6 +7,7 @@ import logo from "../../assets/ICCD-01.png";
 import dp from "../../assets/client_dashboard/clientdp.png"
 import Table from "../freelancer_gigs/table";
 import PricingTable from "../../component/pricing_table";
+import { useSelector } from "react-redux";
 
 export default function FreelancerDashboard() {
   const [activeNavTab, setActiveNavTab] = useState("Dashboard");
@@ -49,6 +50,9 @@ export default function FreelancerDashboard() {
   };
 
   const toggleAvailability = () => setIsAvailable(prev => !prev);
+  const userDetails = useSelector(state => state.user.userDetails)
+  console.log("userDetails: ",userDetails)
+
 
   return (
     <div className="min-h-screen px-4  sm:px-6  bg-white">
@@ -79,8 +83,8 @@ export default function FreelancerDashboard() {
                 className="w-16 h-16 rounded-full"
               />
               <div className="text-center">
-                <h3 className="font-semibold text-sm">Muhammad Talha Butt </h3>
-                <p className="text-xs text-gray-500">@butt997</p>
+                <h3 className="capitalize font-semibold text-sm">{userDetails.name} </h3>
+                <p className="text-xs text-gray-500">{userDetails.email}</p>
               </div>
             </div>
             <button className="w-full mt-4 px-4 py-2 text-sm border border-[#01AEAD] rounded-md hover:bg-gray-50 text-gray-700">
@@ -139,7 +143,7 @@ export default function FreelancerDashboard() {
         {/* Main Content */}
         <main className="mt-10 flex-1 ">
           <div className="mb-6">
-            <h1 className="text-2xl font-bold mb-2">Welcome,  Muhammad Talha</h1>
+            <h1 className="capitalize text-2xl font-bold mb-2">Welcome,  {userDetails.name}</h1>
             <p className="text-xs text-gray-600 mb-4">
               Find important messages, tips, and links to helpful resources here.
             </p>

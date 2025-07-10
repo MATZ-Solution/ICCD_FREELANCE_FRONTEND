@@ -114,18 +114,7 @@ export default function JobForm() {
   // setImages([...images, cameraResult.assets[0].uri]);
 
   const onSubmit = (data) => {
-    const formData = new FormData();
-    for (const key in data) {
-      formData.append(key, data[key])
-      console.log("key: ", key)
-    }
-
-    if (images && images.length > 0) {
-      for (let i = 0; i < data.files.length; i++) {
-        formData.append("files", data.files[i]);
-      }
-    }
-    console.log("Form data: ", formData)
+    console.log("data: ", data)
 
   };
 

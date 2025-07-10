@@ -15,7 +15,7 @@ const GigCard = ({
   const [liked, setLiked] = useState(false);
 
   return (
-    <div onClick={onClick} className="w-full h-full flex flex-col bg-white rounded-xl shadow-sm overflow-hidden  hover:shadow-lg transition relative">
+    <div onClick={onClick} className="cursor-pointer w-full h-full flex flex-col bg-white rounded-xl shadow-sm overflow-hidden  hover:shadow-lg transition relative">
       {/* Image with heart overlay */}
       <div className="relative">
         <img src={image} alt={title} className="w-full h-36 object-cover" />
@@ -33,7 +33,7 @@ const GigCard = ({
       <div className="p-4">
         <h3 className="text-sm text-gray-700 mb-1">{title}</h3>
         <p className="text-xs text-gray-500 mb-1">
-          <span className="font-semibold">{author}</span> • {level}
+          <span className="font-semibold">{author}</span> 
         </p>
         {/* <p className="text-xs text-yellow-500 font-medium mb-1">
           ⭐ {rating} <span className="text-gray-400">({reviews})</span>

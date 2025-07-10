@@ -1,5 +1,6 @@
 import api from "../axios";
 import API_ROUTE from "../endpoints";
+import { useMutation } from "@tanstack/react-query";
 
 export function useGetProjectById(id) {
     const { data, isSuccess, isPending, isError, isLoading } = useQuery({
@@ -45,7 +46,7 @@ export function useAddproject() {
 
     const { mutate: addProject, isSuccess, isPending, isError, error} = useMutation({
         mutationFn: async (data) =>
-            await api.post(`${API_ROUTE.project.addProject}/${id}`, data, {
+            await api.post(`${API_ROUTE.project.addProject}`, data, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                     Authorization: api.defaults.headers.common["Authorization"],
@@ -53,6 +54,7 @@ export function useAddproject() {
                 timeout: 30000,
             }),
         onSuccess: (data) => {
+            // alert("Project added successfully!")
 
         },
         onError: (error) => {
@@ -63,7 +65,7 @@ export function useAddproject() {
             // });
         },
     });
-    return { addProject, isSuccess, isPending, isError, reset, error, data };
+    return { addProject, isSuccess, isPending, isError, error };
 }
 
 // get project

@@ -19,6 +19,7 @@ import blog1 from "../../assets/client_dashboard/blog1.png";
 import { useGetGigs } from "../../../api/client/gigs";
 import { useNavigate } from "react-router-dom";
 import useDebounce from "../../../hooks/useDebounce";
+import { useSelector } from "react-redux";
 
 export default function ClientDashboard() {
   const [activeNavTab, setActiveNavTab] = useState("Dashboard");
@@ -29,6 +30,7 @@ export default function ClientDashboard() {
   const [jobIsAvailable, setJobIsAvailable] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [showMobileSidebar, setShowMobileSidebar] = useState(false);
+  
 
   const navTabs = ["Dashboard", "Orders", "Messages", "Jobs"];
 
@@ -43,10 +45,8 @@ export default function ClientDashboard() {
 
 
   const navigate = useNavigate()
-  let [search, setSearch] = useState('')
-  const debouncedSearch = useDebounce(search, 500);
-  const { gigs, error, isLoading, isError } = useGetGigs({search: debouncedSearch})
-  console.log("Search: ", search)
+  const { gigs, error, isLoading, isError } = useGetGigs()
+  const userDetails = useSelector(state => state.user.userDetails)
 
 
   return (
@@ -80,8 +80,8 @@ export default function ClientDashboard() {
                 className="w-16 h-16 rounded-full"
               />
               <div className="text-center">
-                <h3 className="font-semibold text-sm">Shohaib Nayyar</h3>
-                <p className="text-xs text-gray-500">@butt997</p>
+                <h3 className="capitalize font-semibold text-sm">{userDetails.name}</h3>
+                <p className="text-xs text-gray-500">{userDetails.email}</p>
               </div>
             </div>
             <button className="w-full mt-4 px-4 py-2 text-sm border border-[#01AEAD] rounded-md hover:bg-gray-50 text-gray-700">
@@ -95,8 +95,8 @@ export default function ClientDashboard() {
               Get tailored offers for your needs.
             </p>
             <button
-              onClick={toggleProjectAvailability}
-              className={`w-full px-4 py-2 text-sm rounded-md font-medium ${projectIsAvailable
+              onClick={() => navigate('/client/post-project')}
+              className={`cursor-pointer w-full px-4 py-2 text-sm rounded-md font-medium ${projectIsAvailable
                   ? "bg-blue-500 hover:bg-blue-300 text-white"
                   : "border border-[#01AEAD] hover:bg-green-600 hover:text-white text-gray-700"
                 }`}
@@ -118,8 +118,8 @@ export default function ClientDashboard() {
               Stay productive, anywhere you go.
             </p>
             <button
-              onClick={toggleJobAvailability}
-              className={`w-full px-4 py-2 text-sm rounded-md font-medium ${jobIsAvailable
+              onClick={() => navigate('/client/post-job')}
+              className={`cursor-pointer w-full px-4 py-2 text-sm rounded-md font-medium ${jobIsAvailable
                   ? "bg-red-500 hover:bg-blue-300 text-white"
                   : "border border-[#01AEAD] hover:bg-green-600 hover:text-white text-gray-700"
                 }`}
@@ -139,8 +139,8 @@ export default function ClientDashboard() {
         {/* Main Content */}
         <main className="flex-1">
           <div className="mb-6">
-            <h1 className="text-2xl font-bold mb-2">
-              Welcome, Shoaib Nayyar
+            <h1 className="capitalize text-2xl font-bold mb-2">
+              Welcome, {userDetails.name}
             </h1>
             <p className="text-xs text-gray-600 mb-4">
               Find important messages, tips, and links to helpful resources
@@ -175,9 +175,6 @@ export default function ClientDashboard() {
             )}
           </div>
 
-          <input
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search gigs" className="p-2 w-52 h-12 border-[1px] border-black rounded-md"></input>
           {/* Stats Cards */}
           <div className="mt-5 grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
             <DCard

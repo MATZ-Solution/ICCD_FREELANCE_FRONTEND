@@ -1,46 +1,49 @@
 import bannerimg from "../../assets/client_dashboard/bannerimg.png";
 import { useForm, Controller, useFieldArray } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useAddproject } from "../../../api/client/project";
+import { useState } from "react";
 import * as yup from "yup";
 
 const schema = yup.object({
-  ProjectTitle: yup
+  projectTitle: yup
     .string()
     .required("Project title is required")
     .max(80, "Maximum 80 characters allowed"),
 
   category: yup.string().required("Category is required"),
 
-  subcategory: yup.string().required("Subcategory is required"),
+  subCategory: yup.string().required("Subcategory is required"),
 
-  RequiredSkills: yup
+  skills: yup
     .string()
-    .required("Required skills are required")
-    .test(
-      "min-5-skills",
-      "Please enter at least 5 skills, separated by spaces or commas",
-      (value) => {
-        if (!value) return false;
-        const skills = value
-          .split(/[,\s]+/)
-          .map((s) => s.trim())
-          .filter(Boolean);
-        return skills.length >= 5;
-      }
-    )
-    .test(
-      "only-letters-numbers",
-      "Each skill must contain only letters and numbers",
-      (value) => {
-        if (!value) return false;
-        const skills = value
-          .split(/[,\s]+/)
-          .map((s) => s.trim())
-          .filter(Boolean);
-        const regex = /^[A-Za-z0-9]+$/;
-        return skills.every((skill) => regex.test(skill));
-      }
-    ),
+  .required("Required skills are required")
+  .test(
+    "min-5-skills",
+    "Please enter at least 5 skills, separated by spaces or commas",
+    (value) => {
+      if (!value) return false;
+      const skills = value
+        .split(/[,\s]+/)
+        .map((s) => s.trim())
+        .filter(Boolean);
+      return skills.length >= 5;
+    }
+  )
+  .test(
+    "only-letters-numbers",
+    "Each skill must contain only letters and numbers",
+    (value) => {
+      if (!value) return false;
+      const skills = value
+        .split(/[,\s]+/)
+        .map((s) => s.trim())
+        .filter(Boolean);
+      const regex = /^[A-Za-z0-9]+$/;
+      return skills.every((skill) => regex.test(skill));
+    }
+  )
+  ,
 
   ProjectDescription: yup
     .string()
@@ -49,40 +52,42 @@ const schema = yup.object({
 
   Budget: yup
     .string()
-    .required("Budget is required")
-    .test(
-      "is-valid-budget-range",
-      "Enter a valid budget range like 5000 - 7000",
-      (value) => {
-        if (!value) return false;
-        const regex = /^\s*([\d,]+)\s*-\s*([\d,]+)\s*$/;
-        const match = value.match(regex);
-        if (!match) return false;
-        const min = parseInt(match[1].replace(/,/g, ""));
-        const max = parseInt(match[2].replace(/,/g, ""));
-        if (isNaN(min) || isNaN(max)) return false;
-        if (min >= max) return false;
-        if (max - min < 1000) return false;
-        return true;
-      }
-    ),
+  .required("Budget is required")
+  .test(
+    "is-valid-budget-range",
+    "Enter a valid budget range like 5000 - 7000",
+    (value) => {
+      if (!value) return false;
+      const regex = /^\s*([\d,]+)\s*-\s*([\d,]+)\s*$/;
+      const match = value.match(regex);
+      if (!match) return false;
+      const min = parseInt(match[1].replace(/,/g, ""));
+      const max = parseInt(match[2].replace(/,/g, ""));
+      if (isNaN(min) || isNaN(max)) return false;
+      if (min >= max) return false;
+      if (max - min < 1000) return false;
+      return true;
+    }
+  )
+  ,
 
   deadline: yup.date().required("Deadline is required"),
 
   files: yup
     .mixed()
-    .test("fileRequired", "File is required", (value) => value && value.length > 0)
-    .test("fileSize", "File size must be less than 5MB", (value) =>
-      !value || !value[0] || value[0].size <= 5 * 1024 * 1024
-    )
-    .test(
-      "fileType",
-      "Only image files allowed (jpg, png, gif)",
-      (value) =>
-        !value ||
-        !value[0] ||
-        ["image/jpeg", "image/png", "image/gif"].includes(value[0].type)
-    ),
+  .test("fileRequired", "File is required", (value) => value && value.length > 0)
+  .test("fileSize", "File size must be less than 5MB", (value) =>
+    !value || !value[0] || value[0].size <= 5 * 1024 * 1024
+  )
+  .test(
+    "fileType",
+    "Only image files allowed (jpg, png, gif)",
+    (value) =>
+      !value ||
+      !value[0] ||
+      ["image/jpeg", "image/png", "image/gif"].includes(value[0].type)
+  )
+  ,
 
   milestones: yup.array().of(
     yup.object({
@@ -90,7 +95,8 @@ const schema = yup.object({
       payment: yup
         .number()
         .typeError("Payment amount must be a number")
-        .required("Payment amount is required"),
+      .required("Payment amount is required")
+      ,
       dueDate: yup.date().required("Due date is required"),
     })
   ),
@@ -104,7 +110,7 @@ const ProjectForm = () => {
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
-      ProjectTitle: "",
+      projectTitle: "",
       category: "",
       subcategory: "",
       RequiredSkills: "",
@@ -120,9 +126,26 @@ const ProjectForm = () => {
     name: "milestones",
   });
 
+  let [images, setImages] = useState([])
+  const handleImage = (e) => {
+    const files = Array.from(e.target.files);
+    setImages((prev) => [...prev, ...files]);
+  };
+  const handleDeleteImage = (indexToDelete) => {
+    setImages((prevImages) => prevImages.filter((_, index) => index !== indexToDelete));
+  };
+  console.log("images: ", images)
+  // setImages([...images, cameraResult.assets[0].uri]);
+  const { addProject, isSuccess, isPending, isError, error } = useAddproject()
+
   const onSubmit = (data) => {
-    console.log("Form Data:", data);
-    alert("Form submitted successfully!");
+    console.log("data: ", data)
+    const formData = new FormData();
+    for (const key in data) {
+      formData.append(key, data[key])
+      console.log("value: ", data[key])
+    }
+    addProject(formData)
   };
 
   return (
@@ -165,7 +188,7 @@ const ProjectForm = () => {
             <div className="lg:w-3/4">
               <Controller
                 control={control}
-                name="ProjectTitle"
+                name="projectTitle"
                 render={({ field }) => (
                   <input
                     {...field}
@@ -176,7 +199,7 @@ const ProjectForm = () => {
                 )}
               />
               <p className="text-red-500 text-sm mt-1">
-                {errors.ProjectTitle?.message}
+                {errors.projectTitle?.message}
               </p>
               <div className="text-right text-gray-600 text-xs mt-1">
                 0 / 80 max
@@ -469,6 +492,7 @@ const ProjectForm = () => {
           {/* Submit Button */}
           <button
             type="submit"
+            onClick={handleSubmit(onSubmit)}
             className="w-full mt-4 py-3 bg-teal-500 text-white font-semibold rounded hover:bg-teal-600 transition text-lg"
           >
             Continue

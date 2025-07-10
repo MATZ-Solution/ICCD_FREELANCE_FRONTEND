@@ -38,6 +38,7 @@ import AccountSecurityStep from "../src/pages/freelancer_profile/form3";
 import ProjectForm from "../src/pages/client_dashboard/post_project";
 import Payment from "../src/pages/payment/payment";
 import PricingForm from "../src/component/gigs_pricing_scope";
+import ClientHomepage from "../src/pages/clientHomepage/homePage";
 
 export const router = createBrowserRouter([
   {
@@ -216,7 +217,7 @@ export const router = createBrowserRouter([
       // </AuthRoute>
     ),
   },
-    {
+  {
     path: "/freelancer/profile-form/1",
     element: (
       // <AuthRoute>
@@ -226,7 +227,7 @@ export const router = createBrowserRouter([
       // </AuthRoute>
     ),
   },
-      {
+  {
     path: "/freelancer/profile-form/2",
     element: (
       // <AuthRoute>
@@ -236,7 +237,7 @@ export const router = createBrowserRouter([
       // </AuthRoute>
     ),
   },
-       {
+  {
     path: "/freelancer/profile-form/3",
     element: (
       // <AuthRoute>
@@ -247,7 +248,7 @@ export const router = createBrowserRouter([
     ),
   },
   {
-    path: "/freelancer/manage-gigs-projects",
+    path: "/freelancer/manage-gigs",
     element: (
       // <AuthRoute>
       <MainTemplate isShowFooter={false}>
@@ -256,8 +257,20 @@ export const router = createBrowserRouter([
       // </AuthRoute>
     ),
   },
+
+   {
+    path: "/freelancer/manage-projects",
+    element: (
+      // <AuthRoute>
+      <MainTemplate isShowFooter={false}>
+        <ManageGigsAndProjects />
+      </MainTemplate>
+      // </AuthRoute>
+    ),
+  },
+
   {
-    path: "/freelancer/jobs",
+    path: "/freelancer/manage-jobs",
     element: (
       // <AuthRoute>
       <MainTemplate isShowFooter={false}>
@@ -299,6 +312,17 @@ export const router = createBrowserRouter([
   },
 
   {
+    path: "/client",
+    element: (
+      // <AuthRoute>
+      <MainTemplate isShowFooter={false}>
+        <ClientHomepage />
+      </MainTemplate>
+      // </AuthRoute>
+    ),
+  },
+
+  {
     path: "/client/dashboard",
     element: (
       // <AuthRoute>
@@ -333,12 +357,12 @@ export const router = createBrowserRouter([
     element: (
       // <AuthRoute>
       <MainTemplate isShowFooter={false}>
-        <ClientOrders  />
+        <ClientOrders />
       </MainTemplate>
       // </AuthRoute>
     ),
   },
-   {
+  {
     path: "/client/gigs/gigs_details/:id",
     element: (
       // <AuthRoute>
@@ -349,7 +373,7 @@ export const router = createBrowserRouter([
     ),
   },
 
-    {
+  {
     path: "/payment",
     element: (
       // <AuthRoute>
