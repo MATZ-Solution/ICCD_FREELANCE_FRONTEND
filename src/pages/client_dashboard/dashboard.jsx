@@ -217,7 +217,7 @@ export default function ClientDashboard() {
                 <GigCard
                   key={index}
                   onClick={() => navigate(`/client/gigs/gigs_details/${data?.id}`)}
-                  image={data?.fileUrls.split(',')[0]}
+                  image={data?.fileUrls ? data?.fileUrls.split(',')[0] : ''}
                   title={data.title}
                   author={data.name}
                   level="Level 2++"

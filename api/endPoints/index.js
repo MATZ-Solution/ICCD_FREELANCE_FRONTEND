@@ -7,8 +7,8 @@ const API_ROUTE = {
     checkapi: "checkapi",
   },
   project: {
-    getProject: "/project/getProject",
-    getProjectById: "/project/getProjectById",
+    getProject: "/project/getAllProject",
+    getProjectByUser: "/project/getProjectByUser",
     addProject: "/project/addProject",
   },
   job: {

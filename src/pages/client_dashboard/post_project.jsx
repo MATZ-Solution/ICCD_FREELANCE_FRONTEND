@@ -1,9 +1,11 @@
 import bannerimg from "../../assets/client_dashboard/bannerimg.png";
-import { useForm, Controller, useFieldArray } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useAddproject } from "../../../api/client/project";
-import { useState } from "react";
 import * as yup from "yup";
+import backgroundd from "../../assets/client_dashboard/Group.png";
+import { useEffect, useState } from "react";
+import ReactSelect from "../../component/buttonSelect";
+import { useAddproject } from "../../../api/client/project";
 
 const schema = yup.object({
   projectTitle: yup
@@ -12,493 +14,310 @@ const schema = yup.object({
     .max(80, "Maximum 80 characters allowed"),
 
   category: yup.string().required("Category is required"),
-
   subCategory: yup.string().required("Subcategory is required"),
 
   skills: yup
-    .string()
-  .required("Required skills are required")
-  .test(
-    "min-5-skills",
-    "Please enter at least 5 skills, separated by spaces or commas",
-    (value) => {
-      if (!value) return false;
-      const skills = value
-        .split(/[,\s]+/)
-        .map((s) => s.trim())
-        .filter(Boolean);
-      return skills.length >= 5;
-    }
-  )
-  .test(
-    "only-letters-numbers",
-    "Each skill must contain only letters and numbers",
-    (value) => {
-      if (!value) return false;
-      const skills = value
-        .split(/[,\s]+/)
-        .map((s) => s.trim())
-        .filter(Boolean);
-      const regex = /^[A-Za-z0-9]+$/;
-      return skills.every((skill) => regex.test(skill));
-    }
-  )
-  ,
+    .array()
+    .of(yup.string().required())
+    .min(5, "Please enter at least 5 skills"),
 
-  ProjectDescription: yup
+  projectDescription: yup
     .string()
     .required("Project description is required")
     .max(250, "Maximum 250 characters allowed"),
 
-  Budget: yup
+  budget: yup
     .string()
-  .required("Budget is required")
-  .test(
-    "is-valid-budget-range",
-    "Enter a valid budget range like 5000 - 7000",
-    (value) => {
-      if (!value) return false;
-      const regex = /^\s*([\d,]+)\s*-\s*([\d,]+)\s*$/;
-      const match = value.match(regex);
-      if (!match) return false;
-      const min = parseInt(match[1].replace(/,/g, ""));
-      const max = parseInt(match[2].replace(/,/g, ""));
-      if (isNaN(min) || isNaN(max)) return false;
-      if (min >= max) return false;
-      if (max - min < 1000) return false;
-      return true;
-    }
-  )
-  ,
+    .required("Budget is required")
+    .test(
+      "is-valid-budget-range",
+      "Enter a valid budget range like 5000 - 7000",
+      (value) => {
+        const match = value?.match(/^\s*([\d,]+)\s*-\s*([\d,]+)\s*$/);
+        if (!match) return false;
+        const min = parseInt(match[1].replace(/,/g, ""));
+        const max = parseInt(match[2].replace(/,/g, ""));
+        return !isNaN(min) && !isNaN(max) && min < max && max - min >= 1000;
+      }
+    ),
 
   deadline: yup.date().required("Deadline is required"),
 
   files: yup
     .mixed()
-  .test("fileRequired", "File is required", (value) => value && value.length > 0)
-  .test("fileSize", "File size must be less than 5MB", (value) =>
-    !value || !value[0] || value[0].size <= 5 * 1024 * 1024
-  )
-  .test(
-    "fileType",
-    "Only image files allowed (jpg, png, gif)",
-    (value) =>
+    .test("required", "File is required", (value) => value && value.length > 0)
+    .test("fileSize", "Max file size 5MB", (value) =>
+      !value || !value[0] || value[0].size <= 5 * 1024 * 1024
+    )
+    .test("fileType", "Only jpg, png, gif allowed", (value) =>
       !value ||
       !value[0] ||
       ["image/jpeg", "image/png", "image/gif"].includes(value[0].type)
-  )
-  ,
-
-  milestones: yup.array().of(
-    yup.object({
-      title: yup.string().required("Milestone title is required"),
-      payment: yup
-        .number()
-        .typeError("Payment amount must be a number")
-      .required("Payment amount is required")
-      ,
-      dueDate: yup.date().required("Due date is required"),
-    })
-  ),
+    ),
 });
 
+const categoryOptions = [
+  { value: "Digital Marketing", label: "Digital Marketing" },
+  { value: "Web", label: "Web Development" },
+  { value: "Graphic", label: "Graphic Designing" },
+  { value: "Figma", label: "Figma Design" },
+];
+
+const subCategoryOptions = [
+  { value: "FrontEnd", label: "FrontEnd" },
+  { value: "Backend", label: "Backend" },
+  { value: "Design", label: "Design" },
+  { value: "API", label: "API Integration" },
+];
+
 const ProjectForm = () => {
+  const [skillInput, setSkillInput] = useState("");
+  const [skills, setSkills] = useState([]);
+
   const {
     control,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
       projectTitle: "",
-      category: "",
-      subcategory: "",
-      RequiredSkills: "",
-      ProjectDescription: "",
-      Budget: "",
+      category: null,
+      subCategory: null,
+      skills: [],
+      projectDescription: "",
+      budget: "",
       deadline: "",
-      milestones: [{ title: "", payment: "", dueDate: "" }],
+      files: [],
     },
   });
 
-  const { fields, append } = useFieldArray({
-    control,
-    name: "milestones",
-  });
+  useEffect(() => {
+    setValue("skills", skills);
+  }, [skills, setValue]);
 
-  let [images, setImages] = useState([])
-  const handleImage = (e) => {
-    const files = Array.from(e.target.files);
-    setImages((prev) => [...prev, ...files]);
+  const handleAddSkill = () => {
+    const trimmed = skillInput.trim();
+    if (trimmed && !skills.includes(trimmed)) {
+      setSkills((prev) => [...prev, trimmed]);
+      setSkillInput("");
+    }
   };
-  const handleDeleteImage = (indexToDelete) => {
-    setImages((prevImages) => prevImages.filter((_, index) => index !== indexToDelete));
+
+  const handleRemoveSkill = (index) => {
+    setSkills((prev) => prev.filter((_, i) => i !== index));
   };
-  console.log("images: ", images)
-  // setImages([...images, cameraResult.assets[0].uri]);
+
   const { addProject, isSuccess, isPending, isError, error } = useAddproject()
-
   const onSubmit = (data) => {
-    console.log("data: ", data)
     const formData = new FormData();
     for (const key in data) {
-      formData.append(key, data[key])
-      console.log("value: ", data[key])
+      if (key === 'files') {
+        data.files.forEach((file) => {
+          formData.append("files", file);
+        });
+      } else {
+        formData.append(key, data[key])
+      }
     }
-    addProject(formData)
+     addProject(formData)
   };
 
   return (
-    <div>
-      {/* Banner */}
-      <div className="pmcontainer bg-[#14A800] rounded-lg px-8 md:px-16 py-6 flex flex-col md:flex-row items-center justify-center md:justify-between overflow-hidden shadow-lg">
-        <div className="text-white pr-4 md:w-1/2">
-          <h2 className="text-3xl text-start font-semibold mb-2">
-            Project Management
-          </h2>
-          <p className="text-base text-start">
-            Choose a freelancer's personal and instantly generate work in their distinct style.
-          </p>
+    <div
+      className="bg-fixed bg-cover bg-center"
+      style={{ backgroundImage: `url(${backgroundd})` }}
+    >
+      <div className="max-w-4xl mx-auto px-6 py-8 space-y-8 bg-[#14A800] rounded-lg md:px-16 text-white flex flex-col md:flex-row items-center justify-between shadow-lg">
+        <div className="md:w-1/2">
+          <h2 className="text-3xl font-semibold mb-2">Project Management</h2>
+          <p>Choose a freelancer's personal and instantly generate work.</p>
         </div>
-        <div className="flex-shrink-0">
-          <img
-            src={bannerimg}
-            alt="Project flow illustration"
-            className="w-96 h-auto"
-          />
-        </div>
+        <img src={bannerimg} alt="banner" className="w-96 h-auto" />
       </div>
 
-      {/* Form */}
-      <div className="form my-4">
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="border border-gray-300 rounded-lg shadow-lg p-4 sm:p-8 w-full"
-        >
-          {/* Project Title */}
-          <div className="mb-6 flex flex-col lg:flex-row gap-6 justify-between lg:items-center">
-            <div className="text-start lg:w-1/4">
-              <label className="block text-gray-700 font-medium mb-1">
-                Project Title
-              </label>
-              <p className="text-sm">
-                A clear and concise name for your project that summarizes the task. Example: "E-commerce Website Redesign"
-              </p>
-            </div>
-            <div className="lg:w-3/4">
-              <Controller
-                control={control}
-                name="projectTitle"
-                render={({ field }) => (
-                  <input
-                    {...field}
-                    placeholder="E-commerce Website Redesign"
-                    className="w-full border border-gray-300 rounded px-3 py-3 text-sm"
-                    maxLength={80}
-                  />
-                )}
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="max-w-4xl bg-white mx-auto px-6 py-8 space-y-6"
+      >
+        {/* Project Title */}
+        <Controller
+          control={control}
+          name="projectTitle"
+          render={({ field }) => (
+            <div>
+              <label>Project Title</label>
+              <input
+                {...field}
+                className="w-full border rounded px-3 py-2 mt-1"
               />
-              <p className="text-red-500 text-sm mt-1">
-                {errors.projectTitle?.message}
-              </p>
-              <div className="text-right text-gray-600 text-xs mt-1">
-                0 / 80 max
-              </div>
+              <p className="text-red-500 text-sm">{errors.projectTitle?.message}</p>
             </div>
-          </div>
+          )}
+        />
 
-          {/* Category */}
-          <div className="mb-6 flex flex-col lg:flex-row gap-6 justify-between lg:items-center">
-            <div className="text-start lg:w-1/4">
-              <label className="block text-gray-700 font-medium mb-1">
-                Category
-              </label>
-              <p className="text-sm">
-                Select the most relevant category that matches your project domain.
-              </p>
-            </div>
-            <div className="lg:w-3/4 flex gap-2 sm:gap-4">
-              <div className="w-1/2">
-                <Controller
-                  control={control}
-                  name="category"
-                  render={({ field }) => (
-                    <select
-                      {...field}
-                      className="w-full border border-gray-300 rounded px-3 py-3 text-sm"
-                    >
-                      <option value="">Select A Category</option>
-                      <option value="Web Development">Web Development</option>
-                      <option value="Graphic Design">Graphic Design</option>
-                    </select>
-                  )}
+        {/* Category & subCategory */}
+        <div className="flex gap-4">
+          <div className="w-1/2">
+            <label>Category</label>
+            <Controller
+              control={control}
+              name="category"
+              render={({ field: { onChange, value } }) => (
+                <ReactSelect
+                  placeholder="Select Category"
+                  onChange={(selectedOption) => onChange(selectedOption?.value || "")}
+                  option={categoryOptions}
+                  value={categoryOptions.find((option) => option.value === value) || null}
                 />
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.category?.message}
-                </p>
-              </div>
-              <div className="w-1/2">
-                <Controller
-                  control={control}
-                  name="subcategory"
-                  render={({ field }) => (
-                    <select
-                      {...field}
-                      className="w-full border border-gray-300 rounded px-3 py-3 text-sm"
-                    >
-                      <option value="">Select A Subcategory</option>
-                      <option value="Frontend">Frontend</option>
-                      <option value="Backend">Backend</option>
-                    </select>
-                  )}
+              )}
+            />
+            {errors.category && (
+              <p className="mt-1 text-red-600">{errors.category.message}</p>
+            )}
+          </div>
+
+          <div className="w-1/2">
+            <label>Subcategory</label>
+            <Controller
+              control={control}
+              name="subCategory"
+              render={({ field: { onChange, value } }) => (
+                <ReactSelect
+                  placeholder="Select Subcategory"
+                  onChange={(selectedOption) => onChange(selectedOption?.value || "")}
+                  option={subCategoryOptions}
+                  value={subCategoryOptions.find((option) => option.value === value) || null}
                 />
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.subcategory?.message}
-                </p>
-              </div>
-            </div>
+              )}
+            />
+            {errors.subCategory && (
+              <p className="mt-1 text-red-600">{errors.subCategory.message}</p>
+            )}
           </div>
+        </div>
 
-          {/* Required Skills */}
-          <div className="mb-6 flex flex-col lg:flex-row justify-between lg:items-center gap-6">
-            <div className="text-start lg:w-1/4">
-              <label className="block text-gray-700 font-medium mb-1">
-                Required Skills
-              </label>
-              <p className="text-sm">
-                Choose the specific technical or creative skills needed to complete the project.
-              </p>
-            </div>
-            <div className="lg:w-3/4">
-              <Controller
-                control={control}
-                name="RequiredSkills"
-                render={({ field }) => (
-                  <input
-                    {...field}
-                    placeholder="e.g. React.js, UI/UX Design, Figma"
-                    className="w-full border border-gray-300 rounded px-3 py-3 text-sm"
-                  />
-                )}
-              />
-              <p className="text-red-500 text-sm mt-1">
-                {errors.RequiredSkills?.message}
-              </p>
-              <div className="text-start text-gray-600 text-xs mt-1">
-                5 Skills minimum. Use letters and numbers only.
-              </div>
-            </div>
-          </div>
-
-          {/* Project Description */}
-          <div className="mb-6 flex flex-col lg:flex-row justify-between lg:items-center gap-6">
-            <div className="text-start lg:w-1/4">
-              <label className="block text-gray-700 font-medium mb-1">
-                Project Description
-              </label>
-              <p className="text-sm">
-                Provide a detailed explanation of the project.
-              </p>
-            </div>
-            <div className="lg:w-3/4">
-              <Controller
-                control={control}
-                name="ProjectDescription"
-                render={({ field }) => (
-                  <textarea
-                    {...field}
-                    placeholder="More detail improves quality of proposals."
-                    className="w-full border border-gray-300 rounded px-3 py-3 text-sm"
-                    rows={4}
-                  />
-                )}
-              />
-              <p className="text-red-500 text-sm mt-1">
-                {errors.ProjectDescription?.message}
-              </p>
-              <div className="text-right text-gray-600 text-xs mt-1">
-                0 / 250 max
-              </div>
-            </div>
-          </div>
-
-          {/* Budget */}
-          <div className="mb-6 flex flex-col lg:flex-row justify-between lg:items-center gap-6">
-            <div className="text-start lg:w-1/4">
-              <label className="block text-gray-700 font-medium mb-1">
-                Budget
-              </label>
-              <p className="text-sm">
-                Enter your total budget or price range (e.g. PKR 50,000 – 80,000).
-              </p>
-            </div>
-            <div className="lg:w-3/4">
-              <Controller
-                control={control}
-                name="Budget"
-                render={({ field }) => (
-                  <input
-                    {...field}
-                    placeholder="e.g. PKR 50,000 – 80,000"
-                    className="w-full border border-gray-300 rounded px-3 py-3 text-sm"
-                  />
-                )}
-              />
-              <p className="text-red-500 text-sm mt-1">
-                {errors.Budget?.message}
-              </p>
-            </div>
-          </div>
-
-          {/* Deadline */}
-          <div className="mb-6 flex flex-col lg:flex-row justify-between lg:items-center gap-6">
-            <div className="text-start lg:w-1/4">
-              <label className="block text-gray-700 font-medium mb-1">
-                Timeline / Deadline
-              </label>
-              <p className="text-sm">
-                Select the expected delivery date.
-              </p>
-            </div>
-            <div className="lg:w-3/4">
-              <Controller
-                control={control}
-                name="deadline"
-                render={({ field }) => (
-                  <input
-                    {...field}
-                    type="date"
-                    className="w-full border border-gray-300 rounded px-3 py-3 text-sm"
-                  />
-                )}
-              />
-              <p className="text-red-500 text-sm mt-1">
-                {errors.deadline?.message}
-              </p>
-            </div>
-          </div>
-
-          {/* Files */}
-          <div className="mb-6 flex flex-col lg:flex-row justify-between lg:items-center gap-6">
-            <div className="text-start lg:w-1/4">
-              <label className="block text-gray-700 font-medium mb-1">
-                Files
-              </label>
-              <p className="text-sm">
-                Attach any design briefs, sketches, or documentation.
-              </p>
-            </div>
-            <div className="lg:w-3/4">
-              <Controller
-                control={control}
-                name="files"
-                render={({ field: { onChange } }) => (
-                  <input
-                    type="file"
-                    onChange={(e) => onChange(e.target.files)}
-                    className="w-full border border-gray-300 rounded px-3 py-3 text-sm"
-                  />
-                )}
-              />
-              <p className="text-red-500 text-sm mt-1">
-                {errors.files?.message}
-              </p>
-            </div>
-          </div>
-
-          {/* Milestones */}
-          {fields.map((field, index) => (
-            <div
-              key={field.id}
-              className="border-t border-gray-200 p-4 rounded-lg mb-4 bg-[#f6f6f6]"
-            >
-              <label className="text-start block text-gray-700 font-medium mb-1">
-                Milestone Title
-              </label>
-              <Controller
-                control={control}
-                name={`milestones.${index}.title`}
-                render={({ field }) => (
-                  <input
-                    {...field}
-                    placeholder="Wireframes & UI Screens"
-                    className="w-full border border-gray-300 rounded px-3 py-2 text-sm"
-                  />
-                )}
-              />
-              <p className="text-red-500 text-sm mt-1">
-                {errors.milestones?.[index]?.title?.message}
-              </p>
-
-              <div className="mt-4 flex flex-col sm:flex-row gap-2 sm:gap-4">
-                <div className="sm:w-1/2">
-                  <label className="text-start block text-gray-700 font-medium mb-1">
-                    Payment Amount
-                  </label>
-                  <Controller
-                    control={control}
-                    name={`milestones.${index}.payment`}
-                    render={({ field }) => (
-                      <input
-                        {...field}
-                        placeholder="PKR 25,000"
-                        className="w-full border border-gray-300 rounded px-3 py-2 text-sm"
-                      />
-                    )}
-                  />
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.milestones?.[index]?.payment?.message}
-                  </p>
-                  <div className="text-start text-gray-600 text-xs mt-1">
-                    Specify how much you will pay for this milestone.
-                  </div>
-                </div>
-                <div className="sm:w-1/2">
-                  <label className="text-start block text-gray-700 font-medium mb-1">
-                    Due Date
-                  </label>
-                  <Controller
-                    control={control}
-                    name={`milestones.${index}.dueDate`}
-                    render={({ field }) => (
-                      <input
-                        {...field}
-                        type="date"
-                        className="w-full border border-gray-300 rounded px-3 py-2 text-sm"
-                      />
-                    )}
-                  />
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.milestones?.[index]?.dueDate?.message}
-                  </p>
-                  <div className="text-start text-gray-600 text-xs mt-1">
-                    Select the date by which this milestone should be completed.
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
-
-          <div className="flex justify-end">
+        {/* Required Skills */}
+        <div>
+          <label>Required Skills</label>
+          <div className="flex gap-2 mt-1">
+            <input
+              value={skillInput}
+              onChange={(e) => setSkillInput(e.target.value)}
+              placeholder="Enter a skill"
+              className="w-full border rounded px-3 py-2"
+            />
             <button
               type="button"
-              onClick={() => append({ title: "", payment: "", dueDate: "" })}
-              className="bg-blue-900 text-white px-4 py-2 rounded hover:bg-blue-800 transition text-sm"
+              onClick={handleAddSkill}
+              className="bg-blue-600 text-white px-4 rounded"
             >
-              Add New Milestone
+              Add
             </button>
           </div>
 
-          {/* Submit Button */}
-          <button
-            type="submit"
-            onClick={handleSubmit(onSubmit)}
-            className="w-full mt-4 py-3 bg-teal-500 text-white font-semibold rounded hover:bg-teal-600 transition text-lg"
-          >
-            Continue
-          </button>
-        </form>
-      </div>
+          <div className="flex flex-wrap gap-2 mt-2">
+            {skills.map((skill, index) => (
+              <span
+                key={index}
+                className="bg-teal-600 text-white px-2 py-1 rounded text-sm flex items-center gap-1"
+              >
+                {skill}
+                <button
+                  type="button"
+                  onClick={() => handleRemoveSkill(index)}
+                  className="text-red-300 hover:text-red-500"
+                >
+                  &times;
+                </button>
+              </span>
+            ))}
+          </div>
+
+          <p className="text-red-500 text-sm">{errors.skills?.message}</p>
+        </div>
+
+        {/* Project Description */}
+        <Controller
+          control={control}
+          name="projectDescription"
+          render={({ field }) => (
+            <div>
+              <label>Project Description</label>
+              <textarea
+                {...field}
+                rows={4}
+                className="w-full border rounded px-3 py-2 mt-1"
+              />
+              <p className="text-red-500 text-sm">
+                {errors.projectDescription?.message}
+              </p>
+            </div>
+          )}
+        />
+
+        {/* Budget */}
+        <Controller
+          control={control}
+          name="budget"
+          render={({ field }) => (
+            <div>
+              <label>Budget</label>
+              <input
+                {...field}
+                placeholder="e.g. 50000 - 80000"
+                className="w-full border rounded px-3 py-2 mt-1"
+              />
+              <p className="text-red-500 text-sm">{errors.budget?.message}</p>
+            </div>
+          )}
+        />
+
+        {/* Deadline */}
+        <Controller
+          control={control}
+          name="deadline"
+          render={({ field }) => (
+            <div>
+              <label>Deadline</label>
+              <input
+                {...field}
+                type="date"
+                className="w-full border rounded px-3 py-2 mt-1"
+              />
+              <p className="text-red-500 text-sm">{errors.deadline?.message}</p>
+            </div>
+          )}
+        />
+
+        {/* Files */}
+        <Controller
+          control={control}
+          name="files"
+          render={({ field: { onChange } }) => (
+            <div>
+              <label>File Upload</label>
+              <input
+                type="file"
+                onChange={(e) => {
+                  const filesArray = Array.from(e.target.files); // Convert FileList to array
+                  onChange(filesArray); // Update form state
+                }}
+                className="w-full border rounded px-3 py-2 mt-1"
+              />
+              <p className="text-red-500 text-sm">{errors.files?.message}</p>
+            </div>
+          )}
+        />
+
+        <button
+          onClick={handleSubmit(onSubmit)}
+          className="w-full bg-teal-600 hover:bg-teal-700 text-white py-3 rounded text-lg"
+        >
+          Submit
+        </button>
+      </form>
     </div>
   );
 };

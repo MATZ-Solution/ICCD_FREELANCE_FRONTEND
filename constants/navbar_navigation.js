@@ -10,7 +10,7 @@
     { name: "Home", path: '/client' },
     { name: "Dashboard", path: '/client/dashboard' },
     { name: "Orders", path: '/client/orders' },
-    { name: "Projects", path: '' },
+    { name: "Projects", path: '/client/projects' },
     { name: "Jobs", path: '' }
   ];
 

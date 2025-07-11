@@ -39,6 +39,8 @@ import ProjectForm from "../src/pages/client_dashboard/post_project";
 import Payment from "../src/pages/payment/payment";
 import PricingForm from "../src/component/gigs_pricing_scope";
 import ClientHomepage from "../src/pages/clientHomepage/homePage";
+import ClientProjects from "../src/pages/client_dashboard/client_projects";
+import FreelancerEditProfile from "../src/pages/freelancer_profile/edit_profile";
 
 export const router = createBrowserRouter([
   {
@@ -258,7 +260,7 @@ export const router = createBrowserRouter([
     ),
   },
 
-   {
+  {
     path: "/freelancer/manage-projects",
     element: (
       // <AuthRoute>
@@ -306,6 +308,16 @@ export const router = createBrowserRouter([
       // <AuthRoute>
       <MainTemplate isShowFooter={false}>
         <Job_experience />
+      </MainTemplate>
+      // </AuthRoute>
+    ),
+  },
+    {
+    path: "/freelancer/edit-profile",
+    element: (
+      // <AuthRoute>
+      <MainTemplate isShowFooter={false}>
+        <FreelancerEditProfile />
       </MainTemplate>
       // </AuthRoute>
     ),
@@ -358,6 +370,16 @@ export const router = createBrowserRouter([
       // <AuthRoute>
       <MainTemplate isShowFooter={false}>
         <ClientOrders />
+      </MainTemplate>
+      // </AuthRoute>
+    ),
+  },
+  {
+    path: "/client/projects",
+    element: (
+      // <AuthRoute>
+      <MainTemplate isShowFooter={false}>
+        <ClientProjects />
       </MainTemplate>
       // </AuthRoute>
     ),

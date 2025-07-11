@@ -4,6 +4,8 @@ import Table from '../../component/freelancers_gigs/gigPricingTable'
 import Button from '../../component/button';
 import { useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { setGigsDetails } from '../../../redux/slices/gigsDetailSlice';
 
 const packages = ["basic", "standard", "premium"];
 const features = [
@@ -17,9 +19,9 @@ function Pricing() {
 
   const navigate = useNavigate()
   const location = useLocation()
+  const dispatch = useDispatch()
   const formData = location.state
-  console.log("formData: ", formData)
-
+  
   const [pricing, setPricing] = useState({
     basic: { name: 'basic' }, standard: { name: 'standard' }, premium: { name: 'premium' }
   });
@@ -32,8 +34,9 @@ function Pricing() {
   };
 
   const handleSubmit = () => {
-    navigate('/freelancer/manage-gigs/description', { state: {...formData, packages : pricing} })
-
+    let setpackages = {packages: pricing}
+    dispatch(setGigsDetails(setpackages));
+    navigate('/freelancer/manage-gigs/description')
   }
 
   return (

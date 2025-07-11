@@ -2,7 +2,9 @@ import { useState } from 'react';
 import Profile from '../../component/freelancers_gigs/profile';
 import Button from '../../component/button';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { useLocation } from 'react-router-dom';
+import { setGigsDetails } from '../../../redux/slices/gigsDetailSlice';
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
@@ -11,6 +13,7 @@ function Description() {
 
     const navigate = useNavigate()
     const location = useLocation()
+    const dispatch = useDispatch()
     const formData = location.state
     console.log("formData: ", formData)
 
@@ -27,7 +30,8 @@ function Description() {
     });
 
     const onSubmit = (data) => {
-        navigate('/freelancer/manage-gigs/gallery', { state: { ...formData, description: data.description } })
+        dispatch(setGigsDetails(data));
+        navigate('/freelancer/manage-gigs/gallery')
     }
 
     return (

@@ -247,7 +247,7 @@ export default function Navbar() {
                               onClick={handleSwitchClient}
                             >Switch to client</button>
                             {[
-                              { name: "View Profile", action: () => navigate("/profile") },
+                              { name: "View Profile", action: () => navigate("/freelancer/profile-form/1") },
                               { name: "Settings", action: () => navigate("/settings") },
                               { name: "Logout", action: logout },
                             ].map((data, index) => (

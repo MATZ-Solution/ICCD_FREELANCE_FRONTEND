@@ -7,14 +7,13 @@ import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import { useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import { useAddGigs } from '../../../api/client/gigs';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { resetGigDetails } from '../../../redux/slices/gigsDetailSlice';
 
 function Gallery() {
     const { addGigs, isSuccess, isPending, isError, error } = useAddGigs()
-
-    const navigate = useNavigate()
-
-    const location = useLocation()
-    const data = location.state
+    const data = useSelector(state => state.gigs.gigsDetails)
 
     let [images, setImages] = useState([])
 
@@ -27,21 +26,24 @@ function Gallery() {
     };
 
     const onSubmit = () => {
-        const formData = new FormData();
-        for (const key in data) {
-            console.log(key, data[key])
-            if (key === 'packages') {
-                formData.append(key, JSON.stringify(data[key]))
-            } else {
-                formData.append(key, data[key])
-            }
-        }
-        if (images && images.length > 0) {
-            images.forEach((file) => {
-                formData.append("files", file);
-            });
-        }
-        addGigs(formData)
+        console.log("image: ", images)
+        // console.log("data: ", data)
+        // const formData = new FormData();
+        // for (const key in data) {
+        //     console.log(key, data[key])
+        //     if (key === 'packages') {
+        //         formData.append(key, JSON.stringify(data[key]))
+        //     } else {
+        //         formData.append(key, data[key])
+        //     }
+        // }
+        // if (images && images.length > 0) {
+        //     images.forEach((file) => {
+        //         formData.append("files", file);
+        //     });
+        // }
+        // addGigs(formData)
+        // resetGigDetails()
     };
 
     return (

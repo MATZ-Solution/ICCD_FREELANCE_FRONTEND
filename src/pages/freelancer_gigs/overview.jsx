@@ -3,13 +3,15 @@ import ReactSelect from '../../component/buttonSelect';
 import Profile from '../../component/freelancers_gigs/profile';
 import Button from '../../component/button';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { setGigsDetails } from '../../../redux/slices/gigsDetailSlice';
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 
 function Overview() {
-
   const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   const schema = yup.object({
     gigsTitle: yup.string().required("title not selected"),
@@ -38,8 +40,8 @@ function Overview() {
   ];
 
   const onSubmit = (data) => {
-    console.log("data: ", data)
-    navigate('/freelancer/manage-gigs/pricing', { state: data })
+    dispatch(setGigsDetails(data));
+    navigate('/freelancer/manage-gigs/pricing')
   }
 
   return (
