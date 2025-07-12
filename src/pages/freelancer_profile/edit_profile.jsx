@@ -9,7 +9,7 @@ import CertificationsSection from "../../component/freelancer_profile/Certificat
 import SkillsSection from "../../component/freelancer_profile/SkillsSection";
 import QuickLinksSidebar from "../../component/freelancer_profile/QuickLinksSidebar";
 import SidebarForm from "../../component/freelancer_profile/SidebarForm";
-import { useEditProfile, useGetFreelancerProfile } from "../../../api/client/freelancer";
+import {  useGetFreelancerProfile } from "../../../api/client/freelancer";
 
 // Validation Schemas
 const educationSchema = yup.object().shape({
@@ -53,7 +53,7 @@ const FreelancerEditProfile = () => {
   // console.log("profileData: ", profileData)
   // State
   const { data, isSuccess, isPending, isError, isLoading } = useGetFreelancerProfile()
-  const { addProfile, isSuccess: editProfileSuccess, isPending: editProfilePending, isError: editProfileIsErr, error: editProfileErr } = useEditProfile()
+  // const { addProfile, isSuccess: editProfileSuccess, isPending: editProfilePending, isError: editProfileIsErr, error: editProfileErr } = useEditProfile()
   
   console.log("data: ", data)
 

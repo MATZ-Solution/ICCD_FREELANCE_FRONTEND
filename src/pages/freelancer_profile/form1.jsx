@@ -5,6 +5,8 @@ import { useState } from "react"
 import * as Yup from "yup"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { useNavigate } from "react-router-dom"
+import { useAddProfile } from "../../../api/client/freelancer"
+import { useDispatch } from "react-redux"
 
 const validationSchema = Yup.object({
   firstName: Yup.string()
@@ -44,6 +46,7 @@ export default function PersonalInfoStep() {
   const [currentLevel, setCurrentLevel] = useState("")
 
   const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   const {
     control,
@@ -77,7 +80,7 @@ export default function PersonalInfoStep() {
     setLanguages(newLanguages)
     setValue("languages", newLanguages) // Update react-hook-form value for validation
   }
-
+  const { addProfile, isSuccess, isPending, isError, error } = useAddProfile()
   const onSubmit = (data) => {
     console.log("data: ", data)
 
@@ -87,11 +90,15 @@ export default function PersonalInfoStep() {
         data.files.forEach((file) => {
           formData.append("files", file);
         });
-      } else {
+      }
+      else if (key === 'languages') {
+        formData.append(key, JSON.stringify(data[key]))
+      }
+      else {
         formData.append(key, data[key])
       }
     }
-    //  addProject(formData)
+    addProfile(formData)
     alert("Form submitted! Check console for data.")
     navigate("/freelancer/profile-form/2")
   };
@@ -250,7 +257,10 @@ export default function PersonalInfoStep() {
                     name={name}
                     type="file"
                     accept="image/*"
-                    onChange={(e) => onChange(e.target.files)}
+                    onChange={(e) => {
+                      const filesArray = Array.from(e.target.files); // Convert FileList to array
+                      onChange(filesArray); // Update form state
+                    }}
                     className="text-sm file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-cyan-50 file:text-cyan-700 hover:file:bg-cyan-100"
                   />
                 )}
@@ -360,6 +370,7 @@ export default function PersonalInfoStep() {
         <div className="pt-6">
           <button
             type="submit"
+            onClick={handleSubmit(onSubmit)}
             className="px-8 py-3 bg-slate-800 text-white rounded-full hover:bg-slate-900 transition-colors"
           >
             Continue →

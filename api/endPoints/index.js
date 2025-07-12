@@ -26,7 +26,7 @@ const API_ROUTE = {
   freelancer: {
     checkIsFreelancer: '/freelancer/checkIsFreelancer',
     getFreelancerProfile: '/freelancer/getFreelancerProfile',
-    editProfile: '/freelancer/editProfile'
+    addProfile: '/freelancer/addProfile'
   }
 };
 

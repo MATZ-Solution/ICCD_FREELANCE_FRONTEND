@@ -17,7 +17,6 @@ import { useCheckIsFreelancer } from "../../api/client/user";
 export default function Navbar() {
 
   const { data, error, isSuccess, isPending, isError } = useCheckIsFreelancer()
-  console.log("data: ", data)
   const location = useLocation()
   const navigate = useNavigate()
   const [isOpen, setIsOpen] = useState(false);

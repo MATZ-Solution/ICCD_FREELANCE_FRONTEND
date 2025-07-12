@@ -1,6 +1,8 @@
+import { useDispatch } from "react-redux";
 import api from "../axios";
 import API_ROUTE from "../endpoints";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
+import { setFreelancerID } from "../../redux/slices/userSlice";
 
 export function useGetFreelancerProfile() {
   const { data, isSuccess, isPending, isError, isLoading } = useQuery({
@@ -20,9 +22,9 @@ export function useGetFreelancerProfile() {
   };
 }
 
-export function useEditProfile() {
+export function useAddProfile() {
   const queryClient = useQueryClient();
-
+  const dispatch = useDispatch()
   const {
     mutate: addProfile,
     isSuccess,
@@ -31,15 +33,16 @@ export function useEditProfile() {
     error,
   } = useMutation({
     mutationFn: async (data) =>
-      await api.put(`${API_ROUTE.freelancer.editProfile}`, data, {
+      await api.post(`${API_ROUTE.freelancer.addProfile}`, data, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: api.defaults.headers.common["Authorization"],
         },
         timeout: 30000,
       }),
-    onSuccess: (data) => {
+    onSuccess: (data, res) => {
       alert("Profile added successfully!");
+      dispatch(setFreelancerID(data?.data?.freelancerId))
       queryClient.invalidateQueries({
         queryKey: [API_ROUTE.freelancer.getFreelancerProfile],
       });

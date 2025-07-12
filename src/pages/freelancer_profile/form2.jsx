@@ -4,21 +4,32 @@ import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useNavigate } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
+import { useAddProfile } from "../../../api/client/freelancer";
+import { useSelector } from "react-redux";
 
 const validationSchema = Yup.object({
-  occupation: Yup.string().required("Occupation is required"),
+  occupation: Yup.string()
+  // .required("Occupation is required")
+  ,
   skills: Yup.array()
     .min(1, "At least one skill is required")
     .of(
       Yup.object({
-        skill: Yup.string().required("Skill is required"),
-        level: Yup.string().required("Skill level is required"),
+        skill: Yup.string()
+        // .required("Skill is required")
+        ,
+        level: Yup.string()
+          .required("Skill level is required"),
       })
     ),
   education: Yup.array().of(
     Yup.object({
-      institution: Yup.string().required("Institution is required"),
-      level: Yup.string().required("Education level is required"),
+      institution: Yup.string()
+      // .required("Institution is required")
+      ,
+      level: Yup.string()
+      // .required("Education level is required")
+      ,
       title: Yup.string(),
       major: Yup.string(),
       year: Yup.string(),
@@ -26,12 +37,19 @@ const validationSchema = Yup.object({
   ),
   certifications: Yup.array().of(
     Yup.object({
-      name: Yup.string().required("Certificate name is required"),
-      from: Yup.string().required("Certified from is required"),
+      name: Yup.string()
+      // .required("Certificate name is required")
+      ,
+      from: Yup.string()
+      // .required("Certified from is required")
+      ,
       year: Yup.string(),
     })
   ),
-  personalWebsite: Yup.string().url("Must be a valid URL").nullable(),
+  personalWebsite: Yup.string()
+  // .url("Must be a valid URL")
+  // .nullable()
+  ,
   newOccupation: Yup.string().when("showNewOccupation", {
     is: true,
     then: (schema) => schema.required("New occupation is required"),
@@ -40,6 +58,7 @@ const validationSchema = Yup.object({
 });
 
 export default function ProfessionalInfoStep() {
+  const userDetails = useSelector(state => state.user.userDetails)
   const [showNewOccupation, setShowNewOccupation] = useState(false);
   const navigate = useNavigate();
 
@@ -149,17 +168,37 @@ export default function ProfessionalInfoStep() {
       setShowNewOccupation(false);
     }
   };
+  const { addProfile, isSuccess, isPending, isError, error } = useAddProfile()
 
   const onSubmit = (data) => {
-    console.log("Form Submission Data:", {
-      occupation: data.occupation,
-      skills: data.skills,
-      education: data.education,
-      certifications: data.certifications,
-      personalWebsite: data.personalWebsite,
-    });
-    alert("Form submitted! Check console for data.");
-    navigate("/Account-Security-Step");
+    // console.log("Form Submission Data:", {
+    //   occupation: data.occupation,
+    //   skills: data.skills,
+    //   education: data.education,
+    //   certifications: data.certifications,
+    //   personalWebsite: data.personalWebsite,
+    // });
+
+    let updateData = { ...data, freelancerId: userDetails.freelancerId }
+    console.log("userDetails: ", userDetails)
+    const formData = new FormData();
+    for (const key in updateData) {
+      if (key === 'files') {
+        updateData.files.forEach((file) => {
+          formData.append("files", file);
+        });
+      }
+      else if (Array.isArray(updateData[key])) {
+        formData.append(key, JSON.stringify(updateData[key]));
+      }
+      else {
+        formData.append(key, updateData[key])
+      }
+    }
+
+    addProfile(formData)
+    // alert("Form submitted! Check console for data.");
+    // navigate("/Account-Security-Step");
   };
 
   return (
@@ -168,31 +207,29 @@ export default function ProfessionalInfoStep() {
       <div className="mb-8">
         <div className="bg-gray-300 my-6 h-px w-full"></div>
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0 md:space-x-3 mb-5">
-        <div className="flex flex-wrap items-center gap-3">
-          {[1, 2, 3].map((step) => (
-  <div key={step} className="flex items-center gap-1">
-    <div
-      className={`w-8 h-8 rounded-full flex items-center justify-center ${
-        step === 3 
-          ? "border border-gray-300 bg-white text-gray-300" // active green step 1
-          : "bg-[#01AEAD] text-white" // inactive steps 2 & 3 "bg-[#01AEAD] text-white"
-      }`}
-    >
-      {step}
-    </div>
-    <span
-      className={`${
-        step === 2 ? "text-[#01AEAD]" : "text-gray-600"
-      }`}
-    >
-      {step === 1
-        ? "Personal Info"
-        : step === 2
-        ? "Professional Info"
-        : "Account Security Info"}
-    </span>
-  </div>
-))}
+          <div className="flex flex-wrap items-center gap-3">
+            {[1, 2, 3].map((step) => (
+              <div key={step} className="flex items-center gap-1">
+                <div
+                  className={`w-8 h-8 rounded-full flex items-center justify-center ${step === 3
+                    ? "border border-gray-300 bg-white text-gray-300" // active green step 1
+                    : "bg-[#01AEAD] text-white" // inactive steps 2 & 3 "bg-[#01AEAD] text-white"
+                    }`}
+                >
+                  {step}
+                </div>
+                <span
+                  className={`${step === 2 ? "text-[#01AEAD]" : "text-gray-600"
+                    }`}
+                >
+                  {step === 1
+                    ? "Personal Info"
+                    : step === 2
+                      ? "Professional Info"
+                      : "Account Security Info"}
+                </span>
+              </div>
+            ))}
 
           </div>
           <div className="w-full md:w-auto">

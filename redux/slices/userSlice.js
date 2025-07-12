@@ -11,12 +11,17 @@ export const userSlice = createSlice({
     setUserDetails: (state, action) => {
       state.userDetails = action.payload;
     },
+    setFreelancerID: (state, action) => {
+      if(state.userDetails){
+        state.userDetails = {...state.userDetails, freelancerId: action.payload};
+      }
+    },
     removeUserDetails: (state) => {
       state.userDetails = null;
     },
   },
 });
 
-export const { setUserDetails, removeUserDetails } = userSlice.actions;
+export const { setUserDetails, removeUserDetails, setFreelancerID } = userSlice.actions;
 
 export default userSlice.reducer;

@@ -111,13 +111,22 @@ const ProjectForm = () => {
 
   const { addProject, isSuccess, isPending, isError, error } = useAddproject()
   const onSubmit = (data) => {
+    console.log("data: ", data)
+
     const formData = new FormData();
+
     for (const key in data) {
+      console.log("key: ", key)
       if (key === 'files') {
         data.files.forEach((file) => {
           formData.append("files", file);
         });
-      } else {
+      } 
+      else if(key === 'languages'){
+        console.log("data.languages: ", data.languages)
+          formData.append("languages", JSON.stringify(data.languages));
+      }
+      else {
         formData.append(key, data[key])
       }
     }
