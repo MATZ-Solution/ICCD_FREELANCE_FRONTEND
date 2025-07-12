@@ -1,5 +1,6 @@
 import api from "../axios";
 import API_ROUTE from "../endpoints";
+import { useQuery } from "@tanstack/react-query";
 
 export function useGetJobById(id) {
     const { data, isSuccess, isPending, isError, isLoading } = useQuery({

@@ -46,3 +46,18 @@ export function useGetProjectsByUser() {
     isLoading,
   };
 }
+
+// get project by user
+export function useGetAllProjects() {
+  const { data, isSuccess, isPending, isError, isLoading } = useQuery({
+    queryKey: [API_ROUTE.project.getAllProject],
+    queryFn: async () => await api.get(`${API_ROUTE.project.getAllProject}`),
+  });
+  return {
+    data: data?.data?.data,
+    isSuccess,
+    isPending,
+    isError,
+    isLoading,
+  };
+}

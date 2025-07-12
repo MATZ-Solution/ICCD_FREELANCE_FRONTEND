@@ -7,7 +7,7 @@ const API_ROUTE = {
     checkapi: "checkapi",
   },
   project: {
-    getProject: "/project/getAllProject",
+    getAllProject: "/project/getAllProject",
     getProjectByUser: "/project/getProjectByUser",
     addProject: "/project/addProject",
   },
@@ -23,6 +23,11 @@ const API_ROUTE = {
     getSingleGigs: "/gigs/getSingleGigs",
     getGigsByUserId: "/gigs/getGigsByUser"
   },
+  freelancer: {
+    checkIsFreelancer: '/freelancer/checkIsFreelancer',
+    getFreelancerProfile: '/freelancer/getFreelancerProfile',
+    editProfile: '/freelancer/editProfile'
+  }
 };
 
 export default API_ROUTE;

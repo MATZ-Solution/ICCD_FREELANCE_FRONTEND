@@ -6,7 +6,7 @@ const AboutSection = ({ profileData, skillsList, openSidebar }) => (
       <h2 className="text-xl font-semibold mb-2">About Me</h2>
       <div className="group">
         <div className="flex items-start justify-between">
-          <h2 className="text-lg mb-2 font-bold flex-1">{profileData.tagline}</h2>
+          <h2 className="text-lg mb-2 font-bold flex-1">{profileData.about_tagline}</h2>
           <button
             onClick={() => openSidebar("about")}
             className="opacity-0 group-hover:opacity-100 p-1 hover:bg-gray-100 rounded transition-opacity"
@@ -16,7 +16,7 @@ const AboutSection = ({ profileData, skillsList, openSidebar }) => (
           </button>
         </div>
         <p className="text-gray-700 leading-relaxed mb-4">
-          {profileData.description} <button className="text-[#47AAB3] hover:underline">Read more</button>
+          {profileData.about_description} <button className="text-[#47AAB3] hover:underline">Read more</button>
         </p>
       </div>
       <h3 className="text-md font-semibold mb-2">Skills</h3>

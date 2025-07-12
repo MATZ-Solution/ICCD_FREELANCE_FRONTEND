@@ -8,8 +8,8 @@ const ProfileHeader = ({ profileData, languages, openSidebar }) => (
     </div>
     <div className="flex-1">
       <div className="flex items-center space-x-2 mb-2 group">
-        <h1 className="text-2xl font-bold">{profileData.name}</h1>
-        <span className="text-gray-500">@{profileData.username}</span>
+        <h1 className="text-2xl font-bold">{profileData[0]?.name}</h1>
+        <span className="text-gray-500">@{profileData[0]?.email}</span>
         <button
           onClick={() => openSidebar("profile")}
           className="opacity-0 group-hover:opacity-100 p-1 hover:bg-gray-100 rounded transition-opacity"

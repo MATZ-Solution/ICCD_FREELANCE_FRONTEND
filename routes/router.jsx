@@ -41,6 +41,7 @@ import PricingForm from "../src/component/gigs_pricing_scope";
 import ClientHomepage from "../src/pages/clientHomepage/homePage";
 import ClientProjects from "../src/pages/client_dashboard/client_projects";
 import FreelancerEditProfile from "../src/pages/freelancer_profile/edit_profile";
+import FreelancerProjects from "../src/pages/freelancer_dashboard/project";
 
 export const router = createBrowserRouter([
   {
@@ -261,11 +262,11 @@ export const router = createBrowserRouter([
   },
 
   {
-    path: "/freelancer/manage-projects",
+    path: "/freelancer/projects",
     element: (
       // <AuthRoute>
       <MainTemplate isShowFooter={false}>
-        <ManageGigsAndProjects />
+        <FreelancerProjects />
       </MainTemplate>
       // </AuthRoute>
     ),

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -9,6 +9,7 @@ import CertificationsSection from "../../component/freelancer_profile/Certificat
 import SkillsSection from "../../component/freelancer_profile/SkillsSection";
 import QuickLinksSidebar from "../../component/freelancer_profile/QuickLinksSidebar";
 import SidebarForm from "../../component/freelancer_profile/SidebarForm";
+import { useEditProfile, useGetFreelancerProfile } from "../../../api/client/freelancer";
 
 // Validation Schemas
 const educationSchema = yup.object().shape({
@@ -32,7 +33,7 @@ const skillSchema = yup.object().shape({
 
 const profileSchema = yup.object().shape({
   name: yup.string().required("Name is required").min(2, "Name must be at least 2 characters"),
-  username: yup.string().required("Username is required").min(3, "Username must be at least 3 characters"),
+  email: yup.string().required("email is required").min(3, "email must be at least 3 characters"),
 });
 
 const languagesSchema = yup.object().shape({
@@ -41,23 +42,41 @@ const languagesSchema = yup.object().shape({
 });
 
 const aboutSchema = yup.object().shape({
-  tagline: yup.string().required("Tagline is required").max(100, "Tagline must be less than 100 characters"),
-  description: yup.string().required("Description is required").min(50, "Description must be at least 50 characters"),
+  about_tagline: yup.string().required("about_tagline is required").max(100, "about_tagline must be less than 100 characters"),
+  about_description: yup.string().required("about_Description is required").min(50, "about_Description must be at least 50 characters"),
 });
 
 const FreelancerEditProfile = () => {
   console.log("FreelancerUserProfile component rendered");
 
+  //  const { data: profileData, isSuccess, isPending, isError, isLoading } = useGetFreelancerProfile()
+  // console.log("profileData: ", profileData)
   // State
+  const { data, isSuccess, isPending, isError, isLoading } = useGetFreelancerProfile()
+  const { addProfile, isSuccess: editProfileSuccess, isPending: editProfilePending, isError: editProfileIsErr, error: editProfileErr } = useEditProfile()
+  
+  console.log("data: ", data)
+
   const [profileData, setProfileData] = useState({
-    name: "Syed Mohiuddin",
-    username: "syedmohiuddin",
-    tagline: "Transforming ideas into powerful web experiences.",
-    description:
-      "I'm a passionate and self-driven full-stack web developer based in Karachi, Pakistan, with over a year of experience building modern, responsive, and scalable web applications. Since the 9th grade, I've been fascinated by how websites and digital products are created. That curiosity has evolved into strong technical skills and a growing portfolio, including multiple personal and client projects ranging from admin dashboards to e-commerce and affiliate platforms.",
+    name: data ? data[0]?.name : '',
+    email: data ? data[0]?.email : '',
+    about_tagline: data ? data[0]?.about_tagline : '',
+    about_description: data ? data[0]?.about_description : ''
   });
 
-  const [languages, setLanguages] = useState(["English", "Urdu", "French"]);
+  useEffect(() => {
+  if (isSuccess && data?.[0]) {
+    setProfileData(prev => ({
+      ...prev,
+      name: data[0].name,
+      email: data[0].email,
+      about_tagline: data[0]?.about_tagline,
+      about_description: data[0]?.about_description
+    }));
+  }
+}, [isSuccess, data]);
+
+  const [languages, setLanguages] = useState([]);
   const [educationList, setEducationList] = useState([
     {
       id: 1,
@@ -84,18 +103,18 @@ const FreelancerEditProfile = () => {
   const educationForm = useForm({ resolver: yupResolver(educationSchema), defaultValues: { country: "", universityName: "", degree: "", major: "", graduationYear: "" } });
   const certificationForm = useForm({ resolver: yupResolver(certificationSchema), defaultValues: { name: "", organization: "", issueDate: "" } });
   const skillForm = useForm({ resolver: yupResolver(skillSchema), defaultValues: { skillName: "", level: "" } });
-  const profileForm = useForm({ resolver: yupResolver(profileSchema), defaultValues: { name: profileData.name, username: profileData.username } });
+  const profileForm = useForm({ resolver: yupResolver(profileSchema), defaultValues: { name: profileData[0]?.name, email: profileData[0]?.email } });
   const languagesForm = useForm({ resolver: yupResolver(languagesSchema), defaultValues: { languages, newLanguage: "" } });
-  const aboutForm = useForm({ resolver: yupResolver(aboutSchema), defaultValues: { tagline: profileData.tagline, description: profileData.description } });
+  const aboutForm = useForm({ resolver: yupResolver(aboutSchema), defaultValues: { about_tagline: profileData.about_tagline, about_description: profileData.about_description } });
 
   // Handlers
   const openSidebar = (type) => {
     console.log(`Opening sidebar for: ${type}`);
     setSidebarType(type);
     setSidebarOpen(true);
-    if (type === "profile") profileForm.reset({ name: profileData.name, username: profileData.username });
+    if (type === "profile") profileForm.reset({ name: profileData.name, email: profileData.email });
     else if (type === "languages") languagesForm.reset({ languages, newLanguage: "" });
-    else if (type === "about") aboutForm.reset({ tagline: profileData.tagline, description: profileData.description });
+    else if (type === "about") aboutForm.reset({ about_tagline: profileData.about_tagline, about_description: profileData.about_description });
   };
 
   const closeSidebar = () => {
@@ -110,33 +129,33 @@ const FreelancerEditProfile = () => {
     aboutForm.reset();
   };
 
-const onEducationSubmit = (data) => {
-  const newData = {
-    id: Date.now(),
-    degree: data.degree,
-    major: data.major,
-    institution: data.universityName,
-    location: data.country,
-    year: data.graduationYear,
+  const onEducationSubmit = (data) => {
+    const newData = {
+      id: Date.now(),
+      degree: data.degree,
+      major: data.major,
+      institution: data.universityName,
+      location: data.country,
+      year: data.graduationYear,
+    };
+
+    console.log("Education ===>", newData);
+
+    setEducationList((prev) => [...prev, newData]);
+
+    educationForm.reset();
+
+    alert("Education added successfully!");
   };
-
-  console.log("Education ===>", newData);
-
-  setEducationList((prev) => [...prev, newData]);
-
-  educationForm.reset();
-
-  alert("Education added successfully!");
-};
 
 
   const onCertificationSubmit = (data) => {
-  const newData = {
-    id: Date.now(),
-    name: data.name,
-    organization: data.organization,
-    issueDate: data.issueDate,
-  };
+    const newData = {
+      id: Date.now(),
+      name: data.name,
+      organization: data.organization,
+      issueDate: data.issueDate,
+    };
     console.log("Certification ===>", newData);
 
     setCertificationList((prev) => [...prev, newData]);
@@ -146,10 +165,10 @@ const onEducationSubmit = (data) => {
 
   const onSkillSubmit = (data) => {
     const newData = {
-    id: Date.now(),
-    name: data.skillName,
-    level: data.level,
-  };
+      id: Date.now(),
+      name: data.skillName,
+      level: data.level,
+    };
     console.log("Skill form submitted:", newData);
     setSkillsList((prev) => [...prev, newData]);
     skillForm.reset();
@@ -159,23 +178,26 @@ const onEducationSubmit = (data) => {
   const onProfileSubmit = (data) => {
     console.log("Profile form state before submission:", profileForm.watch()); // Debug log
     console.log("Profile form submitted:", data);
-    setProfileData((prev) => ({ ...prev, name: data.name, username: data.username }));
+    setProfileData((prev) => ({ ...prev, name: data.name, email: data.email }));
+    addProfile(data)
     closeSidebar();
     alert("Profile updated successfully!");
   };
 
+  console.log("language: ", languages)
   const onLanguagesSubmit = (data) => {
-    console.log("Languages form state before submission:", languagesForm.watch()); // Debug log
-    console.log("Languages form submitted:", data);
+    console.log("1")
     setLanguages(data.languages || []);
+    addProfile({languages: languages})
     closeSidebar();
     alert("Languages updated successfully!");
   };
 
   const onAboutSubmit = (data) => {
-    console.log("About form state before submission:", aboutForm.watch()); // Debug log
-    console.log("About form submitted:", data);
-    setProfileData((prev) => ({ ...prev, tagline: data.tagline, description: data.description }));
+    const form = new FormData()
+    form.append('about_tagline', data.about_tagline)
+    form.append('about_description', data.about_description)
+    addProfile(form)
     closeSidebar();
     alert("About section updated successfully!");
   };
@@ -212,11 +234,12 @@ const onEducationSubmit = (data) => {
     languagesForm.setValue("languages", updatedLanguages);
   };
 
+
   return (
     <div className="max-w-7xl mx-auto px-4 py-6 relative">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 space-y-8">
-          <ProfileHeader profileData={profileData} languages={languages} openSidebar={openSidebar} />
+          {data && <ProfileHeader profileData={data} languages={languages} openSidebar={openSidebar} />}
           <AboutSection profileData={profileData} skillsList={skillsList} openSidebar={openSidebar} />
           <EducationSection educationList={educationList} removeEducation={removeEducation} openSidebar={openSidebar} />
           <CertificationsSection certificationList={certificationList} removeCertification={removeCertification} openSidebar={openSidebar} />

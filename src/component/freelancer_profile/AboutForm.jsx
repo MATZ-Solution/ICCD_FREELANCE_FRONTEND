@@ -3,7 +3,7 @@ import { Controller } from "react-hook-form";
 const AboutForm = ({ form, onSubmit }) => (
   <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
     <Controller
-      name="tagline"
+      name="about_tagline"
       control={form.control}
       render={({ field, fieldState: { error } }) => (
         <div>
@@ -19,7 +19,7 @@ const AboutForm = ({ form, onSubmit }) => (
       )}
     />
     <Controller
-      name="description"
+      name="about_description"
       control={form.control}
       render={({ field, fieldState: { error } }) => (
         <div>

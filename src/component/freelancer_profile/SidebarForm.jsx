@@ -8,6 +8,7 @@ import SkillsForm from "./SkillsForm";
 
 const SidebarForm = ({ isOpen, type, closeSidebar, forms, handlers }) => {
   if (!isOpen) return null;
+  console.log("forms: ", forms)
 
   const titles = {
     education: "Education",

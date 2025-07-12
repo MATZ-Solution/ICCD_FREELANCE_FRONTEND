@@ -16,11 +16,11 @@ const validationSchema = Yup.object({
   displayName: Yup.string()
     .required("Display name is required")
     .min(3, "Display name must be at least 3 characters"),
-  description: Yup.string()
-    .required("Description is required")
-    .min(50, "Description must be at least 50 characters")
-    .max(500, "Description cannot exceed 500 characters"),
-  profilePicture: Yup.mixed()
+  about_description: Yup.string()
+    .required("about_description is required")
+    .min(50, "about_description must be at least 50 characters")
+    .max(500, "about_description cannot exceed 500 characters"),
+  files: Yup.mixed()
     .required("Profile picture is required")
     .test("fileSize", "File size must be less than 5MB", (value) =>
       value && value[0] && value[0].size <= 5 * 1024 * 1024
@@ -56,8 +56,8 @@ export default function PersonalInfoStep() {
       firstName: "",
       lastName: "",
       displayName: "",
-      description: "",
-      profilePicture: null,
+      about_description: "",
+      files: null,
       languages: [],
     },
   })
@@ -79,14 +79,23 @@ export default function PersonalInfoStep() {
   }
 
   const onSubmit = (data) => {
-    console.log({
-      ...data,
-      profilePicture: data.profilePicture ? data.profilePicture[0].name : null,
-      languages,
-    })
+    console.log("data: ", data)
+
+    const formData = new FormData();
+    for (const key in data) {
+      if (key === 'files') {
+        data.files.forEach((file) => {
+          formData.append("files", file);
+        });
+      } else {
+        formData.append(key, data[key])
+      }
+    }
+    //  addProject(formData)
     alert("Form submitted! Check console for data.")
-    navigate("/Professional-Info-Step")
-  }
+    navigate("/freelancer/profile-form/2")
+  };
+
 
   return (
     <div className="max-w-6xl mx-auto p-5">
@@ -95,30 +104,28 @@ export default function PersonalInfoStep() {
         <div className="bg-gray-300 my-6 h-px w-full"></div>
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0 md:space-x-3 mb-5">
           <div className="flex flex-wrap items-center gap-3">
-          {[1, 2, 3].map((step) => (
-  <div key={step} className="flex items-center gap-1">
-    <div
-      className={`w-8 h-8 rounded-full flex items-center justify-center ${
-        step === 1
-          ? "bg-[#01AEAD] text-white" // active green step 1
-          : "border border-gray-300 bg-white text-gray-300" // inactive steps 2 & 3
-      }`}
-    >
-      {step}
-    </div>
-    <span
-      className={`${
-        step === 1 ? "text-[#01AEAD]" : "text-gray-600"
-      }`}
-    >
-      {step === 1
-        ? "Personal Info"
-        : step === 2
-        ? "Professional Info"
-        : "Account Security Info"}
-    </span>
-  </div>
-))}
+            {[1, 2, 3].map((step) => (
+              <div key={step} className="flex items-center gap-1">
+                <div
+                  className={`w-8 h-8 rounded-full flex items-center justify-center ${step === 1
+                    ? "bg-[#01AEAD] text-white" // active green step 1
+                    : "border border-gray-300 bg-white text-gray-300" // inactive steps 2 & 3
+                    }`}
+                >
+                  {step}
+                </div>
+                <span
+                  className={`${step === 1 ? "text-[#01AEAD]" : "text-gray-600"
+                    }`}
+                >
+                  {step === 1
+                    ? "Personal Info"
+                    : step === 2
+                      ? "Professional Info"
+                      : "Account Security Info"}
+                </span>
+              </div>
+            ))}
 
           </div>
           <div className="w-full md:w-auto">
@@ -236,7 +243,7 @@ export default function PersonalInfoStep() {
                 👤
               </div>
               <Controller
-                name="profilePicture"
+                name="files"
                 control={control}
                 render={({ field: { onChange, name } }) => (
                   <input
@@ -249,16 +256,16 @@ export default function PersonalInfoStep() {
                 )}
               />
             </div>
-            {errors.profilePicture && (
-              <p className="text-red-500 text-sm mt-2">{errors.profilePicture.message}</p>
+            {errors.files && (
+              <p className="text-red-500 text-sm mt-2">{errors.files.message}</p>
             )}
           </div>
         </div>
 
-        {/* Description */}
+        {/* about_description */}
         <div className="grid grid-cols-2 gap-8 items-start">
           <div>
-            <label className="block font-semibold text-lg mb-2">Description *</label>
+            <label className="block font-semibold text-lg mb-2">About description *</label>
             <p className="text-sm text-gray-600">
               Share a bit about your work experience, cool projects you can worked, and your area of
               expertise.
@@ -266,7 +273,7 @@ export default function PersonalInfoStep() {
           </div>
           <div>
             <Controller
-              name="description"
+              name="about_description"
               control={control}
               render={({ field }) => (
                 <textarea
@@ -278,8 +285,8 @@ export default function PersonalInfoStep() {
               )}
             />
             <p className="text-xs text-gray-600 mt-1">min. 50 characters</p>
-            {errors.description && (
-              <p className="text-red-500 text-sm mt-2">{errors.description.message}</p>
+            {errors.about_description && (
+              <p className="text-red-500 text-sm mt-2">{errors.about_description.message}</p>
             )}
           </div>
         </div>

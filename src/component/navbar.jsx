@@ -12,9 +12,12 @@ import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlin
 import { Bell, Mail, HelpCircle, Star, TrendingUp, FileText, Users, Filter, X, Menu } from "lucide-react";
 import useLogout from "../../hooks/useLogout";
 import { navigation, navTabsFreelancerDashboard, navTabsClientDashboard } from "../../constants/navbar_navigation";
+import { useCheckIsFreelancer } from "../../api/client/user";
 
 export default function Navbar() {
 
+  const { data, error, isSuccess, isPending, isError } = useCheckIsFreelancer()
+  console.log("data: ", data)
   const location = useLocation()
   const navigate = useNavigate()
   const [isOpen, setIsOpen] = useState(false);
@@ -177,7 +180,13 @@ export default function Navbar() {
 
                     <div>
                       <button
-                        onClick={() => navigate(`/freelancer/dashboard`)}
+                        onClick={() => {
+                          if (data.length === 0) {
+                            navigate(`/freelancer/profile-form/1`)
+                          }else{
+                            navigate(`/freelancer/dashboard`)
+                          }
+                        }}
                         className={`cursor-pointer px-3 py-2 text-sm font-medium rounded-md `}
                       >
                         Switch to freelancer
@@ -242,39 +251,39 @@ export default function Navbar() {
                     <>
                       {/* profile menu */}
                       {pathname.includes('freelancer') && (
-                          <div className="px-3 border-[1px] border-gray-300 absolute right-0 mt-2 w-52 bg-white rounded-md shadow-lg  py-1 z-50">
-                            <button className="cursor-pointer border-[1px] rounded-md border-black block w-full text-left px-4 py-2 text-sm text-black font-semibold hover:bg-[#222325] hover:text-white"
-                              onClick={handleSwitchClient}
-                            >Switch to client</button>
-                            {[
-                              { name: "View Profile", action: () => navigate("/freelancer/profile-form/1") },
-                              { name: "Settings", action: () => navigate("/settings") },
-                              { name: "Logout", action: logout },
-                            ].map((data, index) => (
-                              <button key={index} className="text-black block w-full text-left px-4 py-2 text-sm  hover:bg-gray-50 cursor-pointer"
-                                onClick={data.action}
-                              >
-                                {data.name}
-                              </button>
-                            ))}
+                        <div className="px-3 border-[1px] border-gray-300 absolute right-0 mt-2 w-52 bg-white rounded-md shadow-lg  py-1 z-50">
+                          <button className="cursor-pointer border-[1px] rounded-md border-black block w-full text-left px-4 py-2 text-sm text-black font-semibold hover:bg-[#222325] hover:text-white"
+                            onClick={handleSwitchClient}
+                          >Switch to client</button>
+                          {[
+                            { name: "View Profile", action: () => navigate("/freelancer/edit-profile") },
+                            { name: "Settings", action: () => navigate("/settings") },
+                            { name: "Logout", action: logout },
+                          ].map((data, index) => (
+                            <button key={index} className="text-black block w-full text-left px-4 py-2 text-sm  hover:bg-gray-50 cursor-pointer"
+                              onClick={data.action}
+                            >
+                              {data.name}
+                            </button>
+                          ))}
 
-                          </div>
-                        )
+                        </div>
+                      )
                       }
                       {pathname.includes('client') && (
-                          <div className="px-3 border-[1px] border-gray-300 absolute right-0 mt-2 w-52 bg-white rounded-md shadow-lg  py-1 z-50">
-                            {[
-                              { name: "Dashboard", action: () => navigate("/client/dashboard") },
-                              { name: "Logout", action: logout },
-                            ].map((data, index) => (
-                              <button key={index} className="text-black block w-full text-left px-4 py-2 text-sm  hover:bg-gray-50 cursor-pointer"
-                                onClick={data.action}
-                              >
-                                {data.name}
-                              </button>
-                            ))}
-                          </div>
-                        )
+                        <div className="px-3 border-[1px] border-gray-300 absolute right-0 mt-2 w-52 bg-white rounded-md shadow-lg  py-1 z-50">
+                          {[
+                            { name: "Dashboard", action: () => navigate("/client/dashboard") },
+                            { name: "Logout", action: logout },
+                          ].map((data, index) => (
+                            <button key={index} className="text-black block w-full text-left px-4 py-2 text-sm  hover:bg-gray-50 cursor-pointer"
+                              onClick={data.action}
+                            >
+                              {data.name}
+                            </button>
+                          ))}
+                        </div>
+                      )
                       }
                     </>
                   )}

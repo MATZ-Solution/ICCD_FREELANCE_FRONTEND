@@ -17,7 +17,7 @@
   export const navTabsFreelancerDashboard = [
     { name: "Dashboard", path: '/freelancer/dashboard'},
     { name: "Gigs", path: '/freelancer/manage-gigs' },
-    { name: "Project", path: '/freelancer/manage-projects' },
+    { name: "Project", path: '/freelancer/projects' },
     { name: "Jobs", path: '/freelancer/manage-jobs'},
     { name: "Analytics", path: '/freelancer/analytics',  },
   ];

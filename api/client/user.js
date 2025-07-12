@@ -20,6 +20,21 @@ export function useCheck() {
   };
 }
 
+export function useCheckIsFreelancer() {
+  const { data, error, isSuccess, isPending, isError } = useQuery({
+    queryKey: [API_ROUTE.freelancer.checkIsFreelancer],
+    queryFn: () => api.get(API_ROUTE.freelancer.checkIsFreelancer),
+  });
+  return {
+    data: data?.data?.data,
+    error,
+    isSuccess,
+    isPending,
+    isError,
+  };
+}
+
+
 export function useLogin() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -37,7 +52,7 @@ export function useLogin() {
     onSuccess: (response) => {
       setToken(response?.data?.token);
       dispatch(setUserDetails(response?.data?.data));
-      navigate("/freelancer/dashboard");
+      navigate("/client");
       // if (localStorage.get("verify-otp") || localStorage.get("change_pass")) {
       //   localStorage.removeItem("verify-otp");
       //   localStorage.removeItem("change_pass");
