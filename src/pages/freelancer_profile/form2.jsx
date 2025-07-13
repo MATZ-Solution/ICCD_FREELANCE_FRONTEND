@@ -58,7 +58,7 @@ const validationSchema = Yup.object({
 });
 
 export default function ProfessionalInfoStep() {
-  const userDetails = useSelector(state => state.user.userDetails)
+  const userProfileDetail = useSelector(state => state.userProfile.userProfile)
   const [showNewOccupation, setShowNewOccupation] = useState(false);
   const navigate = useNavigate();
 
@@ -119,7 +119,7 @@ export default function ProfessionalInfoStep() {
         ...getValues().education,
         currentEducation,
       ];
-      setValue("education", updatedEducation);
+      setValue("educations", updatedEducation);
       setValue("currentEducation", {
         institution: "",
         level: "",
@@ -171,16 +171,8 @@ export default function ProfessionalInfoStep() {
   const { addProfile, isSuccess, isPending, isError, error } = useAddProfile()
 
   const onSubmit = (data) => {
-    // console.log("Form Submission Data:", {
-    //   occupation: data.occupation,
-    //   skills: data.skills,
-    //   education: data.education,
-    //   certifications: data.certifications,
-    //   personalWebsite: data.personalWebsite,
-    // });
-
-    let updateData = { ...data, freelancerId: userDetails.freelancerId }
-    console.log("userDetails: ", userDetails)
+    let updateData = { ...data, ...userProfileDetail }
+    console.log("updateData: ", updateData)
     const formData = new FormData();
     for (const key in updateData) {
       if (key === 'files') {
@@ -195,10 +187,7 @@ export default function ProfessionalInfoStep() {
         formData.append(key, updateData[key])
       }
     }
-
     addProfile(formData)
-    // alert("Form submitted! Check console for data.");
-    // navigate("/Account-Security-Step");
   };
 
   return (
@@ -457,7 +446,7 @@ export default function ProfessionalInfoStep() {
                       {...field}
                       className="w-full sm:w-auto sm:min-w-[150px] p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-cyan-500"
                     >
-                      <option value="">Education Level</option>
+                      <option value="">Country</option>
                       <option value="bachelors">Bachelor's</option>
                       <option value="masters">Master's</option>
                       <option value="phd">PhD</option>

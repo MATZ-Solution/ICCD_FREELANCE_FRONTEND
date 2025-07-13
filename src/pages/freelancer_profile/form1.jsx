@@ -7,6 +7,7 @@ import { yupResolver } from "@hookform/resolvers/yup"
 import { useNavigate } from "react-router-dom"
 import { useAddProfile } from "../../../api/client/freelancer"
 import { useDispatch } from "react-redux"
+import { setUserProfile } from "../../../redux/slices/userProfileSlice"
 
 const validationSchema = Yup.object({
   firstName: Yup.string()
@@ -80,26 +81,9 @@ export default function PersonalInfoStep() {
     setLanguages(newLanguages)
     setValue("languages", newLanguages) // Update react-hook-form value for validation
   }
-  const { addProfile, isSuccess, isPending, isError, error } = useAddProfile()
   const onSubmit = (data) => {
     console.log("data: ", data)
-
-    const formData = new FormData();
-    for (const key in data) {
-      if (key === 'files') {
-        data.files.forEach((file) => {
-          formData.append("files", file);
-        });
-      }
-      else if (key === 'languages') {
-        formData.append(key, JSON.stringify(data[key]))
-      }
-      else {
-        formData.append(key, data[key])
-      }
-    }
-    addProfile(formData)
-    alert("Form submitted! Check console for data.")
+    dispatch(setUserProfile(data))
     navigate("/freelancer/profile-form/2")
   };
 

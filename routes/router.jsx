@@ -42,6 +42,7 @@ import ClientHomepage from "../src/pages/clientHomepage/homePage";
 import ClientProjects from "../src/pages/client_dashboard/client_projects";
 import FreelancerEditProfile from "../src/pages/freelancer_profile/edit_profile";
 import FreelancerProjects from "../src/pages/freelancer_dashboard/project";
+import { Project_details } from "../src/pages/client_dashboard/projectDetail";
 
 export const router = createBrowserRouter([
   {
@@ -272,6 +273,7 @@ export const router = createBrowserRouter([
     ),
   },
 
+
   {
     path: "/freelancer/manage-jobs",
     element: (
@@ -313,7 +315,7 @@ export const router = createBrowserRouter([
       // </AuthRoute>
     ),
   },
-    {
+  {
     path: "/freelancer/edit-profile",
     element: (
       // <AuthRoute>
@@ -365,6 +367,9 @@ export const router = createBrowserRouter([
       // </AuthRoute>
     ),
   },
+
+
+
   {
     path: "/client/orders",
     element: (
@@ -385,6 +390,17 @@ export const router = createBrowserRouter([
       // </AuthRoute>
     ),
   },
+  {
+    path: "/projects/:id",
+    element: (
+      // <AuthRoute>
+      <MainTemplate isShowFooter={false}>
+        <Project_details />
+      </MainTemplate>
+      // </AuthRoute>
+    ),
+  },
+
   {
     path: "/client/gigs/gigs_details/:id",
     element: (

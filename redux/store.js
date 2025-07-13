@@ -5,6 +5,7 @@ import storage from 'redux-persist/lib/storage'; // uses localStorage
 import { combineReducers } from 'redux';
 import userReducer from './slices/userSlice'; // adjust path
 import gigsReducer from './slices/gigsDetailSlice'
+import userProfileReducer from './slices/userProfileSlice'
 
 const persistConfig = {
   key: 'root',
@@ -13,7 +14,8 @@ const persistConfig = {
 
 const rootReducer = combineReducers({
   user: userReducer,
-  gigs: gigsReducer
+  gigs: gigsReducer,
+  userProfile: userProfileReducer
   // add other reducers here
 });
 
