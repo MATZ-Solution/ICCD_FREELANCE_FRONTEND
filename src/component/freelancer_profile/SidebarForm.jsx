@@ -27,19 +27,12 @@ const SidebarForm = ({ isOpen, type, closeSidebar, forms, handlers }) => {
             <X className="w-5 h-5" />
           </button>
         </div>
-        {type === "profile" && <ProfileForm form={forms.profileForm} onSubmit={handlers.onProfileSubmit} />}
-        {type === "languages" && (
-          <LanguagesForm
-            form={forms.languagesForm}
-            onSubmit={handlers.onLanguagesSubmit}
-            addLanguage={handlers.addLanguage}
-            removeLanguage={handlers.removeLanguage}
-          />
-        )}
-        {type === "about" && <AboutForm form={forms.aboutForm} onSubmit={handlers.onAboutSubmit} />}
+        {type === "profile" && <ProfileForm  />}
+        {type === "languages" && ( <LanguagesForm /> )}
+        {type === "about" && <AboutForm  />}
         {type === "education" && <EducationForm form={forms.educationForm} onSubmit={handlers.onEducationSubmit} />}
         {type === "certifications" && <CertificationsForm form={forms.certificationForm} onSubmit={handlers.onCertificationSubmit} />}
-        {type === "skills" && <SkillsForm form={forms.skillForm} onSubmit={handlers.onSkillSubmit} />}
+        {type === "skills" && <SkillsForm />}
       </div>
     </div>
   );

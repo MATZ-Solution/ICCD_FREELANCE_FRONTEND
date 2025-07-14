@@ -1,49 +1,130 @@
-import { Controller } from "react-hook-form";
-import { X } from "lucide-react";
+import { useDispatch, useSelector } from "react-redux";
+import { setUserProfile } from "../../../redux/slices/userProfileSlice";
+import { useForm, Controller } from "react-hook-form";
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from "yup";
+import { useState } from "react";
 
-const LanguagesForm = ({ form, onSubmit, addLanguage, removeLanguage }) => (
-  <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-    <div>
+const LanguagesForm = () => {
+  const dispatch = useDispatch()
+  const profileDetails = useSelector(state => state.userProfile.userProfile)
+  console.log("profileDetails: ", profileDetails)
+
+  const [languages, setLanguages] = useState([]);
+
+  const schema = yup.object({
+    language: yup.string(),
+    level: yup.string()
+
+    // You can validate array if needed
+  });
+
+  const { control, handleSubmit, reset, formState: { errors } } = useForm({
+    resolver: yupResolver(schema),
+    defaultValues: {
+      language: '',
+      level: ''
+    }
+  });
+
+  const addLanguage = (data) => {
+    const newLang = {
+      skill: data.language,
+      level: data.level
+    };
+    dispatch(setUserProfile({ languages: [...profileDetails.languages, newLang] }))
+    reset();
+  };
+
+  const removeLanguage = (data) => {
+    console.log("data: ", data)
+    console.log("profiledata: ", profileDetails)
+    // setLanguages(languages.filter(item => item !== lang));
+
+    let removeLang = profileDetails.languages.filter(item => item.language !== data.language)
+    if (removeLang.length === 0) {
+      console.log("1")
+      dispatch(setUserProfile({ languages: [] }))
+    } else {
+      dispatch(setUserProfile({ languages: removeLang }))
+    }
+  };
+
+  const onSubmit = (data) => {
+    const newLang = {
+      language: data.language,
+      level: data.level
+    };
+    dispatch(setUserProfile({ languages: [...profileDetails.languages, newLang] }))
+    reset();
+  };
+
+  return (
+    <div className="space-y-4">
       <label className="block text-sm font-medium text-gray-700 mb-2">Current Languages</label>
+
       <div className="flex flex-wrap gap-2 mb-3">
-        {form.watch("languages").map((lang, index) => (
+        {profileDetails.languages.length > 0 && (profileDetails.languages.map((lang, index) => (
           <span key={index} className="px-3 py-1 bg-gray-100 text-gray-800 text-sm rounded-full flex items-center gap-2">
-            {lang}
+            {lang.language}
             <button type="button" onClick={() => removeLanguage(lang)} className="text-red-500 hover:text-red-700">
-              <X className="w-3 h-3" />
+              ×
             </button>
           </span>
-        ))}
+        )))
+        }
       </div>
-    </div>
-    <Controller
-      name="newLanguage"
-      control={form.control}
-      render={({ field }) => (
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Add New Language</label>
+
+      <Controller
+        control={control}
+        name="language"
+        render={({ field: { onChange, value } }) => (
           <div className="flex gap-2">
             <input
-              {...field}
               type="text"
-              placeholder="Enter a language"
-              className="flex-1 p-3 border border-gray-300 rounded-md"
+              value={value}
+              onChange={onChange}
+              className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Enter language"
             />
-            <button
+            {/* <button
               type="button"
-              onClick={() => addLanguage(field.value)}
-              className="px-4 py-3 bg-gray-100 text-gray-700 rounded-md hover:bg-gray-200 transition-colors"
+              onClick={() => {
+                addLanguage(value);
+                onChange(''); // clear input
+              }}
+              className="px-4 py-2 bg-blue-500 text-white rounded"
             >
               Add
-            </button>
+            </button> */}
           </div>
-        </div>
-      )}
-    />
-    <button type="submit" className="w-full p-3 bg-[#5db7be] text-white rounded-md hover:bg-[#5db7be] transition-colors">
-      Update Languages
-    </button>
-  </form>
-);
+        )}
+      />
+
+      <Controller
+        name="level"
+        control={control}
+        render={({ field }) => (
+          <select
+            {...field}
+            className={`w-full p-3 border rounded-md ${errors.level ? "border-red-500" : "border-gray-300"}`}
+          >
+            <option value="">Select level</option>
+            <option value="beginner">Beginner</option>
+            <option value="intermediate">Intermediate</option>
+            <option value="expert">Expert</option>
+          </select>
+        )}
+      />
+
+      <button
+        onClick={handleSubmit(onSubmit)}
+        className="w-full p-3 bg-[#5db7be] text-white rounded-md hover:bg-[#5db7be] transition-colors"
+      >
+        Update Languages
+      </button>
+    </div>
+  );
+};
 
 export default LanguagesForm;

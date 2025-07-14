@@ -10,7 +10,8 @@ import SkillsSection from "../../component/freelancer_profile/SkillsSection";
 import QuickLinksSidebar from "../../component/freelancer_profile/QuickLinksSidebar";
 import SidebarForm from "../../component/freelancer_profile/SidebarForm";
 import { useEditProfile, useGetFreelancerProfile } from "../../../api/client/freelancer";
-
+import { useDispatch, useSelector } from "react-redux";
+import { setUserProfile } from "../../../redux/slices/userProfileSlice";
 // Validation Schemas
 const educationSchema = yup.object().shape({
   country: yup.string().required("Country is required"),
@@ -48,6 +49,8 @@ const aboutSchema = yup.object().shape({
 
 const FreelancerEditProfile = () => {
 
+  const dispatch = useDispatch()
+  const profileDetails = useSelector(state=> state.userProfile.userProfile)
   const [freelancerId, setFreelancerId] = useState('');
   const { data, isSuccess, isPending, isError, isLoading } = useGetFreelancerProfile()
   const { editProfile, isSuccess: editProfileSuccess, isPending: editProfilePending, isError: editProfileIsErr, error: editProfileErr } = useEditProfile(freelancerId)
@@ -63,21 +66,12 @@ const FreelancerEditProfile = () => {
     about_description: data ? data[0]?.about_description : ''
   });
 
-  useEffect(() => {
-    if (isSuccess && data?.[0]) {
-      setProfileData(prev => ({
-        ...prev,
-        name: data[0].firstName,
-        email: data[0].email,
-        about_tagline: data[0]?.about_tagline,
-        about_description: data[0]?.about_description
-      }));
-      setSkillsList(data[0]?.skills);
-      setLanguages(data[0]?.languages)
-      setEducationList([data[0]?.education])
-      setFreelancerId(data[0]?.freelancer_id)
-    }
-  }, [isSuccess, data]);
+
+useEffect(() => {
+  if (data &&  data.length > 0) {
+    dispatch(setUserProfile(data[0]));
+  }
+}, [data]);
 
 
   const [certificationList, setCertificationList] = useState([]);
