@@ -13,13 +13,22 @@ import {
   Calendar,
   Globe,
 } from "lucide-react"
-
+import { useParams } from "react-router-dom";
 import profilepic from "../../assets/freelancer_dashboard/client_img.png"
+import { useGetProjectsById } from "../../../api/client/project";
+import formatSingleDate from "../../../functions/timeFormat";
+
 export const Project_details = () => {
-   
+
+  const { id } = useParams()
+  const { data, isSuccess, isPending, isError, isLoading } = useGetProjectsById(id)
+
+  if (isLoading) {
+    return <p>Loading...</p>
+  }
 
   return (
-   <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
       <div className="max-w-7xl mx-auto p-6">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main Content */}
@@ -34,7 +43,7 @@ export const Project_details = () => {
                   </span>
                 </div>
                 <h1 className="lg:text-3xl text-xl  md:text-2xl sm:text-2xl font-bold text-gray-900 leading-tight">
-                  Learning Strategist/Instructional Designer for Mentorship Program
+                  {data[0]?.title}
                 </h1>
 
                 <div className="flex flex-wrap gap-6 text-sm">
@@ -42,15 +51,15 @@ export const Project_details = () => {
                     <div className="w-5 h-5 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full flex items-center justify-center">
                       <Globe className="w-3 h-3 text-white" />
                     </div>
-                    <span className="font-medium text-blue-700">Remote</span>
+                    <span className="font-medium text-blue-700">{data[0]?.mode}</span>
                   </div>
                   <div className="flex items-center gap-3 bg-emerald-50 px-4 py-2 rounded-full">
                     <Clock className="w-5 h-5 text-emerald-600" />
-                    <span className="font-medium text-emerald-700">1 to 3 months</span>
+                    <span className="font-medium text-emerald-700">{data[0]?.duration}</span>
                   </div>
                   <div className="flex items-center gap-3 bg-purple-50 px-4 py-2 rounded-full">
                     <Users className="w-5 h-5 text-purple-600" />
-                    <span className="font-medium text-purple-700">Hiring 2 Freelancers</span>
+                    <span className="font-medium text-purple-700">Hiring   {data[0]?.total_freelancer} Freelancers</span>
                   </div>
                 </div>
               </div>
@@ -81,13 +90,7 @@ export const Project_details = () => {
               </div>
               <div className="p-8 space-y-6">
                 <p className="text-gray-700 leading-relaxed text-lg">
-                  This project involves taking a course map document, ancillary files, and hyperlinks to build out a
-                  5-module university-level course in the Blackboard LMS of the partner institution. The contract
-                  instructional technologist will be provided access to the materials via a{" "}
-                  <span className="text-blue-600 underline cursor-pointer font-semibold hover:text-blue-800 transition-colors">
-                    Box.com
-                  </span>{" "}
-                  link and the temporary credentials to build the course in a sub-account of the LMS.
+                  {data[0]?.overview}
                 </p>
                 <div className="bg-blue-50 border-l-4 border-blue-400 p-6 rounded-r-lg">
                   <p className="text-blue-800 leading-relaxed">
@@ -105,37 +108,30 @@ export const Project_details = () => {
               </div>
               <div className="p-8 space-y-6">
                 <p className="text-gray-700 leading-relaxed text-lg">
-                  The deliverable is the course built out in the learning management system. This includes transferring
-                  the course map document into the various sections of the LMS. This includes creating the content
-                  pages, assignments, discussion forums, and possibly quizzes and exams. We are looking for an
-                  individual with a keen eye for detail and a willingness to reach out to us with any and all questions
-                  regarding this project as it is being worked on.
+                  {data[0]?.deliverable}
                 </p>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="bg-gradient-to-br from-orange-50 to-red-50 p-6 rounded-xl border border-orange-200">
+                  {/* <div className="bg-gradient-to-br from-orange-50 to-red-50 p-6 rounded-xl border border-orange-200">
                     <div className="flex items-center gap-3 mb-3">
                       <Clock className="w-5 h-5 text-orange-600" />
                       <h3 className="font-semibold text-orange-900">Time Estimate</h3>
                     </div>
                     <p className="text-orange-800">12-16 hours depending on skill level</p>
-                  </div>
+                  </div> */}
 
                   <div className="bg-gradient-to-br from-purple-50 to-pink-50 p-6 rounded-xl border border-purple-200">
                     <div className="flex items-center gap-3 mb-3">
                       <Calendar className="w-5 h-5 text-purple-600" />
                       <h3 className="font-semibold text-purple-900">Deadline</h3>
                     </div>
-                    <p className="text-purple-800">December 10, 2020</p>
+                    <p className="text-purple-800">{formatSingleDate(data[0]?.deadline)}</p>
                   </div>
                 </div>
               </div>
             </div>
-
-            
-
             {/* Time commitment */}
-            <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300">
+            {/* <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300">
               <div className="bg-gradient-to-r from-teal-50 to-cyan-50 p-6 border-b border-gray-200">
                 <h2 className="text-xl font-bold text-gray-900">Time commitment</h2>
               </div>
@@ -152,7 +148,7 @@ export const Project_details = () => {
                   </p>
                 </div>
               </div>
-            </div>
+            </div> */}
 
             {/* Project Details */}
             <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-8 hover:shadow-xl transition-all duration-300">
@@ -162,21 +158,21 @@ export const Project_details = () => {
                     <Briefcase className="w-6 h-6 text-white" />
                   </div>
                   <h3 className="font-bold text-gray-900 mb-2">Project Type</h3>
-                  <p className="text-gray-700 font-medium">Fixed Price</p>
+                  <p className="text-gray-700 font-medium">{data[0]?.type}</p>
                 </div>
                 <div className="text-center">
                   <div className="w-12 h-12 bg-gradient-to-r from-emerald-500 to-teal-600 rounded-full flex items-center justify-center mx-auto mb-4">
                     <Globe className="w-6 h-6 text-white" />
                   </div>
                   <h3 className="font-bold text-gray-900 mb-2">Languages</h3>
-                  <p className="text-gray-700 font-medium">English, Urdu</p>
+                  <p className="text-gray-700 font-medium">{data[0]?.languages}</p>
                 </div>
                 <div className="text-center">
                   <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-600 rounded-full flex items-center justify-center mx-auto mb-4">
                     <Calendar className="w-6 h-6 text-white" />
                   </div>
                   <h3 className="font-bold text-gray-900 mb-2">Project Deadline</h3>
-                  <p className="text-gray-700 font-medium">25 July - 10 August, 2020</p>
+                  <p className="text-gray-700 font-medium">{formatSingleDate(data[0]?.deadline)} </p>
                 </div>
               </div>
             </div>
@@ -186,19 +182,29 @@ export const Project_details = () => {
               <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300">
                 <div className="bg-gradient-to-r from-yellow-50 to-orange-50 p-6 border-b border-gray-200">
                   <h2 className="text-xl font-bold text-gray-900">Required Skills</h2>
-                  <p className="text-sm text-orange-600 font-medium mt-1">
+
+                  {/* <p className="text-sm text-orange-600 font-medium mt-1">
                     You have 2 out of 3 skills required for the job
-                  </p>
+                  </p> */}
                 </div>
                 <div className="p-6">
-                  <div className="flex items-center gap-2">
+                  <div className="flex gap-2">
+                    {
+                      data[0]?.skills?.split(',').map((item, index) => (
+                        <span key={index} className="inline-flex  items-center px-4 py-2 rounded-full text-sm font-semibold bg-gradient-to-r from-pink-100 to-rose-100 text-pink-800 border border-pink-200">
+                          {item}
+                        </span>
+                      ))
+                    }
+                  </div>
+                  {/* <div className="flex items-center gap-2">
                     <div className="flex">
                       <Star className="w-5 h-5 text-yellow-400 fill-current" />
                       <Star className="w-5 h-5 text-yellow-400 fill-current" />
                       <Star className="w-5 h-5 text-gray-300" />
                     </div>
                     <span className="text-sm text-gray-600 font-medium">Skill Match</span>
-                  </div>
+                  </div> */}
                 </div>
               </div>
               <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300">
@@ -207,7 +213,7 @@ export const Project_details = () => {
                 </div>
                 <div className="p-6">
                   <span className="inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold bg-gradient-to-r from-pink-100 to-rose-100 text-pink-800 border border-pink-200">
-                    🎥 Videographer
+                    {data[0]?.freelancerType}
                   </span>
                 </div>
               </div>
@@ -216,95 +222,95 @@ export const Project_details = () => {
 
           {/* Sidebar */}
 
-        <div className="lg:col-span-1">
-  
-        <div className="sticky top-6 space-y-8">
+          <div className="lg:col-span-1">
 
-            {/* Budget */}
-            <div className="bg-white  rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300">
-              <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-6 border-b border-gray-200">
-                <div className="text-sm font-medium text-emerald-600 uppercase tracking-wide mb-2">Client Budget</div>
-                <div className="text-3xl font-bold text-gray-900 mb-4">$2,400 - $3,600</div>
-                <div className="flex items-center gap-3">
-                  <div className="flex">
-                    {[...Array(5)].map((_, i) => (
-                      <div
-                        key={i}
-                        className={`w-3 h-3 rounded-sm mr-1 ${i < 3 ? "bg-emerald-400" : "bg-gray-300"}`}
-                      ></div>
-                    ))}
+            <div className="sticky top-6 space-y-8">
+
+              {/* Budget */}
+              <div className="bg-white  rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300">
+                <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-6 border-b border-gray-200">
+                  <div className="text-sm font-medium text-emerald-600 uppercase tracking-wide mb-2">Client Budget</div>
+                  <div className="text-3xl font-bold text-gray-900 mb-4">{data[0]?.budget} $</div>
+                  <div className="flex items-center gap-3">
+                    <div className="flex">
+                      {[...Array(5)].map((_, i) => (
+                        <div
+                          key={i}
+                          className={`w-3 h-3 rounded-sm mr-1 ${i < 3 ? "bg-emerald-400" : "bg-gray-300"}`}
+                        ></div>
+                      ))}
+                    </div>
+                    <span className="text-sm text-gray-600 font-medium">7 Proposals</span>
                   </div>
-                  <span className="text-sm text-gray-600 font-medium">7 Proposals</span>
+                </div>
+                <div className="p-6 space-y-4">
+                  <button className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center gap-3">
+                    <span className="text-xl">👍</span>
+                    <span>{"I'm interested"}</span>
+                  </button>
+
                 </div>
               </div>
-              <div className="p-6 space-y-4">
-                <button className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center gap-3">
-                  <span className="text-xl">👍</span>
-                  <span>{"I'm interested"}</span>
-                </button>
-          
+
+              {/* About the Employer */}
+              <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300">
+                <div className="bg-gradient-to-r from-indigo-50 to-blue-50 p-6 border-b border-gray-200">
+                  <h3 className="text-xl font-bold text-gray-900">About the Employer</h3>
+                </div>
+                <div className="p-6 space-y-6">
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
+                      <img src={profilepic} />
+                    </div>
+                    <div>
+                      <div className="text-sm text-gray-500 mb-1">Talha Butt</div>
+                      <div className="font-bold text-gray-900 text-lg">Matz Solutions Pvt Ltd</div>
+                    </div>
+                  </div>
+
+                  <p className="text-gray-700 leading-relaxed">
+                    The office of Digital Learning Design and Development is a unit of Digital and Lifelong Learning at
+                    the University of North Carolina at Chapel Hill.
+                  </p>
+
+                  <div className="flex items-center gap-3 text-gray-600 bg-gray-50 p-4 rounded-xl">
+                    <MapPin className="w-5 h-5 text-blue-600" />
+                    <div>
+                      <div className="font-semibold text-gray-900">Pakistan</div>
+                      <div className="text-sm text-gray-500">Karachi</div>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-3 text-emerald-600 bg-emerald-50 p-4 rounded-xl border border-emerald-200">
+                    <CheckCircle className="w-5 h-5" />
+                    <span className="font-semibold">Employer identity verified</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Share this project */}
+              <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300">
+                <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-6 border-b border-gray-200">
+                  <h3 className="text-xl font-bold text-gray-900">Share this project</h3>
+                </div>
+                <div className="p-6">
+                  <div className="grid grid-cols-4 gap-3">
+                    <button className="p-3 border-2 border-blue-200 rounded-xl hover:bg-blue-50 hover:border-blue-400 transition-all duration-300 group">
+                      <Facebook className="w-5 h-5 text-blue-600 mx-auto group-hover:scale-110 transition-transform" />
+                    </button>
+                    <button className="p-3 border-2 border-sky-200 rounded-xl hover:bg-sky-50 hover:border-sky-400 transition-all duration-300 group">
+                      <Twitter className="w-5 h-5 text-sky-600 mx-auto group-hover:scale-110 transition-transform" />
+                    </button>
+                    <button className="p-3 border-2 border-blue-200 rounded-xl hover:bg-blue-50 hover:border-blue-400 transition-all duration-300 group">
+                      <Linkedin className="w-5 h-5 text-blue-700 mx-auto group-hover:scale-110 transition-transform" />
+                    </button>
+                    <button className="p-3 border-2 border-pink-200 rounded-xl hover:bg-pink-50 hover:border-pink-400 transition-all duration-300 group">
+                      <Instagram className="w-5 h-5 text-pink-600 mx-auto group-hover:scale-110 transition-transform" />
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
-
-            {/* About the Employer */}
-            <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300">
-              <div className="bg-gradient-to-r from-indigo-50 to-blue-50 p-6 border-b border-gray-200">
-                <h3 className="text-xl font-bold text-gray-900">About the Employer</h3>
-              </div>
-              <div className="p-6 space-y-6">
-                <div className="flex items-center gap-4">
-                  <div className="w-12 h-12 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
-                    <img src={profilepic} />
-                  </div>
-                  <div>
-                    <div className="text-sm text-gray-500 mb-1">Talha Butt</div>
-                    <div className="font-bold text-gray-900 text-lg">Matz Solutions Pvt Ltd</div>
-                  </div>
-                </div>
-
-                <p className="text-gray-700 leading-relaxed">
-                  The office of Digital Learning Design and Development is a unit of Digital and Lifelong Learning at
-                  the University of North Carolina at Chapel Hill.
-                </p>
-
-                <div className="flex items-center gap-3 text-gray-600 bg-gray-50 p-4 rounded-xl">
-                  <MapPin className="w-5 h-5 text-blue-600" />
-                  <div>
-                    <div className="font-semibold text-gray-900">Pakistan</div>
-                    <div className="text-sm text-gray-500">Karachi</div>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-3 text-emerald-600 bg-emerald-50 p-4 rounded-xl border border-emerald-200">
-                  <CheckCircle className="w-5 h-5" />
-                  <span className="font-semibold">Employer identity verified</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Share this project */}
-            <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300">
-              <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-6 border-b border-gray-200">
-                <h3 className="text-xl font-bold text-gray-900">Share this project</h3>
-              </div>
-              <div className="p-6">
-                <div className="grid grid-cols-4 gap-3">
-                  <button className="p-3 border-2 border-blue-200 rounded-xl hover:bg-blue-50 hover:border-blue-400 transition-all duration-300 group">
-                    <Facebook className="w-5 h-5 text-blue-600 mx-auto group-hover:scale-110 transition-transform" />
-                  </button>
-                  <button className="p-3 border-2 border-sky-200 rounded-xl hover:bg-sky-50 hover:border-sky-400 transition-all duration-300 group">
-                    <Twitter className="w-5 h-5 text-sky-600 mx-auto group-hover:scale-110 transition-transform" />
-                  </button>
-                  <button className="p-3 border-2 border-blue-200 rounded-xl hover:bg-blue-50 hover:border-blue-400 transition-all duration-300 group">
-                    <Linkedin className="w-5 h-5 text-blue-700 mx-auto group-hover:scale-110 transition-transform" />
-                  </button>
-                  <button className="p-3 border-2 border-pink-200 rounded-xl hover:bg-pink-50 hover:border-pink-400 transition-all duration-300 group">
-                    <Instagram className="w-5 h-5 text-pink-600 mx-auto group-hover:scale-110 transition-transform" />
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
           </div>
         </div>
       </div>

@@ -273,6 +273,17 @@ export const router = createBrowserRouter([
     ),
   },
 
+  {
+    path: "/freelancer/projects/:id",
+    element: (
+      // <AuthRoute>
+      <MainTemplate isShowFooter={false}>
+        <Project_details />
+      </MainTemplate>
+      // </AuthRoute>
+    ),
+  },
+
 
   {
     path: "/freelancer/manage-jobs",

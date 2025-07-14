@@ -1,5 +1,5 @@
 import { GraduationCap, Plus, X } from "lucide-react";
-
+import { memo } from "react";
 const EducationSection = ({ educationList, removeEducation, openSidebar }) => (
   <div id="education" className="bg-white border border-gray-200 rounded-lg shadow-sm">
     <div className="p-6">
@@ -11,8 +11,8 @@ const EducationSection = ({ educationList, removeEducation, openSidebar }) => (
               <GraduationCap className="w-4 h-4 text-gray-600" />
             </div>
             <div className="flex-1">
-              <h3 className="font-semibold text-gray-900 mb-1">{edu.institution}</h3>
-              <p className="text-gray-600 mb-1">{edu.degree} Degree, {edu.major}</p>
+              <h3 className="capitalize font-semibold text-gray-900 mb-1">{edu.institution}</h3>
+              <p className="capitalize text-gray-600 mb-1">{edu.degree} Degree, {edu.major}</p>
               <p className="text-gray-500 text-sm">Graduated {edu.year}</p>
             </div>
             <button onClick={() => removeEducation(edu.id)} className="p-1 hover:bg-gray-100 rounded text-red-500">
@@ -32,4 +32,4 @@ const EducationSection = ({ educationList, removeEducation, openSidebar }) => (
   </div>
 );
 
-export default EducationSection;
+export default memo(EducationSection);

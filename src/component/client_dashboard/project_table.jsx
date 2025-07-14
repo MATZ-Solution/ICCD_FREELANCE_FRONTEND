@@ -1,7 +1,8 @@
 import order_logo from '../../assets/freelancer_dashboard/order_logo.png';
+import { useNavigate } from 'react-router-dom';
 
-function Projects_table({data}) {
-
+function Projects_table({ data }) {
+  const navigate = useNavigate()
   const statusColors = {
     'IN PROGRESS': 'bg-[#1467B0]',
     PENDING: 'bg-yellow-500',
@@ -21,7 +22,9 @@ function Projects_table({data}) {
               {data.map((item) => (
                 <tr key={item.id}>
                   <td colSpan={6}>
-                    <div className="w-full bg-[#F8F8F8] shadow-sm rounded-xl flex items-center justify-between px-4 py-3 gap-4 min-w-[1000px]">
+                    <div
+                      onClick={() => navigate(`/freelancer/projects/${item?.id}`)}
+                      className="w-full bg-[#F8F8F8] shadow-sm rounded-xl flex items-center justify-between px-4 py-3 gap-4 min-w-[1000px] hover:cursor-pointer">
                       {/* First Column */}
                       <div className="flex items-center gap-5 w-[20%]">
                         <img src={item?.projectFiles} className="w-40 h-20" />
@@ -32,8 +35,7 @@ function Projects_table({data}) {
                         <p className="text-[#737373]">
                           Project Name:
                         </p>
-                        <p className="font-semibold text-lg text-[#043A53]">{item?.projectTitle
-}</p>
+                        <p className="font-semibold text-lg text-[#043A53]">{item?.title}</p>
                       </div>
 
                       {/* Price */}
@@ -48,7 +50,7 @@ function Projects_table({data}) {
                         <p className="text-[#043A53] text-lg font-semibold">{item?.deadline}</p>
                       </div>
 
-                         {/* Category */}
+                      {/* Category */}
                       <div className="w-[15%]">
                         <p className="text-[#737373]">Category</p>
                         <p className="text-[#043A53] text-lg font-semibold">{item?.category}</p>

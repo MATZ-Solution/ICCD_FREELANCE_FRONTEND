@@ -1,14 +1,15 @@
 import porfilepic from "../../assets/client_dashboard/clientdp.png";
 import { Share2, MapPin, MessageSquare, EyeIcon, Edit2 } from "lucide-react";
+import { memo } from "react";
 
 const ProfileHeader = ({ profileData, languages, openSidebar }) => (
   <div className="flex items-start space-x-4">
     <div className="w-20 h-20 rounded-full overflow-hidden">
-      <img src={porfilepic} alt="Profile picture" width={80} height={80} className="w-full h-full object-cover" />
+      <img src={profileData[0]?.fileUrl} alt="Profile picture" width={80} height={80} className="w-full h-full object-cover" />
     </div>
     <div className="flex-1">
       <div className="flex items-center space-x-2 mb-2 group">
-        <h1 className="text-2xl font-bold">{profileData[0]?.name}</h1>
+        <h1 className="text-2xl font-bold">{profileData[0]?.firstName} {profileData[0]?.lastName}</h1>
         <span className="text-gray-500">@{profileData[0]?.email}</span>
         <button
           onClick={() => openSidebar("profile")}
@@ -27,11 +28,11 @@ const ProfileHeader = ({ profileData, languages, openSidebar }) => (
           <div className="flex gap-2 items-center group">
             <MessageSquare width={16} height={16} />
             <span className="flex gap-1 flex-wrap">
-              {languages.map((item, index) => (
-                <span key={index} className="px-2 py-1 bg-gray-100 text-gray-800 text-xs rounded-full">
+              {(languages && languages?.length) > 0 && (languages?.map((item, index) => (
+                <span key={index} className="capitalize px-2 py-1 bg-gray-100 text-gray-800 text-xs rounded-full">
                   {item}
                 </span>
-              ))}
+              )))}
             </span>
             <button
               onClick={() => openSidebar("languages")}
@@ -55,4 +56,4 @@ const ProfileHeader = ({ profileData, languages, openSidebar }) => (
   </div>
 );
 
-export default ProfileHeader;
+export default memo(ProfileHeader);

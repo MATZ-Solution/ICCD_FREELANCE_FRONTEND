@@ -9,7 +9,7 @@ import CertificationsSection from "../../component/freelancer_profile/Certificat
 import SkillsSection from "../../component/freelancer_profile/SkillsSection";
 import QuickLinksSidebar from "../../component/freelancer_profile/QuickLinksSidebar";
 import SidebarForm from "../../component/freelancer_profile/SidebarForm";
-import {  useGetFreelancerProfile } from "../../../api/client/freelancer";
+import { useEditProfile, useGetFreelancerProfile } from "../../../api/client/freelancer";
 
 // Validation Schemas
 const educationSchema = yup.object().shape({
@@ -47,55 +47,41 @@ const aboutSchema = yup.object().shape({
 });
 
 const FreelancerEditProfile = () => {
-  console.log("FreelancerUserProfile component rendered");
 
-  //  const { data: profileData, isSuccess, isPending, isError, isLoading } = useGetFreelancerProfile()
-  // console.log("profileData: ", profileData)
-  // State
+  const [freelancerId, setFreelancerId] = useState('');
   const { data, isSuccess, isPending, isError, isLoading } = useGetFreelancerProfile()
-  // const { addProfile, isSuccess: editProfileSuccess, isPending: editProfilePending, isError: editProfileIsErr, error: editProfileErr } = useEditProfile()
-  
-  console.log("data: ", data)
+  const { editProfile, isSuccess: editProfileSuccess, isPending: editProfilePending, isError: editProfileIsErr, error: editProfileErr } = useEditProfile(freelancerId)
 
+
+  const [skillsList, setSkillsList] = useState([]);
+  const [languages, setLanguages] = useState([]);
+  const [educationList, setEducationList] = useState([]);
   const [profileData, setProfileData] = useState({
-    name: data ? data[0]?.name : '',
+    name: data ? data[0]?.firstName : '',
     email: data ? data[0]?.email : '',
     about_tagline: data ? data[0]?.about_tagline : '',
     about_description: data ? data[0]?.about_description : ''
   });
 
   useEffect(() => {
-  if (isSuccess && data?.[0]) {
-    setProfileData(prev => ({
-      ...prev,
-      name: data[0].name,
-      email: data[0].email,
-      about_tagline: data[0]?.about_tagline,
-      about_description: data[0]?.about_description
-    }));
-  }
-}, [isSuccess, data]);
+    if (isSuccess && data?.[0]) {
+      setProfileData(prev => ({
+        ...prev,
+        name: data[0].firstName,
+        email: data[0].email,
+        about_tagline: data[0]?.about_tagline,
+        about_description: data[0]?.about_description
+      }));
+      setSkillsList(data[0]?.skills);
+      setLanguages(data[0]?.languages)
+      setEducationList([data[0]?.education])
+      setFreelancerId(data[0]?.freelancer_id)
+    }
+  }, [isSuccess, data]);
 
-  const [languages, setLanguages] = useState([]);
-  const [educationList, setEducationList] = useState([
-    {
-      id: 1,
-      degree: "B.Sc.",
-      major: "computer science",
-      institution: "Karachi School of Business And Leadership",
-      location: "Pakistan",
-      year: "2027",
-    },
-  ]);
+
   const [certificationList, setCertificationList] = useState([]);
-  const [skillsList, setSkillsList] = useState([
-    { id: 1, name: "Next Js", level: "expert" },
-    { id: 2, name: "React Js", level: "expert" },
-    { id: 3, name: "Node Js", level: "expert" },
-    { id: 4, name: "Express", level: "expert" },
-    { id: 5, name: "JavaScript", level: "expert" },
-    { id: 6, name: "TypeScript", level: "expert" },
-  ]);
+
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarType, setSidebarType] = useState(null);
 
@@ -109,7 +95,6 @@ const FreelancerEditProfile = () => {
 
   // Handlers
   const openSidebar = (type) => {
-    console.log(`Opening sidebar for: ${type}`);
     setSidebarType(type);
     setSidebarOpen(true);
     if (type === "profile") profileForm.reset({ name: profileData.name, email: profileData.email });
@@ -118,7 +103,6 @@ const FreelancerEditProfile = () => {
   };
 
   const closeSidebar = () => {
-    console.log("Closing sidebar");
     setSidebarOpen(false);
     setSidebarType(null);
     educationForm.reset();
@@ -138,13 +122,8 @@ const FreelancerEditProfile = () => {
       location: data.country,
       year: data.graduationYear,
     };
-
-    console.log("Education ===>", newData);
-
     setEducationList((prev) => [...prev, newData]);
-
     educationForm.reset();
-
     alert("Education added successfully!");
   };
 
@@ -156,7 +135,6 @@ const FreelancerEditProfile = () => {
       organization: data.organization,
       issueDate: data.issueDate,
     };
-    console.log("Certification ===>", newData);
 
     setCertificationList((prev) => [...prev, newData]);
     certificationForm.reset();
@@ -169,26 +147,24 @@ const FreelancerEditProfile = () => {
       name: data.skillName,
       level: data.level,
     };
-    console.log("Skill form submitted:", newData);
     setSkillsList((prev) => [...prev, newData]);
     skillForm.reset();
     alert("Skill added successfully!");
   };
 
   const onProfileSubmit = (data) => {
-    console.log("Profile form state before submission:", profileForm.watch()); // Debug log
-    console.log("Profile form submitted:", data);
-    setProfileData((prev) => ({ ...prev, name: data.name, email: data.email }));
-    addProfile(data)
+    // console.log("data: ", data)
+    // setProfileData((prev) => ({ ...prev, name: data.name, email: data.email,about_tagline: data.about_tagline }));
+    // addProfile(data)
     closeSidebar();
     alert("Profile updated successfully!");
   };
 
-  console.log("language: ", languages)
   const onLanguagesSubmit = (data) => {
-    console.log("1")
-    setLanguages(data.languages || []);
-    addProfile({languages: languages})
+    let { languages } = data
+    let form = new FormData()
+    form.append('languages', JSON.stringify(languages))
+    editProfile(form)
     closeSidebar();
     alert("Languages updated successfully!");
   };
@@ -197,18 +173,16 @@ const FreelancerEditProfile = () => {
     const form = new FormData()
     form.append('about_tagline', data.about_tagline)
     form.append('about_description', data.about_description)
-    addProfile(form)
+    // addProfile(form)
     closeSidebar();
     alert("About section updated successfully!");
   };
 
   const removeEducation = (id) => {
-    console.log("Removing education with id:", id);
     setEducationList((prev) => prev.filter((edu) => edu.id !== id));
   };
 
   const removeCertification = (id) => {
-    console.log("Removing certification with id:", id);
     setCertificationList((prev) => prev.filter((cert) => cert.id !== id));
   };
 
@@ -218,7 +192,6 @@ const FreelancerEditProfile = () => {
   };
 
   const addLanguage = (newLanguage) => {
-    console.log("Adding language:", newLanguage);
     if (newLanguage && !languages.includes(newLanguage)) {
       const updatedLanguages = [...languages, newLanguage];
       setLanguages(updatedLanguages);
@@ -228,7 +201,6 @@ const FreelancerEditProfile = () => {
   };
 
   const removeLanguage = (languageToRemove) => {
-    console.log("Removing language:", languageToRemove);
     const updatedLanguages = languages.filter((lang) => lang !== languageToRemove);
     setLanguages(updatedLanguages);
     languagesForm.setValue("languages", updatedLanguages);

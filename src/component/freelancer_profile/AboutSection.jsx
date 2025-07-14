@@ -1,4 +1,5 @@
 import { Edit2 } from "lucide-react";
+import { memo } from "react";
 
 const AboutSection = ({ profileData, skillsList, openSidebar }) => (
   <div id="about" className="bg-white border border-gray-200 rounded-lg shadow-sm">
@@ -22,7 +23,7 @@ const AboutSection = ({ profileData, skillsList, openSidebar }) => (
       <h3 className="text-md font-semibold mb-2">Skills</h3>
       <div className="flex flex-wrap gap-2 mb-4">
         {skillsList.map((skill) => (
-          <span key={skill.id} className="px-3 py-1 bg-gray-100 text-gray-800 text-sm rounded-full">
+          <span key={skill.id} className="capitalize px-3 py-1 bg-gray-100 text-gray-800 text-sm rounded-full">
             {skill.name} ({skill.level})
           </span>
         ))}
@@ -31,4 +32,4 @@ const AboutSection = ({ profileData, skillsList, openSidebar }) => (
   </div>
 );
 
-export default AboutSection;
+export default memo(AboutSection);

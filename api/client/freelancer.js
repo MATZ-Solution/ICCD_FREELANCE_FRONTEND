@@ -57,3 +57,38 @@ export function useAddProfile() {
   });
   return { addProfile, isSuccess, isPending, isError, error };
 }
+
+export function useEditProfile(freelancerId) {
+  const queryClient = useQueryClient();
+  const dispatch = useDispatch()
+  const {
+    mutate: editProfile,
+    isSuccess,
+    isPending,
+    isError,
+    error,
+  } = useMutation({
+    mutationFn: async (data) =>
+      await api.put(`${API_ROUTE.freelancer.editProfile}/${freelancerId}`, data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: api.defaults.headers.common["Authorization"],
+        },
+        timeout: 30000,
+      }),
+    onSuccess: (data, res) => {
+      alert("Profile edit successfully!");
+      queryClient.invalidateQueries({
+        queryKey: [API_ROUTE.freelancer.getFreelancerProfile],
+      });
+    },
+    onError: (error) => {
+      // Toast.show({
+      //     type: "error",
+      //     text1: "Error",
+      //     text2: "Failed to edit scout",
+      // });
+    },
+  });
+  return { editProfile, isSuccess, isPending, isError, error };
+}

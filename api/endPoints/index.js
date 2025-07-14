@@ -10,6 +10,7 @@ const API_ROUTE = {
     getAllProject: "/project/getAllProject",
     getProjectByUser: "/project/getProjectByUser",
     addProject: "/project/addProject",
+    getProjectById: "project/getProjectById"
   },
   job: {
     getJob: "/job/getJob",
@@ -26,7 +27,8 @@ const API_ROUTE = {
   freelancer: {
     checkIsFreelancer: '/freelancer/checkIsFreelancer',
     getFreelancerProfile: '/freelancer/getFreelancerProfile',
-    addProfile: '/freelancer/addProfile'
+    addProfile: '/freelancer/addProfile',
+    editProfile: '/freelancer/editProfile'
   }
 };
 

@@ -55,7 +55,7 @@ const QuickLinksSidebar = ({ educationList, certificationList, skillsList, langu
               <div className="text-xs text-gray-500">Skills</div>
             </div>
             <div className="p-2 bg-gray-50 rounded-md">
-              <div className="text-lg font-semibold text-gray-900">{languages.length}</div>
+              <div className="text-lg font-semibold text-gray-900">{(languages && languages.length>0) && languages.length}</div>
               <div className="text-xs text-gray-500">Languages</div>
             </div>
           </div>

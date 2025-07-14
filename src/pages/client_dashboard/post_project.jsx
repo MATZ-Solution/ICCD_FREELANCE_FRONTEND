@@ -1,31 +1,37 @@
-import bannerimg from "../../assets/client_dashboard/bannerimg.png";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import backgroundd from "../../assets/client_dashboard/Group.png";
 import { useEffect, useState } from "react";
-import ReactSelect from "../../component/buttonSelect";
+import Select from "react-select";
+import RichTextEditor from "../../component/client_dashboard/text_editor";
+import bannerimg from "../../assets/client_dashboard/bannerimg.png";
+import backgroundd from "../../assets/client_dashboard/Group.png";
 import { useAddproject } from "../../../api/client/project";
 
+// Yup schema with Language as an array
 const schema = yup.object({
-  projectTitle: yup
+  title: yup
     .string()
     .required("Project title is required")
     .max(80, "Maximum 80 characters allowed"),
-
   category: yup.string().required("Category is required"),
   subCategory: yup.string().required("Subcategory is required"),
-
   skills: yup
     .array()
     .of(yup.string().required())
-    .min(5, "Please enter at least 5 skills"),
-
-  projectDescription: yup
+    .min(1, "At least one skill is required"),
+  description: yup
     .string()
     .required("Project description is required")
     .max(250, "Maximum 250 characters allowed"),
-
+  overview: yup
+    .string()
+    .required("Project overview is required")
+    .max(250, "Maximum 250 characters allowed"),
+  deliverable: yup
+    .string()
+    .required("Deliverable are required")
+    .max(250, "Maximum 250 characters allowed"),
   budget: yup
     .string()
     .required("Budget is required")
@@ -40,20 +46,21 @@ const schema = yup.object({
         return !isNaN(min) && !isNaN(max) && min < max && max - min >= 1000;
       }
     ),
-
-  deadline: yup.date().required("Deadline is required"),
-
-  files: yup
-    .mixed()
-    .test("required", "File is required", (value) => value && value.length > 0)
-    .test("fileSize", "Max file size 5MB", (value) =>
-      !value || !value[0] || value[0].size <= 5 * 1024 * 1024
-    )
-    .test("fileType", "Only jpg, png, gif allowed", (value) =>
-      !value ||
-      !value[0] ||
-      ["image/jpeg", "image/png", "image/gif"].includes(value[0].type)
-    ),
+  type: yup.string().required("Price Type is required"),
+  language: yup
+    .array()
+    .of(yup.string().required())
+    .min(1, "At least one language is required")
+    .required("Language is required"),
+  freelancerType: yup.string().required("Freelancer Type is required"),
+  deadline: yup.date().required("Deadline is required").nullable(),
+  // duration: yup.date().required("Duration is required").nullable(),
+  duration: yup.string().required("Hiring timeline is required"),
+  total_freelancer: yup
+    .number()
+    .min(1, "At least one freelancer is required")
+    .required("Number of freelancers is required"),
+  mode: yup.string().required("Mode is required"),
 });
 
 const categoryOptions = [
@@ -70,6 +77,35 @@ const subCategoryOptions = [
   { value: "API", label: "API Integration" },
 ];
 
+const languageOptions = [
+  { value: "French", label: "French" },
+  { value: "English", label: "English" },
+  { value: "Urdu", label: "Urdu" },
+  { value: "German", label: "German" },
+  { value: "Turkish", label: "Turkish" },
+];
+
+const freelancerTypeOptions = [
+  { value: "Digital Marketing", label: "Digital Marketing" },
+  { value: "Web", label: "Web Development" },
+  { value: "Graphic", label: "Graphic Designing" },
+  { value: "Figma", label: "Figma Design" },
+];
+
+const timeLineOptions = [
+  { value: "1 to 2 Month", label: "1 to 2 Month" },
+  { value: "2 to 4 Month", label: "2 to 4 Month" },
+  { value: "4 to 6 Month", label: "4 to 6 Month" },
+  { value: "6 to 12 Month", label: "6 to 12 Month" },
+];
+
+const typeOptions = [
+  { value: "FixedPrice", label: "Fixed Price" },
+  { value: "Flexible", label: "Flexible" },
+];
+
+const modeOptions = ["Physical", "Remote", "Hybrid"];
+
 const ProjectForm = () => {
   const [skillInput, setSkillInput] = useState("");
   const [skills, setSkills] = useState([]);
@@ -82,14 +118,22 @@ const ProjectForm = () => {
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
-      projectTitle: "",
-      category: null,
-      subCategory: null,
+      title: "",
+      category: "",
+      subCategory: "",
       skills: [],
-      projectDescription: "",
+      description: "",
+      overview: "",
+      deliverable: "",
       budget: "",
-      deadline: "",
-      files: [],
+      deadline: null,
+      // duration: null,
+      duration: "",
+      total_freelancer: 1,
+      mode: "",
+      type: "",
+      language: [],
+      freelancerType: "",
     },
   });
 
@@ -109,28 +153,11 @@ const ProjectForm = () => {
     setSkills((prev) => prev.filter((_, i) => i !== index));
   };
 
-  const { addProject, isSuccess, isPending, isError, error } = useAddproject()
+  const  { addProject, isSuccess, isPending, isError, error } = useAddproject()
   const onSubmit = (data) => {
-    console.log("data: ", data)
-
-    const formData = new FormData();
-
-    for (const key in data) {
-      console.log("key: ", key)
-      if (key === 'files') {
-        data.files.forEach((file) => {
-          formData.append("files", file);
-        });
-      } 
-      else if(key === 'languages'){
-        console.log("data.languages: ", data.languages)
-          formData.append("languages", JSON.stringify(data.languages));
-      }
-      else {
-        formData.append(key, data[key])
-      }
-    }
-     addProject(formData)
+    console.log("Form Data:", data);
+    addProject(data)
+    alert("Form submitted!");
   };
 
   return (
@@ -143,84 +170,97 @@ const ProjectForm = () => {
           <h2 className="text-3xl font-semibold mb-2">Project Management</h2>
           <p>Choose a freelancer's personal and instantly generate work.</p>
         </div>
-        <img src={bannerimg} alt="banner" className="w-96 h-auto" />
+        <img src={bannerimg} alt="Banner" className="w-96 h-auto" />
       </div>
 
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className="max-w-4xl bg-white mx-auto px-6 py-8 space-y-6"
-      >
-        {/* Project Title */}
+      <div className="max-w-4xl bg-white mx-auto px-6 py-8 space-y-6">
         <Controller
           control={control}
-          name="projectTitle"
+          name="title"
           render={({ field }) => (
             <div>
-              <label>Project Title</label>
+              <label htmlFor="title" className="block text-sm font-medium text-gray-700">
+                Project Title
+              </label>
               <input
                 {...field}
-                className="w-full border rounded px-3 py-2 mt-1"
+                id="title"
+                aria-label="Project Title"
+                className="w-full border rounded px-3 py-2 mt-1 focus:ring-teal-500 focus:border-teal-500"
               />
-              <p className="text-red-500 text-sm">{errors.projectTitle?.message}</p>
+              {errors.title && (
+                <p className="text-red-500 text-sm mt-1">{errors.title.message}</p>
+              )}
             </div>
           )}
         />
 
-        {/* Category & subCategory */}
         <div className="flex gap-4">
           <div className="w-1/2">
-            <label>Category</label>
+            <label htmlFor="category" className="block text-sm font-medium text-gray-700">
+              Category
+            </label>
             <Controller
               control={control}
               name="category"
               render={({ field: { onChange, value } }) => (
-                <ReactSelect
+                <Select
+                  inputId="category"
                   placeholder="Select Category"
                   onChange={(selectedOption) => onChange(selectedOption?.value || "")}
-                  option={categoryOptions}
+                  options={categoryOptions}
                   value={categoryOptions.find((option) => option.value === value) || null}
+                  className="mt-1"
                 />
               )}
             />
             {errors.category && (
-              <p className="mt-1 text-red-600">{errors.category.message}</p>
+              <p className="text-red-500 text-sm mt-1">{errors.category.message}</p>
             )}
           </div>
 
           <div className="w-1/2">
-            <label>Subcategory</label>
+            <label htmlFor="subCategory" className="block text-sm font-medium text-gray-700">
+              Subcategory
+            </label>
             <Controller
               control={control}
               name="subCategory"
               render={({ field: { onChange, value } }) => (
-                <ReactSelect
+                <Select
+                  inputId="subCategory"
                   placeholder="Select Subcategory"
                   onChange={(selectedOption) => onChange(selectedOption?.value || "")}
-                  option={subCategoryOptions}
+                  options={subCategoryOptions}
                   value={subCategoryOptions.find((option) => option.value === value) || null}
+                  className="mt-1"
                 />
               )}
             />
             {errors.subCategory && (
-              <p className="mt-1 text-red-600">{errors.subCategory.message}</p>
+              <p className="text-red-500 text-sm mt-1">{errors.subCategory.message}</p>
             )}
           </div>
         </div>
 
-        {/* Required Skills */}
         <div>
-          <label>Required Skills</label>
+          <label htmlFor="skills" className="block text-sm font-medium text-gray-700">
+            Required Skills
+          </label>
           <div className="flex gap-2 mt-1">
             <input
+              id="skills"
               value={skillInput}
               onChange={(e) => setSkillInput(e.target.value)}
               placeholder="Enter a skill"
-              className="w-full border rounded px-3 py-2"
+              className="w-full border rounded px-3 py-2 focus:ring-teal-500 focus:border-teal-500"
+              aria-label="Enter a skill"
             />
             <button
               type="button"
               onClick={handleAddSkill}
-              className="bg-blue-600 text-white px-4 rounded"
+              disabled={!skillInput.trim()}
+              className="bg-teal-600 text-white px-4 py-2 rounded hover:bg-teal-700 disabled:bg-teal-400"
             >
               Add
             </button>
@@ -237,96 +277,325 @@ const ProjectForm = () => {
                   type="button"
                   onClick={() => handleRemoveSkill(index)}
                   className="text-red-300 hover:text-red-500"
+                  aria-label={`Remove ${skill}`}
                 >
-                  &times;
+                  ×
                 </button>
               </span>
             ))}
           </div>
-
-          <p className="text-red-500 text-sm">{errors.skills?.message}</p>
+          {errors.skills && (
+            <p className="text-red-500 text-sm mt-1">{errors.skills.message}</p>
+          )}
         </div>
 
-        {/* Project Description */}
         <Controller
           control={control}
-          name="projectDescription"
-          render={({ field }) => (
+          name="description"
+          render={({ field: { value, onChange } }) => (
             <div>
-              <label>Project Description</label>
-              <textarea
-                {...field}
-                rows={4}
-                className="w-full border rounded px-3 py-2 mt-1"
+              <label htmlFor="description" className="block text-sm font-medium text-gray-700">
+                Project Description
+              </label>
+              <RichTextEditor
+                id="description"
+                placeholder="Provide a detailed description of your project."
+                value={value}
+                onChange={onChange}
               />
-              <p className="text-red-500 text-sm">
-                {errors.projectDescription?.message}
-              </p>
+              {errors.description && (
+                <p className="text-red-500 text-sm mt-1">{errors.description.message}</p>
+              )}
             </div>
           )}
         />
 
-        {/* Budget */}
+        <Controller
+          control={control}
+          name="overview"
+          render={({ field: { value, onChange } }) => (
+            <div>
+              <label htmlFor="overview" className="block text-sm font-medium text-gray-700">
+                Project Overview
+              </label>
+              <RichTextEditor
+                id="overview"
+                placeholder="Give a brief overview of your project"
+                value={value}
+                onChange={onChange}
+              />
+              {errors.overview && (
+                <p className="text-red-500 text-sm mt-1">{errors.overview.message}</p>
+              )}
+            </div>
+          )}
+        />
+
+        <Controller
+          control={control}
+          name="deliverable"
+          render={({ field: { value, onChange } }) => (
+            <div>
+              <label htmlFor="deliverable" className="block text-sm font-medium text-gray-700">
+                Deliverables
+              </label>
+              <RichTextEditor
+                id="deliverable"
+                placeholder="Describe the files, documents, or results you will deliver upon project completion"
+                value={value}
+                onChange={onChange}
+              />
+              {errors.deliverable && (
+                <p className="text-red-500 text-sm mt-1">{errors.deliverable.message}</p>
+              )}
+            </div>
+          )}
+        />
+
         <Controller
           control={control}
           name="budget"
           render={({ field }) => (
             <div>
-              <label>Budget</label>
+              <label htmlFor="budget" className="block text-sm font-medium text-gray-700">
+                Budget
+              </label>
               <input
                 {...field}
+                id="budget"
                 placeholder="e.g. 50000 - 80000"
-                className="w-full border rounded px-3 py-2 mt-1"
+                className="w-full border rounded px-3 py-2 mt-1 focus:ring-teal-500 focus:border-teal-500"
+                aria-label="Budget range"
               />
-              <p className="text-red-500 text-sm">{errors.budget?.message}</p>
+              {errors.budget && (
+                <p className="text-red-500 text-sm mt-1">{errors.budget.message}</p>
+              )}
             </div>
           )}
         />
 
-        {/* Deadline */}
         <Controller
           control={control}
           name="deadline"
-          render={({ field }) => (
+          render={({ field: { onChange, value } }) => (
             <div>
-              <label>Deadline</label>
+              <label htmlFor="deadline" className="block text-sm font-medium text-gray-700">
+                Deadline
+              </label>
               <input
-                {...field}
                 type="date"
-                className="w-full border rounded px-3 py-2 mt-1"
+                id="deadline"
+                value={value ? new Date(value).toISOString().split("T")[0] : ""}
+                onChange={(e) => onChange(e.target.value ? new Date(e.target.value) : null)}
+                className="w-full border rounded px-3 py-2 mt-1 focus:ring-teal-500 focus:border-teal-500"
+                aria-label="Project deadline"
               />
-              <p className="text-red-500 text-sm">{errors.deadline?.message}</p>
+              {errors.deadline && (
+                <p className="text-red-500 text-sm mt-1">{errors.deadline.message}</p>
+              )}
             </div>
           )}
         />
 
-        {/* Files */}
-        <Controller
+        {/* <Controller
           control={control}
-          name="files"
-          render={({ field: { onChange } }) => (
+          name="duration"
+          render={({ field: { onChange, value } }) => (
             <div>
-              <label>File Upload</label>
+              <label htmlFor="duration" className="block text-sm font-medium text-gray-700">
+                Duration
+              </label>
               <input
-                type="file"
-                onChange={(e) => {
-                  const filesArray = Array.from(e.target.files); // Convert FileList to array
-                  onChange(filesArray); // Update form state
-                }}
-                className="w-full border rounded px-3 py-2 mt-1"
+                type="date"
+                id="duration"
+                value={value ? new Date(value).toISOString().split("T")[0] : ""}
+                onChange={(e) => onChange(e.target.value ? new Date(e.target.value) : null)}
+                className="w-full border rounded px-3 py-2 mt-1 focus:ring-teal-500 focus:border-teal-500"
+                aria-label="Project duration"
               />
-              <p className="text-red-500 text-sm">{errors.files?.message}</p>
+              {errors.duration && (
+                <p className="text-red-500 text-sm mt-1">{errors.duration.message}</p>
+              )}
             </div>
           )}
-        />
+        /> */}
+
+        <div className="space-y-4">
+          <h3 className="text-sm font-medium text-[#01AEAD]">Hiring details</h3>
+          <label htmlFor="duration" className="block text-sm font-medium text-gray-700">
+            Hiring timeline for this job *
+          </label>
+          <Controller
+            name="duration"
+            control={control}
+            render={({ field: { onChange, value } }) => (
+              <Select
+                inputId="duration"
+                placeholder="Select a Timeline"
+                onChange={(selectedOption) => onChange(selectedOption?.value || "")}
+                options={timeLineOptions}
+                value={timeLineOptions.find((option) => option.value === value) || null}
+                className="mt-1"
+              />
+            )}
+          />
+          {errors.duration && (
+            <p className="text-red-500 text-sm mt-1">{errors.duration.message}</p>
+          )}
+
+          <div>
+            <label htmlFor="total_freelancer" className="block text-sm font-medium text-gray-700 mb-1">
+              Number of Freelancers to hire for this Project *
+            </label>
+            <Controller
+              name="total_freelancer"
+              control={control}
+              render={({ field: { onChange, value } }) => (
+                <div className="inline-flex items-center border border-gray-300 rounded-md overflow-hidden">
+                  <span className="px-4 py-2 text-gray-700">
+                    {value} {value === 1 ? "person" : "people"}
+                  </span>
+                  <div className="flex items-center">
+                    <button
+                      type="button"
+                      onClick={() => onChange(value + 1)}
+                      className="px-3 py-2 text-gray-600 hover:bg-gray-100"
+                      aria-label="Increase freelancer count"
+                    >
+                      +
+                    </button>
+                    <div className="h-6 w-px bg-gray-300" />
+                    <button
+                      type="button"
+                      onClick={() => onChange(Math.max(1, value - 1))}
+                      className="px-3 py-2 text-gray-600 hover:bg-gray-100"
+                      aria-label="Decrease freelancer count"
+                    >
+                      -
+                    </button>
+                  </div>
+                </div>
+              )}
+            />
+            {errors.total_freelancer && (
+              <p className="text-red-500 text-sm mt-1">{errors.total_freelancer.message}</p>
+            )}
+          </div>
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-3">
+            Mode
+          </label>
+          <Controller
+            name="mode"
+            control={control}
+            render={({ field: { onChange, value } }) => (
+              <div className="flex flex-wrap gap-4">
+                {modeOptions.map((type) => (
+                  <label
+                    key={type}
+                    className="flex items-center space-x-2 cursor-pointer"
+                  >
+                    <input
+                      type="radio"
+                      value={type}
+                      checked={value === type}
+                      onChange={() => onChange(type)}
+                      className="w-4 h-4 text-teal-600 border-gray-300 focus:ring-teal-500"
+                      aria-label={`Select ${type} mode`}
+                    />
+                    <span className="text-sm text-gray-700">{type}</span>
+                  </label>
+                ))}
+              </div>
+            )}
+          />
+          {errors.mode && (
+            <p className="text-red-500 text-sm mt-1">{errors.mode.message}</p>
+          )}
+        </div>
+
+        <div className="w-1/2">
+          <label htmlFor="type" className="block text-sm font-medium text-gray-700">
+            Select Type
+          </label>
+          <Controller
+            control={control}
+            name="type"
+            render={({ field: { onChange, value } }) => (
+              <Select
+                inputId="type"
+                placeholder="Select type"
+                onChange={(selectedOption) => onChange(selectedOption?.value || "")}
+                options={typeOptions}
+                value={typeOptions.find((option) => option.value === value) || null}
+                className="mt-1"
+              />
+            )}
+          />
+          {errors.type && (
+            <p className="text-red-500 text-sm mt-1">{errors.type.message}</p>
+          )}
+        </div>
+
+        <div className="w-1/2">
+          <label htmlFor="language" className="block text-sm font-medium text-gray-700">
+            Languages
+          </label>
+          <Controller
+            control={control}
+            name="language"
+            render={({ field: { onChange, value } }) => (
+              <Select
+                inputId="language"
+                isMulti
+                placeholder="Select Languages"
+                onChange={(selectedOptions) =>
+                  onChange(selectedOptions ? selectedOptions.map((option) => option.value) : [])
+                }
+                options={languageOptions}
+                value={languageOptions.filter((option) => value.includes(option.value))}
+                className="mt-1"
+              />
+            )}
+          />
+          {errors.language && (
+            <p className="text-red-500 text-sm mt-1">{errors.language.message}</p>
+          )}
+        </div>
+
+        <div className="w-1/2">
+          <label htmlFor="freelancerType" className="block text-sm font-medium text-gray-700">
+            Select Freelancer Type
+          </label>
+          <Controller
+            control={control}
+            name="freelancerType"
+            render={({ field: { onChange, value } }) => (
+              <Select
+                inputId="freelancerType"
+                placeholder="Select Freelancer Type"
+                onChange={(selectedOption) => onChange(selectedOption?.value || "")}
+                options={freelancerTypeOptions}
+                value={freelancerTypeOptions.find((option) => option.value === value) || null}
+                className="mt-1"
+              />
+            )}
+          />
+          {errors.freelancerType && (
+            <p className="text-red-500 text-sm mt-1">{errors.freelancerType.message}</p>
+          )}
+        </div>
 
         <button
+          type="button"
           onClick={handleSubmit(onSubmit)}
-          className="w-full bg-teal-600 hover:bg-teal-700 text-white py-3 rounded text-lg"
+          className="w-full bg-teal-600 hover:bg-teal-700 text-white py-3 rounded text-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
         >
           Submit
         </button>
-      </form>
+      </div>
     </div>
   );
 };
