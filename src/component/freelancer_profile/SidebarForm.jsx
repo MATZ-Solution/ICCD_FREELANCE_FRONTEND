@@ -6,7 +6,7 @@ import EducationForm from "./EducationForm";
 import CertificationsForm from "./CertificationsForm";
 import SkillsForm from "./SkillsForm";
 
-const SidebarForm = ({ isOpen, type, closeSidebar, forms, handlers }) => {
+const SidebarForm = ({ isOpen, type, closeSidebar,  }) => {
   if (!isOpen) return null;
 
   const titles = {
@@ -30,8 +30,8 @@ const SidebarForm = ({ isOpen, type, closeSidebar, forms, handlers }) => {
         {type === "profile" && <ProfileForm  />}
         {type === "languages" && ( <LanguagesForm /> )}
         {type === "about" && <AboutForm  />}
-        {type === "education" && <EducationForm form={forms.educationForm} onSubmit={handlers.onEducationSubmit} />}
-        {type === "certifications" && <CertificationsForm form={forms.certificationForm} onSubmit={handlers.onCertificationSubmit} />}
+        {type === "education" && <EducationForm  />}
+        {type === "certifications" && <CertificationsForm />}
         {type === "skills" && <SkillsForm />}
       </div>
     </div>

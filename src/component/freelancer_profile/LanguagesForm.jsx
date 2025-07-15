@@ -8,7 +8,7 @@ import { useState } from "react";
 const LanguagesForm = () => {
   const dispatch = useDispatch()
   const profileDetails = useSelector(state => state.userProfile.userProfile)
-  console.log("profileDetails: ", profileDetails)
+  console.log("language section profileDetails: ", profileDetails)
 
   const [languages, setLanguages] = useState([]);
 
@@ -37,8 +37,6 @@ const LanguagesForm = () => {
   };
 
   const removeLanguage = (data) => {
-    console.log("data: ", data)
-    console.log("profiledata: ", profileDetails)
     // setLanguages(languages.filter(item => item !== lang));
 
     let removeLang = profileDetails.languages.filter(item => item.language !== data.language)

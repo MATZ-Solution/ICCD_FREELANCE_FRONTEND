@@ -6,6 +6,11 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 
 const AboutForm = () => {
+
+  const dispatch = useDispatch()
+  const profileDetails = useSelector(state => state.userProfile.userProfile)
+  console.log("about section profile: ", profileDetails)
+
   const schema = yup.object({
     about_tagline: yup.string().required('Skill is required'),
     about_description: yup.string().required('Level is required')
@@ -21,8 +26,8 @@ const AboutForm = () => {
 
   const onSubmit = (data) => {
     console.log("data: ", data)
+    dispatch(setUserProfile({ about_tagline: data.about_tagline, about_description: data.about_description}))
   };
-
 
   return (
     <div className="space-y-4">
