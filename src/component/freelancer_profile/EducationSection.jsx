@@ -12,7 +12,7 @@ const EducationSection = ({ openSidebar }) => {
   console.log("profileDetails: ", profileDetails)
 
   const removeEdu = (data) => {
-      let removeEdu = profileDetails.educations.filter(item => item.university_name !== data.university_name)
+      let removeEdu = profileDetails.educations.filter(item => item.educationId !== data.educationId)
       if (removeEdu.length === 0) {
         dispatch(setUserProfile({ educations: [] }))
       } else {

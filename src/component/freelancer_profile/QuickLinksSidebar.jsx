@@ -4,24 +4,22 @@ import { useSelector } from "react-redux";
 
 const QuickLinksSidebar = ({ openSidebar }) => {
   const profileDetails = useSelector(state => state.userProfile.userProfile)
-  const {educations, certifications, skills, languages} = profileDetails
+  const { educations, certifications, skills, languages } = profileDetails
+  console.log("profileDetails: ", profileDetails)
   return (
     <div className="lg:col-span-1">
       <div className="sticky top-6">
         <div className="bg-white border border-gray-200 rounded-lg shadow-sm p-6">
           <h3 className="text-lg font-semibold mb-4 text-gray-900">Quick Links</h3>
           <div className="space-y-3">
-            <a
-              href="#about"
-              className="flex items-center space-x-3 p-2 rounded-md hover:bg-gray-50 transition-colors text-gray-700 hover:text-gray-900"
-            >
+            
               <Link
                 to="/freelancer/manage-gigs/overview"
                 className="flex items-center space-x-3 p-2 rounded-md hover:bg-gray-50 transition-colors text-gray-700 hover:text-gray-900"
               >
                 <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                 <span className="text-sm">Gigs</span>
-              </Link>          </a>
+              </Link>         
           </div>
           <hr className="my-4 border-gray-200" />
           <div className="space-y-3">
@@ -47,19 +45,19 @@ const QuickLinksSidebar = ({ openSidebar }) => {
             <h4 className="text-sm font-medium text-gray-900">Profile Stats</h4>
             <div className="grid grid-cols-2 gap-3 text-center">
               <div className="p-2 bg-gray-50 rounded-md">
-                <div className="text-lg font-semibold text-gray-900">{educations.length}</div>
+                <div className="text-lg font-semibold text-gray-900">{(profileDetails && profileDetails.educations) && educations.length}</div>
                 <div className="text-xs text-gray-500">Education</div>
               </div>
               <div className="p-2 bg-gray-50 rounded-md">
-                <div className="text-lg font-semibold text-gray-900">{certifications.length}</div>
+                <div className="text-lg font-semibold text-gray-900">{(profileDetails && profileDetails.certifications) && certifications.length}</div>
                 <div className="text-xs text-gray-500">Certificates</div>
               </div>
               <div className="p-2 bg-gray-50 rounded-md">
-                <div className="text-lg font-semibold text-gray-900">{skills.length}</div>
+                <div className="text-lg font-semibold text-gray-900">{(profileDetails && profileDetails.skills) && skills.length}</div>
                 <div className="text-xs text-gray-500">Skills</div>
               </div>
               <div className="p-2 bg-gray-50 rounded-md">
-                <div className="text-lg font-semibold text-gray-900">{languages.length}</div>
+                <div className="text-lg font-semibold text-gray-900">{(profileDetails && profileDetails.languages) && languages.length}</div>
                 <div className="text-xs text-gray-500">Languages</div>
               </div>
             </div>

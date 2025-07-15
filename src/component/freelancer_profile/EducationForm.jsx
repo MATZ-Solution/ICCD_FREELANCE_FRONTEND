@@ -42,6 +42,7 @@ const EducationForm = () => {
   const onSubmit = (data) => {
     console.log("data: ", data)
     const newEducation = {
+      educationId: Date.now,
       university_name: data.university_name,
       country: data.country,
       degree: data.degree,

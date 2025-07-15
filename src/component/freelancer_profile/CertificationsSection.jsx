@@ -9,7 +9,7 @@ const CertificationsSection = ({ openSidebar }) => {
   const { certifications } = profileDetails
 
   const removeCert = (data) => {
-    let removeCertification = profileDetails.certifications.filter(item => item.name !== data.name)
+    let removeCertification = profileDetails.certifications.filter(item => item.certificateId !== data.certificateId)
     if (removeCertification.length === 0) {
       dispatch(setUserProfile({ certifications: [] }))
     } else {

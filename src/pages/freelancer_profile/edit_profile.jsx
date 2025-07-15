@@ -6,15 +6,18 @@ import CertificationsSection from "../../component/freelancer_profile/Certificat
 import SkillsSection from "../../component/freelancer_profile/SkillsSection";
 import QuickLinksSidebar from "../../component/freelancer_profile/QuickLinksSidebar";
 import SidebarForm from "../../component/freelancer_profile/SidebarForm";
-import { useGetFreelancerProfile } from "../../../api/client/freelancer";
-import { useDispatch } from "react-redux";
+import { useEditProfile, useGetFreelancerProfile } from "../../../api/client/freelancer";
+import { useDispatch, useSelector } from "react-redux";
 import { getUserProfile } from "../../../redux/slices/userProfileSlice";
-
+import Button from "../../component/button";
 
 const FreelancerEditProfile = () => {
 
   const dispatch = useDispatch()
+  const profileDetails = useSelector(state => state.userProfile.userProfile)
   const { data, isSuccess, isPending, isError, isLoading } = useGetFreelancerProfile()
+  const { editProfile, isSuccess: isSuccProfile, isPending: isPendProfile, isError: isErrProfile, error } = useEditProfile(profileDetails.id)
+
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarType, setSidebarType] = useState(null);
@@ -29,9 +32,29 @@ const FreelancerEditProfile = () => {
     setSidebarType(null);
   };
 
+  const handleSaveChanges = () => {
+
+    const formData = new FormData();
+    for (const key in profileDetails) {
+      if (key === 'files') {
+        updateData.files.forEach((file) => {
+          formData.append("files", file);
+        });
+      }
+      else if (Array.isArray(profileDetails[key])) {
+        formData.append(key, JSON.stringify(profileDetails[key]));
+      }
+      else {
+        formData.append(key, profileDetails[key])
+      }
+    }
+    editProfile(formData)
+  }
+
+
   useEffect(() => {
-    if (data) {
-      dispatch(getUserProfile(data));
+    if (data && data.length > 0) {
+      dispatch(getUserProfile(data[0]));
     }
   }, [data]);
 
@@ -44,6 +67,8 @@ const FreelancerEditProfile = () => {
           <EducationSection openSidebar={openSidebar} />
           <CertificationsSection openSidebar={openSidebar} />
           <SkillsSection openSidebar={openSidebar} />
+
+          <Button onClick={handleSaveChanges} className="px-6 py-3">Save Changes</Button>
         </div>
         <QuickLinksSidebar openSidebar={openSidebar} />
       </div>

@@ -83,6 +83,8 @@ export function useEditProfile(freelancerId) {
       });
     },
     onError: (error) => {
+
+      alert("failed")
       // Toast.show({
       //     type: "error",
       //     text1: "Error",

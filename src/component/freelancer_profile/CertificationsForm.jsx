@@ -36,6 +36,7 @@ const CertificationsForm = () => {
 
   const onSubmit = (data) => {
     const newCertification = {
+      certificateId: Date.now(),
       name: data.name,
       organization: data.organization,
       year: data.year,

@@ -12,11 +12,11 @@ const SkillsForm = () => {
 
 
   const removeSkill = (data) => {
-    let removeSkill = profileDetails.skills.filter(item=> item.skill !== data.skill)
-    if(removeSkill.length === 0){
-      dispatch(setUserProfile({skills: []}))
-    }else{
-      dispatch(setUserProfile({skills: removeSkill}))
+    let removeSkill = profileDetails.skills.filter(item => item.skill !== data.skill)
+    if (removeSkill.length === 0) {
+      dispatch(setUserProfile({ skills: [] }))
+    } else {
+      dispatch(setUserProfile({ skills: removeSkill }))
     }
   };
 
@@ -35,11 +35,12 @@ const SkillsForm = () => {
 
   const onSubmit = (data) => {
     const newSkill = {
+      skillId: Date.now(),
       skill: data.skillName,
       level: data.level
     };
 
-    dispatch(setUserProfile({skills: [...profileDetails.skills, newSkill]}))
+    dispatch(setUserProfile({ skills: [...profileDetails.skills, newSkill] }))
     reset();
   };
 
@@ -83,7 +84,7 @@ const SkillsForm = () => {
         </button>
       </form>
 
-      { profileDetails?.skills?.length > 0 && (profileDetails?.skills?.map((lang, index) => (
+      {profileDetails?.skills?.length > 0 && (profileDetails?.skills?.map((lang, index) => (
         <span key={index} className="inline px-3 py-1 bg-gray-100 text-gray-800 text-sm rounded-full  items-center gap-2">
           {lang.skill}
           <button type="button" onClick={() => removeSkill(lang)} className="text-red-500 hover:text-red-700">
