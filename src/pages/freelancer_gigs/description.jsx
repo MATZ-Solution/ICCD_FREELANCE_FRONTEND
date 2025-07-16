@@ -8,8 +8,13 @@ import { setGigsDetails } from '../../../redux/slices/gigsDetailSlice';
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
+import {  useSelector } from "react-redux";
 
 function Description() {
+
+  const data = useSelector(state => state.gigs.gigsDetails)
+  console.log("data: ", data)
+
 
     const navigate = useNavigate()
     const location = useLocation()

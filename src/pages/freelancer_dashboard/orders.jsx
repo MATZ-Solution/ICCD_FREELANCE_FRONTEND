@@ -1,12 +1,15 @@
 import { useState } from "react";
 import OrderTable from "../../component/freelancer_dashboard/order_table"
 import SearchIcon from '@mui/icons-material/Search';
-
+import { useGetOrderByFreelancer } from "../../../api/client/order";
+import { useSelector } from "react-redux";
 function Orders() {
 
     const [active, setActive] = useState('Active')
     const navigation = ['Active', 'Pending Approval', 'Requires Modification', 'Draft', 'Denied', 'Paused']
     
+    const { data, error, isLoading, isError } = useGetOrderByFreelancer()
+    console.log("data: ", data)
     return (
         <div className="px-5 sm:px-5 lg:px-10">
             <div className="flex flex-wrap justify-between mt-10 p-5 bg-[#F8F8F8] rounded-md">
@@ -26,7 +29,7 @@ function Orders() {
             </div>
             {/* table */}
             <div>
-                <OrderTable />
+                <OrderTable data={data}/>
             </div>
         </div>
     )

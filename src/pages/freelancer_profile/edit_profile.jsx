@@ -15,7 +15,6 @@ const FreelancerEditProfile = () => {
 
   const dispatch = useDispatch()
   const profileDetails = useSelector(state => state.userProfile.userProfile)
-  const { data, isSuccess, isPending, isError, isLoading } = useGetFreelancerProfile()
   const { editProfile, isSuccess: isSuccProfile, isPending: isPendProfile, isError: isErrProfile, error } = useEditProfile(profileDetails.id)
 
 
@@ -52,11 +51,7 @@ const FreelancerEditProfile = () => {
   }
 
 
-  useEffect(() => {
-    if (data && data.length > 0) {
-      dispatch(getUserProfile(data[0]));
-    }
-  }, [data]);
+ 
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-6 relative">

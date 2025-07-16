@@ -13,7 +13,9 @@ import { resetGigDetails } from '../../../redux/slices/gigsDetailSlice';
 
 function Gallery() {
     const { addGigs, isSuccess, isPending, isError, error } = useAddGigs()
+    const profileDetails = useSelector(state => state.userProfile.userProfile)
     const data = useSelector(state => state.gigs.gigsDetails)
+    console.log("gigs details: ", data)
 
     let [images, setImages] = useState([])
 
@@ -26,23 +28,23 @@ function Gallery() {
     };
 
     const onSubmit = () => {
-        console.log("image: ", images)
         // console.log("data: ", data)
-        // const formData = new FormData();
-        // for (const key in data) {
-        //     console.log(key, data[key])
-        //     if (key === 'packages') {
-        //         formData.append(key, JSON.stringify(data[key]))
-        //     } else {
-        //         formData.append(key, data[key])
-        //     }
-        // }
-        // if (images && images.length > 0) {
-        //     images.forEach((file) => {
-        //         formData.append("files", file);
-        //     });
-        // }
-        // addGigs(formData)
+        const formData = new FormData();
+        for (const key in data) {
+            console.log(key, data[key])
+            if (key === 'packages') {
+                formData.append(key, JSON.stringify(data[key]))
+            } else {
+                formData.append(key, data[key])
+            }
+        }
+        if (images && images.length > 0) {
+            images.forEach((file) => {
+                formData.append("files", file);
+            });
+        }
+        formData.append('freelancerId', profileDetails.id)
+        addGigs(formData)
         // resetGigDetails()
     };
 

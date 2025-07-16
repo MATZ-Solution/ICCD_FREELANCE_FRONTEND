@@ -170,6 +170,7 @@ export default function ProfessionalInfoStep() {
   };
   const { addProfile, isSuccess, isPending, isError, error } = useAddProfile()
 
+  console.log("userProfile ", userProfileDetail)
   const onSubmit = (data) => {
     let updateData = { ...data, ...userProfileDetail }
     console.log("updateData: ", updateData)

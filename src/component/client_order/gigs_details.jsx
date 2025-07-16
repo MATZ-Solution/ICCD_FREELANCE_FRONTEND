@@ -8,87 +8,11 @@ import { useSelector } from "react-redux";
 
 export default function ServicePage() {
   const [activeNavTab, setActiveNavTab] = useState("Basic");
-  const [showAllReviews, setShowAllReviews] = useState(false);
-  const [expandedReviews, setExpandedReviews] = useState({});
-
-  const toggleReview = (id) => {
-    setExpandedReviews((prev) => ({
-      ...prev,
-      [id]: !prev[id],
-    }));
-  };
-
-  const allReviews = [
-    {
-      id: 1,
-      userInitial: "U",
-      username: "utsavs",
-      country: "United States",
-      rating: 5,
-      text:
-        "Saba completed all expectations! Saba understood my vision perfectly and delivered a website far beyond what I had envisioned. I'm recommending Saba to everyone. Communication was perfect, and delivery was super fast. Absolutely delighted!",
-      timeAgo: "2 months ago",
-    },
-    {
-      id: 2,
-      userInitial: "R",
-      username: "ronit",
-      country: "United Kingdom",
-      rating: 4,
-      text:
-        "Very professional and quick to respond. Will definitely work again. Designs were clean and modern.",
-      timeAgo: "3 weeks ago",
-    },
-    {
-      id: 3,
-      userInitial: "A",
-      username: "amy_smith",
-      country: "Australia",
-      rating: 5,
-      text:
-        "Amazing design skills. She gave me so many ideas and the output was fantastic! Highly recommend working with Saba for any UI/UX project.",
-      timeAgo: "1 month ago",
-    },
-  ];
 
   const { id } = useParams();
   const { data, isSuccess, isPending, isError, isLoading } = useGetSingleGigs(id)
-  // console.log("data: ", data)
-  const userDetails = useSelector(state => state.user.userDetails)
-  // console.log("userDetails: ", userDetails)
-  let [orderDetails, setOrderDetails] = useState({
-    status: 'pending',
-    ordered: 'true',
-    payment_status: 'true',
-    gigID: data?.gigsID,
-    clientID: userDetails.id,
-    freelancerID: data?.freelancerID,
-    packageID: data?.packages?.find(item => item?.name === 'basic').packageID
-  })
-
-  useEffect(() => {
-    if (
-      isSuccess &&
-      data &&
-      userDetails &&
-      data.packages?.length
-    ) {
-      const basicPackage = data.packages.find(p => p.name === 'basic');
-
-      setOrderDetails({
-        status: 'pending',
-        ordered: 'true',
-        payment_status: 'true',
-        gigID: data.gigsID,
-        clientID: userDetails.id,
-        freelancerID: data.freelancerID,
-        packageID: basicPackage?.packageID || null
-      });
-    }
-  }, [isSuccess, data, userDetails]);
-
-  console.log("orderDetails: ", orderDetails)
-
+  console.log("data: ", data)
+  
   return (
     <div className="min-h-screen bg-white">
       <div className="max-w-7xl mx-auto px-4 py-6">
@@ -109,7 +33,7 @@ export default function ServicePage() {
 
                   <div >
                     <div className="flex flex-row space-x-2" >
-                      <h1 className="font-semibold">{data?.username} </h1>
+                      <h1 className="font-semibold">userName </h1>
                       <h2>Level 2 + +</h2>
                       <h3 className="text-gray-500" >7 orders in queue </h3>
 
@@ -139,7 +63,7 @@ export default function ServicePage() {
             <div className="mb-8">
               <div className="relative aspect-video rounded-lg overflow-hidden bg-gray-100">
                 <img
-                  src={data?.gigsFiles[0]}
+                  // src={data?.gigsFiles[0]}
                   alt="Figma UI/UX Design Service Banner"
                   className="object-cover w-full h-full"
                 />
@@ -147,7 +71,7 @@ export default function ServicePage() {
             </div>
 
             {/* Reviews Section */}
-            <div className="mb-8">
+            {/* <div className="mb-8">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-semibold">
                   What people loved about this freelancer
@@ -220,7 +144,7 @@ export default function ServicePage() {
                   )
                 )}
               </div>
-            </div>
+            </div> */}
 
             {/* About This Gig */}
             <div>
@@ -258,7 +182,7 @@ export default function ServicePage() {
                       id="Standard"
                       onClick={() => {
                         setActiveNavTab("Standard")
-                        setOrderDetails({ ...orderDetails, packageID: data?.packages?.find(item => item?.name === 'standard').packageID })
+                        // setOrderDetails({ ...orderDetails, packageID: data?.packages?.find(item => item?.name === 'standard').packageID })
                       }}
                       className={`flex-1 py-3 px-4 text-center text-sm font-medium border-b-2 ${activeNavTab === "Standard"
                         ? "border-black text-black bg-green-50"
@@ -271,7 +195,7 @@ export default function ServicePage() {
                       id="Premium"
                       onClick={() => {
                         setActiveNavTab("Premium")
-                        setOrderDetails({ ...orderDetails, packageID: data?.packages?.find(item => item?.name === 'premium').packageID })
+                        // setOrderDetails({ ...orderDetails, packageID: data?.packages?.find(item => item?.name === 'premium').packageID })
                       }}
                       className={`flex-1 py-3 px-4 text-center text-sm font-medium border-b-2 ${activeNavTab === "Premium"
                         ? "border-black text-black bg-green-50"
@@ -286,8 +210,8 @@ export default function ServicePage() {
                 {activeNavTab === "Basic" && (
                   <SidebarCard
                     price="21,00"
-                    description={data?.packages?.find(item => item?.name === 'basic').packageTitle}
-                    deliverytime={data?.packages?.find(item => item?.name === 'basic').deliveryTime}
+                    description='descriptiom'
+                    deliverytime='delivery Time'
                     Revisions="Unlimited"
                     pages="1"
                   />
@@ -296,8 +220,8 @@ export default function ServicePage() {
                 {activeNavTab === "Standard" && (
                   <SidebarCard
                     price="21,00"
-                    description={data?.packages?.find(item => item?.name === 'standard').packageTitle}
-                    deliverytime={data?.packages?.find(item => item?.name === 'standard').deliveryTime}
+                    description='description'
+                    deliverytime='delivery Time'
                     Revisions="Unlimited"
                     pages="1"
                   />
@@ -306,8 +230,8 @@ export default function ServicePage() {
                 {activeNavTab === "Premium" && (
                   <SidebarCard
                     price="21,00"
-                    description={data?.packages?.find(item => item?.name === 'premium').packageTitle}
-                    deliverytime={data?.packages?.find(item => item?.name === 'premium').deliveryTime}
+                    description='description'
+                    deliverytime='delivery Time'
                     Revisions="Unlimited"
                     pages="1"
                   />

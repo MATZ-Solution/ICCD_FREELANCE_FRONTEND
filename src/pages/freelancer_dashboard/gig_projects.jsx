@@ -5,6 +5,7 @@ import Gigs_table from "../../component/freelancers_gigs/gigs_table";
 import Button from "../../component/button";
 import { useNavigate } from "react-router-dom";
 import { useGetGigsByUser } from "../../../api/client/gigs";
+import { useSelector } from "react-redux";
 
 function ManageGigsAndProjects() {
 
@@ -12,8 +13,8 @@ function ManageGigsAndProjects() {
     const [active, setActive] = useState('Active')
     const datas = ['Active', 'Pending Approval', 'Requires Modification', 'Draft', 'Denied', 'Paused']
 
-      const { data, isSuccess, isPending, isError, isLoading } = useGetGigsByUser()
-      console.log("data: ", data)
+    const profileDetails = useSelector(state => state.userProfile.userProfile)
+    const { data, isSuccess, isPending, isError, isLoading } = useGetGigsByUser(profileDetails.id)
 
     return (
         <div className="px-5 sm:px-5 lg:px-10">
@@ -30,12 +31,12 @@ function ManageGigsAndProjects() {
                 <Tabs datas={datas} active={active} setActive={setActive} />
             </div> */}
             <div className="mt-10 flex justify-end">
-                <Button className="px-5 py-2" onClick={()=> navigate('/freelancer/manage-gigs/overview')}>Add new gigs</Button>
+                <Button className="px-5 py-2" onClick={() => navigate('/freelancer/manage-gigs/overview')}>Add new gigs</Button>
             </div>
 
             {/* table */}
-            {data && (<Gigs_table data={data}/>)}
-            
+            {data && (<Gigs_table data={data} />)}
+
         </div>
     )
 }

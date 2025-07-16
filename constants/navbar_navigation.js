@@ -19,5 +19,6 @@
     { name: "Gigs", path: '/freelancer/manage-gigs' },
     { name: "Project", path: '/freelancer/projects' },
     { name: "Jobs", path: '/freelancer/manage-jobs'},
+    { name: "Orders", path: '/freelancer/orders'},
     { name: "Analytics", path: '/freelancer/analytics',  },
   ];

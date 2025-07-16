@@ -2,6 +2,7 @@ import API_ROUTE from "../endpoints";
 import { useMutation } from "@tanstack/react-query";
 import api from "../axios/index";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useSelector } from "react-redux";
 
 export function useAddGigs() {
   // const pathname = usePathname();
@@ -72,9 +73,10 @@ export function useGetSingleGigs(id) {
 
 
 export function useGetGigsByUser() {
+  const freelancerDetails = useSelector(state=> state.userProfile.userProfile)
   const { data, isSuccess, isPending, isError, isLoading } = useQuery({
-    queryKey: [API_ROUTE.gigs.getGigsByUserId],
-    queryFn: async () => await api.get(`${API_ROUTE.gigs.getGigsByUserId}`),
+    queryKey: [API_ROUTE.gigs.getGigsByUserId, freelancerDetails.id],
+    queryFn: async () => await api.get(`${API_ROUTE.gigs.getGigsByUserId}/${freelancerDetails.id}`),
   });
   return {
     data: data?.data?.data,

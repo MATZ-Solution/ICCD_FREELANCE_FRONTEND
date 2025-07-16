@@ -8,6 +8,10 @@ import dp from "../../assets/client_dashboard/clientdp.png"
 import Table from "../freelancer_gigs/table";
 import PricingTable from "../../component/pricing_table";
 import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { useGetFreelancerProfile } from "../../../api/client/freelancer";
+import { useEffect } from "react";
+import { getUserProfile } from "../../../redux/slices/userProfileSlice";
 
 export default function FreelancerDashboard() {
   const [activeNavTab, setActiveNavTab] = useState("Dashboard");
@@ -41,7 +45,6 @@ export default function FreelancerDashboard() {
     "MAX": { sales: [20, 50, 30, 70, 60, 90, 80], orders: [10, 25, 35, 45, 30, 50, 45] },
   };
 
-  const navTabs = ["Dashboard", "Orders", "Gigs and Projects", "Analytics"];
   const timeTabs = ["1Day", "5Days", "1Month", "6Months", "1Year", "MAX"];
 
   const handleNavigation = (tab) => {
@@ -51,8 +54,16 @@ export default function FreelancerDashboard() {
 
   const toggleAvailability = () => setIsAvailable(prev => !prev);
   const userDetails = useSelector(state => state.user.userDetails)
-  console.log("userDetails: ",userDetails)
+  console.log("userDetails: ", userDetails)
 
+  const dispatch = useDispatch()
+  const { data, isSuccess, isPending, isError, isLoading } = useGetFreelancerProfile()
+
+  useEffect(() => {
+    if (data && data.length > 0) {
+      dispatch(getUserProfile(data[0]));
+    }
+  }, [data]);
 
   return (
     <div className="min-h-screen px-4  sm:px-6  bg-white">

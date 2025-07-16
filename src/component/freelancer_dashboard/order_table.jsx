@@ -1,63 +1,7 @@
 import order_logo from '../../assets/freelancer_dashboard/order_logo.png';
 import client_img from '../../assets/freelancer_dashboard/client_img.png';
 
-const OrderTable = () => {
-    const data = [
-        {
-            id: 1,
-            clientName: 'Albert Wiliam',
-            project: 'Mobile App Redesign',
-            price: 250,
-            due: '9d, 10h',
-            status: 'IN PROGRESS',
-            details : "check detail"
-        },
-        {
-            id: 2,
-            clientName: 'John Smith',
-            project: 'Website Development',
-            price: 500,
-            due: '5d, 3h',
-            status: 'PENDING',
-            details : "check detail"
-        },
-        {
-            id: 3,
-            clientName: 'Emily Doe',
-            project: 'UI/UX Audit',
-            price: 150,
-            due: '2d, 22h',
-            status: 'COMPLETED',
-            details : "check detail"
-        },
-        {
-            id: 4,
-            clientName: 'Michael Jordan',
-            project: 'E-commerce Setup',
-            price: 320,
-            due: '1d, 5h',
-            status: 'IN PROGRESS',
-            details : "check detail"
-        },
-        {
-            id: 5,
-            clientName: 'Sara Connor',
-            project: 'Branding Kit',
-            price: 180,
-            due: '6d, 8h',
-            status: 'IN REVIEW',
-            details : "check detail"
-        },
-        {
-            id: 6,
-            clientName: 'Tom Hanks',
-            project: 'API Integration',
-            price: 275,
-            due: '12d, 4h',
-            status: 'ON HOLD',
-            details : "check detail"
-        },
-    ];
+const OrderTable = ({data}) => {
 
     const statusColors = {
         'IN PROGRESS': 'bg-[#1467B0]',
@@ -73,15 +17,15 @@ const OrderTable = () => {
                 <div className="min-w-[1000px] rounded-xl">
                     <table className="min-w-full border-separate border-spacing-y-4 border-spacing-x-4">
                         <tbody>
-                            {data.map((item) => (
-                                <tr key={item.id}>
+                            {data?.map((item, index) => (
+                                <tr key={index}>
                                     <td colSpan={6}>
                                         <div className="w-full bg-[#F8F8F8] shadow-sm rounded-xl flex items-center justify-between px-4 py-3 gap-4 min-w-[1000px]">
                                             {/* First Column */}
                                             <div className="flex items-center gap-5 w-[20%]">
-                                                <img src={order_logo} className="w-40 h-20" />
+                                                <img src={item.gigsImage} className="w-40 h-20" />
                                                 <div className="relative w-12 h-12 rounded-full">
-                                                    <img src={client_img} className="h-full object-contain" />
+                                                    <img src={item.clientImage} className="h-full object-contain" />
                                                     <div className="absolute bottom-1 right-1 bg-green-400 w-2 h-2 rounded-full"></div>
                                                 </div>
                                             </div>
@@ -91,7 +35,7 @@ const OrderTable = () => {
                                                 <p className="text-[#737373]">
                                                     Client: <span className="font-semibold text-black">{item.clientName}</span>
                                                 </p>
-                                                <p className="font-semibold text-lg text-[#043A53]">{item.project}</p>
+                                                <p className="font-semibold text-lg text-[#043A53]">{item.gigsTitle}</p>
                                             </div>
 
                                             {/* Price */}

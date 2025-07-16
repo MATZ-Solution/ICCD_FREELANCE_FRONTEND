@@ -29,6 +29,9 @@ const API_ROUTE = {
     getFreelancerProfile: '/freelancer/getFreelancerProfile',
     addProfile: '/freelancer/addProfile',
     editProfile: '/freelancer/editProfile'
+  },
+  order: {
+    getOrderByFreelancer: '/order/getAllOrderByFreelancer'
   }
 };
 
