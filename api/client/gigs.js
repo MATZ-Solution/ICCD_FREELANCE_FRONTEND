@@ -59,7 +59,7 @@ export function useGetSingleGigs(id) {
     queryKey: [API_ROUTE.gigs.getSingleGigs, id],
     queryFn: async () => await api.get(`${API_ROUTE.gigs.getSingleGigs}/${id}`),
     // refetchOnWindowFocus: true,
-    // staleTime: 0,
+    // staleTime: 60000,
     // refetchOnMount: true,
   });
   return {
