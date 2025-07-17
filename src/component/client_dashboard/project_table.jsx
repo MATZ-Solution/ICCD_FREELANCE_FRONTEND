@@ -1,7 +1,12 @@
 import order_logo from '../../assets/freelancer_dashboard/order_logo.png';
 import { useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 function Projects_table({ data }) {
+
+  const pathName = useLocation().pathname
+  console.log("pathName : ", pathName)
+
   const navigate = useNavigate()
   const statusColors = {
     'IN PROGRESS': 'bg-[#1467B0]',
@@ -12,6 +17,13 @@ function Projects_table({ data }) {
   };
 
   console.log("data: ", data)
+  const handleNavigate = (id)=> {
+    if(pathName.includes('client')){
+      navigate(`/client/projects/${id}`)
+    }else{
+      navigate(`/freelancer/projects/${id}`)
+    }
+  }
 
   return (
     <div className="py-6">
@@ -23,7 +35,7 @@ function Projects_table({ data }) {
                 <tr key={item.id}>
                   <td colSpan={6}>
                     <div
-                      onClick={() => navigate(`/freelancer/projects/${item?.id}`)}
+                      onClick={() => handleNavigate(item?.id)}
                       className="w-full bg-[#F8F8F8] shadow-sm rounded-xl flex items-center justify-between px-4 py-3 gap-4 min-w-[1000px] hover:cursor-pointer">
                       {/* First Column */}
                       <div className="flex items-center gap-5 w-[20%]">

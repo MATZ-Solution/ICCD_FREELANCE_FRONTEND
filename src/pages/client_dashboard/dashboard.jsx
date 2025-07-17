@@ -30,7 +30,7 @@ export default function ClientDashboard() {
   const [jobIsAvailable, setJobIsAvailable] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [showMobileSidebar, setShowMobileSidebar] = useState(false);
-  
+
 
   const navTabs = ["Dashboard", "Orders", "Messages", "Jobs"];
 
@@ -60,13 +60,13 @@ export default function ClientDashboard() {
         />
       )}
 
-      <div className="flex flex-col sm:flex-row">
+      <div className=" flex flex-col sm:flex-row">
         {/* Sidebar */}
         <aside
-          className={`${showMobileSidebar ? "block" : "hidden"
-            } fixed top-0 left-0 w-full sm:w-80 h-full bg-[#F8F8F8] lg:bg-white backdrop-blur-3xl p-4 sm:p-6 z-50 transition-all duration-700 lg:static lg:block lg:h-auto lg:w-auto`}
+          className={` ${showMobileSidebar ? "block" : "hidden"
+            } fixed top-0 left-0 w-full sm:w-80 h-full bg-[#F8F8F8] lg:bg-white backdrop-blur-3xl p-4 sm:p-6 z-50 transition-all duration-700 lg:static lg:block lg:h-auto lg:w-70`}
         >
-          <div className="flex justify-end mb-4 lg:hidden">
+          <div className="bg-green-300flex justify-end mb-4 lg:hidden">
             <button onClick={() => setShowMobileSidebar(false)}>
               <X className="h-6 w-6 text-black" />
             </button>
@@ -84,10 +84,23 @@ export default function ClientDashboard() {
                 <p className="text-xs text-gray-500">{userDetails.email}</p>
               </div>
             </div>
+
+            
             <button className="w-full mt-4 px-4 py-2 text-sm border border-[#01AEAD] rounded-md hover:bg-gray-50 text-gray-700">
               View Profile
             </button>
           </div>
+
+          <div className="mb-6 bg-[#F8F8F8] rounded-lg p-3">
+            <div className="flex flex-col  gap-3">
+              <div className="text-center">
+                <h3 className=" capitalize font-semibold text-sm">About</h3>
+                <p className="mt-2 text-xs text-gray-500">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nesciunt labore veritatis explicabo harum autem, dolore saepe ratione voluptatum doloribus eius? Distinctio, ab? Qui illo amet molestias natus blanditiis sunt eum!</p>
+              </div>
+            </div>
+            
+          </div>
+
 
           <div className="mb-6 bg-[#F8F8F8] rounded-lg p-4">
             <h4 className="font-semibold mb-2 text-lg">Post a project brief</h4>
@@ -97,8 +110,8 @@ export default function ClientDashboard() {
             <button
               onClick={() => navigate('/client/post-project')}
               className={`cursor-pointer w-full px-4 py-2 text-sm rounded-md font-medium ${projectIsAvailable
-                  ? "bg-blue-500 hover:bg-blue-300 text-white"
-                  : "border border-[#01AEAD] hover:bg-green-600 hover:text-white text-gray-700"
+                ? "bg-blue-500 hover:bg-blue-300 text-white"
+                : "border border-[#01AEAD] hover:bg-green-600 hover:text-white text-gray-700"
                 }`}
             >
               {projectIsAvailable ? "Project Posted" : "Post a Project"}
@@ -120,8 +133,8 @@ export default function ClientDashboard() {
             <button
               onClick={() => navigate('/client/post-job')}
               className={`cursor-pointer w-full px-4 py-2 text-sm rounded-md font-medium ${jobIsAvailable
-                  ? "bg-red-500 hover:bg-blue-300 text-white"
-                  : "border border-[#01AEAD] hover:bg-green-600 hover:text-white text-gray-700"
+                ? "bg-red-500 hover:bg-blue-300 text-white"
+                : "border border-[#01AEAD] hover:bg-green-600 hover:text-white text-gray-700"
                 }`}
             >
               {jobIsAvailable ? "Job Posted" : "Post a Job"}

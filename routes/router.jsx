@@ -43,6 +43,7 @@ import ClientProjects from "../src/pages/client_dashboard/client_projects";
 import FreelancerEditProfile from "../src/pages/freelancer_profile/edit_profile";
 import FreelancerProjects from "../src/pages/freelancer_dashboard/project";
 import { Project_details } from "../src/pages/client_dashboard/projectDetail";
+import Check from "../src/component/CVUploadModal";
 
 export const router = createBrowserRouter([
   {
@@ -402,7 +403,7 @@ export const router = createBrowserRouter([
     ),
   },
   {
-    path: "/projects/:id",
+    path: "/client/projects/:id",
     element: (
       // <AuthRoute>
       <MainTemplate isShowFooter={false}>
@@ -433,6 +434,5 @@ export const router = createBrowserRouter([
       // </AuthRoute>
     ),
   },
-
 
 ]);

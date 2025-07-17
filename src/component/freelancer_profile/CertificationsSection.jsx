@@ -1,6 +1,7 @@
 import { Plus, X } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { setUserProfile } from "../../../redux/slices/userProfileSlice";
+import { memo } from "react";
 
 const CertificationsSection = ({ openSidebar }) => {
 
@@ -9,7 +10,7 @@ const CertificationsSection = ({ openSidebar }) => {
   const { certifications } = profileDetails
 
   const removeCert = (data) => {
-    let removeCertification = profileDetails.certifications.filter(item => item.certificateId !== data.certificateId)
+    let removeCertification = profileDetails?.certifications?.filter(item => item.certificateId !== data.certificateId)
     if (removeCertification.length === 0) {
       dispatch(setUserProfile({ certifications: [] }))
     } else {
@@ -23,9 +24,9 @@ const CertificationsSection = ({ openSidebar }) => {
       <div className="p-6">
         <h2 className="text-xl font-semibold mb-2">Certifications</h2>
         <p className="text-gray-600 mb-4">Showcase your mastery with certifications earned in your field.</p>
-        {(certifications && certifications.length) > 0 ? (
+        {(certifications && certifications?.length) > 0 ? (
           <div className="space-y-3 mb-4">
-            {certifications.map((cert, index) => (
+            {certifications?.map((cert, index) => (
               <div key={index} className="p-3 border border-gray-200 rounded-md flex justify-between items-start">
                 <div>
                   <h3 className="font-medium text-gray-900">{cert.name}</h3>
@@ -54,4 +55,4 @@ const CertificationsSection = ({ openSidebar }) => {
   )
 }
 
-export default CertificationsSection;
+export default memo(CertificationsSection);

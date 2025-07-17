@@ -50,8 +50,13 @@ const FreelancerEditProfile = () => {
     editProfile(formData)
   }
 
+  const { data, isSuccess, isPending, isError, isLoading } = useGetFreelancerProfile()
 
- 
+  useEffect(() => {
+    if (data && data.length > 0) {
+      dispatch(getUserProfile(data[0]));
+    }
+  }, [data]);
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-6 relative">

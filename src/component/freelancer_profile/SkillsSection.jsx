@@ -1,7 +1,7 @@
 import { Plus, X } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { setUserProfile } from "../../../redux/slices/userProfileSlice";
-
+import { memo } from "react";
 const SkillsSection = ({ openSidebar }) => {
 
   const dispatch = useDispatch()
@@ -45,4 +45,4 @@ const SkillsSection = ({ openSidebar }) => {
   )
 }
 
-export default SkillsSection;
+export default memo(SkillsSection);

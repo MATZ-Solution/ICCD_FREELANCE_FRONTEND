@@ -19,3 +19,19 @@ export function useGetOrderByFreelancer(params = {}) {
     });
     return { data: data?.data?.data, error, isLoading, isError };
 }
+
+export function useGetOrderByClient(params = {}) {
+    const clientDetails = useSelector(state => state.user.userDetails)
+  const { id } = clientDetails
+    const constructQueryString = (params) => {
+        const query = new URLSearchParams(params).toString();
+        return query ? `&${query}` : "";
+    };
+    const queryKey = [API_ROUTE.order.getAllOrderByClient, params];
+    const { data, error, isLoading, isError } = useQuery({
+        queryKey,
+        queryFn: () =>
+            api.get(`${API_ROUTE.order.getAllOrderByClient}/${id}?${constructQueryString(params)}`),
+    });
+    return { data: data?.data?.data, error, isLoading, isError };
+}

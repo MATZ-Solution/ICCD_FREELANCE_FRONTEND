@@ -75,3 +75,29 @@ export function useGetProjectsById(id) {
     isLoading,
   };
 }
+
+export function useApplyProject() {
+    
+    const { mutate: submitProposals, isSuccess, isPending, isError, error} = useMutation({
+        mutationFn: async (data) =>
+            await api.post(`${API_ROUTE.project.submitProposals}`, data, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                    Authorization: api.defaults.headers.common["Authorization"],
+                },
+                timeout: 30000,
+            }),
+        onSuccess: (data) => {
+            alert("CV send successfully!")
+
+        },
+        onError: (error) => {
+            // Toast.show({
+            //     type: "error",
+            //     text1: "Error",
+            //     text2: "Failed to edit scout",
+            // });
+        },
+    });
+    return { submitProposals, isSuccess, isPending, isError, error };
+}

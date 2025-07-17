@@ -17,10 +17,15 @@ import { useParams } from "react-router-dom";
 import profilepic from "../../assets/freelancer_dashboard/client_img.png"
 import { useGetProjectsById } from "../../../api/client/project";
 import formatSingleDate from "../../../functions/timeFormat";
+import CVUploadModal from "../../component/CVUploadModal";
+import { useState } from "react";
+import { useLocation } from "react-router-dom";
 
 export const Project_details = () => {
 
   const { id } = useParams()
+  let [show, setShow] = useState(false)
+  const pathName = useLocation().pathname
   const { data, isSuccess, isPending, isError, isLoading } = useGetProjectsById(id)
 
   if (isLoading) {
@@ -29,6 +34,7 @@ export const Project_details = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
+      {show && (<CVUploadModal onClose={() => setShow(false)} data={data} />)}
       <div className="max-w-7xl mx-auto p-6">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main Content */}
@@ -243,13 +249,14 @@ export const Project_details = () => {
                     <span className="text-sm text-gray-600 font-medium">7 Proposals</span>
                   </div>
                 </div>
+                { pathName.includes('freelancer') && (
                 <div className="p-6 space-y-4">
-                  <button className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center gap-3">
+                  <button onClick={() => setShow(true)} className="cursor-pointer w-full bg-[#01AEAD] hover:bg-[#05929c]  text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center gap-3">
                     <span className="text-xl">👍</span>
                     <span>{"I'm interested"}</span>
                   </button>
-
                 </div>
+                )}
               </div>
 
               {/* About the Employer */}

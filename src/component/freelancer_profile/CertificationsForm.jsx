@@ -35,6 +35,7 @@ const CertificationsForm = () => {
   });
 
   const onSubmit = (data) => {
+    console.log("profileDetails.certifications: ", profileDetails.certifications)
     const newCertification = {
       certificateId: Date.now(),
       name: data.name,

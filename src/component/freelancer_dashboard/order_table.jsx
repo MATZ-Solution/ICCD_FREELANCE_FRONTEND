@@ -1,5 +1,3 @@
-import order_logo from '../../assets/freelancer_dashboard/order_logo.png';
-import client_img from '../../assets/freelancer_dashboard/client_img.png';
 
 const OrderTable = ({data}) => {
 

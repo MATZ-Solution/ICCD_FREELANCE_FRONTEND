@@ -1,6 +1,7 @@
 import { Edit2, Share2, EyeIcon } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { memo } from "react";
 
 const QuickLinksSidebar = ({ openSidebar }) => {
   const profileDetails = useSelector(state => state.userProfile.userProfile)
@@ -68,4 +69,4 @@ const QuickLinksSidebar = ({ openSidebar }) => {
   )
 }
 
-export default QuickLinksSidebar;
+export default memo(QuickLinksSidebar);

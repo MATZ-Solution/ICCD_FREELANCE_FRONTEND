@@ -5,6 +5,7 @@ import AboutForm from "./AboutForm";
 import EducationForm from "./EducationForm";
 import CertificationsForm from "./CertificationsForm";
 import SkillsForm from "./SkillsForm";
+import { memo } from "react";
 
 const SidebarForm = ({ isOpen, type, closeSidebar,  }) => {
   if (!isOpen) return null;
@@ -38,4 +39,4 @@ const SidebarForm = ({ isOpen, type, closeSidebar,  }) => {
   );
 };
 
-export default SidebarForm;
+export default memo(SidebarForm);
