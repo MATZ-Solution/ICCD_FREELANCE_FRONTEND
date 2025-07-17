@@ -6,7 +6,7 @@ import Button from "../../component/button";
 import { useNavigate } from "react-router-dom";
 import { useGetGigsByUser } from "../../../api/client/gigs";
 import Projects_table from "../../component/client_dashboard/project_table";
-import { useGetAllProjects, useGetProjectsByUser } from "../../../api/client/project";
+import { useGetAllProjects } from "../../../api/client/project";
 import { useLocation } from "react-router-dom";
 function FreelancerProjects() {
 

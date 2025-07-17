@@ -8,7 +8,7 @@ const API_ROUTE = {
   },
   project: {
     getAllProject: "/project/getAllProject",
-    getProjectByUser: "/project/getProjectByUser",
+    getProjectByClient: "/project/getProjectByClient",
     addProject: "/project/addProject",
     getProjectById: "/project/getProjectById",
     submitProposals:"/project/submitProposals"

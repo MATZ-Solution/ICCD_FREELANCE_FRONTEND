@@ -6,7 +6,7 @@ import Button from "../../component/button";
 import { useNavigate } from "react-router-dom";
 import { useGetGigsByUser } from "../../../api/client/gigs";
 import Projects_table from "../../component/client_dashboard/project_table";
-import { useGetProjectsByUser } from "../../../api/client/project";
+import { useGetProjectsByClient } from "../../../api/client/project";
 
 function ClientProjects() {
 
@@ -14,7 +14,7 @@ function ClientProjects() {
     const [active, setActive] = useState('Active')
     const datas = ['Active', 'Pending Approval', 'Requires Modification', 'Draft', 'Denied', 'Paused']
 
-    const { data, isSuccess, isPending, isError, isLoading } = useGetProjectsByUser()
+    const { data, isSuccess, isPending, isError, isLoading } = useGetProjectsByClient()
     console.log("data: ", data)
 
     return (

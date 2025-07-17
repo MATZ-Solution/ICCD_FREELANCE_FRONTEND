@@ -33,10 +33,10 @@ export function useAddproject() {
 }
 
 // get project by user
-export function useGetProjectsByUser() {
+export function useGetProjectsByClient() {
   const { data, isSuccess, isPending, isError, isLoading } = useQuery({
-    queryKey: [API_ROUTE.project.getProjectByUser],
-    queryFn: async () => await api.get(`${API_ROUTE.project.getProjectByUser}`),
+    queryKey: [API_ROUTE.project.getProjectByClient],
+    queryFn: async () => await api.get(`${API_ROUTE.project.getProjectByClient}`),
   });
   return {
     data: data?.data?.data,
