@@ -273,6 +273,7 @@ export default function Navbar() {
                         <div className="px-3 border-[1px] border-gray-300 absolute right-0 mt-2 w-52 bg-white rounded-md shadow-lg  py-1 z-50">
                           {[
                             { name: "Dashboard", action: () => navigate("/client/dashboard") },
+                            { name: "View Profile", action: () => navigate("/client/profile") },
                             { name: "Logout", action: logout },
                           ].map((data, index) => (
                             <button key={index} className="text-black block w-full text-left px-4 py-2 text-sm  hover:bg-gray-50 cursor-pointer"

@@ -67,7 +67,6 @@ const FreelancerEditProfile = () => {
           <EducationSection openSidebar={openSidebar} />
           <CertificationsSection openSidebar={openSidebar} />
           <SkillsSection openSidebar={openSidebar} />
-
           <Button onClick={handleSaveChanges} className="px-6 py-3">Save Changes</Button>
         </div>
         <QuickLinksSidebar openSidebar={openSidebar} />

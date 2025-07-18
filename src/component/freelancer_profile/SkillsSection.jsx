@@ -9,6 +9,7 @@ const SkillsSection = ({ openSidebar }) => {
   const { skills } = profileDetails
 
   const removeSkills = (data) => {
+    console.log("hello world")
     let removeSkill = profileDetails.skills.filter(item => item.skillId !== data.skillId)
     if (removeSkill.length === 0) {
       dispatch(setUserProfile({ skills: [] }))

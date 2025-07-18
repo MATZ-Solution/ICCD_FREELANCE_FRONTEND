@@ -101,3 +101,19 @@ export function useApplyProject() {
     });
     return { submitProposals, isSuccess, isPending, isError, error };
 }
+
+export function useGetProjectProposalByClient(id) {
+  const { data, isSuccess, isPending, isError, isLoading } = useQuery({
+    queryKey: [API_ROUTE.project.getProjectPropsalByClient, id],
+    queryFn: async () => await api.get(`${API_ROUTE.project.getProjectPropsalByClient}/${id}`),
+  });
+  return {
+    data: data?.data?.data,
+    isSuccess,
+    isPending,
+    isError,
+    isLoading,
+  };
+}
+
+

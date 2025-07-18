@@ -10,8 +10,8 @@
     { name: "Home", path: '/client' },
     { name: "Dashboard", path: '/client/dashboard' },
     { name: "Orders", path: '/client/orders' },
-    { name: "Projects", path: '/client/projects' },
-    { name: "Jobs", path: '' }
+    { name: "Posted Projects", path: '/client/projects' },
+    { name: "Posted Jobs", path: '' }
   ];
 
   export const navTabsFreelancerDashboard = [

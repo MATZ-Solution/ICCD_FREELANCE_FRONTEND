@@ -15,19 +15,22 @@ import {
 } from "lucide-react"
 import { useParams } from "react-router-dom";
 import profilepic from "../../assets/freelancer_dashboard/client_img.png"
-import { useGetProjectsById } from "../../../api/client/project";
-import formatSingleDate from "../../../functions/timeFormat";
+import { useGetProjectProposalByClient, useGetProjectsById } from "../../../api/client/project";
+import { formatSingleDate } from "../../../functions/timeFormat";
 import CVUploadModal from "../../component/CVUploadModal";
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
 
-export const Project_details = () => {
+export const ProjectDetailClient = () => {
 
   const { id } = useParams()
   let [show, setShow] = useState(false)
   const pathName = useLocation().pathname
   const { data, isSuccess, isPending, isError, isLoading } = useGetProjectsById(id)
 
+  const { data: propData, isSuccess: propSucc, isPending: propIsPend, isError: propIsErr, isLoading: propIsLoad } = useGetProjectProposalByClient(id)
+
+  console.log("props data: ", propData)
   if (isLoading) {
     return <p>Loading...</p>
   }
@@ -72,7 +75,7 @@ export const Project_details = () => {
             </div>
 
             {/* About the employer */}
-            <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300">
+            {/* <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300">
               <div className="bg-gradient-to-r from-gray-50 to-gray-100 p-6 border-b border-gray-200">
                 <div className="flex items-center gap-3">
                   <Briefcase className="w-6 h-6 text-gray-600" />
@@ -87,10 +90,10 @@ export const Project_details = () => {
                   faculty and leaders at the partner institution to develop high-quality, innovative course curriculum.
                 </p>
               </div>
-            </div>
+            </div> */}
 
             {/* Overview */}
-            <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300">
+            {/* <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300">
               <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 border-b border-gray-200">
                 <h2 className="text-xl font-bold text-gray-900">Overview</h2>
               </div>
@@ -104,6 +107,42 @@ export const Project_details = () => {
                     an instructional technologist that can work on additional projects as they are needed.
                   </p>
                 </div>
+              </div>
+            </div> */}
+
+
+            {/* Proposals */}
+            <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300">
+              <div className="bg-gradient-to-r from-emerald-50 to-teal-50 p-6 border-b border-gray-200">
+                <h2 className="text-xl font-bold text-gray-900">Clients & Proposals</h2>
+              </div>
+              <div className="px-4 overflow-x-auto rounded-lg">
+                <table className="min-w-full bg-white">
+                  <thead className="bg-[#47AAB3] text-white text-sm sticky top-0">
+                    <tr>
+                      <th className="px-6 py-3 text-left font-medium">Name</th>
+                      <th className="px-6 py-3 text-left font-medium">Experience</th>
+                      <th className="px-6 py-3 text-center font-medium">CVs</th>
+                      <th className="px-6 py-3"></th>
+                    </tr>
+                  </thead>
+                  <tbody className="text-sm divide-y divide-gray-200">
+                    {propData?.map((item, index) => (
+                      <tr key={index} className="hover:bg-gray-50">
+                        <td className="px-6 py-4 whitespace-nowrap flex items-center gap-3">
+                          <img src={item?.freelancerImg} className="w-9 h-9 rounded-full bg-gray-200"></img>
+                          <span className="font-medium">{item?.name}</span>
+                        </td>
+                        <td className="px-6 py-4">{item?.experience}</td>
+                        <td className="px-6 py-4 text-right">
+                          <button className="text-[#47AAB3] hover:underline text-sm">
+                            Download CV
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             </div>
 
@@ -246,21 +285,21 @@ export const Project_details = () => {
                         ></div>
                       ))}
                     </div>
-                    <span className="text-sm text-gray-600 font-medium">7 Proposals</span>
+                    <span className="text-sm text-gray-600 font-medium">{propData && propData?.length} Proposals</span>
                   </div>
                 </div>
-                { pathName.includes('freelancer') && (
-                <div className="p-6 space-y-4">
-                  <button onClick={() => setShow(true)} className="cursor-pointer w-full bg-[#01AEAD] hover:bg-[#05929c]  text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center gap-3">
-                    <span className="text-xl">👍</span>
-                    <span>{"I'm interested"}</span>
-                  </button>
-                </div>
+                {pathName.includes('freelancer') && (
+                  <div className="p-6 space-y-4">
+                    <button onClick={() => setShow(true)} className="cursor-pointer w-full bg-[#01AEAD] hover:bg-[#05929c]  text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center gap-3">
+                      <span className="text-xl">👍</span>
+                      <span>{"I'm interested"}</span>
+                    </button>
+                  </div>
                 )}
               </div>
 
               {/* About the Employer */}
-              <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300">
+              {/* <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300">
                 <div className="bg-gradient-to-r from-indigo-50 to-blue-50 p-6 border-b border-gray-200">
                   <h3 className="text-xl font-bold text-gray-900">About the Employer</h3>
                 </div>
@@ -293,7 +332,7 @@ export const Project_details = () => {
                     <span className="font-semibold">Employer identity verified</span>
                   </div>
                 </div>
-              </div>
+              </div> */}
 
               {/* Share this project */}
               <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300">
@@ -324,3 +363,5 @@ export const Project_details = () => {
     </div>
   );
 }
+
+export default ProjectDetailClient;

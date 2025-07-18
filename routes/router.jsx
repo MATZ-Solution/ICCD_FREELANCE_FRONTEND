@@ -42,8 +42,9 @@ import ClientHomepage from "../src/pages/clientHomepage/homePage";
 import ClientProjects from "../src/pages/client_dashboard/client_projects";
 import FreelancerEditProfile from "../src/pages/freelancer_profile/edit_profile";
 import FreelancerProjects from "../src/pages/freelancer_dashboard/project";
-import { Project_details } from "../src/pages/client_dashboard/projectDetail";
-import Check from "../src/component/CVUploadModal";
+import  ProjectDetailClient from "../src/pages/client_dashboard/projectDetailClient";
+import Check from "../src/pages/check";
+import ProjectDetailFreelancer  from "../src/pages/freelancer_dashboard/projectDetailFreelancer";
 
 export const router = createBrowserRouter([
   {
@@ -279,7 +280,7 @@ export const router = createBrowserRouter([
     element: (
       // <AuthRoute>
       <MainTemplate isShowFooter={false}>
-        <Project_details />
+        <ProjectDetailFreelancer />
       </MainTemplate>
       // </AuthRoute>
     ),
@@ -359,6 +360,18 @@ export const router = createBrowserRouter([
       // </AuthRoute>
     ),
   },
+
+    {
+    path: "/client/profile",
+    element: (
+      // <AuthRoute>
+      <MainTemplate isShowFooter={false}>
+        <ClientDashboard />
+      </MainTemplate>
+      // </AuthRoute>
+    ),
+  },
+
   {
     path: "/client/post-job",
     element: (
@@ -379,8 +392,6 @@ export const router = createBrowserRouter([
       // </AuthRoute>
     ),
   },
-
-
 
   {
     path: "/client/orders",
@@ -407,7 +418,7 @@ export const router = createBrowserRouter([
     element: (
       // <AuthRoute>
       <MainTemplate isShowFooter={false}>
-        <Project_details />
+        <ProjectDetailClient />
       </MainTemplate>
       // </AuthRoute>
     ),
@@ -434,5 +445,17 @@ export const router = createBrowserRouter([
       // </AuthRoute>
     ),
   },
+
+    {
+    path: "/check",
+    element: (
+      // <AuthRoute>
+      <MainTemplate isShowFooter={false}>
+        <Check />
+      </MainTemplate>
+      // </AuthRoute>
+    ),
+  },
+
 
 ]);

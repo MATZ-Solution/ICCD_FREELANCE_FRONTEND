@@ -11,7 +11,8 @@ const API_ROUTE = {
     getProjectByClient: "/project/getProjectByClient",
     addProject: "/project/addProject",
     getProjectById: "/project/getProjectById",
-    submitProposals:"/project/submitProposals"
+    submitProposals:"/project/submitProposals",
+    getProjectPropsalByClient: '/project/getProjectPropsalByClient'
   },
   job: {
     getJob: "/job/getJob",
@@ -30,6 +31,10 @@ const API_ROUTE = {
     getFreelancerProfile: '/freelancer/getFreelancerProfile',
     addProfile: '/freelancer/addProfile',
     editProfile: '/freelancer/editProfile'
+  },
+  client : {
+    getClientDashboardData: '/client/getClientDashboardData',
+    clientEditProfile: '/client/clientEditProfile'
   },
   order: {
     getOrderByFreelancer: '/order/getAllOrderByFreelancer',

@@ -1,6 +1,7 @@
 import order_logo from '../../assets/freelancer_dashboard/order_logo.png';
 import { useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
+import { formatDate } from '../../../functions/timeFormat';
 
 function Projects_table({ data }) {
 
@@ -59,7 +60,7 @@ function Projects_table({ data }) {
                       {/* Due */}
                       <div className="w-[15%]">
                         <p className="text-[#737373]">Deadline</p>
-                        <p className="text-[#043A53] text-lg font-semibold">{item?.deadline}</p>
+                        <p className="text-[#043A53] text-lg font-semibold">{formatDate(item?.deadline)}</p>
                       </div>
 
                       {/* Category */}
