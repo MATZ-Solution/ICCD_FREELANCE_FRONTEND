@@ -94,7 +94,7 @@ export default function FreelancerDashboard() {
                 className="w-16 h-16 rounded-full"
               />
               <div className="text-center">
-                <h3 className="capitalize font-semibold text-sm">{userDetails.name} </h3>
+                <h3 className="capitalize font-semibold text-sm">{ data ? data[0]?.firstName: ''} {data ? data[0]?.lastName : ''} </h3>
                 <p className="text-xs text-gray-500">{userDetails.email}</p>
               </div>
             </div>
@@ -154,7 +154,7 @@ export default function FreelancerDashboard() {
         {/* Main Content */}
         <main className="mt-10 flex-1 ">
           <div className="mb-6">
-            <h1 className="capitalize text-2xl font-bold mb-2">Welcome,  {userDetails.name}</h1>
+            <h1 className="capitalize text-2xl font-bold mb-2">Welcome, {data ? data[0]?.firstName:""} {data ? data[0]?.lastName : ''}</h1>
             <p className="text-xs text-gray-600 mb-4">
               Find important messages, tips, and links to helpful resources here.
             </p>

@@ -23,7 +23,8 @@ const schema = yup.object().shape({
         }),
 });
 
-const CVUploadModal = ({ onClose, data }) => {
+const CVUploadModal = ({ onClose, data, freelancerData }) => {
+    const {firstName, lastName} = freelancerData
     const clientID = data[0]?.clientID
     const projectID = data[0]?.id
     const {
@@ -32,6 +33,9 @@ const CVUploadModal = ({ onClose, data }) => {
         formState: { errors },
     } = useForm({
         resolver: yupResolver(schema),
+        defaultValues:{
+            name: firstName + " " +lastName
+        }
     });
     const { submitProposals, isSuccess, isPending, isError, error } = useApplyProject()
 

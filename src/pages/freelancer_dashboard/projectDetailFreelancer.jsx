@@ -20,12 +20,14 @@ import { formatSingleDate } from "../../../functions/timeFormat";
 import CVUploadModal from "../../component/CVUploadModal";
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const ProjectDetailFreelancer = () => {
 
     const { id } = useParams()
     let [show, setShow] = useState(false)
     const pathName = useLocation().pathname
+    const freelancerData = useSelector(state => state.userProfile.userProfile)
     const { data, isSuccess, isPending, isError, isLoading } = useGetProjectsById(id)
 
     if (isLoading) {
@@ -34,7 +36,7 @@ const ProjectDetailFreelancer = () => {
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
-            {show && (<CVUploadModal onClose={() => setShow(false)} data={data} />)}
+            {show && (<CVUploadModal onClose={() => setShow(false)} data={data} freelancerData={freelancerData} />)}
             <div className="max-w-7xl mx-auto p-6">
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     {/* Main Content */}
@@ -234,7 +236,7 @@ const ProjectDetailFreelancer = () => {
                                 <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-6 border-b border-gray-200">
                                     <div className="text-sm font-medium text-emerald-600 uppercase tracking-wide mb-2">Client Budget</div>
                                     <div className="text-3xl font-bold text-gray-900 mb-4">{data[0]?.budget} $</div>
-                                   
+
                                 </div>
                                 {pathName.includes('freelancer') && (
                                     <div className="p-6 space-y-4">
@@ -254,7 +256,7 @@ const ProjectDetailFreelancer = () => {
                                 <div className="p-6 space-y-6">
                                     <div className="flex items-center gap-4">
                                         {/* <div className="w-12 h-12 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-lg"> */}
-                                            <img className="w-12 h-12 object-cover rounded-full" src={data[0]?.companyImg} /> 
+                                        <img className="w-12 h-12 object-cover rounded-full" src={data[0]?.companyImg} />
                                         {/* </div> */}
                                         <div>
                                             {/* <div className="text-sm text-gray-500 mb-1">Talha Butt</div> */}
@@ -263,7 +265,7 @@ const ProjectDetailFreelancer = () => {
                                     </div>
 
                                     <p className="text-gray-700 leading-relaxed">
-                                     {data[0]?.companyAbout}
+                                        {data[0]?.companyAbout}
                                     </p>
 
                                     <div className="flex items-center gap-3 text-gray-600 bg-gray-50 p-4 rounded-xl">

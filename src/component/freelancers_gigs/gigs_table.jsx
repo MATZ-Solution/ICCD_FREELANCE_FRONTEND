@@ -1,6 +1,6 @@
 import order_logo from '../../assets/freelancer_dashboard/order_logo.png';
 
-function Gigs_table({data}) {
+function Gigs_table({ data }) {
 
   const statusColors = {
     'IN PROGRESS': 'bg-[#1467B0]',
@@ -35,17 +35,19 @@ function Gigs_table({data}) {
                         <p className="font-semibold text-lg text-[#043A53]">{item?.title}</p>
                       </div>
 
+                      {/* Due */}
+                      <div className="w-[15%]">
+                        <p className="text-[#737373]">Clicks</p>
+                        <p className="text-[#043A53] text-lg font-semibold">{item.due}</p>
+                      </div>
+
                       {/* Price */}
                       <div className="w-[15%]">
                         <p className="text-[#737373]">Category</p>
                         <p className="text-[#043A53] text-lg font-semibold">{item?.category}</p>
                       </div>
 
-                      {/* Due */}
-                      <div className="w-[15%]">
-                        <p className="text-[#737373]">Clicks</p>
-                        <p className="text-[#043A53] text-lg font-semibold">{item.due}</p>
-                      </div>
+
 
                       {/* Orders */}
                       <div className="w-[15%]">
@@ -56,7 +58,7 @@ function Gigs_table({data}) {
                       {/* View */}
                       <div className="w-[15%]">
                         <button className="w-full h-16 flex justify-center items-center mt-2 bg-[#EDEDED] rounded-2xl p-3">
-                          <p className="text-[#043A53] font-semibold">View</p>
+                          <p className="text-[#043A53] font-semibold">Edit</p>
                         </button>
                       </div>
 
