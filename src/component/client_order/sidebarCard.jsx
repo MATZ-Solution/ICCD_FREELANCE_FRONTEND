@@ -1,4 +1,5 @@
-import React, { memo } from "react";
+import React, { memo, useState } from "react";
+import OrderOptions from './OrderOptions';
 
 const SidebarCard = ({
   price,
@@ -22,19 +23,20 @@ const SidebarCard = ({
     { label: "Social Media Kit", value: socialMediaKit },
   ];
 
+  const [showOrderOptions, setShowOrderOptions] = useState(false);
+
   return (
-    <div className="p-6">
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="font-semibold text-lg">PKR {price}</h3>
-        <span className="text-xs text-gray-600 bg-yellow-100 px-2 py-1 rounded">
+    <div className="p-4 sm:p-6 bg-white rounded-lg shadow-md">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4">
+        <h3 className="font-semibold text-xl text-gray-900">PKR {price}</h3>
+        <span className="text-xs text-gray-700 bg-yellow-100 px-2 py-1 mt-2 sm:mt-0 rounded">
           Save up to 10% with Subscribe to Save
         </span>
       </div>
-      
 
-      <p className="text-sm text-gray-700 mb-4">{description}</p>
+      <p className="text-sm text-gray-700 mb-4">{description} || In tempore harum ma In tempore harum ma In tempore harum ma In tempore harum maIn tempore harum maIn tempore harum </p>
 
-      <div className="space-y-3 flex flex-row">
+      <div className="flex flex-col sm:flex-row sm:space-x-6 space-y-2 sm:space-y-0 mb-4">
         <div className="flex items-center space-x-2">
           <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
@@ -46,7 +48,7 @@ const SidebarCard = ({
           </svg>
           <span className="text-sm text-gray-700">{deliverytime} day delivery</span>
         </div>
-        <div className="flex mb-2 items-center ml-4">
+        <div className="flex items-center space-x-2">
           <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
               strokeLinecap="round"
@@ -59,7 +61,7 @@ const SidebarCard = ({
         </div>
       </div>
 
-      <div className="space-y-2 mb-6 mt-4">
+      <div className="space-y-2 mb-6">
         <FeatureItem label={`${pages} Page`} available={true} />
         <FeatureItem label="Responsive Design" available={true} />
         <FeatureItem label="Prototype" available={true} />
@@ -68,18 +70,13 @@ const SidebarCard = ({
         ))}
       </div>
 
-      <button className="w-full bg-black hover:bg-blue-500 text-white py-3 px-4 rounded-lg font-medium transition-colors mb-3">
-        Continue
-      </button>
+      <OrderOptions isOpen={showOrderOptions} onClose={() => setShowOrderOptions(false)} />
 
-      <button className="w-full border border-gray-300 text-gray-700 hover:bg-gray-50 py-3 px-4 rounded-lg font-medium transition-colors">
-        Contact me
-      </button>
+      
     </div>
   );
 };
 
-// Reusable Feature Item component
 const FeatureItem = ({ label, available }) => {
   return (
     <div className="flex items-center space-x-2">

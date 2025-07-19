@@ -42,9 +42,16 @@ import ClientHomepage from "../src/pages/clientHomepage/homePage";
 import ClientProjects from "../src/pages/client_dashboard/client_projects";
 import FreelancerEditProfile from "../src/pages/freelancer_profile/edit_profile";
 import FreelancerProjects from "../src/pages/freelancer_dashboard/project";
-import  ProjectDetailClient from "../src/pages/client_dashboard/projectDetailClient";
+import ProjectDetailClient from "../src/pages/client_dashboard/projectDetailClient";
 import Check from "../src/pages/check";
-import ProjectDetailFreelancer  from "../src/pages/freelancer_dashboard/projectDetailFreelancer";
+import ProjectDetailFreelancer from "../src/pages/freelancer_dashboard/projectDetailFreelancer";
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
+import PaymentSuccess from "../src/pages/payment/PaymentSuccess";
+import PaymentCancel from "../src/pages/payment/PaymentCancel";
+import OrderOptions from "../src/component/client_order/OrderOptions";
+
+const stripePromise = loadStripe("pk_test_51QCl1eCDh3RtIJ6XkYcN5vHd3KTO2f8enRSNv9Wx7Li0iCI7cr9khTDQx0vS5RmbazZoaECNW83FesOMwLeIgMLb00BJG4pPZR");
 
 export const router = createBrowserRouter([
   {
@@ -361,7 +368,7 @@ export const router = createBrowserRouter([
     ),
   },
 
-    {
+  {
     path: "/client/profile",
     element: (
       // <AuthRoute>
@@ -446,7 +453,7 @@ export const router = createBrowserRouter([
     ),
   },
 
-    {
+  {
     path: "/check",
     element: (
       // <AuthRoute>
@@ -456,6 +463,48 @@ export const router = createBrowserRouter([
       // </AuthRoute>
     ),
   },
+  {
+    path: "/payment",
+    element: (
+      // <AuthRoute>
+      <MainTemplate isShowFooter={false}>
+        <Elements stripe={stripePromise}>
+          <Payment />
+        </Elements>
+      </MainTemplate>
+      // </AuthRoute>
+    ),
+  },
 
+  {
+    path: "/success",
+    element: (
+      // <AuthRoute>
+      <MainTemplate isShowFooter={false}>
+        <PaymentSuccess />
+      </MainTemplate>
+      // </AuthRoute>
+    ),
+  },
+  {
+    path: "/OrderOptions",
+    element: (
+      // <AuthRoute>
+      <MainTemplate isShowFooter={false}>
+        <OrderOptions />
+      </MainTemplate>
+      // </AuthRoute>
+    ),
+  },
+  {
+    path: "/cancel",
+    element: (
+      // <AuthRoute>
+      <MainTemplate isShowFooter={false}>
+        <PaymentCancel />
+      </MainTemplate>
+      // </AuthRoute>
+    ),
+  }
 
 ]);
