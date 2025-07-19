@@ -6,6 +6,7 @@ import { combineReducers } from 'redux';
 import userReducer from './slices/userSlice'; // adjust path
 import gigsReducer from './slices/gigsDetailSlice'
 import userProfileReducer from './slices/userProfileSlice'
+import orderReducer from "./slices/orderSlice";
 
 const persistConfig = {
   key: 'root',
@@ -15,6 +16,7 @@ const persistConfig = {
 const rootReducer = combineReducers({
   user: userReducer,
   gigs: gigsReducer,
+  order: orderReducer,
   userProfile: userProfileReducer
   // add other reducers here
 });
@@ -30,3 +32,4 @@ export const store = configureStore({
 });
 
 export const persistor = persistStore(store);
+

@@ -1,368 +1,325 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
-import CreditCardIcon from '@mui/icons-material/CreditCard';
-import PaymentIcon from '@mui/icons-material/Payment';
-import LockIcon from '@mui/icons-material/Lock';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import ExpandLessIcon from '@mui/icons-material/ExpandLess';
-import DoneIcon from '@mui/icons-material/Done';
-import figmathumbnail from '../../assets/client_dashboard/blog1.png';
+"use client"
 
-// 1. Yup validation schema
-const paymentSchema = yup.object().shape({
-    cardNumber: yup
-        .string()
-        .required('Card number zaroori hai')
-        .matches(/^\d{16}$/, '16-digit number dalain'),
-    expiry: yup
-        .string()
-        .required('Expiry date zaroori hai')
-        .matches(/^(0[1-9]|1[0-2]) \/ ([0-9]{2})$/, 'Format 05 / 25 hona chahiye'),
-    securityCode: yup
-        .string()
-        .required('Security code zaroori hai')
-        .matches(/^\d{3}$/, '3-digit code hona chahiye'),
-    cardholderName: yup
-        .string()
-        .min(3, "Name must be at least 3 characters")
-        .required("Cardholder's name zaroori hai"),
-    displayName: yup
-        .string()
-        .max(30, 'Max 30 characters'),
-    saveCard: yup.boolean(),
-});
+import { useEffect, useRef, useState } from "react"
+import { ChevronDown, ChevronUp, Check } from "lucide-react"
+import figmathumbnail from "../../assets/client_dashboard/blog1.png"
+import { useSelector } from "react-redux"
 
 const Payment = () => {
-    // 2. React Hook Form init
-    const {
-        register,
-        handleSubmit,
-        formState: { errors },
-    } = useForm({
-        resolver: yupResolver(paymentSchema),
-    });
+  const [method, setMethod] = useState("card")
+  const cardRef = useRef(null)
+  const paypalRef = useRef(null)
+  const [cardHeight, setCardHeight] = useState("0px")
+  const [paypalHeight, setPaypalHeight] = useState("0px")
 
-    // accordion refs & state
-    const [method, setMethod] = useState('card');
-    const cardRef = useRef(null);
-    const paypalRef = useRef(null);
-    const [cardHeight, setCardHeight] = useState('0px');
-    const [paypalHeight, setPaypalHeight] = useState('0px');
+  const order = useSelector((state) => state.order)
+  const { quantity, basePrice, totalPrice, packageType, packageDescription, delivery, revisions } = order
 
-    // useEffect(() => {
-    //     if (method === 'card') {
-    //         setCardHeight(`${cardRef.current.scrollHeight}px`);
-    //     } else {
-    //         setCardHeight('0px');
-    //     }
-    // }, [
-    //     method,
-    //     // Jab bhi errors change hon, dobara height nikaal lo
-    //     Object.keys(errors).length
-    // ]);
+  useEffect(() => {
+    setCardHeight(method === "card" ? `${cardRef.current.scrollHeight}px` : "0px")
+    setPaypalHeight(method === "paypal" ? `${paypalRef.current.scrollHeight}px` : "0px")
+  }, [method])
 
-    useEffect(() => {
-        // card panel
-        setCardHeight(
-            method === 'card'
-                ? `${cardRef.current.scrollHeight}px`
-                : '0px'
-        );
-        // paypal panel
-        setPaypalHeight(
-            method === 'paypal'
-                ? `${paypalRef.current.scrollHeight}px`
-                : '0px'
-        );
-    }, [method, Object.keys(errors).length]);
-
-    // form submit handler
-    const onSubmit = data => {
-        console.log('Payment data:', data);
-        // API call integration here
-    };
-
-    // PayPal redirect handler
-    const handlePaypal = () => {
-        // redirect logic
-        window.location.href = '/api/paypal';
-    };
-
+  if (!order.packageType)
     return (
-        <div className="flex flex-col md:flex-row justify-center gap-10 lg:gap-20 py-4">
-            {/* left section */}
-            <div className="flex flex-col gap-5 w-full md:w-3/5 lg:w-2/3">
-                <div className="w-full border border-gray-200">
-                    <div className="bg-gray-50 border-b border-gray-300 px-3 py-2">
-                        <h2 className="text-lg font-semibold text-gray-800">Payment Options</h2>
-                    </div>
-
-                    {/* Card Option */}
-                    <div className="border-b border-gray-300 overflow-hidden">
-                        <button
-                            onClick={() => setMethod('card')}
-                            className="w-full flex justify-between items-center px-4 py-3 bg-white cursor-pointer"
-                        >
-                            <label className="flex items-center cursor-pointer">
-                                <input
-                                    type="radio"
-                                    name="payment"
-                                    value="card"
-                                    checked={method === 'card'}
-                                    onChange={() => setMethod('card')}
-                                    className="form-radio h-5 w-5 text-blue-600"
-                                />
-                                <span className="pl-2 text-lg text-gray-800">Credit & Debit Cards</span>
-                            </label>
-                            {method === 'card' ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-                        </button>
-                        <div
-                            ref={cardRef}
-                            style={{ maxHeight: cardHeight }}
-                            className="bg-gray-100 transition-all duration-300 overflow-hidden"
-                        >
-                            {/* 3. Form wrapper with id */}
-                            <form
-                                id="paymentForm"
-                                onSubmit={handleSubmit(onSubmit)}
-                                className="bg-gray-50 p-8 space-y-4"
-                            >
-                                {/* Card number */}
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1 text-start">Card number</label>
-                                    <div className="relative">
-                                        <CreditCardIcon className="absolute left-3 top-3 text-gray-400" />
-                                        <input
-                                            {...register('cardNumber')}
-                                            placeholder="1234 5678 9012 3456"
-                                            inputMode="numeric"           // numeric keypad mobile pe
-                                            pattern="[0-9]*"              // validation hint
-                                            onInput={e => {
-                                                // non-digits hata do
-                                                e.currentTarget.value = e.currentTarget.value.replace(/\D/g, '')
-                                            }}
-                                            className={`w-full rounded-lg pl-12 py-3 text-sm ${errors.cardNumber ? 'border border-red-500 focus:outline-red-500'
-                                                : 'border border-gray-400 focus:outline-blue-500'
-                                                }`}
-                                        />
-                                        <LockIcon className="absolute right-3 top-3 text-gray-400" />
-                                    </div>
-                                    {errors.cardNumber && (
-                                        <p className="mt-1 text-sm text-start text-red-500">{errors.cardNumber.message}</p>
-                                    )}
-                                </div>
-
-                                {/* Expiry & Security */}
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                    <div>
-                                        <label className="text-start block text-sm font-medium text-gray-700 mb-1">Expiry date</label>
-                                        <input
-                                            {...register('expiry')}
-                                            placeholder="MM / YY"
-                                            inputMode="numeric"
-                                            pattern="\d{2} \/ \d{2}"
-                                            maxLength={7}
-                                            onInput={e => {
-                                                // sirf digits aur slash
-                                                let v = e.currentTarget.value.replace(/[^\d]/g, '')
-                                                if (v.length > 2) v = v.slice(0, 2) + ' / ' + v.slice(2, 4)
-                                                e.currentTarget.value = v
-                                            }}
-                                            className={`w-full rounded-lg px-4 py-3 text-sm ${errors.expiry ? 'border border-red-500 focus:outline-red-500'
-                                                : 'border border-gray-400 focus:outline-blue-500'
-                                                }`}
-                                        />
-                                        {errors.expiry && <p className="text-start mt-1 text-sm text-red-500">{errors.expiry.message}</p>}
-                                    </div>
-                                    <div>
-                                        <label className="text-start block text-sm font-medium text-gray-700 mb-1">
-                                            Security code <span title="What's this?">?</span>
-                                        </label>
-                                        <input
-                                            {...register('securityCode')}
-                                            placeholder="123"
-                                            pattern="\d{3}"
-                                            maxLength={3}
-                                            onInput={e => {
-                                                e.currentTarget.value = e.currentTarget.value.replace(/\D/g, '')
-                                            }}
-                                            className={`w-full rounded-lg px-4 py-3 text-sm ${errors.securityCode ? 'border border-red-500 focus:outline-red-500'
-                                                : 'border border-gray-400 focus:outline-blue-500'
-                                                }`}
-                                        />
-                                        {errors.securityCode && (
-                                            <p className="text-start mt-1 text-sm text-red-500">{errors.securityCode.message}</p>
-                                        )}
-                                    </div>
-                                </div>
-
-                                {/* Cardholder */}
-                                <div>
-                                    <label className="text-start block text-sm font-medium text-gray-700 mb-1">Cardholder's name</label>
-                                    <input
-                                        {...register('cardholderName',)}
-                                        placeholder="As written on card"
-                                        minLength={3}
-                                        className={`w-full rounded-lg px-4 py-3 text-sm ${errors.cardholderName ? 'border border-red-500 focus:outline-red-500'
-                                            : 'border border-gray-400 focus:outline-blue-500'
-                                            }`}
-                                    />
-                                    {errors.cardholderName && (
-                                        <p className="text-start mt-1 text-sm text-red-500">{errors.cardholderName.message}</p>
-                                    )}
-                                </div>
-
-                                {/* Display name & save */}
-                                <div>
-                                    <label className="text-start block text-sm font-medium text-gray-700 mb-1">
-                                        Card display name <span>(Optional)</span>
-                                    </label>
-                                    <input
-                                        {...register('displayName')}
-                                        placeholder="e.g. Marketing card…"
-                                        inputMode="text"
-                                        pattern="[A-Za-z\s]+"
-                                        minLength={3}
-                                        onInput={e => {
-                                            // sirf letters aur spaces
-                                            e.currentTarget.value = e.currentTarget.value.replace(/[^A-Za-z\s]/g, '')
-                                        }}
-                                        className={`w-full rounded-lg px-4 py-3 text-sm ${errors.displayName ? 'border border-red-500 focus:outline-red-500'
-                                            : 'border border-gray-400 focus:outline-blue-500'
-                                            }`}
-                                    />
-                                    <div className="text-right text-xs text-gray-500">
-                                        {/* you can show dynamic char count here */}
-                                    </div>
-                                    {errors.displayName && (
-                                        <p className="text-start mt-1 text-sm text-red-500">{errors.displayName.message}</p>
-                                    )}
-                                </div>
-
-                                <div className="flex items-center">
-                                    <input
-                                        type="checkbox"
-                                        {...register('saveCard')}
-                                        className="form-checkbox h-4 w-4 text-blue-600"
-                                    />
-                                    <label className="ml-2 text-sm">Save this card for future payments</label>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-
-                    {/* PayPal Option */}
-                    <div className="border-b border-gray-300">
-                        <button
-                            onClick={() => setMethod('paypal')}
-                            className="w-full flex justify-between items-center px-4 py-3 bg-white cursor-pointer"
-                        >
-                            <label className="flex items-center cursor-pointer">
-                                <input
-                                    type="radio"
-                                    name="payment"
-                                    value="paypal"
-                                    checked={method === 'paypal'}
-                                    onChange={() => setMethod('paypal')}
-                                    className="form-radio h-5 w-5 text-blue-600"
-                                />
-                                <span className="pl-2 text-lg text-gray-800">PayPal</span>
-                            </label>
-                            {method === 'paypal' ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-                        </button>
-                        <div
-                            ref={paypalRef}
-                            style={{ maxHeight: paypalHeight }}
-                            className="transition-all duration-300 bg-gray-50 text-gray-700"
-                        >
-                            <div className='text-lg py-4'> Redirect to PayPal for payment.</div>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Billing Info */}
-                <div className="w-full border border-gray-200">
-                    <div className='bg-gray-50 border-b border-gray-300 px-3 py-2'>
-                        <h2 className="text-start text-lg text-gray-800 font-semibold">Billing Information</h2>
-                    </div>
-                    <div className='p-6'>
-                        <div className='flex justify-between gap-2 items-center space-y-1'>
-                            <p className='text-base text-start'>Your invoice will be issued according to the details listed here.</p>
-                            <button className='shrink-0 text-base border px-3 py-1 cursor-pointer hover:bg-gray-50'>Add details</button>
-                        </div>
-                        <div>
-                            <p className='text-base text-start font-semibold'>butt1997</p>
-                            <p className='text-base text-start'>Pakistan</p>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
-            {/* right summary */}
-            <div className="w-full md:w-2/5 lg:w-1/3">
-                <div className='border border-gray-200 bg-gray-50 py-3 px-5'>
-                    <div className="flex gap-5 items-center mb-3">
-                        <img src={figmathumbnail} alt="Figma thumbnail" className="w-32 h-16 object-cover rounded" />
-                        <div className="">
-                            <p className="text-xs text-gray-800 text-start font-medium">I will create figma ui ux design website mockup and figma website design</p>
-                        </div>
-                    </div>
-                    <div className="space-y-2">
-                        <div className="flex justify-between">
-                            <span className='text-sm font-semibold text-gray-800'>Single page</span>
-                            <span className='text-sm font-semibold text-gray-800'>PKR 2,979.41</span>
-                        </div>
-                        <ul className="text-start text-sm space-y-1 text-gray-700">
-                            <li><DoneIcon fontSize="small" /> 1 page</li>
-                            <li><DoneIcon fontSize="small" /> Responsive design</li>
-                            <li><DoneIcon fontSize="small" /> Source file</li>
-                            <li><DoneIcon fontSize="small" /> Unlimited revisions</li>
-                        </ul>
-                    </div>
-                </div>
-                <div className="text-start py-3 px-5 border-b border-x border-gray-200">
-                    <p className="text-sm text-gray-800">Enter promo code <span className="text-gray-800">?</span></p>
-                </div>
-                <div className="flex justify-between py-3 px-5 text-sm border-b border-x border-gray-200">
-                    <span>Service fee <span className="text-gray-800">?</span></span>
-                    <span>PKR 1,206.66</span>
-                </div>
-                <div className='px-5 border-x border-gray-200 border-b'>
-                    <div className="pt-3 flex justify-between font-semibold">
-                        <span className='text-base text-gray-800'>Total</span>
-                        <span className='text-base text-gray-800'>PKR 4,186.07</span>
-                    </div>
-                    <p className="text-xs text-gray-800 text-start pt-2">Total delivery time 4 days</p>
-                    <p className='text-xs text-start text-gray-800 py-3'>By clicking the button, you agree to Fiverr's <span className='underline'>Terms of Service</span> and <span className='underline'>Payment Terms</span></p>
-
-                    {method === 'card' ? (
-                        <button
-                            type="submit"
-                            form="paymentForm"
-                            className="w-full py-2 bg-black text-white rounded hover:opacity-90 text-base mb-2"
-                        >
-                            Confirm & Pay
-                        </button>
-                    ) : (
-                        <button
-                            onClick={handlePaypal}
-                            className="w-full py-2 bg-black text-white rounded hover:opacity-90 text-base mb-2"
-                        >
-                            Pay with PayPal
-                        </button>
-                    )}
-                    <div className="flex items-center justify-center text-sm font-medium text-gray-800">
-                        <LockIcon className="mr-1" fontSize="small" /> SSL Secure Payment
-                    </div>
-                    <p className="px-5 pt-2 pb-4 text-xs text-start text-gray-800 mt-2 border-gray-200">You will be charged PKR 4,186.07. Total amount includes currency conversion fees.</p>
-                </div>
-
-            </div>
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center p-4">
+        <div className="bg-white rounded-2xl shadow-2xl p-8 text-center max-w-md">
+          <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-purple-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <span className="text-2xl">💳</span>
+          </div>
+          <p className="text-xl font-semibold text-gray-800">No order selected</p>
         </div>
-    );
-};
+      </div>
+    )
 
-export default Payment;
+  const handleCheckout = async () => {
+    try {
+      const lineItems = [
+        {
+          name: order.packageType + " Package",
+          price: order.totalPrice * 100,
+          quantity: order.quantity || 1,
+        },
+      ]
+
+      const res = await fetch("http://localhost:2300/stripe/create-checkout-session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          orderDetails: lineItems,
+          paymentMethod: method,
+        }),
+      })
+
+      if (!res.ok) {
+        throw new Error("Failed to create checkout session")
+      }
+
+      const responseData = await res.json()
+      if (responseData.url) {
+        window.location.href = responseData.url
+      } else {
+        console.error("Stripe URL not received")
+      }
+    } catch (err) {
+      console.error("Checkout Error:", err.message)
+    }
+  }
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 py-8 px-4">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-4">
+            Complete Your Payment
+          </h1>
+          <p className="text-gray-600 text-lg max-w-2xl mx-auto">
+            Secure checkout powered by industry-leading encryption
+          </p>
+        </div>
+
+        <div className="flex flex-col md:flex-row justify-center gap-8 lg:gap-12">
+          {/* Payment Options */}
+          <div className="flex flex-col gap-8 w-full md:w-3/5 lg:w-2/3">
+            {/* Payment Method Selection */}
+            <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
+              <div className="bg-gradient-to-r from-blue-600 to-purple-600 px-6 py-4">
+                <h2 className="text-xl font-semibold text-white flex items-center gap-2">
+                  <span className="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center">💳</span>
+                  Select Payment Method
+                </h2>
+              </div>
+
+              {/* Card Option */}
+              <div className="border-b border-gray-100 overflow-hidden">
+                <button
+                  onClick={() => setMethod("card")}
+                  className="w-full flex justify-between items-center px-6 py-5 bg-white hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 transition-all duration-300 cursor-pointer group"
+                >
+                  <label className="flex items-center cursor-pointer">
+                    <div className="relative">
+                      <input
+                        type="radio"
+                        name="payment"
+                        value="card"
+                        checked={method === "card"}
+                        onChange={() => setMethod("card")}
+                        className="w-5 h-5 text-blue-600 border-2 border-gray-300 focus:ring-blue-500 focus:ring-2"
+                      />
+                      {method === "card" && (
+                        <div className="absolute inset-0 w-5 h-5 bg-blue-600 rounded-full flex items-center justify-center">
+                          <div className="w-2 h-2 bg-white rounded-full"></div>
+                        </div>
+                      )}
+                    </div>
+                    <div className="ml-4 flex items-center gap-3">
+                      <div className="w-10 h-10 bg-gradient-to-br from-blue-100 to-blue-200 rounded-xl flex items-center justify-center">
+                        💳
+                      </div>
+                      <div className="text-left">
+                        <span className="text-lg font-semibold text-gray-800 block">Credit & Debit Cards</span>
+                        <span className="text-sm text-gray-500">Visa, Mastercard, Amex</span>
+                      </div>
+                    </div>
+                  </label>
+                  <div className="flex items-center gap-2">
+                    <div className="hidden sm:flex gap-1">
+                      <span className="px-2 py-1 bg-gray-100 text-xs font-medium rounded">VISA</span>
+                      <span className="px-2 py-1 bg-gray-100 text-xs font-medium rounded">MC</span>
+                    </div>
+                    {method === "card" ? (
+                      <ChevronUp className="w-5 h-5 text-gray-400 group-hover:text-blue-600 transition-colors" />
+                    ) : (
+                      <ChevronDown className="w-5 h-5 text-gray-400 group-hover:text-blue-600 transition-colors" />
+                    )}
+                  </div>
+                </button>
+                <div
+                  ref={cardRef}
+                  style={{ maxHeight: cardHeight }}
+                  className="bg-gradient-to-r from-blue-50 to-purple-50 transition-all duration-300 overflow-hidden"
+                >
+                  <div className="px-6 py-4 border-t border-blue-100">
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">🔒</div>
+                      <p className="text-sm text-blue-800 font-medium">
+                        Pay securely using your credit or debit card on the next page.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* PayPal Option */}
+              <div className="overflow-hidden">
+                <button
+                  onClick={() => setMethod("paypal")}
+                  className="w-full flex justify-between items-center px-6 py-5 bg-white hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 transition-all duration-300 cursor-pointer group"
+                >
+                  <label className="flex items-center cursor-pointer">
+                    <div className="relative">
+                      <input
+                        type="radio"
+                        name="payment"
+                        value="paypal"
+                        checked={method === "paypal"}
+                        onChange={() => setMethod("paypal")}
+                        className="w-5 h-5 text-blue-600 border-2 border-gray-300 focus:ring-blue-500 focus:ring-2"
+                      />
+                      {method === "paypal" && (
+                        <div className="absolute inset-0 w-5 h-5 bg-blue-600 rounded-full flex items-center justify-center">
+                          <div className="w-2 h-2 bg-white rounded-full"></div>
+                        </div>
+                      )}
+                    </div>
+                    <div className="ml-4 flex items-center gap-3">
+                      <div className="w-10 h-10 bg-gradient-to-br from-blue-100 to-blue-200 rounded-xl flex items-center justify-center">
+                        🅿️
+                      </div>
+                      <div className="text-left">
+                        <span className="text-lg font-semibold text-gray-800 block">PayPal</span>
+                        <span className="text-sm text-gray-500">Pay with PayPal account</span>
+                      </div>
+                    </div>
+                  </label>
+                  <div className="flex items-center gap-2">
+                    <span className="hidden sm:block px-2 py-1 bg-blue-100 text-xs font-medium rounded text-blue-700">
+                      PAYPAL
+                    </span>
+                    {method === "paypal" ? (
+                      <ChevronUp className="w-5 h-5 text-gray-400 group-hover:text-blue-600 transition-colors" />
+                    ) : (
+                      <ChevronDown className="w-5 h-5 text-gray-400 group-hover:text-blue-600 transition-colors" />
+                    )}
+                  </div>
+                </button>
+                <div
+                  ref={paypalRef}
+                  style={{ maxHeight: paypalHeight }}
+                  className="bg-gradient-to-r from-blue-50 to-purple-50 transition-all duration-300 overflow-hidden"
+                >
+                  <div className="px-6 py-4 border-t border-blue-100">
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">🔒</div>
+                      <p className="text-sm text-blue-800 font-medium">
+                        You will be redirected to PayPal to complete the payment.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Billing Info */}
+            <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
+              <div className="bg-gradient-to-r from-green-600 to-teal-600 px-6 py-4">
+                <h2 className="text-xl font-semibold text-white flex items-center gap-2">
+                  <span className="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center">📋</span>
+                  Billing Information
+                </h2>
+              </div>
+              <div className="p-6">
+                <p className="text-gray-600 mb-6 leading-relaxed">
+                  Your invoice will be issued according to the details listed here.
+                </p>
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center py-3 px-4 bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl">
+                    <span className="text-gray-600 font-medium">Account</span>
+                    <span className="font-semibold text-gray-800">butt1997</span>
+                  </div>
+                  <div className="flex justify-between items-center py-3 px-4 bg-gradient-to-r from-gray-50 to-gray-100 rounded-xl">
+                    <span className="text-gray-600 font-medium">Country</span>
+                    <span className="font-semibold text-gray-800">Pakistan</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Summary */}
+          <div className="w-full md:w-2/5 lg:w-1/3">
+            <div className="sticky top-8">
+              <div className="bg-white rounded-2xl shadow-2xl border border-gray-100 overflow-hidden">
+                <div className="bg-gradient-to-r from-purple-600 to-pink-600 px-6 py-4">
+                  <h2 className="text-xl font-semibold text-white flex items-center gap-2">
+                    <span className="w-6 h-6 bg-white/20 rounded-full flex items-center justify-center">📦</span>
+                    Order Summary
+                  </h2>
+                </div>
+
+                <div className="p-6">
+                  <div className="flex gap-4 items-start mb-6">
+                    <div className="relative overflow-hidden rounded-xl shadow-lg">
+                      <img
+                        src={figmathumbnail || "/placeholder.svg"}
+                        alt="Thumbnail"
+                        className="w-24 h-16 object-cover"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+                    </div>
+                    <p className="text-sm text-gray-700 font-medium leading-relaxed flex-1">{packageDescription}</p>
+                  </div>
+
+                  <div className="space-y-4 mb-6">
+                    <div className="flex justify-between items-center">
+                      <span className="font-semibold text-gray-800 text-lg">{packageType} Package</span>
+                      <span className="font-bold text-gray-900 text-lg">PKR {totalPrice}</span>
+                    </div>
+
+                    <div className="space-y-3">
+                      <div className="flex items-center gap-3 text-sm">
+                        <div className="w-6 h-6 bg-green-100 rounded-full flex items-center justify-center">
+                          <Check className="w-4 h-4 text-green-600" />
+                        </div>
+                        <span className="text-gray-700">{quantity} page(s)</span>
+                      </div>
+                      <div className="flex items-center gap-3 text-sm">
+                        <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
+                          <Check className="w-4 h-4 text-blue-600" />
+                        </div>
+                        <span className="text-gray-700">{delivery} day delivery</span>
+                      </div>
+                      <div className="flex items-center gap-3 text-sm">
+                        <div className="w-6 h-6 bg-purple-100 rounded-full flex items-center justify-center">
+                          <Check className="w-4 h-4 text-purple-600" />
+                        </div>
+                        <span className="text-gray-700">{revisions} revisions</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Confirm Button */}
+                <div className="px-6 pb-6 border-t border-gray-100 pt-6">
+                  <div className="flex justify-between items-center mb-6">
+                    <span className="text-xl font-bold text-gray-900">Total</span>
+                    <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                      PKR {totalPrice}
+                    </span>
+                  </div>
+
+                  <button
+                    onClick={handleCheckout}
+                    className="w-full py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all duration-300 text-lg font-semibold shadow-lg hover:shadow-xl transform hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2"
+                  >
+                    <span className="text-xl">🔒</span>
+                    Confirm & Pay
+                  </button>
+
+                  <p className="text-xs text-gray-600 text-center mt-4 leading-relaxed">
+                    You will be charged PKR {totalPrice}. Includes any conversion fees.
+                    <br />
+                    <span className="font-medium text-green-600">✓ 256-bit SSL encrypted</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default Payment
