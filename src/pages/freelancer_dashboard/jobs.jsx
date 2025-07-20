@@ -9,6 +9,7 @@ import CasesIcon from '@mui/icons-material/Cases';
 import { useState } from 'react';
 import Modal from '../../component/modal';
 import { useNavigate } from 'react-router-dom';
+import { useGetAllJobs, useGetJobById } from '../../../api/client/job';
 
 function Jobs() {
     const navigate = useNavigate()
@@ -18,6 +19,14 @@ function Jobs() {
         { title: 'UI/UX Designer', companyName: 'Angular Quantum', jobType: 'full-time' }
     ]
     const [show, setShow] = useState(false)
+
+    const { data, isSuccess, isPending, isError, isLoading } = useGetAllJobs()
+    const { data: singleJobData, isSuccess: singleJobIsSucc, isPending: singleJobIsPend, isError: singleJobIsErr, isLoading: singleJobIsLoad } = useGetJobById(2)
+
+    console.log("data: ", data)
+    console.log("single data: ", singleJobData)
+
+
     return (
         <div className='px-6 sm:px-10'>
             {/* Job opportunity header */}

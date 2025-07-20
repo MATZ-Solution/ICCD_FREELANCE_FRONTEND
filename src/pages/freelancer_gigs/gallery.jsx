@@ -6,16 +6,20 @@ import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import { useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
-import { useAddGigs } from '../../../api/client/gigs';
+import { useAddGigs, useGetSingleGigs } from '../../../api/client/gigs';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { resetGigDetails } from '../../../redux/slices/gigsDetailSlice';
+import { useParams } from 'react-router-dom';
 
 function Gallery() {
+
+    const { id } = useParams()
+    const data = useSelector(state => state.gigs.gigsDetails)
     const { addGigs, isSuccess, isPending, isError, error } = useAddGigs()
     const profileDetails = useSelector(state => state.userProfile.userProfile)
-    const data = useSelector(state => state.gigs.gigsDetails)
-    console.log("gigs details: ", data)
+    const { data: gigsData, isSuccess: gigIsSucc, isPending: gigIsPend, isError: gigIsErr, isLoading } = useGetSingleGigs(id)
+    console.log("gigs details: ", gigsData)
 
     let [images, setImages] = useState([])
 

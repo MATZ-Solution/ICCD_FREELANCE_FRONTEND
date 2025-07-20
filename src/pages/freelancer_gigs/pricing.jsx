@@ -4,7 +4,9 @@ import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup"
 import { useDispatch } from "react-redux"
 import { setGigsDetails } from "../../../redux/slices/gigsDetailSlice"
-import { useNavigate } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
+import { useParams } from "react-router-dom"
+import { useGetSingleGigs, useEditGigs } from "../../../api/client/gigs"
 
 
 const packageNames = ["basic", "standard", "premium"]
@@ -123,6 +125,14 @@ function buildExtraServicesSchema(services) {
 }
 
 export default function PricingForm() {
+
+  const {id} = useParams()
+  
+    const { data: gigsData, isSuccess, isPending, isError, isLoading } = useGetSingleGigs(id)
+        const { editGigs, isSuccess: editGigsIsSucc, isPending: editGigIsPend, isError: editGigIsErr, error } = useEditGigs(id, 'json')
+    
+    console.log("gigs data: ", gigsData)
+    
   const [extraServicesList, setExtraServicesList] = useState(defaultExtraServices)
   const [addingExtra, setAddingExtra] = useState(false)
   const [newLabel, setNewLabel] = useState("")
@@ -310,6 +320,9 @@ export default function PricingForm() {
     },
   })
 
+  const location = useLocation()
+  
+
   const onSubmit = async (data) => {
     try {
       // Additional validation before submission
@@ -322,7 +335,11 @@ export default function PricingForm() {
       console.log("data: ", data)
       let setpackages = {packages: packages}
       dispatch(setGigsDetails(setpackages));
-      navigate('/freelancer/manage-gigs/description')
+      if(location.pathname.includes('edit')){
+        navigate(`/freelancer/manage-gigs/description/edit/${id}`)
+      }else{
+        navigate('/freelancer/manage-gigs/description')
+      }
     } catch (error) {
       console.error("Submission error:", error)
       alert("There was an error submitting the form. Please try again.")

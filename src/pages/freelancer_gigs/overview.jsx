@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useStatey, useEffect } from 'react';
 import ReactSelect from '../../component/buttonSelect';
 import Profile from '../../component/freelancers_gigs/profile';
 import Button from '../../component/button';
@@ -7,11 +7,18 @@ import { useDispatch } from 'react-redux';
 import { setGigsDetails } from '../../../redux/slices/gigsDetailSlice';
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useParams } from 'react-router-dom';
 import * as yup from "yup";
+import { useEditGigs, useGetSingleGigs } from '../../../api/client/gigs';
 
 function Overview() {
+
   const navigate = useNavigate()
   const dispatch = useDispatch()
+  const { id } = useParams()
+
+  const { data: gigsData, isSuccess, isPending, isError, isLoading } = useGetSingleGigs(id)
+  const { editGigs, isSuccess: editGigsIsSucc, isPending: editGigIsPend, isError: editGigIsErr, error } = useEditGigs(id,'json')
 
   const schema = yup.object({
     gigsTitle: yup.string().required("title not selected"),
@@ -19,12 +26,12 @@ function Overview() {
     subCategory: yup.string().required("sub category not selected"),
   })
 
-  const { register, control, handleSubmit, formState: { errors } } = useForm({
+  const { register, control, handleSubmit, reset, formState: { errors } } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
-      gigsTitle: '',
-      category: null,
-      subCategory: null
+      gigsTitle: gigsData && gigsData?.length > 0 ? gigsData[0]?.gigsDescription?.gigsTitle : '',
+      category: gigsData && gigsData?.length > 0 ? gigsData[0]?.gigsDescription?.gigsCategory : null,
+      subCategory: gigsData && gigsData?.length > 0 ? gigsData[0]?.gigsDescription?.gigsSubcategory : null
     }
   });
 
@@ -40,9 +47,25 @@ function Overview() {
   ];
 
   const onSubmit = (data) => {
-    dispatch(setGigsDetails(data));
-    navigate('/freelancer/manage-gigs/pricing')
+    // dispatch(setGigsDetails(data));
+    console.log("data: ", data)
+    if (location.pathname.includes('edit')) {
+      editGigs(data)
+      // navigate(`/freelancer/manage-gigs/pricing/edit/${id}`)
+    } else {
+      navigate('/freelancer/manage-gigs/pricing')
+    }
   }
+
+  useEffect(() => {
+    if (gigsData && gigsData?.length > 0) {
+      reset({
+        gigsTitle: gigsData[0]?.gigsDescription?.gigsTitle || '',
+        category: gigsData[0]?.gigsDescription?.gigsCategory || null,
+        subCategory: gigsData[0]?.gigsDescription?.gigsSubcategory|| null,
+      });
+    }
+  }, [gigsData, reset]);
 
   return (
     <Profile>
@@ -127,7 +150,6 @@ function Overview() {
       </div>
       <div className="mt-5 flex sm:justify-end">
         <Button
-
           className='px-5 py-2' onClick={handleSubmit(onSubmit)}>Save & Continue</Button>
       </div>
     </Profile>

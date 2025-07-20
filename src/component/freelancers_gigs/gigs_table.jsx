@@ -1,5 +1,5 @@
 import order_logo from '../../assets/freelancer_dashboard/order_logo.png';
-
+import { useNavigate } from 'react-router-dom';
 function Gigs_table({ data }) {
 
   const statusColors = {
@@ -9,7 +9,7 @@ function Gigs_table({ data }) {
     'IN REVIEW': 'bg-purple-500',
     'ON HOLD': 'bg-red-500',
   };
-
+  const navigate = useNavigate()
   console.log("data: ", data)
 
   return (
@@ -57,7 +57,9 @@ function Gigs_table({ data }) {
 
                       {/* View */}
                       <div className="w-[15%]">
-                        <button className="w-full h-16 flex justify-center items-center mt-2 bg-[#EDEDED] rounded-2xl p-3">
+                        <button 
+                        onClick={()=>navigate(`/freelancer/manage-gigs/overview/edit/${item?.id}`)}
+                        className="w-full h-16 flex justify-center items-center mt-2 bg-[#EDEDED] rounded-2xl p-3">
                           <p className="text-[#043A53] font-semibold">Edit</p>
                         </button>
                       </div>

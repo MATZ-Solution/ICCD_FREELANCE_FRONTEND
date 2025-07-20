@@ -2,6 +2,24 @@ import api from "../axios";
 import API_ROUTE from "../endpoints";
 import { useQuery } from "@tanstack/react-query";
 
+
+export function useGetAllJobs() {
+    const { data, isSuccess, isPending, isError, isLoading } = useQuery({
+        queryKey: [API_ROUTE.job.getAllJob],
+        queryFn: async () => await api.get(`${API_ROUTE.job.getAllJob}`),
+        // refetchOnWindowFocus: true,
+        // staleTime: 0,
+        // refetchOnMount: true,
+    });
+    return {
+        data: data?.data?.data,
+        isSuccess,
+        isPending,
+        isError,
+        isLoading,
+    };
+}
+
 export function useGetJobById(id) {
     const { data, isSuccess, isPending, isError, isLoading } = useQuery({
         queryKey: [API_ROUTE.job.getJobById, id],
@@ -11,7 +29,7 @@ export function useGetJobById(id) {
         // refetchOnMount: true,
     });
     return {
-        data: data?.data,
+        data: data?.data?.data,
         isSuccess,
         isPending,
         isError,
@@ -27,7 +45,6 @@ export function useGetScoutFilterEntries(params = {}) {
     };
 
     const queryKey = [API_ROUTES.SCOUT.GET_SCOUT_FILTER, params];
-
     const { data, error, isLoading, isError } = useQuery(
         {
             queryKey,

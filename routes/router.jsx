@@ -121,7 +121,27 @@ export const router = createBrowserRouter([
     ),
   },
   {
+    path: "/freelancer/manage-gigs/overview/edit/:id",
+    element: (
+      // <AuthRoute>
+      <MainTemplate isShowFooter={false}>
+        <Overview />
+      </MainTemplate>
+      // </AuthRoute>
+    ),
+  },
+  {
     path: "/freelancer/manage-gigs/description",
+    element: (
+      // <AuthRoute>
+      <MainTemplate isShowFooter={false}>
+        <Description />
+      </MainTemplate>
+      // </AuthRoute>
+    ),
+  },
+  {
+    path: "/freelancer/manage-gigs/description/edit/:id",
     element: (
       // <AuthRoute>
       <MainTemplate isShowFooter={false}>
@@ -151,6 +171,17 @@ export const router = createBrowserRouter([
     ),
   },
   {
+    path: "/freelancer/manage-gigs/gallery/edit/:id",
+    element: (
+      // <AuthRoute>
+      <MainTemplate isShowFooter={false}>
+        <Gallery />
+      </MainTemplate>
+      // </AuthRoute>
+    ),
+  },
+
+  {
     path: "/freelancer/manage-gigs/publish",
     element: (
       // <AuthRoute>
@@ -162,6 +193,16 @@ export const router = createBrowserRouter([
   },
   {
     path: "/freelancer/manage-gigs/pricing",
+    element: (
+      // <AuthRoute>
+      <MainTemplate isShowFooter={false}>
+        <Pricing />
+      </MainTemplate>
+      // </AuthRoute>
+    ),
+  },
+  {
+    path: "/freelancer/manage-gigs/pricing/edit/:id",
     element: (
       // <AuthRoute>
       <MainTemplate isShowFooter={false}>

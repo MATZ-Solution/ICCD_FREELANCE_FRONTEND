@@ -27,7 +27,6 @@ export const ProjectDetailClient = () => {
   let [show, setShow] = useState(false)
   const pathName = useLocation().pathname
   const { data, isSuccess, isPending, isError, isLoading } = useGetProjectsById(id)
-
   const { data: propData, isSuccess: propSucc, isPending: propIsPend, isError: propIsErr, isLoading: propIsLoad } = useGetProjectProposalByClient(id)
 
   console.log("props data: ", propData)

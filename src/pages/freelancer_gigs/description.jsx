@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Profile from '../../component/freelancers_gigs/profile';
 import Button from '../../component/button';
 import { useNavigate } from 'react-router-dom';
@@ -8,36 +8,51 @@ import { setGigsDetails } from '../../../redux/slices/gigsDetailSlice';
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
-import {  useSelector } from "react-redux";
+import { useSelector } from "react-redux";
+import { useParams } from 'react-router-dom';
+import { useGetSingleGigs, useEditGigs } from '../../../api/client/gigs';
 
 function Description() {
 
-  const data = useSelector(state => state.gigs.gigsDetails)
-  console.log("data: ", data)
-
-
+    const { id } = useParams()
     const navigate = useNavigate()
     const location = useLocation()
     const dispatch = useDispatch()
     const formData = location.state
-    console.log("formData: ", formData)
+
+    const data = useSelector(state => state.gigs.gigsDetails)
+    const { data: gigsData, isSuccess, isPending, isError, isLoading } = useGetSingleGigs(id)
+    const { editGigs, isSuccess: editGigsIsSucc, isPending: editGigIsPend, isError: editGigIsErr, error } = useEditGigs(id, 'json')
 
 
     const schema = yup.object({
         description: yup.string().required("description not selected"),
     })
 
-    const { control, handleSubmit, formState: { errors } } = useForm({
+    const { control, handleSubmit, reset, formState: { errors } } = useForm({
         resolver: yupResolver(schema),
         defaultValues: {
-            description: '',
+            description: gigsData && gigsData?.length > 0 ? gigsData[0]?.gigsDescription?.gigsDescription : '',
         }
     });
 
     const onSubmit = (data) => {
-        dispatch(setGigsDetails(data));
-        navigate('/freelancer/manage-gigs/gallery')
+        // dispatch(setGigsDetails(data));
+        if (location.pathname.includes('edit')) {
+            editGigs(data)
+            navigate(`/freelancer/manage-gigs/gallery/edit/${id}`)
+        } else {
+            navigate('/freelancer/manage-gigs/gallery')
+        }
     }
+
+    useEffect(() => {
+        if (gigsData && gigsData?.length > 0) {
+            reset({
+                description: gigsData[0]?.gigsDescription?.gigsDescription || '',
+            });
+        }
+    }, [gigsData, reset]);
 
     return (
         <Profile>
