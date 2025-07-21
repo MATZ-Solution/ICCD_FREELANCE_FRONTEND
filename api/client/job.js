@@ -1,6 +1,6 @@
 import api from "../axios";
 import API_ROUTE from "../endpoints";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 
 export function useGetAllJobs(params = {}) {
@@ -28,6 +28,7 @@ export function useGetJobById(id) {
   const { data, isSuccess, isPending, isError, isLoading } = useQuery({
     queryKey: [API_ROUTE.job.getJobById, id],
     queryFn: async () => await api.get(`${API_ROUTE.job.getJobById}/${id}`),
+    enabled: id !== undefined && id !== null
     // refetchOnWindowFocus: true,
     // staleTime: 0,
     // refetchOnMount: true,
@@ -129,4 +130,41 @@ export function useGetAllJobByClient(params = {}) {
     isError,
     isLoading,
   };
+}
+
+export function useEditJobs(id) {
+  // const pathname = usePathname();
+  const queryClient = useQueryClient();
+  // const { dispatch } = useGlobalState();
+
+  const {
+    mutate: editJob,
+    isSuccess,
+    isPending,
+    isError,
+    error,
+  } = useMutation({
+    mutationFn: async (data) =>
+      await api.put(`${API_ROUTE.job.editJob}/${id}`, data, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: api.defaults.headers.common["Authorization"],
+        },
+        timeout: 30000,
+      }),
+    onSuccess: (data) => {
+       queryClient.invalidateQueries({
+        queryKey: [API_ROUTE.job.getJobsByClient],
+      });
+      alert("Job Edit Successfully")
+    },
+    onError: (error) => {
+      // Toast.show({
+      //     type: "error",
+      //     text1: "Error",
+      //     text2: "Failed to edit scout",
+      // });
+    },
+  });
+  return { editJob, isSuccess, isPending, isError, error };
 }

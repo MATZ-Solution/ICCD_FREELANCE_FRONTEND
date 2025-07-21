@@ -433,6 +433,17 @@ export const router = createBrowserRouter([
       // </AuthRoute>
     ),
   },
+   {
+    path: "/client/edit-job/:id",
+    element: (
+      // <AuthRoute>
+      <MainTemplate isShowFooter={false}>
+        <Post_job />
+      </MainTemplate>
+      // </AuthRoute>
+    ),
+  },
+
   {
     path: "/client/post-project",
     element: (
