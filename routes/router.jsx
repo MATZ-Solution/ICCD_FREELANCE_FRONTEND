@@ -52,6 +52,7 @@ import PaymentCancel from "../src/pages/payment/PaymentCancel";
 import OrderOptions from "../src/component/client_order/OrderOptions";
 import ClientJobs from "../src/pages/client_dashboard/client_jobs";
 import WhatsAppClone from "../src/pages/messages";
+import JobDetailPage from "../src/pages/client_dashboard/JobDetail";
 
 const stripePromise = loadStripe("pk_test_51QCl1eCDh3RtIJ6XkYcN5vHd3KTO2f8enRSNv9Wx7Li0iCI7cr9khTDQx0vS5RmbazZoaECNW83FesOMwLeIgMLb00BJG4pPZR");
 
@@ -489,6 +490,16 @@ export const router = createBrowserRouter([
       // <AuthRoute>
       <MainTemplate isShowFooter={false}>
         <Gigs_details />
+      </MainTemplate>
+      // </AuthRoute>
+    ),
+  },
+    {
+    path: "/client/jobdetail",
+    element: (
+      // <AuthRoute>
+      <MainTemplate isShowFooter={false}>
+        <JobDetailPage />
       </MainTemplate>
       // </AuthRoute>
     ),

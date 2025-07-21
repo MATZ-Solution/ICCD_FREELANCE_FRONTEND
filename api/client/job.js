@@ -1,6 +1,7 @@
 import api from "../axios";
 import API_ROUTE from "../endpoints";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
+
 
 export function useGetAllJobs(params = {}) {
   const constructQueryString = (params) => {
@@ -64,39 +65,36 @@ export function useGetScoutFilterEntries(params = {}) {
   };
 }
 
-// multipart form data
+
 export function useAddJob() {
-  // const pathname = usePathname();
-  // const queryClient = useQueryClient();
-  // const { dispatch } = useGlobalState();
+    // const pathname = usePathname();
+    // const queryClient = useQueryClient();
+    // const { dispatch } = useGlobalState();
 
-  const {
-    mutate: addJob,
-    isSuccess,
-    isPending,
-    isError,
-    error,
-  } = useMutation({
-    mutationFn: async (data) =>
-      await api.post(`${API_ROUTE.job.addJob}/${id}`, data, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: api.defaults.headers.common["Authorization"],
+    const { mutate: addjob, isSuccess, isPending, isError, error} = useMutation({
+        mutationFn: async (data) =>
+            await api.post(`${API_ROUTE.job.addJob}`, data, {
+                headers: {
+                    "Content-Type": "application/json",
+                    
+                    Authorization: api.defaults.headers.common["Authorization"],
+                },
+                timeout: 30000,
+            }),
+        onSuccess: (data) => {
+            alert("job added successfully!")
+
         },
-        timeout: 30000,
-      }),
-    onSuccess: (data) => {},
-    onError: (error) => {
-      // Toast.show({
-      //     type: "error",
-      //     text1: "Error",
-      //     text2: "Failed to edit scout",
-      // });
-    },
-  });
-  return { addJob, isSuccess, isPending, isError, reset, error, data };
+        onError: (error) => {
+            // Toast.show({
+            //     type: "error",
+            //     text1: "Error",
+            //     text2: "Failed to edit scout",
+            // });
+        },
+    });
+    return { addjob, isSuccess, isPending, isError, error };
 }
-
 // get project
 export function useGetJob(params = {}) {
   const constructQueryString = (params) => {
