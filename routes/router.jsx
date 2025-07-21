@@ -50,6 +50,7 @@ import { Elements } from "@stripe/react-stripe-js";
 import PaymentSuccess from "../src/pages/payment/PaymentSuccess";
 import PaymentCancel from "../src/pages/payment/PaymentCancel";
 import OrderOptions from "../src/component/client_order/OrderOptions";
+import ClientJobs from "../src/pages/client_dashboard/client_jobs";
 
 const stripePromise = loadStripe("pk_test_51QCl1eCDh3RtIJ6XkYcN5vHd3KTO2f8enRSNv9Wx7Li0iCI7cr9khTDQx0vS5RmbazZoaECNW83FesOMwLeIgMLb00BJG4pPZR");
 
@@ -471,7 +472,16 @@ export const router = createBrowserRouter([
       // </AuthRoute>
     ),
   },
-
+  {
+    path: "/client/jobs",
+    element: (
+      // <AuthRoute>
+      <MainTemplate isShowFooter={false}>
+        <ClientJobs />
+      </MainTemplate>
+      // </AuthRoute>
+    ),
+  },
   {
     path: "/client/gigs/gigs_details/:id",
     element: (

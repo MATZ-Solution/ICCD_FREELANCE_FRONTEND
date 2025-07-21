@@ -209,7 +209,7 @@ export default function ClientDashboard() {
             />
             <DCard
               title="Total Posted Jobs"
-              value="256"
+              value={ dashboardData?.length > 0 ? dashboardData[0]?.totalPostedJob : 0}
               subtitle="58% higher than "
               month="Last Month"
               percentChange="58%"

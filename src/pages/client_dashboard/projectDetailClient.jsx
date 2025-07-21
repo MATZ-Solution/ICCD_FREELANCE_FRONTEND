@@ -20,7 +20,7 @@ import { formatSingleDate } from "../../../functions/timeFormat";
 import CVUploadModal from "../../component/CVUploadModal";
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
-
+import { downloadFile } from "../../../functions/download_pdf";
 export const ProjectDetailClient = () => {
 
   const { id } = useParams()
@@ -134,7 +134,7 @@ export const ProjectDetailClient = () => {
                         </td>
                         <td className="px-6 py-4">{item?.experience}</td>
                         <td className="px-6 py-4 text-right">
-                          <button className="text-[#47AAB3] hover:underline text-sm">
+                          <button onClick={()=> downloadFile(item?.fileUrl, item?.name)} className="text-[#47AAB3] hover:underline text-sm">
                             Download CV
                           </button>
                         </td>

@@ -18,6 +18,7 @@ const API_ROUTE = {
     getAllJob: "/job/getAllJob",
     getJobById: "/job/getJobById",
     addJob: "/job/addJob",
+    getJobsByClient: '/job/getJobsByClient'
   },
   gigs: {
     getGigs: "/gigs/getGigs",

@@ -51,7 +51,7 @@ function Overview() {
     console.log("data: ", data)
     if (location.pathname.includes('edit')) {
       editGigs(data)
-      // navigate(`/freelancer/manage-gigs/pricing/edit/${id}`)
+      navigate(`/freelancer/manage-gigs/pricing/edit/${id}`)
     } else {
       navigate('/freelancer/manage-gigs/pricing')
     }
