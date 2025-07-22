@@ -38,9 +38,9 @@ const schema = yup.object({
 });
 
 const payTypeOptions = [
-  { value: "hourly", label: "Hourly" },
-  { value: "salary", label: "Salary" },
-  { value: "commission", label: "Commission" },
+  { value: "Hourly", label: "Hourly" },
+  { value: "Salary", label: "Salary" },
+  { value: "Commission", label: "Commission" },
   { value: "Monthly", label: "Monthly" },
 ];
 
@@ -91,8 +91,6 @@ export default function JobForm() {
     } else {
       addjob(data)
     }
-    console.log("Submitted Data:", data);
-
   };
 
    useEffect(() => {

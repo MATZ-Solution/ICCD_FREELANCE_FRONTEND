@@ -66,6 +66,7 @@ export function useGetProjectsById(id) {
   const { data, isSuccess, isPending, isError, isLoading } = useQuery({
     queryKey: [API_ROUTE.project.getProjectById],
     queryFn: async () => await api.get(`${API_ROUTE.project.getProjectById}/${id}`),
+    enabled: id !== undefined && id !== null
   });
   return {
     data: data?.data?.data,

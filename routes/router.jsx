@@ -454,6 +454,16 @@ export const router = createBrowserRouter([
       // </AuthRoute>
     ),
   },
+    {
+    path: "/client/edit-project/:id",
+    element: (
+      // <AuthRoute>
+      <MainTemplate isShowFooter={false}>
+        <ProjectForm />
+      </MainTemplate>
+      // </AuthRoute>
+    ),
+  },
 
   {
     path: "/client/orders",

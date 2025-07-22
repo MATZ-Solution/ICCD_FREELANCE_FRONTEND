@@ -42,6 +42,11 @@ const API_ROUTE = {
   order: {
     getOrderByFreelancer: '/order/getAllOrderByFreelancer',
     getAllOrderByClient: '/order/getAllOrderByClient'
+  },
+  messages: {
+    addMessageByUser: '/messages/addMessageByUser',
+    getAllMessageByUser: '/messages/getAllMessageByUser',
+    getMessageByUserWithRecipitant: '/messages/getMessageByUserWithRecipitant',
   }
 };
 

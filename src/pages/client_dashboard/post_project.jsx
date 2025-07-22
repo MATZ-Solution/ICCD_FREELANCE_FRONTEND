@@ -6,7 +6,8 @@ import Select from "react-select";
 import RichTextEditor from "../../component/client_dashboard/text_editor";
 import bannerimg from "../../assets/client_dashboard/bannerimg.png";
 import backgroundd from "../../assets/client_dashboard/Group.png";
-import { useAddproject } from "../../../api/client/project";
+import { useAddproject, useGetProjectsById } from "../../../api/client/project";
+import { useParams } from "react-router-dom";
 
 // Yup schema with Language as an array
 const schema = yup.object({
@@ -107,12 +108,15 @@ const typeOptions = [
 const modeOptions = ["Physical", "Remote", "Hybrid"];
 
 const ProjectForm = () => {
+
+  const { id } = useParams()
   const [skillInput, setSkillInput] = useState("");
   const [skills, setSkills] = useState([]);
 
   const {
     control,
     handleSubmit,
+    reset,
     formState: { errors },
     setValue,
   } = useForm({
@@ -137,9 +141,9 @@ const ProjectForm = () => {
     },
   });
 
-  useEffect(() => {
-    setValue("skills", skills);
-  }, [skills, setValue]);
+  // useEffect(() => {
+  //   setValue("skills", skills);
+  // }, [skills, setValue]);
 
   const handleAddSkill = () => {
     const trimmed = skillInput.trim();
@@ -153,12 +157,40 @@ const ProjectForm = () => {
     setSkills((prev) => prev.filter((_, i) => i !== index));
   };
 
-  const  { addProject, isSuccess, isPending, isError, error } = useAddproject()
+  const { addProject, isSuccess, isPending, isError, error } = useAddproject()
+  const { data: getProData, isSuccess: getProIsSucc, isPending: getProIsPend, isError: getProIsErr, isLoading: getProIsLoad } = useGetProjectsById(id)
+  // const { editProject, isSuccess: editProIsSucc, isPending: editProIsPend, isError: editProIsErr, error: editProErr } = useEditJobs(id)
+
   const onSubmit = (data) => {
-    console.log("Form Data:", data);
-    addProject(data)
-    alert("Form submitted!");
+    if (pathName.includes('edit-project')) {
+      // editProject(data)
+    } else {
+      addProject(data)
+    }
   };
+
+  // console.log("skills: ", getProData[0]?.skills.split(','))
+  useEffect(() => {
+    if (getProData && getProData?.length > 0) {
+      reset({
+        title: getProData[0]?.title || '',
+        category: getProData[0]?.category || '',
+        subCategory: getProData[0]?.subCategory || "",
+        description: getProData[0]?.description || "",
+        overview: getProData[0]?.overview || "",
+        deliverable: getProData[0]?.deliverable || "",
+        budget: getProData[0]?.budget || "",
+        deadline: getProData[0]?.deadline || null,
+        duration: getProData[0]?.duration || "",
+        skills: getProData[0]?.skills.split(',') || [],
+        language: getProData[0]?.languages.split(',') || [],
+        total_freelancer: getProData[0]?.total_freelancer || 1,
+        mode: getProData[0]?.mode || "",
+        type: getProData[0]?.type || "",
+        freelancerType: getProData[0]?.freelancerType || "",
+      });
+    }
+  }, [getProData, reset]);
 
   return (
     <div
