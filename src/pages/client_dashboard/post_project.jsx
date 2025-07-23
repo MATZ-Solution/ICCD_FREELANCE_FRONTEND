@@ -7,6 +7,7 @@ import bannerimg from "../../assets/client_dashboard/bannerimg.png";
 import backgroundd from "../../assets/client_dashboard/Group.png";
 import { useAddproject, useGetProjectsById } from "../../../api/client/project";
 import { useParams } from "react-router-dom";
+import { useEffect } from "react";
 
 // Yup schema with Language as an array
 const schema = yup.object({
@@ -142,7 +143,9 @@ const ProjectForm = () => {
     },
   });
 
+  const {id} = useParams()
   const { addProject, isSuccess, isPending, isError, error } = useAddproject();
+  const {data: getProData} = useGetProjectsById(id)
   
   const onSubmit = (data) => {
     if (pathName.includes('edit-project')) {
