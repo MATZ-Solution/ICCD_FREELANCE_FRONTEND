@@ -56,10 +56,10 @@ const FreelancerAnalytics = () => {
       {/* Overview Charts */}
       <div className="grid lg:grid-cols-2 gap-6 mb-6">
         <div className="bg-[#F8F8F8] rounded-2xl p-4">
-          <OverviewChart period="Monthly" colorScheme="purple" />
+          <OverviewChart height={400}  period="Monthly" colorScheme="purple" />
         </div>
         <div className="bg-[#F8F8F8] rounded-2xl p-4">
-          <OverviewChart period="Weekly" colorScheme="green" />
+          <OverviewChart height={400} period="Weekly" colorScheme="green" />
         </div>
       </div>
 

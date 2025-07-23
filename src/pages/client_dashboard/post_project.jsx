@@ -1,7 +1,6 @@
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { useEffect, useState } from "react";
 import Select from "react-select";
 import RichTextEditor from "../../component/client_dashboard/text_editor";
 import bannerimg from "../../assets/client_dashboard/bannerimg.png";
@@ -54,7 +53,6 @@ const schema = yup.object({
     .required("Language is required"),
   freelancerType: yup.string().required("Freelancer Type is required"),
   deadline: yup.date().required("Deadline is required").nullable(),
-  // duration: yup.date().required("Duration is required").nullable(),
   duration: yup.string().required("Hiring timeline is required"),
   total_freelancer: yup
     .number()
@@ -75,6 +73,16 @@ const subCategoryOptions = [
   { value: "Backend", label: "Backend" },
   { value: "Design", label: "Design" },
   { value: "API", label: "API Integration" },
+];
+
+const skillsOptions = [
+  { value: "React", label: "React" },
+  { value: "Node.js", label: "Node.js" },
+  { value: "Figma", label: "Figma" },
+  { value: "Photoshop", label: "Photoshop" },
+  { value: "SEO", label: "SEO" },
+  { value: "Laravel", label: "Laravel" },
+  { value: "Java", label: "Java" },
 ];
 
 const languageOptions = [
@@ -107,14 +115,10 @@ const typeOptions = [
 const modeOptions = ["Physical", "Remote", "Hybrid"];
 
 const ProjectForm = () => {
-  const [skillInput, setSkillInput] = useState("");
-  const [skills, setSkills] = useState([]);
-
   const {
     control,
     handleSubmit,
     formState: { errors },
-    setValue,
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
@@ -127,7 +131,6 @@ const ProjectForm = () => {
       deliverable: "",
       budget: "",
       deadline: null,
-      // duration: null,
       duration: "",
       total_freelancer: 1,
       mode: "",
@@ -137,26 +140,11 @@ const ProjectForm = () => {
     },
   });
 
-  useEffect(() => {
-    setValue("skills", skills);
-  }, [skills, setValue]);
-
-  const handleAddSkill = () => {
-    const trimmed = skillInput.trim();
-    if (trimmed && !skills.includes(trimmed)) {
-      setSkills((prev) => [...prev, trimmed]);
-      setSkillInput("");
-    }
-  };
-
-  const handleRemoveSkill = (index) => {
-    setSkills((prev) => prev.filter((_, i) => i !== index));
-  };
-
-  const  { addProject, isSuccess, isPending, isError, error } = useAddproject()
+  const { addProject, isSuccess, isPending, isError, error } = useAddproject();
+  
   const onSubmit = (data) => {
     console.log("Form Data:", data);
-    addProject(data)
+    addProject(data);
     alert("Form submitted!");
   };
 
@@ -247,46 +235,28 @@ const ProjectForm = () => {
           <label htmlFor="skills" className="block text-sm font-medium text-gray-700">
             Required Skills
           </label>
-          <div className="flex gap-2 mt-1">
-            <input
-              id="skills"
-              value={skillInput}
-              onChange={(e) => setSkillInput(e.target.value)}
-              placeholder="Enter a skill"
-              className="w-full border rounded px-3 py-2 focus:ring-teal-500 focus:border-teal-500"
-              aria-label="Enter a skill"
-            />
-            <button
-              type="button"
-              onClick={handleAddSkill}
-              disabled={!skillInput.trim()}
-              className="bg-teal-600 text-white px-4 py-2 rounded hover:bg-teal-700 disabled:bg-teal-400"
-            >
-              Add
-            </button>
-          </div>
-
-          <div className="flex flex-wrap gap-2 mt-2">
-            {skills.map((skill, index) => (
-              <span
-                key={index}
-                className="bg-teal-600 text-white px-2 py-1 rounded text-sm flex items-center gap-1"
-              >
-                {skill}
-                <button
-                  type="button"
-                  onClick={() => handleRemoveSkill(index)}
-                  className="text-red-300 hover:text-red-500"
-                  aria-label={`Remove ${skill}`}
-                >
-                  ×
-                </button>
-              </span>
-            ))}
-          </div>
-          {errors.skills && (
-            <p className="text-red-500 text-sm mt-1">{errors.skills.message}</p>
-          )}
+          <Controller
+            control={control}
+            name="skills"
+            render={({ field: { onChange, value } }) => (
+              <div>
+                <Select
+                  inputId="skills"
+                  isMulti
+                  placeholder="Select Required Skills"
+                  onChange={(selectedOptions) =>
+                    onChange(selectedOptions ? selectedOptions.map((option) => option.value) : [])
+                  }
+                  options={skillsOptions}
+                  value={skillsOptions.filter((option) => value && value.includes(option.value))}
+                  className="mt-1"
+                />
+                {errors.skills && (
+                  <p className="text-red-500 text-sm mt-1">{errors.skills.message}</p>
+                )}
+              </div>
+            )}
+          />
         </div>
 
         <Controller
@@ -396,29 +366,6 @@ const ProjectForm = () => {
             </div>
           )}
         />
-
-        {/* <Controller
-          control={control}
-          name="duration"
-          render={({ field: { onChange, value } }) => (
-            <div>
-              <label htmlFor="duration" className="block text-sm font-medium text-gray-700">
-                Duration
-              </label>
-              <input
-                type="date"
-                id="duration"
-                value={value ? new Date(value).toISOString().split("T")[0] : ""}
-                onChange={(e) => onChange(e.target.value ? new Date(e.target.value) : null)}
-                className="w-full border rounded px-3 py-2 mt-1 focus:ring-teal-500 focus:border-teal-500"
-                aria-label="Project duration"
-              />
-              {errors.duration && (
-                <p className="text-red-500 text-sm mt-1">{errors.duration.message}</p>
-              )}
-            </div>
-          )}
-        /> */}
 
         <div className="space-y-4">
           <h3 className="text-sm font-medium text-[#01AEAD]">Hiring details</h3>
@@ -555,7 +502,7 @@ const ProjectForm = () => {
                   onChange(selectedOptions ? selectedOptions.map((option) => option.value) : [])
                 }
                 options={languageOptions}
-                value={languageOptions.filter((option) => value.includes(option.value))}
+                value={languageOptions.filter((option) => value && value.includes(option.value))}
                 className="mt-1"
               />
             )}

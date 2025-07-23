@@ -52,6 +52,10 @@ import PaymentCancel from "../src/pages/payment/PaymentCancel";
 import OrderOptions from "../src/component/client_order/OrderOptions";
 import ClientJobs from "../src/pages/client_dashboard/client_jobs";
 import JobDetailPage from "../src/pages/client_dashboard/JobDetail";
+import SuperAdminDashboard from "../src/pages/superadmin_dashboard/dashboard";
+import ManageUsers from "../src/pages/superadmin_dashboard/manage_dispute";
+import ManageDispute from "../src/pages/superadmin_dashboard/manage_dispute";
+import ReviewPage from "../src/pages/superadmin_dashboard/review-page";
 
 const stripePromise = loadStripe("pk_test_51QCl1eCDh3RtIJ6XkYcN5vHd3KTO2f8enRSNv9Wx7Li0iCI7cr9khTDQx0vS5RmbazZoaECNW83FesOMwLeIgMLb00BJG4pPZR");
 
@@ -499,6 +503,39 @@ export const router = createBrowserRouter([
       // <AuthRoute>
       <MainTemplate isShowFooter={false}>
         <JobDetailPage />
+      </MainTemplate>
+      // </AuthRoute>
+    ),
+  },
+    {
+    path: "/superadmin/dashboard",
+    element: (
+      // <AuthRoute>
+      <MainTemplate isShowFooter={false}>
+        <SuperAdminDashboard />
+        
+      </MainTemplate>
+      // </AuthRoute>
+    ),
+  },
+     {
+    path: "/superadmin/manage-dispute",
+    element: (
+      // <AuthRoute>
+      <MainTemplate isShowFooter={false}>
+        <ManageDispute />
+        
+      </MainTemplate>
+      // </AuthRoute>
+    ),
+  },
+  {
+    path: "/superadmin/reviews",
+    element: (
+      // <AuthRoute>
+      <MainTemplate isShowFooter={false}>
+       <ReviewPage/>
+        
       </MainTemplate>
       // </AuthRoute>
     ),

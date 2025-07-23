@@ -137,14 +137,14 @@ export default function NotificationDropdown() {
                             {moment(n.created_at).fromNow()}
                           </span>
                          {n.is_read ? (
-                                <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-medium">
-                                    Readed
-                                </span>
-                                ) : (
-                                <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-medium">
-                                    New
-                                </span>
-                                )}
+                            <span className="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-medium">
+                                Readed
+                            </span>
+                            ) : (
+                            <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+                                New
+                            </span>
+                            )}
 
                         </div>
                       </div>
