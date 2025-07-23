@@ -36,7 +36,7 @@ function Jobs_table({ data }) {
                 <tr key={item.id}>
                   <td colSpan={6}>
                     <div
-                      onClick={() => handleNavigate(item?.id)}
+                      // onClick={() => handleNavigate(item?.id)}
                       className="w-full bg-[#F8F8F8] shadow-sm rounded-xl flex items-center justify-between px-4 py-3 gap-4 min-w-[1000px] hover:cursor-pointer">
                       {/* First Column */}
                       {/* <div className="flex items-center gap-5 w-[20%]">
@@ -71,8 +71,10 @@ function Jobs_table({ data }) {
 
                       {/* View */}
                       <div className="w-[15%]">
-                        <button className="w-full h-16 flex justify-center items-center mt-2 bg-[#EDEDED] rounded-2xl p-3">
-                          <p className="text-[#043A53] font-semibold">View</p>
+                        <button 
+                        onClick={()=> navigate(`/client/edit-job/${item?.id}`)} 
+                        className="w-full h-16 flex justify-center items-center mt-2 bg-[#EDEDED] rounded-2xl p-3">
+                          <p className="text-[#043A53] font-semibold">Edit</p>
                         </button>
                       </div>
 

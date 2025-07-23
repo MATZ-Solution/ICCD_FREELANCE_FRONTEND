@@ -18,7 +18,8 @@ const API_ROUTE = {
     getAllJob: "/job/getAllJob",
     getJobById: "/job/getJobById",
     addJob: "/job/addJob",
-    getJobsByClient: '/job/getJobsByClient'
+    getJobsByClient: '/job/getJobsByClient',
+    editJob: '/job/editJob/',
   },
   gigs: {
     getGigs: "/gigs/getGigs",
@@ -41,6 +42,11 @@ const API_ROUTE = {
   order: {
     getOrderByFreelancer: '/order/getAllOrderByFreelancer',
     getAllOrderByClient: '/order/getAllOrderByClient'
+  },
+  messages: {
+    addMessageByUser: '/messages/addMessageByUser',
+    getAllMessageByUser: '/messages/getAllMessageByUser',
+    getMessageByUserWithRecipitant: '/messages/getMessageByUserWithRecipitant',
   }
 };
 

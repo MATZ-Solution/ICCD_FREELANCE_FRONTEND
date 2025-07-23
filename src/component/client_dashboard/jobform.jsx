@@ -5,8 +5,10 @@ import hirefast from "../../assets/client_dashboard/hirefast.png";
 import backgroundd from "../../assets/client_dashboard/Group.png";
 import Select from "react-select";
 import RichTextEditor from "./text_editor";
-import { useAddJob } from "../../../api/client/job";
-
+import { useAddJob, useEditJobs, useGetJobById } from "../../../api/client/job";
+import { useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { useEffect } from "react";
 
 
 
@@ -36,9 +38,10 @@ const schema = yup.object({
 });
 
 const payTypeOptions = [
-  { value: "hourly", label: "Hourly" },
-  { value: "salary", label: "Salary" },
-  { value: "commission", label: "Commission" },
+  { value: "Hourly", label: "Hourly" },
+  { value: "Salary", label: "Salary" },
+  { value: "Commission", label: "Commission" },
+  { value: "Monthly", label: "Monthly" },
 ];
 
 const locationOptions = [
@@ -55,12 +58,18 @@ const locationOptions = [
 ];
 
 export default function JobForm() {
-
-
+  const pathName = useLocation().pathname
+  const { id } = useParams()
   const { addjob, isSuccess, isPending, isError, error } = useAddJob()
+  const { data, isSuccess: getJobIsSucc, isPending: getJobIsPend, isError: getJobIsErr, isLoading: getJobIsLoad } = useGetJobById(id)
+  const { editJob, isSuccess: editJobIsSucc, isPending: editJobIsPend, isError: editJobIsErr, error: editJobErr } = useEditJobs(id)
+
+  console.log("data: ", data)
+
   const {
     control,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
@@ -77,13 +86,28 @@ export default function JobForm() {
   });
 
   const onSubmit = (data) => {
-    // alert("Job added successfully!");
-    addjob(data)
-    
-        console.log("Submitted Data:", data);
-
-
+    if (pathName.includes('edit-job')) {
+      editJob(data)
+    } else {
+      addjob(data)
+    }
   };
+
+   useEffect(() => {
+      if (data && data?.length > 0) {
+        reset({
+          jobTitle: data[0]?.jobTitle || '',
+          joblocation: data[0]?.joblocation || '',
+          jobType: data[0]?.jobType || "",
+          payType: data[0]?.payType || "",
+          minSalaray: data[0]?.minSalaray || 0,
+          maxSalaray: data[0]?.maxSalaray || 0,
+          jobDescription: data[0]?.jobDescription || "",
+          totalPersontoHire: data[0]?.totalPersontoHire || 1
+
+        });
+      }
+    }, [data, reset]);
 
   return (
     <div
@@ -307,7 +331,7 @@ export default function JobForm() {
             </h2>
           </div>
           <div className="p-6">
-             <Controller
+            <Controller
               name="jobDescription"
               control={control}
               render={({ field }) => (

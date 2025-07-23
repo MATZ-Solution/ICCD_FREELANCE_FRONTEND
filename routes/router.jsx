@@ -51,6 +51,7 @@ import PaymentSuccess from "../src/pages/payment/PaymentSuccess";
 import PaymentCancel from "../src/pages/payment/PaymentCancel";
 import OrderOptions from "../src/component/client_order/OrderOptions";
 import ClientJobs from "../src/pages/client_dashboard/client_jobs";
+import WhatsAppClone from "../src/pages/messages";
 import JobDetailPage from "../src/pages/client_dashboard/JobDetail";
 import SuperAdminDashboard from "../src/pages/superadmin_dashboard/dashboard";
 import ManageUsers from "../src/pages/superadmin_dashboard/manage_dispute";
@@ -436,8 +437,29 @@ export const router = createBrowserRouter([
       // </AuthRoute>
     ),
   },
+   {
+    path: "/client/edit-job/:id",
+    element: (
+      // <AuthRoute>
+      <MainTemplate isShowFooter={false}>
+        <Post_job />
+      </MainTemplate>
+      // </AuthRoute>
+    ),
+  },
+
   {
     path: "/client/post-project",
+    element: (
+      // <AuthRoute>
+      <MainTemplate isShowFooter={false}>
+        <ProjectForm />
+      </MainTemplate>
+      // </AuthRoute>
+    ),
+  },
+    {
+    path: "/client/edit-project/:id",
     element: (
       // <AuthRoute>
       <MainTemplate isShowFooter={false}>
@@ -601,6 +623,16 @@ export const router = createBrowserRouter([
       // <AuthRoute>
       <MainTemplate isShowFooter={false}>
         <PaymentCancel />
+      </MainTemplate>
+      // </AuthRoute>
+    ),
+  },
+  {
+    path: "/messages",
+    element: (
+      // <AuthRoute>
+      <MainTemplate isShowFooter={false}>
+        <WhatsAppClone />
       </MainTemplate>
       // </AuthRoute>
     ),
