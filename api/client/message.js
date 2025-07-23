@@ -1,6 +1,6 @@
 import api from "../axios";
 import API_ROUTE from "../endpoints";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient, useInfiniteQuery } from "@tanstack/react-query";
 
 
 export function useAddMessage() {
@@ -65,5 +65,44 @@ export function useGetAllMsgByReceiptant(params = {}) {
         isPending,
         isError,
         isLoading,
+    };
+}
+
+export function useInfiniteQueryWithClient(params = {}) {
+    const queryClient = useQueryClient();
+
+    const constructQueryString = (params) => {
+        const query = new URLSearchParams(params).toString();
+        return query ? `&${query}` : "";
+    };
+    const {
+        data,
+        error,
+        fetchNextPage,
+        hasNextPage,
+        isFetching,
+        isFetchingNextPage,
+        status,
+    } = useInfiniteQuery({
+        queryKey: [API_ROUTE.messages.getMessageByUserWithRecipitant, params],
+        queryFn: ({ pageParam }) =>
+            api.get(
+                `${API_ROUTE.messages.getMessageByUserWithRecipitant}?page=${pageParam}${constructQueryString(
+                    params
+                )}`
+            ),
+        enabled: params.userId !== undefined && params.userId !== null && params.recipientId !== undefined && params.recipientId !== null && data.length === 0,
+        initialPageParam: 1,
+        getNextPageParam: (lastPage, pages) => lastPage.nextCursor,
+    })
+
+    return {
+        data: data?.pages?.flatMap((page) => page?.data?.data) ?? [],
+        error,
+        fetchNextPage,
+        hasNextPage,
+        isFetching,
+        isFetchingNextPage,
+        status,
     };
 }
