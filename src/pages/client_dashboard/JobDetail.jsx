@@ -64,9 +64,7 @@ export default function JobDetailPage() {
               </div>
             </div>
             <div className="flex flex-col sm:flex-row gap-3">
-              <button className="px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                Apply Now
-              </button>
+           
               <button className="px-6 py-3 bg-white text-gray-700 font-medium rounded-lg border border-gray-300 hover:bg-gray-50 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 flex items-center gap-2">
                 <Share2 className="w-4 h-4" />
                   Share this Job
@@ -88,34 +86,32 @@ export default function JobDetailPage() {
               </div>
             </div>
 
-            {/* Additional Info */}
+          
+          </div>
+
+          {/* Sidebar */}
+          <div className=" space-y-6">
+
+             {/* Company Info */}
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4">What We Offer</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="flex items-center gap-3 p-3 bg-green-50 rounded-lg">
-                  <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
-                    <DollarSign className="w-4 h-4 text-green-600" />
-                  </div>
-                  <div>
-                    <p className="font-medium text-gray-900">Competitive Salary</p>
-                    <p className="text-sm text-gray-600">Market-rate compensation</p>
-                  </div>
+              <h2 className="text-xl font-semibold text-gray-900 mb-3">About the Company</h2>
+              <div className="space-y-3">
+                <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                  <span className="text-white font-bold text-xl">TC</span>
                 </div>
-                <div className="flex items-center gap-3 p-3 bg-blue-50 rounded-lg">
-                  <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                    <Clock className="w-4 h-4 text-blue-600" />
-                  </div>
-                  <div>
-                    <p className="font-medium text-gray-900">Flexible Hours</p>
-                    <p className="text-sm text-gray-600">Work-life balance</p>
+                <div>
+                  <h3 className="font-medium text-gray-900">TechCorp Inc.</h3>
+                  <p className="text-sm text-gray-600 mb-3">
+                    Join our innovative team and help shape the future of technology. We're committed to creating an
+                    inclusive workplace where everyone can thrive.
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">500+ employees</span>
+                    <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">Tech Industry</span>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-
-          {/* Sidebar */}
-          <div className="space-y-6">
             {/* Job Details */}
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
               <h2 className="text-xl font-semibold text-gray-900 mb-4">Job Details</h2>
@@ -165,42 +161,7 @@ export default function JobDetailPage() {
               </div>
             </div>
 
-            {/* Quick Apply */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-              <h2 className="text-xl font-semibold text-gray-900 mb-3">Quick Apply</h2>
-              <p className="text-sm text-gray-600 mb-4">Ready to take the next step in your career?</p>
-              <div className="space-y-3">
-                <button className="w-full px-4 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                  Apply for this Position
-                </button>
-                <button className="w-full px-4 py-3 bg-white text-gray-700 font-medium rounded-lg border border-gray-300 hover:bg-gray-50 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 flex items-center justify-center gap-2">
-                  <Share2 className="w-4 h-4" />
-                  Share this Job
-                </button>
-              </div>
-            </div>
-
-            {/* Company Info */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-              <h2 className="text-xl font-semibold text-gray-900 mb-3">About the Company</h2>
-              <div className="space-y-3">
-                <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-                  <span className="text-white font-bold text-xl">TC</span>
-                </div>
-                <div>
-                  <h3 className="font-medium text-gray-900">TechCorp Inc.</h3>
-                  <p className="text-sm text-gray-600 mb-3">
-                    Join our innovative team and help shape the future of technology. We're committed to creating an
-                    inclusive workplace where everyone can thrive.
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">500+ employees</span>
-                    <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">Tech Industry</span>
-                    <span className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded-full">Series B</span>
-                  </div>
-                </div>
-              </div>
-            </div>
+           
 
             {/* Application Stats */}
             <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg border border-blue-200 p-6">

@@ -27,6 +27,8 @@ export default function FreelancerDashboard() {
     { id: 1, name: "DONGYONG PENG", type: "Graphics", amount: 20, date: "6 May 2023", status: "active" },
     { id: 2, name: "GUL AHMED TEXTILE", type: "Website", amount: 60000, date: "6 May 2023", status: "completed" },
     { id: 3, name: "SARAH JOHNSON", type: "Graphics", amount: 150, date: "5 May 2023", status: "pending" },
+    { id: 4, name: "Mohid Hussain", type: "Web", amount: 400, date: "23 july 2025", status: "completed" },
+
   ];
 
   const orderTabs = ["All", "Graphics", "Website"];
@@ -94,7 +96,7 @@ export default function FreelancerDashboard() {
                 className="w-16 h-16 rounded-full"
               />
               <div className="text-center">
-                <h3 className="capitalize font-semibold text-sm">{ data ? data[0]?.firstName: ''} {data ? data[0]?.lastName : ''} </h3>
+                <h3 className="capitalize font-semibold text-sm">{userDetails.name} </h3>
                 <p className="text-xs text-gray-500">{userDetails.email}</p>
               </div>
             </div>
@@ -154,7 +156,7 @@ export default function FreelancerDashboard() {
         {/* Main Content */}
         <main className="mt-10 flex-1 ">
           <div className="mb-6">
-            <h1 className="capitalize text-2xl font-bold mb-2">Welcome, {data ? data[0]?.firstName:""} {data ? data[0]?.lastName : ''}</h1>
+            <h1 className="capitalize text-2xl font-bold mb-2">Welcome,  {userDetails.name}</h1>
             <p className="text-xs text-gray-600 mb-4">
               Find important messages, tips, and links to helpful resources here.
             </p>
@@ -269,7 +271,7 @@ export default function FreelancerDashboard() {
                   <span className="text-xs text-gray-600">New Orders</span>
                 </div>
               </div>
-              <OverviewChart salesData={chartData[activeTimeTab].sales} ordersData={chartData[activeTimeTab].orders} />
+              <OverviewChart height={200} salesData={chartData[activeTimeTab].sales} ordersData={chartData[activeTimeTab].orders} />
             </div>
 
             {/* Recent Orders */}

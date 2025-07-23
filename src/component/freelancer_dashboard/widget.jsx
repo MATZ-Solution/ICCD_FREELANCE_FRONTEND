@@ -15,7 +15,7 @@ const Widgets = ({
   return (
     <div className="p-2">
       <div className="
-        lg:w-[300px] 
+        lg:w-[200px] 
         h-[370px] 
         
         border 

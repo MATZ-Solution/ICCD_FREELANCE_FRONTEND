@@ -13,6 +13,7 @@ import { Bell, Mail, HelpCircle, Star, TrendingUp, FileText, Users, Filter, X, M
 import useLogout from "../../hooks/useLogout";
 import { navigation, navTabsFreelancerDashboard, navTabsClientDashboard } from "../../constants/navbar_navigation";
 import { useCheckIsFreelancer } from "../../api/client/user";
+import NotificationDropdown from "./NotificationDropdown";
 
 export default function Navbar() {
 
@@ -222,14 +223,11 @@ export default function Navbar() {
           {
             userDetails ?
               <div className="flex items-center gap-2">
-                <button onClick={() => setNotifications(0)} className="p-2 hover:bg-gray-100 rounded-md relative">
-                  <Bell className="h-5 w-5 text-gray-600" />
-                  {notifications > 0 && (
-                    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                      {notifications}
-                    </span>
-                  )}
-                </button>
+                 <header className=" z-10  relative">
+               <NotificationDropdown />
+
+              </header>
+
                 <button onClick={() => setMessages(0)} className="p-2 hover:bg-gray-100 rounded-md relative">
                   <Mail className="h-5 w-5 text-gray-600" />
                   {messages > 0 && (

@@ -40,7 +40,7 @@ const dataSets = {
   ],
 };
 
-const OverviewChart = ({ colorScheme = "purple" }) => {
+const OverviewChart = ({ colorScheme = "purple"  , height }) => {
   const [period, setPeriod] = useState("Monthly");
 
   const styles = {
@@ -58,7 +58,7 @@ const OverviewChart = ({ colorScheme = "purple" }) => {
   const data = dataSets[period] || [];
 
   return (
-    <div style={{ width: "100%", height: 400, position: "relative" }}>
+    <div style={{ width: "100%", height: height, position: "relative" }}>
       <div
         style={{
           position: "absolute",
