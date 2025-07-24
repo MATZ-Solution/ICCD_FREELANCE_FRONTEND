@@ -12,6 +12,7 @@ import Modal from '../../component/modal';
 import { useNavigate } from 'react-router-dom';
 import { useGetAllJobs, useGetJobById } from '../../../api/client/job';
 import { useEffect } from 'react';
+import useDebounce from '../../../hooks/useDebounce';
 
 function Jobs() {
   const navigate = useNavigate();
@@ -81,13 +82,13 @@ function Jobs() {
 
       {/* Search Bar */}
       <div className="w-full flex flex-col items-center gap-4 p-5 mt-5 rounded-2xl bg-gray-100 shadow-lg lg:flex-row lg:gap-0">
-        <div className="w-full relative">
-          <SearchOutlinedIcon className="absolute top-1 left-2" />
-          <input className="w-full h-10 px-10" placeholder="Job title, keywords, or company" />
+        <div className="w-full relative ">
+          <SearchOutlinedIcon className="absolute top-2 left-2" />
+          <input onChange={(e) => setObj({...obj, jobTitle: e.target.value})} className="w-full h-10 px-10 outline-none" placeholder="Job title, keywords, or company" />
         </div>
         <div className="w-full relative lg:border-l-[1px] lg:border-r-gray-400">
-          <LocationOnIcon className="absolute top-1 left-2" />
-          <input className="w-full h-10 px-10" placeholder='City, state, zip code, or "remote"' />
+          <LocationOnIcon className="absolute top-2 left-2" />
+          <input className="w-full h-10 px-10 outline-none" placeholder='City, state, zip code, or "remote"' />
           <button className="hidden absolute top-0 right-2 bg-[#15A9B2] rounded-md text-white px-7 py-2 lg:flex">
             Search
           </button>
