@@ -14,10 +14,15 @@ import useLogout from "../../hooks/useLogout";
 import { navigation, navTabsFreelancerDashboard, navTabsClientDashboard } from "../../constants/navbar_navigation";
 import { useCheckIsFreelancer } from "../../api/client/user";
 import NotificationDropdown from "./NotificationDropdown";
+import NotificationBell from "./notificationBell";
+import { useGetNotification } from "../../api/client/notification";
 
 export default function Navbar() {
 
   const { data, error, isSuccess, isPending, isError } = useCheckIsFreelancer()
+  // const { data: notData } = useGetNotification({ type: 'freelancer' })
+  // console.log("############    notData   #############: ", notData)
+
   const location = useLocation()
   const navigate = useNavigate()
   const [isOpen, setIsOpen] = useState(false);
@@ -60,6 +65,9 @@ export default function Navbar() {
 
     return () => clearTimeout(delayDebounce);
   }, [search, location.pathname, navigate]);
+
+
+
 
 
   return (
@@ -183,7 +191,7 @@ export default function Navbar() {
                         onClick={() => {
                           if (data.length === 0) {
                             navigate(`/freelancer/profile-form/1`)
-                          }else{
+                          } else {
                             navigate(`/freelancer/dashboard`)
                           }
                         }}
@@ -223,11 +231,9 @@ export default function Navbar() {
           {
             userDetails ?
               <div className="flex items-center gap-2">
-                 <header className=" z-10  relative">
-               <NotificationDropdown />
-
-              </header>
-
+                <header className=" z-10 relative">
+                  <NotificationDropdown />
+                </header>
                 <button onClick={() => setMessages(0)} className="p-2 hover:bg-gray-100 rounded-md relative">
                   <Mail className="h-5 w-5 text-gray-600" />
                   {messages > 0 && (

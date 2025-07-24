@@ -47,6 +47,9 @@ const API_ROUTE = {
     addMessageByUser: '/messages/addMessageByUser',
     getAllMessageByUser: '/messages/getAllMessageByUser',
     getMessageByUserWithRecipitant: '/messages/getMessageByUserWithRecipitant',
+  },
+  notifications: {
+    getNofication: '/notifications/getNotification'
   }
 };
 

@@ -23,6 +23,7 @@ const WhatsAppClone = () => {
   const [message, setMessages] = useState([]);
 
   const client = useSelector((state) => state.user.userDetails);
+  console.log("client: ", client)
 
   const { data } = useGetAllMessagesByUser();
   const {
@@ -106,6 +107,7 @@ const WhatsAppClone = () => {
   // Socket listener
   useEffect(() => {
     const handleReceiveMessage = (data) => {
+      console.log("data: ", data)
       shouldScrollRef.current = true;
       setMessages((prev) => [...prev, data]);
     };
