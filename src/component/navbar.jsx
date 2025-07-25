@@ -31,6 +31,7 @@ export default function Navbar() {
   const [notifications, setNotifications] = useState(3);
   const [messages, setMessages] = useState(5);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
+  const [isShowNot, setIsShowNot] = useState(false)
 
   const logout = useLogout()
 
@@ -232,7 +233,8 @@ export default function Navbar() {
             userDetails ?
               <div className="flex items-center gap-2">
                 <header className=" z-10 relative">
-                  <NotificationDropdown />
+                 <NotificationBell isShowNot={isShowNot} setIsShowNot={setIsShowNot}/>
+                 {isShowNot && (<NotificationDropdown />)}
                 </header>
                 <button onClick={() => setMessages(0)} className="p-2 hover:bg-gray-100 rounded-md relative">
                   <Mail className="h-5 w-5 text-gray-600" />
