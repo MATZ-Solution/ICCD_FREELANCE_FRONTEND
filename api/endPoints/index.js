@@ -12,14 +12,15 @@ const API_ROUTE = {
     addProject: "/project/addProject",
     getProjectById: "/project/getProjectById",
     submitProposals:"/project/submitProposals",
-    getProjectPropsalByClient: '/project/getProjectPropsalByClient'
+    getProjectPropsalByClient: '/project/getProjectPropsalByClient',
+    editProject : '/project/editProject'
   },
   job: {
     getAllJob: "/job/getAllJob",
     getJobById: "/job/getJobById",
     addJob: "/job/addJob",
     getJobsByClient: '/job/getJobsByClient',
-    editJob: '/job/editJob/',
+    editJob: '/job/editJob',
   },
   gigs: {
     getGigs: "/gigs/getGigs",
@@ -27,7 +28,9 @@ const API_ROUTE = {
     addGigs: "/gigs/addGigs",
     getSingleGigs: "/gigs/getSingleGigs",
     getGigsByUserId: "/gigs/getGigsByUser",
-    editGigs: "/gigs/editGigs"
+    editGigs: "/gigs/editGigs",
+    getGigsFiles: '/gigs/getGigsFiles',
+    editGigsFiles: '/gigs/editGigsFiles'
   },
   freelancer: {
     checkIsFreelancer: '/freelancer/checkIsFreelancer',

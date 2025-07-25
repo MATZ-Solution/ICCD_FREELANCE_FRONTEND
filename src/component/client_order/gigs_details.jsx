@@ -10,7 +10,6 @@ export default function ServicePage() {
 
   const { id } = useParams();
   const { data, isLoading } = useGetSingleGigs(id);
-  console.log(data)
 
   const gig = data?.[0];
   const gigInfo = gig?.gigsDescription;
@@ -46,12 +45,17 @@ export default function ServicePage() {
             </div>
           </div>
 
-          <div className="aspect-video rounded-lg overflow-hidden bg-gray-100">
-            <img
-              src={gigInfo?.gigsFiles}
-              alt="gig banner"
-              className="w-full h-full object-cover"
-            />
+          <div className="aspect-video rounded-lg  bg-gray-100">
+            {data[0]?.gigsDescription?.gigsFiles?.split(',')?.map((item, index)=>{
+              return (
+                <img
+                key={index}
+                  src={item}
+                  alt="gig banner"
+                  className="w-full h-full object-cover"
+                />
+              )
+            })}
           </div>
 
           <div className="bg-white border border-gray-200 rounded-xl shadow-sm p-6">

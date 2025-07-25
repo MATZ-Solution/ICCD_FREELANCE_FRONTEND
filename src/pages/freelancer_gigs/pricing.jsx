@@ -313,11 +313,8 @@ export default function PricingForm() {
   })
 
   useEffect(() => {
-    console.log("useEffect triggered - isSuccess:", isSuccess, "gigsData:", gigsData)
     if (isSuccess && gigsData && Array.isArray(gigsData) && gigsData.length > 0 && isInitialMount.current) {
       const packagesDetails = gigsData[0].packagesDetails
-      console.log("packagesDetails:", packagesDetails)
-
       const packagesData = {
         basic: {
           packageType: "basic",
@@ -412,8 +409,8 @@ export default function PricingForm() {
 
   const onSubmit = (data) => {
     // dispatch(setGigsDetails(data));
-    console.log("data: ", data)
     if (location.pathname.includes('edit')) {
+      console.log("data: ", data)
       editGigs(data)
       navigate(`/freelancer/manage-gigs/description/edit/${id}`)
     } else {

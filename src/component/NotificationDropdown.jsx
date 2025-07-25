@@ -21,7 +21,6 @@ export default function NotificationDropdown() {
 
 
   const { data, error, isLoading, isError } = useGetNotification({ type: 'freelancer' })
-  console.log("############    data   #############: ", data)
 
   return (
     <div className="relative" ref={dropdownRef}>

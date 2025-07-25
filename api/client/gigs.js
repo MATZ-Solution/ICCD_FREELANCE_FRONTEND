@@ -105,6 +105,24 @@ export function useGetGigsByUser() {
   };
 }
 
+export function useGetGigsFiles(id) {
+  const { data, isSuccess, isPending, isError, isLoading } = useQuery({
+    queryKey: [API_ROUTE.gigs.getGigsFiles, id],
+    queryFn: async () => await api.get(`${API_ROUTE.gigs.getGigsFiles}/${id}`),
+    enabled: id !== undefined && id !== null
+    // refetchOnWindowFocus: true,
+    // staleTime: 0,
+    // refetchOnMount: true,
+  });
+  return {
+    data: data?.data?.data,
+    isSuccess,
+    isPending,
+    isError,
+    isLoading,
+  };
+}
+
 export function useEditGigs(id, formType='json') {
   // const pathname = usePathname();
   const queryClient = useQueryClient();
@@ -139,4 +157,40 @@ export function useEditGigs(id, formType='json') {
     },
   });
   return { editGigs, isSuccess, isPending, isError, error };
+}
+
+export function useEditGigsFiles(id) {
+  // const pathname = usePathname();
+  const queryClient = useQueryClient();
+  // const { dispatch } = useGlobalState();
+
+  const {
+    mutate: editGigsFiles,
+    isSuccess,
+    isPending,
+    isError,
+    error,
+  } = useMutation({
+    mutationFn: async (data) =>
+      await api.put(`${API_ROUTE.gigs.editGigsFiles}/${id}`, data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: api.defaults.headers.common["Authorization"],
+        },
+        timeout: 30000,
+      }),
+    onSuccess: (data) => {
+       queryClient.invalidateQueries({
+        queryKey: [API_ROUTE.gigs.editGigs],
+      });
+    },
+    onError: (error) => {
+      // Toast.show({
+      //     type: "error",
+      //     text1: "Error",
+      //     text2: "Failed to edit scout",
+      // });
+    },
+  });
+  return { editGigsFiles, isSuccess, isPending, isError, error };
 }

@@ -1,22 +1,26 @@
 import Profile from '../../component/freelancers_gigs/profile';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Button from '../../component/button';
 import CollectionsIcon from '@mui/icons-material/Collections';
 import { useNavigate, useLocation, useParams } from 'react-router-dom';
-import { useAddGigs, useGetSingleGigs } from '../../../api/client/gigs';
+import { useAddGigs, useGetSingleGigs, useEditGigs, useGetGigsFiles, useEditGigsFiles } from '../../../api/client/gigs';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { resetGigDetails } from '../../../redux/slices/gigsDetailSlice';
 
 function Gallery() {
   const { id } = useParams();
+  const location = useLocation()
   const data = useSelector(state => state.gigs.gigsDetails);
   const profileDetails = useSelector(state => state.userProfile.userProfile);
   const { addGigs, isSuccess, isPending, isError, error } = useAddGigs();
-  const { data: gigsData } = useGetSingleGigs(id);
+  const { data: gigsData } = useGetGigsFiles(id);
   console.log("gigs details: ", gigsData);
 
-  const [images, setImages] = useState([null, null, null]);
+  const [images, setImages] = useState([]);
+  useEffect(() => {
+    setImages(gigsData)
+  }, [gigsData])
 
   const handleReplaceImage = (index, e) => {
     const file = e.target.files[0];
@@ -29,13 +33,12 @@ function Gallery() {
     }
   };
 
-  const handleDeleteImage = (indexToDelete) => {
-    setImages((prevImages) => {
-      const newImages = [...prevImages];
-      newImages[indexToDelete] = null;
-      return newImages;
-    });
+  const handleDeleteImage = (file) => {
+    const filterImg = images?.filter(item => item?.fileUrl !== file)
+    setImages(filterImg);
   };
+
+  const { editGigsFiles, isPending: editGigIsPending } = useEditGigsFiles(id)
 
   const onSubmit = () => {
     const formData = new FormData();
@@ -46,13 +49,19 @@ function Gallery() {
         formData.append(key, data[key]);
       }
     }
-
     images.forEach((file) => {
       if (file) formData.append("files", file);
     });
-
     formData.append('freelancerId', profileDetails.id);
-    addGigs(formData);
+    if (location.pathname.includes('edit')) {
+
+      editGigsFiles(formData)
+      // navigate(`/freelancer/manage-gigs/description/edit/${id}`)
+    } else {
+      addGigs(formData);
+      // navigate('/freelancer/manage-gigs/pricing')
+    }
+
   };
 
   return (
@@ -73,43 +82,49 @@ function Gallery() {
         <p className='text-[#515151] text-sm'>Get noticed by the right buyers with visual example of your services.</p>
 
         <div className="mt-4 flex gap-4 flex-wrap sm:flex-nowrap">
-          {Array.from({ length: 3 }).map((_, index) => (
-            <div key={index} className="w-52 h-32 flex flex-col items-center justify-center border border-gray-300 relative overflow-hidden rounded">
-              {images[index] ? (
-                <>
-                  <img
-                    src={URL.createObjectURL(images[index])}
-                    alt={`Preview ${index}`}
-                    className="w-full h-full object-cover"
-                  />
-                  <button
-                    onClick={() => handleDeleteImage(index)}
-                    className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center"
-                  >
-                    ×
-                  </button>
-                </>
-              ) : (
-                <>
-                  <input
-                    id={`file-input-${index}`}
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => handleReplaceImage(index, e)}
-                    className="hidden"
-                  />
-                  <label
-                    htmlFor={`file-input-${index}`}
-                    className="cursor-pointer flex flex-col items-center justify-center w-full h-full"
-                  >
-                    <CollectionsIcon style={{ scale: 2 }} className="text-gray-400" />
-                    <p className="text-gray-500 mt-3 text-sm font-semibold">Drop a Photo</p>
-                    <p className="text-blue-500 text-sm">Browse</p>
-                  </label>
-                </>
-              )}
-            </div>
-          ))}
+          {[0, 1, 2].map((index) => {
+            const image = (images || [])[index];
+            return (
+              <div
+                key={index}
+                className="w-52 h-32 flex items-center justify-center border border-gray-300 relative overflow-hidden rounded"
+              >
+                {image ? (
+                  <>
+                    <img
+                      src={image.fileUrl}
+                      alt={`Preview ${index}`}
+                      className="w-full h-full object-cover"
+                    />
+                    <button
+                      onClick={() => handleDeleteImage(image.fileUrl)}
+                      className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center"
+                    >
+                      ×
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <input
+                      id={`file-input-${index}`}
+                      type="file"
+                      accept="image/*"
+                      onChange={(e) => handleAddImage(index, e)}
+                      className="hidden"
+                    />
+                    <label
+                      htmlFor={`file-input-${index}`}
+                      className="cursor-pointer flex flex-col items-center justify-center w-full h-full"
+                    >
+                      <CollectionsIcon style={{ scale: 2 }} className="text-gray-400" />
+                      <p className="text-gray-500 mt-3 text-sm font-semibold">Drop a Photo</p>
+                      <p className="text-blue-500 text-sm">Browse</p>
+                    </label>
+                  </>
+                )}
+              </div>
+            );
+          })}
         </div>
       </div>
 
