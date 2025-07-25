@@ -117,4 +117,41 @@ export function useGetProjectProposalByClient(id) {
   };
 }
 
+export function useEditProjects(id) {
+  // const pathname = usePathname();
+  // const queryClient = useQueryClient();
+  // const { dispatch } = useGlobalState();
+
+  const {
+    mutate: editProject,
+    isSuccess,
+    isPending,
+    isError,
+    error,
+  } = useMutation({
+    mutationFn: async (data) =>
+      await api.put(`${API_ROUTE.project.editProject}/${id}`, data, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: api.defaults.headers.common["Authorization"],
+        },
+        timeout: 30000,
+      }),
+    onSuccess: (data) => {
+      //  queryClient.invalidateQueries({
+      //   queryKey: [API_ROUTE.project.getProjectByClient],
+      // });
+      alert("project Edit Successfully")
+    },
+    onError: (error) => {
+      // Toast.show({
+      //     type: "error",
+      //     text1: "Error",
+      //     text2: "Failed to edit scout",
+      // });
+    },
+  });
+  return { editProject, isSuccess, isPending, isError, error };
+}
+
 

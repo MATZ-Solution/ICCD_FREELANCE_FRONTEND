@@ -12,6 +12,7 @@ import { useDispatch } from "react-redux";
 import { useGetFreelancerProfile } from "../../../api/client/freelancer";
 import { useEffect } from "react";
 import { getUserProfile } from "../../../redux/slices/userProfileSlice";
+import {  useNavigate } from "react-router-dom";
 
 export default function FreelancerDashboard() {
   const [activeNavTab, setActiveNavTab] = useState("Dashboard");
@@ -22,6 +23,7 @@ export default function FreelancerDashboard() {
   const [isAvailable, setIsAvailable] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [showMobileSidebar, setShowMobileSidebar] = useState(false);
+  const navigate = useNavigate()
 
   const orders = [
     { id: 1, name: "DONGYONG PENG", type: "Graphics", amount: 20, date: "6 May 2023", status: "active" },
@@ -149,7 +151,7 @@ export default function FreelancerDashboard() {
 
           <div className="flex bg-[#F8F8F8] p-4 rounded-xl justify-between">
             <h4 className="font-semibold text-lg">Inbox</h4>
-            <button className="text-xs text-cyan-500 hover:text-cyan-600">View All</button>
+            <button onClick={()=> navigate('/messages')} className="text-xs text-cyan-500 hover:text-cyan-600">View All</button>
           </div>
 
         </aside>

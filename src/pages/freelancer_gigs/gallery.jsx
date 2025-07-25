@@ -15,44 +15,47 @@ function Gallery() {
   const profileDetails = useSelector(state => state.userProfile.userProfile);
   const { addGigs, isSuccess, isPending, isError, error } = useAddGigs();
   const { data: gigsData } = useGetGigsFiles(id);
-  console.log("gigs details: ", gigsData);
-
+  
   const [images, setImages] = useState([]);
+  const [delImgFileKey, setDelImgFileKey] = useState([]);
+  
+  console.log("images: ", images);
+  console.log("delImgFileKey: ", delImgFileKey);
+  
+
   useEffect(() => {
     setImages(gigsData)
   }, [gigsData])
 
-  const handleReplaceImage = (index, e) => {
+  const handleUpload = (e) => {
     const file = e.target.files[0];
-    if (file) {
-      setImages((prevImages) => {
-        const newImages = [...prevImages];
-        newImages[index] = file;
-        return newImages;
-      });
+    if (!file) return;
+
+    if (images.length >= 3) {
+      return alert("Only 3 images allowed");
     }
+
+    const fileUrl = URL.createObjectURL(file); // Preview
+    setImages((prev) => [...prev, { file, fileUrl }]);
   };
 
-  const handleDeleteImage = (file) => {
-    const filterImg = images?.filter(item => item?.fileUrl !== file)
-    setImages(filterImg);
+  const handleDeleteImage = (fileObj) => {
+    if(fileObj?.fileKey){
+      setDelImgFileKey((prevItems) => [...prevItems, fileObj.fileKey]);
+    }
+    setImages((prev) => prev.filter((img) => img.fileUrl !== fileObj.fileUrl));
   };
 
   const { editGigsFiles, isPending: editGigIsPending } = useEditGigsFiles(id)
 
   const onSubmit = () => {
     const formData = new FormData();
-    for (const key in data) {
-      if (key === 'packages') {
-        formData.append(key, JSON.stringify(data[key]));
-      } else {
-        formData.append(key, data[key]);
-      }
+    if(delImgFileKey.length>0){
+      formData.append("delFilesKey", JSON.stringify(delImgFileKey))
     }
-    images.forEach((file) => {
-      if (file) formData.append("files", file);
+    images.forEach((img) => {
+      if (img.file) formData.append("files", img.file);
     });
-    formData.append('freelancerId', profileDetails.id);
     if (location.pathname.includes('edit')) {
 
       editGigsFiles(formData)
@@ -82,50 +85,48 @@ function Gallery() {
         <p className='text-[#515151] text-sm'>Get noticed by the right buyers with visual example of your services.</p>
 
         <div className="mt-4 flex gap-4 flex-wrap sm:flex-nowrap">
-          {[0, 1, 2].map((index) => {
-            const image = (images || [])[index];
-            return (
-              <div
-                key={index}
-                className="w-52 h-32 flex items-center justify-center border border-gray-300 relative overflow-hidden rounded"
+          {/* Existing or uploaded images */}
+          {images?.map((item, index) => (
+            <div
+              key={index}
+              className="w-52 h-32 flex items-center justify-center border border-gray-300 relative overflow-hidden rounded"
+            >
+              <img
+                src={item?.fileUrl}
+                alt={`Preview ${index}`}
+                className="w-full h-full object-cover"
+              />
+              <button
+                onClick={() => handleDeleteImage(item)}
+                className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center"
               >
-                {image ? (
-                  <>
-                    <img
-                      src={image.fileUrl}
-                      alt={`Preview ${index}`}
-                      className="w-full h-full object-cover"
-                    />
-                    <button
-                      onClick={() => handleDeleteImage(image.fileUrl)}
-                      className="absolute top-1 right-1 bg-red-500 text-white rounded-full w-5 h-5 text-xs flex items-center justify-center"
-                    >
-                      ×
-                    </button>
-                  </>
-                ) : (
-                  <>
-                    <input
-                      id={`file-input-${index}`}
-                      type="file"
-                      accept="image/*"
-                      onChange={(e) => handleAddImage(index, e)}
-                      className="hidden"
-                    />
-                    <label
-                      htmlFor={`file-input-${index}`}
-                      className="cursor-pointer flex flex-col items-center justify-center w-full h-full"
-                    >
-                      <CollectionsIcon style={{ scale: 2 }} className="text-gray-400" />
-                      <p className="text-gray-500 mt-3 text-sm font-semibold">Drop a Photo</p>
-                      <p className="text-blue-500 text-sm">Browse</p>
-                    </label>
-                  </>
-                )}
+                ×
+              </button>
+            </div>
+          ))}
+
+          {/* Upload "drop a photo" cards if space left */}
+          {images?.length < 3 &&
+            Array.from({ length: 3 - images.length }).map((_, i) => (
+              <div
+                key={`drop-${i}`}
+                className="w-52 h-32 border-2 border-dashed border-gray-300 rounded flex items-center justify-center relative"
+              >
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleUpload}
+                  className="absolute inset-0 opacity-0 cursor-pointer"
+                />
+                <div className="flex flex-col items-center justify-center pointer-events-none">
+                  <CollectionsIcon style={{ scale: 2 }} className="text-gray-400" />
+                  <p className="text-gray-500 mt-3 text-sm font-semibold">Drop a Photo</p>
+                  <p className="text-blue-500 text-sm">Browse</p>
+                </div>
               </div>
-            );
-          })}
+            ))}
         </div>
+
       </div>
 
       <div className="mt-5 flex sm:justify-end">

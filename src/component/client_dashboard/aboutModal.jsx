@@ -29,18 +29,20 @@ const AboutModal = ({ onClose }) => {
     });
 
     const [image, setImage] = useState(null);
+    const [delFileKey, setDelFileKey] = useState(null)
     console.log("image: ", image)
 
     const handleImageChange = (event) => {
         const file = event.target.files[0];
         if (file) {
+            setDelFileKey(user?.fileKey)
             const imageUrl = URL.createObjectURL(file);  // creates preview
             setImage({ imageUrl: imageUrl, imageFile: file });  // update image state
         }
     };
     const { editClientProfile, isSuccess, isPending, isError, error } = useEditClientProfile()
     const onSubmit = (data) => {
-        const updateData = { ...data, userId: user?.id, files: image?.imageFile, fileKey: user?.fileKey }
+        const updateData = { ...data, userId: user?.id, files: image?.imageFile, fileKey: delFileKey }
         const formData = new FormData()
         for (const key in updateData) {
             if (key === 'files') {
@@ -59,7 +61,6 @@ const AboutModal = ({ onClose }) => {
             <div className="absolute inset-0 bg-black/50 z-0"></div>
             <div className="z-10 bg-white rounded-xl p-6 w-full max-w-md shadow-lg space-y-4">
                 <h2 className="text-xl font-semibold text-center">Update Profile</h2>
-
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                     <div className='relative flex justify-center'>
                         <div className='relative'>
@@ -75,7 +76,6 @@ const AboutModal = ({ onClose }) => {
                             <label htmlFor="fileInput" className="absolute -top-2 -right-6  p-1 rounded-full shadow cursor-pointer">
                                 <Pencil size={18} className="text-black" />
                             </label>
-
                         </div>
                     </div>
                     <div>
@@ -88,7 +88,6 @@ const AboutModal = ({ onClose }) => {
                         />
                         {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
                     </div>
-
                     <div>
                         <label className="block mb-1 font-medium">About</label>
                         <textarea
@@ -99,7 +98,6 @@ const AboutModal = ({ onClose }) => {
                         />
                         {errors.about && <p className="text-red-500 text-sm">{errors.about.message}</p>}
                     </div>
-
                     <div className="flex justify-between space-x-2">
                         <button
                             type="button"

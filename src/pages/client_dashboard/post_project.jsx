@@ -5,9 +5,10 @@ import Select from "react-select";
 import RichTextEditor from "../../component/client_dashboard/text_editor";
 import bannerimg from "../../assets/client_dashboard/bannerimg.png";
 import backgroundd from "../../assets/client_dashboard/Group.png";
-import { useAddproject, useGetProjectsById } from "../../../api/client/project";
+import { useAddproject, useEditProjects, useGetProjectsById } from "../../../api/client/project";
 import { useParams } from "react-router-dom";
 import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 
 // Yup schema with Language as an array
 const schema = yup.object({
@@ -117,6 +118,7 @@ const typeOptions = [
 const modeOptions = ["Physical", "Remote", "Hybrid"];
 
 const ProjectForm = () => {
+  const pathName = useLocation().pathname
   const {
     control,
     handleSubmit,
@@ -145,11 +147,12 @@ const ProjectForm = () => {
 
   const {id} = useParams()
   const { addProject, isSuccess, isPending, isError, error } = useAddproject();
+  const { editProject} = useEditProjects(id)
   const {data: getProData} = useGetProjectsById(id)
   
   const onSubmit = (data) => {
     if (pathName.includes('edit-project')) {
-      // editProject(data)
+      editProject(data)
     } else {
       addProject(data);
     }
@@ -157,7 +160,7 @@ const ProjectForm = () => {
 
   // console.log("skills: ", getProData[0]?.skills.split(','))
   useEffect(() => {
-    if (getProData && getProData?.length > 0) {
+    if (pathName.includes('edit-project') && getProData && getProData?.length > 0) {
       reset({
         title: getProData[0]?.title || '',
         category: getProData[0]?.category || '',

@@ -172,7 +172,7 @@ export function useEditGigsFiles(id) {
     error,
   } = useMutation({
     mutationFn: async (data) =>
-      await api.put(`${API_ROUTE.gigs.editGigsFiles}/${id}`, data, {
+      await api.post(`${API_ROUTE.gigs.editGigsFiles}/${id}`, data, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: api.defaults.headers.common["Authorization"],
