@@ -4,20 +4,24 @@ import { useSelector } from "react-redux";
 import { Bell } from "lucide-react";
 import { useLocation } from "react-router-dom";
 import { useGetUnReadCountNot } from "../../api/client/notification";
+import { memo } from "react";
 
 const NotificationBell = ({ isShowNot, setIsShowNot }) => {
 
-    const freelancer = useSelector((state) => state.user.userDetails);
-    const client = useSelector((state) => state.userProfile.userProfile);
-
-    let [user, setUser] = useState({id: client?.id, type: 'client'})
-
     const [count, setCount] = useState(0);
-
-    const socket = useMemo(() => { return getSocket(client.id) }, [client.id]);
-    const { data, error, isLoading, isError } = useGetUnReadCountNot(freelancer?.id)
-
+    const pathName = useLocation().pathname
     
+    const client = useSelector((state) => state.user.userDetails);
+    const freelancer = useSelector((state) => state.userProfile.userProfile);
+
+    const user = useSelector((state) => state.userType.user);
+
+    console.log("user: ", user)
+
+    const socket = useMemo(() => { return getSocket(user.id, 'notification')}, [user.id]);
+
+    const { data, error, isLoading, isError } = useGetUnReadCountNot(user)
+
     useEffect(() => {
         if (data && data?.length > 0) {
             setCount(data[0]?.count);
@@ -50,4 +54,4 @@ const NotificationBell = ({ isShowNot, setIsShowNot }) => {
     );
 };
 
-export default NotificationBell;
+export default memo(NotificationBell);

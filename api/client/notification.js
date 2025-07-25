@@ -17,22 +17,30 @@ export function useGetNotification(id, params = {}) {
     return { data: data?.data?.data, error, isLoading, isError };
 }
 
-export function useGetUnReadCountNot(id) {
-    const queryKey = [API_ROUTE.notifications.unread_count];
+export function useGetUnReadCountNot(params = {}) {
+    const constructQueryString = (params) => {
+        const query = new URLSearchParams(params).toString();
+        return query ? `&${query}` : "";
+    };
+    const queryKey = [API_ROUTE.notifications.unread_count, params];
     const { data, error, isLoading, isError } = useQuery({
         queryKey,
         queryFn: () =>
-            api.get(`${API_ROUTE.notifications.unread_count}/${id}`),
+            api.get(`${API_ROUTE.notifications.unread_count}?${constructQueryString(params)}`),
     });
     return { data: data?.data?.data, error, isLoading, isError };
 }
 
-export function useUpdateReadNot(id) {
-    const queryKey = [API_ROUTE.notifications.mark_read];
+export function useUpdateReadNot(params = {}) {
+    const constructQueryString = (params) => {
+        const query = new URLSearchParams(params).toString();
+        return query ? `&${query}` : "";
+    };
+    const queryKey = [API_ROUTE.notifications.mark_read, params];
     const { data, error, isLoading, isError } = useQuery({
         queryKey,
         queryFn: () =>
-            api.put(`${API_ROUTE.notifications.mark_read}/${id}`),
+            api.put(`${API_ROUTE.notifications.mark_read}?${constructQueryString(params)}`),
     });
     return { data: data?.data?.data, error, isLoading, isError };
 }
