@@ -1,98 +1,211 @@
-import { useState, useEffect } from "react"
-import { useNavigate } from "react-router-dom"
-import { CheckCircle, ArrowRight, Home, Receipt } from "lucide-react"
+import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 
-export default function PaymentSuccess() {
-  const [isVisible, setIsVisible] = useState(false)
-  const navigate = useNavigate()
+function SuccessPage() {
+  const [searchParams] = useSearchParams();
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [orderStatus, setOrderStatus] = useState(null);
 
   useEffect(() => {
-    setIsVisible(true)
-  }, [])
+    const sessionId = searchParams.get("session_id");
+
+    console.log("🚀 Processing session:", sessionId);
+
+    if (!sessionId) {
+      setError("Session ID not found in URL");
+      setLoading(false);
+      return;
+    }
+
+    // Fetch session data and process order in sequence
+    fetchSessionAndProcessOrder(sessionId);
+  }, [searchParams]);
+
+  const fetchSessionAndProcessOrder = async (sessionId) => {
+    try {
+      // Step 1: Fetch session data from Stripe
+      console.log("📡 Fetching session data...");
+      const sessionResponse = await fetch(`http://localhost:2300/stripe/session?session_id=${sessionId}`);
+      
+      if (!sessionResponse.ok) {
+        throw new Error(`Failed to fetch session: ${sessionResponse.status}`);
+      }
+      
+      const sessionData = await sessionResponse.json();
+      console.log("✅ Session data received:", sessionData);
+      
+      setData(sessionData);
+
+      // Step 2: Process order (with built-in duplicate prevention)
+      console.log("💾 Processing order...");
+      const orderData = {
+        id: sessionData.id,
+        customer_email: sessionData.customer_email,
+        amount_total: sessionData.amount_total,
+        payment_status: sessionData.payment_status
+      };
+
+      const orderResponse = await fetch("http://localhost:2300/stripe/process-order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(orderData),
+      });
+
+      const orderResult = await orderResponse.json();
+      
+      if (!orderResponse.ok) {
+        throw new Error(`Order processing failed: ${orderResult.error || orderResponse.status}`);
+      }
+
+      console.log("✅ Order processed:", orderResult);
+      
+      // Set status based on whether it's a new order or existing
+      if (orderResult.isNew) {
+        setOrderStatus("✅ Payment confirmed and order saved successfully!");
+      } else {
+        setOrderStatus("ℹ️ Payment confirmed (order was already processed)");
+      }
+
+    } catch (err) {
+      console.error("❌ Error:", err);
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div style={{ textAlign: 'center', padding: '50px' }}>
+        <h1>🔄 Processing Payment...</h1>
+        <p>Please wait while we confirm your payment and save your order.</p>
+        <div style={{ margin: '20px 0' }}>
+          <div style={{ 
+            border: '3px solid #f3f3f3', 
+            borderTop: '3px solid #3498db',
+            borderRadius: '50%',
+            width: '40px',
+            height: '40px',
+            animation: 'spin 1s linear infinite',
+            margin: '0 auto'
+          }}></div>
+        </div>
+        <style>{`
+          @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }
+        `}</style>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div style={{ textAlign: 'center', padding: '50px' }}>
+        <h1>❌ Error</h1>
+        <p>There was an error processing your payment:</p>
+        <div style={{ 
+          background: '#ffebee', 
+          border: '1px solid #f44336', 
+          borderRadius: '5px',
+          padding: '15px',
+          margin: '20px 0',
+          color: '#c62828'
+        }}>
+          {error}
+        </div>
+        <p>Please contact support if this issue persists.</p>
+        <button 
+          onClick={() => window.location.reload()}
+          style={{
+            padding: '10px 20px',
+            backgroundColor: '#2196f3',
+            color: 'white',
+            border: 'none',
+            borderRadius: '5px',
+            cursor: 'pointer'
+          }}
+        >
+          Try Again
+        </button>
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-emerald-50 flex items-center justify-center p-4">
-      <div className="w-full max-w-md text-center space-y-8">
-
-        {/* Success Animation */}
-        <div className={`transition-all duration-1000 ${isVisible ? "opacity-100 scale-100" : "opacity-0 scale-95"}`}>
-          <div className="relative mb-8">
-            <div className="w-24 h-24 bg-green-100 rounded-full flex items-center justify-center mx-auto animate-bounce">
-              <CheckCircle className="w-16 h-16 text-green-600" />
-            </div>
-            <div className="absolute inset-0 w-24 h-24 bg-green-200 rounded-full mx-auto animate-ping opacity-30"></div>
-          </div>
-
-          <div className="space-y-4">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">Payment Successful! 🎉</h1>
-            <p className="text-lg text-gray-600 leading-relaxed">
-              Thank you for your purchase!
-              <br />
-              Your payment has been processed successfully.
-            </p>
+    <div style={{ maxWidth: '600px', margin: '0 auto', padding: '50px 20px', textAlign: 'center' }}>
+      <h1>🎉 Payment Successful!</h1>
+      
+      {orderStatus && (
+        <div style={{ 
+          padding: '15px', 
+          marginBottom: '30px', 
+          backgroundColor: orderStatus.includes('successfully') ? '#e8f5e8' : '#e3f2fd',
+          border: '1px solid ' + (orderStatus.includes('successfully') ? '#4caf50' : '#2196f3'),
+          borderRadius: '8px',
+          fontSize: '16px',
+          fontWeight: 'bold'
+        }}>
+          {orderStatus}
+        </div>
+      )}
+      
+      {data ? (
+        <div style={{ 
+          backgroundColor: '#f9f9f9', 
+          padding: '25px', 
+          borderRadius: '10px',
+          textAlign: 'left',
+          boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
+        }}>
+          <h3 style={{ marginTop: 0, color: '#333' }}>Payment Details:</h3>
+          <div style={{ lineHeight: '1.8' }}>
+            <p><strong>📧 Email:</strong> {data.customer_email || 'Not provided'}</p>
+            <p><strong>💰 Amount:</strong> ${data.amount_total ? (data.amount_total / 100).toFixed(2) : 'N/A'}</p>
+            <p><strong>📊 Status:</strong> {data.payment_status || 'N/A'}</p>
+            <p><strong>🔗 Session ID:</strong> <code style={{ background: '#eee', padding: '2px 6px', borderRadius: '3px' }}>{data.id || 'N/A'}</code></p>
           </div>
         </div>
-
-        {/* Success Card */}
-        <div
-          className={`bg-white rounded-2xl shadow-xl p-8 border border-gray-100 transition-all duration-1000 delay-300 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
+      ) : (
+        <p>No payment details available.</p>
+      )}
+      
+      <div style={{ marginTop: '30px' }}>
+        <button
+          onClick={() => window.location.href = '/'}
+          style={{
+            padding: '12px 30px',
+            backgroundColor: '#4caf50',
+            color: 'white',
+            border: 'none',
+            borderRadius: '6px',
+            fontSize: '16px',
+            cursor: 'pointer',
+            marginRight: '10px'
+          }}
         >
-          <div className="space-y-6">
-            <div className="flex items-center justify-center space-x-2 text-green-600">
-              <Receipt className="w-5 h-5" />
-              <span className="font-medium">Transaction Complete</span>
-            </div>
-
-            <div className="text-center space-y-2">
-              <p className="text-gray-700">Your Desired Freelancer Will Soon Contact You.</p>
-              <p className="text-sm text-gray-500">Please check your inbox for transaction details.</p>
-            </div>
-
-            <div className="w-full h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent"></div>
-
-            <div className="text-center">
-              <p className="text-sm text-gray-600 mb-4">What would you like to do next?</p>
-
-              <div className="space-y-3">
-                <button
-                  onClick={() => navigate("/client")}
-                  className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-medium py-3 px-6 rounded-xl transition-all duration-200 transform hover:scale-105 flex items-center justify-center space-x-2"
-                >
-                  <Home className="w-4 h-4" />
-                  <span>Go to Dashboard</span>
-                </button>
-
-                <button
-                  onClick={() => navigate("/")}
-                  className="w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-3 px-6 rounded-xl transition-all duration-200 flex items-center justify-center space-x-2"
-                >
-                  <span>Continue Shopping</span>
-                  <ArrowRight className="w-4 h-4" />
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Support Info */}
-        <div
-          className={`transition-all duration-1000 delay-500 ${isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
+          Continue Shopping
+        </button>
+        <button
+          onClick={() => window.print()}
+          style={{
+            padding: '12px 30px',
+            backgroundColor: '#ff9800',
+            color: 'white',
+            border: 'none',
+            borderRadius: '6px',
+            fontSize: '16px',
+            cursor: 'pointer'
+          }}
         >
-          <div className="bg-white/70 backdrop-blur-sm rounded-xl p-6 border border-white/50">
-            <p className="text-sm text-gray-600 mb-3">Need help? Our support team is available 24/7</p>
-            <div className="flex justify-center space-x-4">
-              <button className="text-blue-600 hover:text-blue-700 text-sm font-medium transition-colors">
-                Contact Support
-              </button>
-              <span className="text-gray-300">•</span>
-              <button className="text-blue-600 hover:text-blue-700 text-sm font-medium transition-colors">
-                Help Center
-              </button>
-            </div>
-          </div>
-        </div>
-
+          Print Receipt
+        </button>
       </div>
     </div>
-  )
+  );
 }
+
+export default SuccessPage;

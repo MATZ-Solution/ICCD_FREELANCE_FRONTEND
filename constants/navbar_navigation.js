@@ -1,9 +1,9 @@
  export const navigation = [
-    { name: "Find Talent", href: "#" },
-    { name: "Find Work", href: "#" },
-    { name: "Why ICCD Freelance", href: "#" },
-    { name: "Contact Us", href: "#" },
-    { name: "Login", href: "#" },
+    { name: "Find Talent", href: "/find-talent" },
+    { name: "Find Work", href: "/browse-jobs" },
+    { name: "Why ICCD Freelance", href: "/aboutus" },
+    { name: "Contact Us", href: "/contactus" },
+    { name: "Login", href: "/login" },
   ];
 
  export const navTabsClientDashboard = [

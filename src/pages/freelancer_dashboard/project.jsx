@@ -1,43 +1,45 @@
 import { useState } from "react";
 import SearchIcon from '@mui/icons-material/Search';
 import Tabs from "../../component/freelancer_dashboard/tabs";
-import Gigs_table from "../../component/freelancers_gigs/gigs_table";
-import Button from "../../component/button";
-import { useNavigate } from "react-router-dom";
-import { useGetGigsByUser } from "../../../api/client/gigs";
 import Projects_table from "../../component/client_dashboard/project_table";
+import { useNavigate } from "react-router-dom";
 import { useGetAllProjects } from "../../../api/client/project";
-import { useLocation } from "react-router-dom";
+
 function FreelancerProjects() {
+  const navigate = useNavigate();
 
-    const navigate = useNavigate()
-  
-    const [active, setActive] = useState('Active')
-    const datas = ['Active', 'Pending Approval', 'Requires Modification', 'Draft', 'Denied', 'Paused']
+  const [active, setActive] = useState('Active');
+  const datas = ['Active', 'Pending Approval', 'Requires Modification', 'Draft', 'Denied', 'Paused'];
 
-    const { data, isSuccess, isPending, isError, isLoading } = useGetAllProjects()
-    console.log("data: ", data)
+  const { data, isSuccess, isPending, isError, isLoading } = useGetAllProjects();
+  console.log("data: ", data);
 
-    return (
-        <div className="px-5 sm:px-5 lg:px-10">
-            <div className="flex flex-wrap justify-between mt-10 p-5 bg-[#F8F8F8] rounded-md">
-                <p className="text-xl sm:text-2xl "><span className="text-[#043A53]  font-semibold">Manage Projects</span></p>
-                <div className="relative mt-5 sm:mt-0">
-                    <input className="border-[1px] border-gray-500 rounded-md bg-white w-72 h-10 p-2" placeholder="Search My History..." />
-                    <SearchIcon className="absolute top-2 right-2" />
-                </div>
-            </div>
-
-            {/* tabs */}
-            {/* <div className="mt-8 flex gap-10">
-                <Tabs datas={datas} active={active} setActive={setActive} />
-            </div> */}
-            
-            {/* table */}
-            {data && (<Projects_table data={data} />)}
-
+  return (
+    <div className="px-4 sm:px-6 lg:px-10 w-full">
+      <div className="flex flex-col sm:flex-row justify-between gap-4 sm:items-center mt-10 p-4 sm:p-6 bg-[#F8F8F8] rounded-md">
+        <p className="text-lg sm:text-xl md:text-2xl font-semibold text-[#043A53]">
+          Manage Projects
+        </p>
+        <div className="relative w-full sm:w-72">
+          <input
+            className="border border-gray-500 rounded-md bg-white w-full h-10 px-3 pr-10 text-sm sm:text-base"
+            placeholder="Search My History..."
+          />
+          <SearchIcon className="absolute top-2.5 right-3 text-gray-500" />
         </div>
-    )
+      </div>
+
+      {/* Tabs - uncomment if needed */}
+      {/* <div className="mt-8 overflow-x-auto">
+          <Tabs datas={datas} active={active} setActive={setActive} />
+      </div> */}
+
+      {/* Table */}
+      <div className="mt-6 overflow-x-auto">
+        {data && <Projects_table data={data} />}
+      </div>
+    </div>
+  );
 }
 
-export default FreelancerProjects
+export default FreelancerProjects;

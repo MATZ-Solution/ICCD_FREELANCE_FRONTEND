@@ -57,6 +57,8 @@ import SuperAdminDashboard from "../src/pages/superadmin_dashboard/dashboard";
 import ManageUsers from "../src/pages/superadmin_dashboard/manage_dispute";
 import ManageDispute from "../src/pages/superadmin_dashboard/manage_dispute";
 import ReviewPage from "../src/pages/superadmin_dashboard/review-page";
+import ContactPage from '../src/pages/contactpage';
+import AboutUsPage from '../src/pages/aboutuspage';
 
 const stripePromise = loadStripe("pk_test_51QCl1eCDh3RtIJ6XkYcN5vHd3KTO2f8enRSNv9Wx7Li0iCI7cr9khTDQx0vS5RmbazZoaECNW83FesOMwLeIgMLb00BJG4pPZR");
 
@@ -67,6 +69,46 @@ export const router = createBrowserRouter([
       <Homepage />
     ,
   },
+   {
+    path: "/contactus",
+    element:
+
+      <MainTemplate isShowFooter={true}>
+      <ContactPage />
+      </MainTemplate>
+    ,
+  },
+  {
+    path: "/aboutus",
+    element:
+      <MainTemplate isShowFooter={true}>
+      <AboutUsPage />
+      </MainTemplate>
+    ,
+  },
+    {
+    path: "/browse-jobs",
+    element: (
+      // <AuthRoute>
+      <MainTemplate isShowFooter={false}>
+        <Jobs />
+      </MainTemplate>
+      // </AuthRoute>
+    ),
+  },
+
+   {
+    path: "/find-talent",
+    element: (
+      // <AuthRoute>
+      <MainTemplate isShowFooter={true}>
+          <ClientHomepage />
+      </MainTemplate>
+      // </AuthRoute>
+    ),
+  },
+
+
   {
     path: "/login",
     element:

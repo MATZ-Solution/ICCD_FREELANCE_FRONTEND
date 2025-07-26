@@ -1,7 +1,10 @@
 import bannerImage from '../../src/assets/banner_img_3.png'
 import SearchIcon from '@mui/icons-material/Search';
+import { useNavigate } from "react-router-dom";
 
 const Banner1 = () => {
+    const navigate = useNavigate();
+
   return (
     <div className='px-3 sm:px-10 mt-10'>
       <section
@@ -16,8 +19,18 @@ const Banner1 = () => {
 
           <div className=' w-full bg-[#343434] rounded-xl px-5 py-5 sm:w-full md:max-w-[80%] lg:w-[50%] lg:mt-20'>
             <div className='bg-[#676162] rounded-full flex '>
-              <button className='h-10 text-white w-full rounded-full border-2 border-transparent hover:border-white'>Find Talent</button>
-              <button className='h-10 text-white w-full rounded-full border-2 border-transparent hover:border-white'>Browse Job</button>
+              <button
+                className='h-10 text-white w-full rounded-full border-2 border-transparent hover:border-white'
+                onClick={() => navigate('/find-talent')}
+              >
+                Find Talent
+              </button>     
+                      <button
+                className='h-10 text-white w-full rounded-full border-2 border-transparent hover:border-white'
+                onClick={() => navigate('/browse-jobs')}
+              >
+                Browse Job
+              </button>
             </div>
             <div className='relative mt-5'>
               <input className=' w-full h-12 rounded-full p-5 bg-white' placeholder='Search by role, skills, or keywords' />
