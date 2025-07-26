@@ -21,6 +21,9 @@ export default function ServicePage() {
 
   if (isLoading) return <p className="text-center mt-10">Loading...</p>;
 
+
+  console.log("Gig Data:", gig);
+
   return (
     <div className="min-h-screen bg-white px-4 py-6 md:px-8 lg:px-12">
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -114,9 +117,11 @@ export default function ServicePage() {
                 {selectedPackage ? (
                   <>
                     <SidebarCard
+                      type={selectedPackage.packageType}
                       price={selectedPackage.price}
-                      description={`Package: ${selectedPackage.packageType}`}
-                      deliverytime={selectedPackage.deliverytime || "3 Days"}
+                      title={selectedPackage.packageName}
+                      description={`${selectedPackage.packageDescription}`}
+                      deliverytime={selectedPackage.deliveryTime }
                       Revisions={selectedPackage.revisions}
                       pages={selectedPackage.pages}
                       sourceFile={selectedPackage.sourceFile}
