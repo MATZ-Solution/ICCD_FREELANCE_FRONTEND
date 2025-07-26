@@ -1,7 +1,7 @@
 import order_logo from '../../assets/freelancer_dashboard/order_logo.png';
 import { useNavigate } from 'react-router-dom';
-function Gigs_table({ data }) {
 
+function Gigs_table({ data }) {
   const statusColors = {
     'IN PROGRESS': 'bg-[#1467B0]',
     PENDING: 'bg-yellow-500',
@@ -9,60 +9,63 @@ function Gigs_table({ data }) {
     'IN REVIEW': 'bg-purple-500',
     'ON HOLD': 'bg-red-500',
   };
-  const navigate = useNavigate()
-  console.log("data: ", data)
+
+  const navigate = useNavigate();
+  console.log("data: ", data);
 
   return (
     <div className="py-6">
       <div className="overflow-x-auto w-full">
-        <div className="min-w-[1000px] rounded-xl">
-          <table className="min-w-full border-separate border-spacing-y-4 border-spacing-x-4">
+        <div className="min-w-full rounded-xl">
+          <table className="min-w-full border-separate border-spacing-y-4 border-spacing-x-2">
             <tbody>
               {data.map((item) => (
                 <tr key={item.id}>
                   <td colSpan={6}>
-                    <div className="w-full bg-[#F8F8F8] shadow-sm rounded-xl flex items-center justify-between px-4 py-3 gap-4 min-w-[1000px]">
-                      {/* First Column */}
-                      <div className="flex items-center gap-5 w-[20%]">
-                        <img src={item?.gigsFiles} className="w-40 h-20" />
+                    <div className="w-full bg-[#F8F8F8] shadow-sm rounded-xl flex flex-wrap md:flex-nowrap items-center justify-between gap-4 px-4 py-4">
+                      {/* Image */}
+                      <div className="flex-shrink-0 w-full sm:w-40 h-20 flex justify-center items-center">
+                        <img
+                          src={item?.gigsFiles || order_logo}
+                          alt="gig"
+                          className="object-cover w-full h-full rounded-md"
+                        />
                       </div>
 
-                      {/* Second Column */}
-                      <div className="w-[20%]">
-                        <p className="text-[#737373]">
-                          Title:
-                        </p>
-                        <p className="font-semibold text-lg text-[#043A53]">{item?.title}</p>
+                      {/* Title */}
+                      <div className="flex flex-col w-full sm:w-1/2 md:w-[20%]">
+                        <p className="text-sm text-[#737373]">Title:</p>
+                        <p className="font-semibold text-base sm:text-lg text-[#043A53] truncate">{item?.title}</p>
                       </div>
 
-                      {/* Due */}
-                      <div className="w-[15%]">
-                        <p className="text-[#737373]">Clicks</p>
-                        <p className="text-[#043A53] text-lg font-semibold">{item.due}</p>
+                      {/* Clicks */}
+                      <div className="flex flex-col w-full sm:w-1/2 md:w-[15%]">
+                        <p className="text-sm text-[#737373]">Clicks</p>
+                        <p className="text-[#043A53] font-semibold text-base sm:text-lg">{item.due}</p>
                       </div>
 
-                      {/* Price */}
-                      <div className="w-[15%]">
-                        <p className="text-[#737373]">Category</p>
-                        <p className="text-[#043A53] text-lg font-semibold">{item?.category}</p>
+                      {/* Category */}
+                      <div className="flex flex-col w-full sm:w-1/2 md:w-[15%]">
+                        <p className="text-sm text-[#737373]">Category</p>
+                        <p className="text-[#043A53] font-semibold text-base sm:text-lg">{item?.category}</p>
                       </div>
-
-
 
                       {/* Orders */}
-                      <div className="w-[15%]">
-                        <p className="text-[#737373]">Orders</p>
-                        <p className="text-[#043A53] text-lg font-semibold">{item.due}</p>
+                      <div className="flex flex-col w-full sm:w-1/2 md:w-[15%]">
+                        <p className="text-sm text-[#737373]">Orders</p>
+                        <p className="text-[#043A53] font-semibold text-base sm:text-lg">{item.due}</p>
                       </div>
 
-                      {/* View */}
-                      <div className="w-[15%]">
-                        <button 
-                        onClick={()=>navigate(`/freelancer/manage-gigs/overview/edit/${item?.id}`)}
-                        className="w-full h-16 flex justify-center items-center mt-2 bg-[#EDEDED] rounded-2xl p-3">
-                          <p className="text-[#043A53] font-semibold">Edit</p>
-                        </button>
-                      </div>
+                 {/* Edit Button */}
+                <div className="w-full sm:w-auto md:w-[15%]">
+                  <button
+                    onClick={() => navigate(`/freelancer/manage-gigs/overview/edit/${item?.id}`)}
+                    className="w-full sm:w-auto h-12 lg:h-16 lg:w-[160px] flex justify-center items-center bg-[#EDEDED] rounded-xl px-4 py-2 lg:px-6"
+                  >
+                    <p className="text-[#043A53] font-semibold text-sm sm:text-base lg:text-lg">Edit</p>
+                  </button>
+                </div>
+
 
                     </div>
                   </td>
@@ -73,7 +76,7 @@ function Gigs_table({ data }) {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default Gigs_table
+export default Gigs_table;

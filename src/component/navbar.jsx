@@ -16,6 +16,8 @@ import { useCheckIsFreelancer } from "../../api/client/user";
 import NotificationDropdown from "./NotificationDropdown";
 import NotificationBell from "./notificationBell";
 import { useGetNotification } from "../../api/client/notification";
+import { setUserType } from "../../redux/slices/userType";
+import { useDispatch } from "react-redux";
 
 export default function Navbar() {
 
@@ -25,12 +27,16 @@ export default function Navbar() {
 
   const location = useLocation()
   const navigate = useNavigate()
+  const dispatch = useDispatch()
   const [isOpen, setIsOpen] = useState(false);
   const userDetails = useSelector(state => state.user.userDetails)
   const { pathname } = location
   const [notifications, setNotifications] = useState(3);
   const [messages, setMessages] = useState(5);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
+  const [isShowNot, setIsShowNot] = useState(false)
+  const client = useSelector((state) => state.user.userDetails);
+  const freelancer = useSelector((state) => state.userProfile.userProfile);
 
   const logout = useLogout()
 
@@ -44,6 +50,8 @@ export default function Navbar() {
   const handleSwitchClient = () => {
     if (location.pathname === '/freelancer/dashboard') {
       navigate('/client')
+      dispatch(setUserType({ id: client?.id, type: 'client' }))
+
     } else {
       navigate('/freelancer/dashboard')
     }
@@ -65,9 +73,6 @@ export default function Navbar() {
 
     return () => clearTimeout(delayDebounce);
   }, [search, location.pathname, navigate]);
-
-
-
 
 
   return (
@@ -193,6 +198,7 @@ export default function Navbar() {
                             navigate(`/freelancer/profile-form/1`)
                           } else {
                             navigate(`/freelancer/dashboard`)
+                            dispatch(setUserType({ id: freelancer?.id, type: 'freelancer' }))
                           }
                         }}
                         className={`cursor-pointer px-3 py-2 text-sm font-medium rounded-md `}
@@ -232,7 +238,8 @@ export default function Navbar() {
             userDetails ?
               <div className="flex items-center gap-2">
                 <header className=" z-10 relative">
-                  <NotificationDropdown />
+                  <NotificationBell isShowNot={isShowNot} setIsShowNot={setIsShowNot} />
+                  {isShowNot && (<NotificationDropdown />)}
                 </header>
                 <button onClick={() => setMessages(0)} className="p-2 hover:bg-gray-100 rounded-md relative">
                   <Mail className="h-5 w-5 text-gray-600" />
@@ -257,7 +264,7 @@ export default function Navbar() {
                         <div className="px-3 border-[1px] border-gray-300 absolute right-0 mt-2 w-52 bg-white rounded-md shadow-lg  py-1 z-50">
                           <button className="cursor-pointer border-[1px] rounded-md border-black block w-full text-left px-4 py-2 text-sm text-black font-semibold hover:bg-[#222325] hover:text-white"
                             onClick={handleSwitchClient}
-                          >Switch to client</button>
+                          >Switch to clients</button>
                           {[
                             { name: "View Profile", action: () => navigate("/freelancer/edit-profile") },
                             { name: "Settings", action: () => navigate("/settings") },

@@ -52,7 +52,9 @@ const API_ROUTE = {
     getMessageByUserWithRecipitant: '/messages/getMessageByUserWithRecipitant',
   },
   notifications: {
-    getNofication: '/notifications/getNotification'
+    getNofication: '/notifications/getNotification',
+    unread_count: '/notifications/unread-count',
+    mark_read: '/notifications/mark-read'
   }
 };
 

@@ -5,6 +5,7 @@ import { setToken } from "../../utils/auth";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setUserDetails } from "../../redux/slices/userSlice";
+import { setUserType } from "../../redux/slices/userType";
 
 export function useCheck() {
   const { data, error, isSuccess, isPending, isError } = useQuery({
@@ -52,6 +53,7 @@ export function useLogin() {
     onSuccess: (response) => {
       setToken(response?.data?.token);
       dispatch(setUserDetails(response?.data?.data));
+      dispatch(setUserType({ id: response?.data?.data.id, type: 'client'}))
       navigate("/client");
       // if (localStorage.get("verify-otp") || localStorage.get("change_pass")) {
       //   localStorage.removeItem("verify-otp");

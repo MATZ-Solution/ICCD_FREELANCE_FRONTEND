@@ -11,43 +11,34 @@ import ReactSelect from 'react-select';
 import Modal from '../../component/modal';
 import { useNavigate } from 'react-router-dom';
 import { useGetAllJobs, useGetJobById } from '../../../api/client/job';
-import { useEffect } from 'react';
-import useDebounce from '../../../hooks/useDebounce';
 
 function Jobs() {
   const navigate = useNavigate();
-  const filterNames = ['jobType','joblocation'];
+  const filterNames = ['jobType', 'joblocation'];
 
   const [show, setShow] = useState(false);
   const [selectedJobId, setSelectedJobId] = useState(null);
 
-  let [obj, setObj] = useState({})
-  console.log("obj: ", obj)
+  let [obj, setObj] = useState({});
 
-
-  // Fetch all jobs
   const { data: allJobs, isSuccess: allJobsSuccess } = useGetAllJobs(obj);
 
-  // Fetch details for selected job
   const { data: jobDetails, isSuccess: jobDetailsSuccess } = useGetJobById(selectedJobId, {
-    enabled: !!selectedJobId, // only fetch if selectedJobId exists
+    enabled: !!selectedJobId,
   });
 
   const filterOptions = {
-    'jobType': [
+    jobType: [
       { value: 'Full Time', label: 'Full Time' },
       { value: 'part_time', label: 'Part Time' },
       { value: 'contract', label: 'Contract' },
     ],
-  
-    'joblocation': [
+    joblocation: [
       { value: 'remote', label: 'Remote' },
       { value: 'karachi', label: 'Karachi' },
       { value: 'lahore', label: 'Lahore' },
     ],
- 
   };
-
 
   return (
     <div className="px-6 sm:px-10">
@@ -82,9 +73,13 @@ function Jobs() {
 
       {/* Search Bar */}
       <div className="w-full flex flex-col items-center gap-4 p-5 mt-5 rounded-2xl bg-gray-100 shadow-lg lg:flex-row lg:gap-0">
-        <div className="w-full relative ">
+        <div className="w-full relative">
           <SearchOutlinedIcon className="absolute top-2 left-2" />
-          <input onChange={(e) => setObj({...obj, jobTitle: e.target.value})} className="w-full h-10 px-10 outline-none" placeholder="Job title, keywords, or company" />
+          <input
+            onChange={(e) => setObj({ ...obj, jobTitle: e.target.value })}
+            className="w-full h-10 px-10 outline-none"
+            placeholder="Job title, keywords, or company"
+          />
         </div>
         <div className="w-full relative lg:border-l-[1px] lg:border-r-gray-400">
           <LocationOnIcon className="absolute top-2 left-2" />
@@ -99,7 +94,7 @@ function Jobs() {
       </div>
 
       {/* Browse Jobs */}
-      <div className="w-full shadow-lg p-5 mt-5 rounded-2xl bg-gray-100 ">
+      <div className="w-full shadow-lg p-5 mt-5 rounded-2xl bg-gray-100">
         <div className="w-full flex flex-wrap gap-3 py-5 mt-5">
           {filterNames.map((filterName) => (
             <div key={filterName} className="w-40">
@@ -107,7 +102,7 @@ function Jobs() {
                 options={filterOptions[filterName]}
                 placeholder={`${filterName}`}
                 className="text-[#3d3d3d] font-semibold rounded-lg bg-gray-300 p-1"
-                onChange={(selectedOption) => setObj({...obj, [filterName]: selectedOption.value})}
+                onChange={(selectedOption) => setObj({ ...obj, [filterName]: selectedOption.value })}
               />
             </div>
           ))}
@@ -117,7 +112,7 @@ function Jobs() {
           Sort by: <span className="text-black font-semibold">relevance</span>
         </p>
 
-        <div className="flex flex-col lg:flex-row">
+        <div className="flex flex-col md:flex-col lg:flex-row">
           {/* Left side - job list */}
           <div className="w-full lg:w-1/2 flex flex-col">
             {allJobsSuccess &&
@@ -149,7 +144,10 @@ function Jobs() {
           {/* Right side - job details */}
           <div className="hidden px-5 lg:flex lg:w-1/2 lg:h-screen sticky top-0">
             {jobDetailsSuccess && jobDetails?.map((job, index) => (
-              <div className="w-full relative mt-5 p-5 border-[1px] border-gray-400 rounded-lg hover:border-[#15A9B2]">
+              <div
+                key={job.id || index}
+                className="w-full relative mt-5 p-5 border-[1px] border-gray-400 rounded-lg hover:border-[#15A9B2]"
+              >
                 <h1 className="font-bold text-xl">
                   {job.jobTitle} {job.mode}
                 </h1>
@@ -206,9 +204,7 @@ function Jobs() {
                   </div>
                 </div>
               </div>
-            ) , (
-              <p className="text-gray-500 mt-5">Select a job to see details</p>
-            ))}
+            )) || <p className="text-gray-500 mt-5">Select a job to see details</p>}
           </div>
         </div>
       </div>

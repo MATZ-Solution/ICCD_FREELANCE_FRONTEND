@@ -26,6 +26,8 @@ const WhatsAppClone = () => {
 
 
   const client = useSelector((state) => state.user.userDetails);
+  const user = useSelector((state) => state.userType.user);
+
 
   const { data } = useGetAllMessagesByUser();
   const {
@@ -41,8 +43,8 @@ const WhatsAppClone = () => {
   });
 
   const socket = useMemo(() => {
-    return getSocket(client.id);
-  }, [client.id]);
+    return getSocket(user.id, 'messages');
+  }, [user.id]);
 
   const handleSubmitMessages = () => {
     if (!messageInput.trim() || !friend) return;

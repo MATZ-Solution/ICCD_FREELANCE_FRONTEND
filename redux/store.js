@@ -7,6 +7,7 @@ import userReducer from './slices/userSlice'; // adjust path
 import gigsReducer from './slices/gigsDetailSlice'
 import userProfileReducer from './slices/userProfileSlice'
 import orderReducer from "./slices/orderSlice";
+import userTypeReducer from "./slices/userType";
 
 const persistConfig = {
   key: 'root',
@@ -17,7 +18,8 @@ const rootReducer = combineReducers({
   user: userReducer,
   gigs: gigsReducer,
   order: orderReducer,
-  userProfile: userProfileReducer
+  userProfile: userProfileReducer,
+  userType: userTypeReducer
   // add other reducers here
 });
 
