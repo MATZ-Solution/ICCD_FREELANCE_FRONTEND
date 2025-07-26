@@ -13,6 +13,7 @@ import { useGetFreelancerProfile } from "../../../api/client/freelancer";
 import { useEffect } from "react";
 import { getUserProfile } from "../../../redux/slices/userProfileSlice";
 import {  useNavigate } from "react-router-dom";
+import { setUserType } from "../../../redux/slices/userType";
 
 export default function FreelancerDashboard() {
   const [activeNavTab, setActiveNavTab] = useState("Dashboard");
@@ -66,6 +67,7 @@ export default function FreelancerDashboard() {
   useEffect(() => {
     if (data && data.length > 0) {
       dispatch(getUserProfile(data[0]));
+      dispatch(setUserType({ id: data[0]?.id, type: 'freelancer' }))
     }
   }, [data]);
 

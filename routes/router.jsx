@@ -509,6 +509,16 @@ export const router = createBrowserRouter([
       // </AuthRoute>
     ),
   },
+    {
+    path: "/client/jobs/:id",
+    element: (
+      // <AuthRoute>
+      <MainTemplate isShowFooter={false}>
+         <JobDetailPage />
+      </MainTemplate>
+      // </AuthRoute>
+    ),
+  },
   {
     path: "/client/gigs/gigs_details/:id",
     element: (

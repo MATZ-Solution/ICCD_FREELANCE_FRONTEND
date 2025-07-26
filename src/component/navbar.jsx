@@ -194,12 +194,14 @@ export default function Navbar() {
                     <div>
                       <button
                         onClick={() => {
-                          if (data.length === 0) {
-                            navigate(`/freelancer/profile-form/1`)
-                          } else {
-                            navigate(`/freelancer/dashboard`)
-                            dispatch(setUserType({ id: freelancer?.id, type: 'freelancer' }))
-                          }
+                          navigate(`/freelancer/dashboard`)
+                          dispatch(setUserType({ id: freelancer?.id, type: 'freelancer' }))
+                          // if (data?.length === 0) {
+                          //   navigate(`/freelancer/profile-form/1`)
+                          // } else {
+                          //   navigate(`/freelancer/dashboard`)
+                          //   dispatch(setUserType({ id: freelancer?.id, type: 'freelancer' }))
+                          // }
                         }}
                         className={`cursor-pointer px-3 py-2 text-sm font-medium rounded-md `}
                       >

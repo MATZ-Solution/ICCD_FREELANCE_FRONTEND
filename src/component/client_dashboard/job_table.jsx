@@ -20,10 +20,11 @@ function Jobs_table({ data }) {
   console.log("data: ", data)
   const handleNavigate = (id)=> {
     if(pathName.includes('client')){
-      navigate(`/client/projects/${id}`)
-    }else{
-      navigate(`/freelancer/projects/${id}`)
+      navigate(`/client/jobs/${id}`)
     }
+    // else{
+    //   navigate(`/freelancer/projects/${id}`)
+    // }
   }
 
   return (
@@ -71,6 +72,11 @@ function Jobs_table({ data }) {
 
                       {/* View */}
                       <div className="w-[15%]">
+                         <button 
+                        onClick={()=> navigate(`/client/jobs/${item?.id}`)} 
+                        className="w-full h-16 flex justify-center items-center mt-2 bg-[#EDEDED] rounded-2xl p-3">
+                          <p className="text-[#043A53] font-semibold">View</p>
+                        </button>
                         <button 
                         onClick={()=> navigate(`/client/edit-job/${item?.id}`)} 
                         className="w-full h-16 flex justify-center items-center mt-2 bg-[#EDEDED] rounded-2xl p-3">

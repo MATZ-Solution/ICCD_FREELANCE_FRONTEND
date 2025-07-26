@@ -17,7 +17,7 @@ import { useParams } from "react-router-dom";
 import profilepic from "../../assets/freelancer_dashboard/client_img.png"
 import { useGetProjectsById } from "../../../api/client/project";
 import { formatSingleDate } from "../../../functions/timeFormat";
-import CVUploadModal from "../../component/CVUploadModal";
+import ProposalModal from "../../component/ProposalModal";
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -36,7 +36,7 @@ const ProjectDetailFreelancer = () => {
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
-            {show && (<CVUploadModal onClose={() => setShow(false)} data={data} freelancerData={freelancerData} />)}
+            {show && (<ProposalModal onClose={() => setShow(false)} data={data} freelancerData={freelancerData} />)}
             <div className="max-w-7xl mx-auto p-6">
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                     {/* Main Content */}

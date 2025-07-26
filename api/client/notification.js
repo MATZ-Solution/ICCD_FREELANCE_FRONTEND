@@ -3,7 +3,7 @@ import api from "../axios/index";
 import { useQuery } from "@tanstack/react-query";
 import { useSelector } from "react-redux";
 
-export function useGetNotification(id, params = {}) {
+export function useGetNotification( params = {}) {
     const constructQueryString = (params) => {
         const query = new URLSearchParams(params).toString();
         return query ? `&${query}` : "";
@@ -12,7 +12,7 @@ export function useGetNotification(id, params = {}) {
     const { data, error, isLoading, isError } = useQuery({
         queryKey,
         queryFn: () =>
-            api.get(`${API_ROUTE.notifications.getNofication}/${id}?${constructQueryString(params)}`),
+            api.get(`${API_ROUTE.notifications.getNofication}?${constructQueryString(params)}`),
     });
     return { data: data?.data?.data, error, isLoading, isError };
 }
