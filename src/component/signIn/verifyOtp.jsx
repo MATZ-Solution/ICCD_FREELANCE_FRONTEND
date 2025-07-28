@@ -11,8 +11,9 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import { useState } from "react";
 import { useSubmitOtp } from "../../../api/client/user";
+import SignIn_modal1 from "../modal/signIn_Modal1";
 
-function ConfirmEmail({ handleSwitch, email }) {
+function VerifyOtp({ handleSwitch, email }) {
 
     const { handleOtp, isSuccess, isPending, isError, error, data } = useSubmitOtp({
         onSuccess: (response) => {
@@ -47,9 +48,9 @@ function ConfirmEmail({ handleSwitch, email }) {
                     className="lg:w-24 lg:h-24 object-fit "
                 />
             </div>
-            <h2 className="text-2xl font-bold text-gray-800 md:text-2xl md:font-semibold ">Confirm your email</h2>
+            <h2 className="text-2xl font-bold text-gray-800 md:text-2xl md:font-semibold ">Verification Code</h2>
             <p className="text-[#656565] text-sm">Enter the verification code we emailed to:</p>
-            <p className="text-[#656565] text-sm font-bold">matzsolutions@outlook.com</p>
+            <p className="text-[#656565] text-sm font-bold">{email}</p>
             <div className="w-full mt-2 flex gap-5">
                 <Controller
                     control={control}
@@ -65,20 +66,32 @@ function ConfirmEmail({ handleSwitch, email }) {
                     )}
                 />
             </div>
-            <button
-                type="submit"
-                className={` mt-3 flex gap-2 items-center justify-center px-4 py-2 font-semibold text-white bg-[#15A9B2] rounded-full hover:bg-[#05929c] cursor-pointer transition`}
-                onClick={handleSubmit(onSubmit)}
-                disabled={isPending ? true : false}
-            >
-                <p>Submit</p>
-                <div className=' rounded-full px-1 py- bg-[#60cfd6]'>
-                    <EastIcon style={{ fontSize: 20 }} />
-                </div>
-            </button>
-
+            <div className='flex gap-4'>
+                <button
+                    type="submit"
+                    className={`mt-3 w-full flex gap-2 items-center justify-center px-4 py-2 font-semibold text-white bg-[#15A9B2] rounded-full hover:bg-[#05929c] cursor-pointer transition`}
+                    onClick={() => handleSwitch('forgotPassword')}
+                    disabled={isPending ? true : false}
+                >
+                    {/* <div className=' rounded-full px-1 py- bg-[#60cfd6]'>
+            <ArrowLeft style={{ fontSize: 20 }} />
+          </div> */}
+                    <p>Back</p>
+                </button>
+                <button
+                    type="submit"
+                    className={`w-full mt-3 flex gap-2 items-center justify-center px-4 py-2 font-semibold text-white bg-[#15A9B2] rounded-full hover:bg-[#05929c] cursor-pointer transition`}
+                    onClick={handleSubmit(onSubmit)}
+                    disabled={isPending ? true : false}
+                >
+                    <p>Submit</p>
+                    {/* <div className=' rounded-full px-1 py- bg-[#60cfd6]'>
+                        <EastIcon style={{ fontSize: 20 }} />
+                    </div> */}
+                </button>
+            </div>
         </div>
     )
 }
 
-export default ConfirmEmail
+export default VerifyOtp

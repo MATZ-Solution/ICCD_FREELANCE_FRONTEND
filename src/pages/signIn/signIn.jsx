@@ -41,7 +41,6 @@ function Login({ handleSwitch }) {
   };
 
   return (
-    <SignIn_modal1>
       <div className="px-10 w-full mt-5 flex flex-col gap-2">
         <div className='w-full flex justify-center lg:justify-start'>
           {/* <img
@@ -113,7 +112,6 @@ function Login({ handleSwitch }) {
           <p className="underline" onClick={() => handleSwitch('forgotPassword')}>forgot Password?</p>
         </div>
       </div>
-    </SignIn_modal1>
   )
 }
 

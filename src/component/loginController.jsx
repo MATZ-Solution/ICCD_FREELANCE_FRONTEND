@@ -1,68 +1,53 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Login from "../pages/signIn/signIn";
 import SignUp from "../pages/signUp";
-import ForgotPassword from "../pages/forgotPass";
-import VerifyOtp from "../pages/otpVerification";
-import ChangePassword from "../pages/changePass";
-
-// VerifyOtp
-import ConfirmEmail from "./signIn/confirm_email";
-
-// ForgotPassword
-import GetProfile from "./signIn/get_profile";
-
-// ChangePassword
-import ContinueWithEmail from "./signIn/continue_with_email";
-
-
+import VerifyOtp from "./signIn/verifyOtp";
+import ForgotPassword from "./signIn/ForgotPassword";
+import ChangePassword from "./signIn/ChangePassword";
+import login_banner from '../../src/assets/login_banner_img.png'
+import { CircleX } from "lucide-react";
+import CloseIcon from '@mui/icons-material/Close';
 
 const LoginController = () => {
 
     let [email, setEmail] = useState('')
-    const [modalView, setModalView] = useState("change-password");
+    const [modalView, setModalView] = useState("login");
     const handleSwitch = (view) => setModalView(view);
 
     return (
-        <>
-            {modalView === "login" && (
-                <Login handleSwitch={handleSwitch} />
-            )}
-            {modalView === "signup" && (
-                <SignUp handleSwitch={handleSwitch} />
-            )}
+        <div className="w-full flex fixed z-20 inset-0 sm:p-5 sm:items-center sm:justify-center lg:p-10 ">
+            <div className="absolute inset-0 bg-black/50 z-0"></div>
+            <div className={`z-10 flex w-full h-full flex-col bg-white sm:rounded-4xl sm:w-xl md:w-xl lg:flex-row lg:min-w-5xl shadow-lg `}>
+                <img src={login_banner} alt="Banner" className="hidden w-full h-full object-fit lg:flex" />
+                <div className='relative w-full flex flex-col'>
+                    <div  className="cursor-pointer absolute right-5 top-5 w-8 h-8 flex items-center justify-center bg-gray-300 rounded-full">
+                        <CloseIcon style={{ fontSize: 20 }} />
+                    </div>
+                    <div className="pb-10 rounded-tr-xl rounded-br-xl w-full h-full flex flex-col sm:items-center sm:justify-center">
+                        {modalView === "login" && (
+                            <Login handleSwitch={handleSwitch} />
+                        )}
+                        {modalView === "signup" && (
+                            <SignUp handleSwitch={handleSwitch} />
+                        )}
+                        {modalView === "forgotPassword" && (
+                            <ForgotPassword handleSwitch={handleSwitch} setEmail={setEmail} />
+                        )}
 
-            {/* ############################### */}
-            {/* {modalView === "forgotPassword" && (
-                <ForgotPassword handleSwitch={handleSwitch} setEmail={setEmail} />
-            )} */}
+                        {modalView === "verify-otp" && (
+                            <VerifyOtp handleSwitch={handleSwitch} email={email} />
+                        )}
 
-            {modalView === "forgotPassword" && (
-                <GetProfile handleSwitch={handleSwitch} setEmail={setEmail} />
-            )}
-
-            {/* ############################### */}
-
-
-            {/* ######################### */}
-            {/* {modalView === "verify-otp" && (
-                <VerifyOtp handleSwitch={handleSwitch} email={email} />
-            )} */}
-
-            {modalView === "verify-otp" && (
-                <ConfirmEmail handleSwitch={handleSwitch} email={email} />
-            )}
-
-            {/* ######################### */}
-
-            {/* {modalView === "change-password" && (
-                <ChangePassword handleSwitch={handleSwitch} email={email} setEmail={setEmail} />
-            )} */}
-
-             {modalView === "change-password" && (
-                <ContinueWithEmail handleSwitch={handleSwitch} email={email} setEmail={setEmail} />
-            )}
-
-        </>
+                        {modalView === "change-password" && (
+                            <ChangePassword handleSwitch={handleSwitch} email={email} setEmail={setEmail} />
+                        )}
+                    </div>
+                    <p className="px-10 pb-6 text-xs text-center">
+                        By joining, you agree to the ICCD Freelance Terms of Service and to occasionally receive emails from us. Please read our Privacy Policy to learn how we use your personal data.
+                    </p>
+                </div>
+            </div>
+        </div>
     );
 };
 
