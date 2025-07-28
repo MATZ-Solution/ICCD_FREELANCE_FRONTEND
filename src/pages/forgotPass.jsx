@@ -5,9 +5,17 @@ import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 
-const ForgotPassword = () => {
+const ForgotPassword = ({ handleSwitch, setEmail }) => {
 
-  const { handleEmail, isSuccess, isPending, isError, error, data } = useSendOtp()
+  const { handleEmail, isSuccess, isPending, isError, error, data } = useSendOtp({
+    onSuccess: (response, data) => {
+      handleSwitch('verify-otp')
+      setEmail(data?.email)
+    },
+    onError: (err) => {
+      console.error("Signup error:", err);
+    },
+  })
 
   const schema = yup.object({
     email: yup.string()
@@ -21,7 +29,7 @@ const ForgotPassword = () => {
     }
   });
 
-    const onSubmit = (data) => {
+  const onSubmit = (data) => {
     handleEmail(data)
   };
 
@@ -51,7 +59,7 @@ const ForgotPassword = () => {
           <button
             type="submit"
             className="w-full py-2 font-semibold text-white bg-blue-600 mt-4 rounded hover:bg-blue-700"
-           onClick={handleSubmit(onSubmit)}
+            onClick={handleSubmit(onSubmit)}
           >
             Send OTP
           </button>

@@ -3,6 +3,24 @@ import api from "../axios";
 import API_ROUTE from "../endpoints";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { setFreelancerID } from "../../redux/slices/userSlice";
+import { useSelector } from "react-redux";
+
+
+export function useGetFreelDashboardData() {
+   const freelancerDetails = useSelector(state=> state.userProfile.userProfile)
+   const { id } = freelancerDetails
+  const { data, isSuccess, isPending, isError, isLoading } = useQuery({
+    queryKey: [API_ROUTE.freelancer.getFreelancerDashboardData],
+    queryFn: async () => await api.get(`${API_ROUTE.freelancer.getFreelancerDashboardData}?freelancerId=${id}`),
+  });
+  return {
+    data: data?.data?.data,
+    isSuccess,
+    isPending,
+    isError,
+    isLoading,
+  };
+}
 
 export function useGetFreelancerProfile() {
   const { data, isSuccess, isPending, isError, isLoading } = useQuery({

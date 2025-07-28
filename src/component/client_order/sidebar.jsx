@@ -1,8 +1,8 @@
 import { Clock } from "lucide-react";
-import React, { useState } from "react";
+import React, { memo, useState } from "react";
 import SidebarCard from "./sidebarcard";
 
-export default function Sidebar() {
+ function Sidebar() {
   const [activeNavTab, setActiveNavTab] = useState("Basic");
 
   return (
@@ -82,3 +82,5 @@ export default function Sidebar() {
     </div>
   );
 }
+
+export default memo(Sidebar)

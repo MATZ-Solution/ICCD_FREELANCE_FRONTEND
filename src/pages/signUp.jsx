@@ -7,9 +7,16 @@ import { useNavigate } from "react-router-dom";
 import SignIn_modal1 from '../component/modal/signIn_Modal1';
 
 
-function SignUp({ modalData, setModalData }) {
-  const navigate = useNavigate()
-  const { userSignUp, isSuccess, isPending, isError, error, } = useSignUp()
+function SignUp({ handleSwitch }) {
+
+  const { userSignUp, isSuccess, isPending, isError, error, } = useSignUp({
+    onSuccess: (res) => {
+      handleSwitch("login")
+    },
+    onError: (err) => {
+      console.error("Signup error:", err);
+    },
+  })
 
   const schema = yup.object({
     name: yup.string().required('Email is required'),
@@ -38,12 +45,7 @@ function SignUp({ modalData, setModalData }) {
   });
 
   const onSubmit = (data) => {
-    console.log("isSuccess: ", isSuccess)
-    console.log("isError: ", isError)
     userSignUp(data)
-    if (isSuccess) {
-      setModalData({ ...modalData, ModalName: 'continue with email' })
-    }
   };
 
   return (

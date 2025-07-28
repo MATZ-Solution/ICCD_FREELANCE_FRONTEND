@@ -10,61 +10,65 @@ import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import { useState } from "react";
+import { useSubmitOtp } from "../../../api/client/user";
 
-function ConfirmEmail({modalData, setModalData}) {
+function ConfirmEmail({ handleSwitch, email }) {
 
-    const { userLogin, isSuccess, isPending, isError, reset, error, data } = useLogin()
+    const { handleOtp, isSuccess, isPending, isError, error, data } = useSubmitOtp({
+        onSuccess: (response) => {
+            handleSwitch("change-password")
+        },
+    })
+
     const schema = yup.object({
-        userName: yup.string()
-            .required('Username is required.')
+        otp: yup.string().required('Otp is required')
     })
 
     const { register, control, handleSubmit, formState: { errors } } = useForm({
         resolver: yupResolver(schema),
         defaultValues: {
-            userName: '',
+            otp: '',
         }
     });
 
     const onSubmit = (data) => {
-        // console.log("data: ", data)
-        userLogin(data)
+        const allData = { ...data, email: email }
+        handleOtp(allData)
+        //    console.log("allData: ", allData)
     };
 
-    const [otp, setOtp] = useState('')
 
     return (
         <div className="px-10 w-full mt-5 flex flex-col gap-2">
-              <div className='w-full flex justify-center lg:justify-start'>
-                            <img
-                                src={logo}
-                                alt="Banner"
-                                className="lg:w-24 lg:h-24 object-fit "
-                            />
-                        </div>
+            <div className='w-full flex justify-center lg:justify-start'>
+                <img
+                    src={logo}
+                    alt="Banner"
+                    className="lg:w-24 lg:h-24 object-fit "
+                />
+            </div>
             <h2 className="text-2xl font-bold text-gray-800 md:text-2xl md:font-semibold ">Confirm your email</h2>
             <p className="text-[#656565] text-sm">Enter the verification code we emailed to:</p>
             <p className="text-[#656565] text-sm font-bold">matzsolutions@outlook.com</p>
             <div className="w-full mt-2 flex gap-5">
-                {
-                    Array.from({ length: 6 }).map((_, index) => (
+                <Controller
+                    control={control}
+                    name="otp"
+                    render={({ field: { onChange, onBlur, value } }) => (
                         <input
-                        key={index}
-                            className="w-12 h-12 border-2 border-gray-600 rounded-md px-4"
-                            maxLength={1}
-                            onChange={(e) => setOtp(otp + e.target.value)}
-                        />  
-                    ))
-                }
+                            name="otp"
+                            value={value}
+                            onChange={onChange}
+                            className="w-full px-4 py-2 mt-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            placeholder="Enter Otp"
+                        />
+                    )}
+                />
             </div>
             <button
                 type="submit"
                 className={` mt-3 flex gap-2 items-center justify-center px-4 py-2 font-semibold text-white bg-[#15A9B2] rounded-full hover:bg-[#05929c] cursor-pointer transition`}
-                onClick={() => setModalData({ ...modalData,
-                     ModalName: 'choose profile',
-                     isShowLeftPic: false,
-                     isShowPolicy: false
-                     })}
+                onClick={handleSubmit(onSubmit)}
                 disabled={isPending ? true : false}
             >
                 <p>Submit</p>

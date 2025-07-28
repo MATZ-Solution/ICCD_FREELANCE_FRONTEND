@@ -9,10 +9,10 @@ import Table from "../freelancer_gigs/table";
 import PricingTable from "../../component/pricing_table";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
-import { useGetFreelancerProfile } from "../../../api/client/freelancer";
+import { useGetFreelancerProfile, useGetFreelDashboardData } from "../../../api/client/freelancer";
 import { useEffect } from "react";
 import { getUserProfile } from "../../../redux/slices/userProfileSlice";
-import {  useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { setUserType } from "../../../redux/slices/userType";
 
 export default function FreelancerDashboard() {
@@ -63,6 +63,8 @@ export default function FreelancerDashboard() {
 
   const dispatch = useDispatch()
   const { data, isSuccess, isPending, isError, isLoading } = useGetFreelancerProfile()
+  const { data: dashData, isError: dashDataIsErr, isLoading: dashDataIsLoad } = useGetFreelDashboardData()
+  console.log("dashData: ", dashData)
 
   useEffect(() => {
     if (data && data.length > 0) {
@@ -70,6 +72,10 @@ export default function FreelancerDashboard() {
       dispatch(setUserType({ id: data[0]?.id, type: 'freelancer' }))
     }
   }, [data]);
+
+  if (dashDataIsLoad) {
+    return <p>Loading...</p>
+  }
 
   return (
     <div className="min-h-screen px-4  sm:px-6  bg-white">
@@ -153,7 +159,7 @@ export default function FreelancerDashboard() {
 
           <div className="flex bg-[#F8F8F8] p-4 rounded-xl justify-between">
             <h4 className="font-semibold text-lg">Inbox</h4>
-            <button onClick={()=> navigate('/messages')} className="text-xs text-cyan-500 hover:text-cyan-600">View All</button>
+            <button onClick={() => navigate('/messages')} className="text-xs text-cyan-500 hover:text-cyan-600">View All</button>
           </div>
 
         </aside>
@@ -193,7 +199,7 @@ export default function FreelancerDashboard() {
 
           {/* Stats Cards */}
           <div className="grid sm:grid-cols-2 grid-cols-1 md:grid-cols-2  lg:grid-cols-3 gap-4 mb-6">
-            <DCard
+            {/* <DCard
               title="Total Earning"
               value="$29,098,00"
               bottomText="58% higher than Last Month "
@@ -201,41 +207,41 @@ export default function FreelancerDashboard() {
               percentChange="+8.2%"
               variant="purple"
               icon={<TrendingUp className="w-6 h-6" />}
-            />
-            <DCard
-              title="Total Active Orders"
+            /> */}
+            {/* <DCard
+              title="Total Orders"
               value="256"
               bottomText="58% higher than Last Month "
 
               percentChange="+12.5%"
               variant="green"
               icon={<FileText className="w-6 h-6" />}
-            />
-            <DCard
+            /> */}
+            {/* <DCard
               title="Priority Orders"
               value="1098"
               bottomText="58% higher than Last Month"
               percentChange="+5.7%"
               variant="blue"
               icon={<span className="text-2xl">📋</span>}
-            />
+            /> */}
             <DCard
               title="Total Gigs Added"
-              value="509"
+              value={dashData[0]?.totalGigsAdded}
               bottomText="48.7% You earned Last Month "
               variant="teal"
               icon={<span className="text-2xl">💼</span>}
             />
             <DCard
-              title="Total Jobs Offered"
-              value="293"
+              title="Applied Job"
+              value={dashData[0]?.totalAppliedJobs}
               bottomText="You Offered Last Month"
               variant="brown"
               icon={<FileText className="w-6 h-6" />}
             />
             <DCard
-              title="Active Contracts"
-              value="1098"
+              title="Applied Projects"
+              value={dashData[0]?.totalAppliedProject}
               bottomText="You earned Last Month"
               variant="indigo"
               icon={<Users className="w-6 h-6" />}

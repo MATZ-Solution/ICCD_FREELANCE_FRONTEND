@@ -132,6 +132,21 @@ export function useGetAllJobByClient(params = {}) {
   };
 }
 
+export function getJobPropsalByClient(params = {}) {
+  const constructQueryString = (params) => {
+    const query = new URLSearchParams(params).toString();
+    return query ? `&${query}` : "";
+  };
+  const queryKey = [API_ROUTE.job.getJobPropsalByClient, params];
+  const { data, error, isLoading, isError } = useQuery({
+    queryKey,
+    queryFn: () =>
+      api.get(`${API_ROUTE.job.getJobPropsalByClient}?${constructQueryString(params)}`),
+  });
+  return { jobProposals: data?.data?.data, error, isLoading, isError };
+}
+
+
 export function useEditJobs(id) {
   // const pathname = usePathname();
   const queryClient = useQueryClient();

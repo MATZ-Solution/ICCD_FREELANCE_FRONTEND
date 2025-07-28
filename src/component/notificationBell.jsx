@@ -12,11 +12,8 @@ const NotificationBell = ({ isShowNot, setIsShowNot }) => {
     const [countFreelancer, setCountFreelancer] = useState(0);
     const pathName = useLocation().pathname
     const user = useSelector((state) => state.userType.user);
-
-      const client = useSelector((state) => state.user.userDetails);
-    
+    const client = useSelector((state) => state.user.userDetails);
     const socket = useMemo(() => { return getSocket(client.id) }, [client.id]);
-    
     const { data, error, isLoading, isError } = useGetUnReadCountNot(user)
 
     useEffect(() => {

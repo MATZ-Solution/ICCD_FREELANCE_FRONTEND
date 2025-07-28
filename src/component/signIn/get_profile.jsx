@@ -9,74 +9,85 @@ import { useLogin } from "../../../api/client/user";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
+import { useSendOtp } from "../../../api/client/user";
+import SignIn_modal1 from "../modal/signIn_Modal1";
 
+function GetProfile({ handleSwitch, setEmail }) {
 
-function GetProfile({ modalData, setModalData }) {
+    const { handleEmail, isSuccess, isPending, isError, error, data } = useSendOtp({
+        onSuccess: (response, data) => {
+            handleSwitch('verify-otp')
+            setEmail(data?.email)
+        },
+        onError: (err) => {
+            console.error("Signup error:", err);
+        },
+    })
 
-    const { userLogin, isSuccess, isPending, isError, reset, error, data } = useLogin()
     const schema = yup.object({
-        userName: yup.string()
-            .required('Username is required.')
+        email: yup.string()
+            .email('Please enter a valid email address').required('Email is required')
     })
 
     const { register, control, handleSubmit, formState: { errors } } = useForm({
         resolver: yupResolver(schema),
         defaultValues: {
-            userName: '',
+            email: '',
         }
     });
 
     const onSubmit = (data) => {
-        // console.log("data: ", data)
-        userLogin(data)
+        handleEmail(data)
     };
 
     return (
-        <div className="px-10 w-full mt-5 flex flex-col gap-2">
-            <div className='w-full flex justify-center lg:justify-start'>
-                <img
-                    src={logo}
-                    alt="Banner"
-                    className="lg:w-24 lg:h-24 object-fit "
-                />
-            </div>
-            <h2 className="text-2xl font-bold text-gray-800 md:text-2xl md:font-semibold ">Get your profile started</h2>
-            <p className="text-[#656565] text-sm">Add a username that's unique to you, this is how you'll appear to others.</p>
-            <p className="text-[#656565] text-sm font-bold">You can't change your username, so choose wisely.</p>
-            <div className="w-full mt-2">
-                <label className="block text-sm font-medium text-gray-700">Choose a username</label>
-                <Controller
-                    control={control}
-                    name="userName"
-                    render={({ field: { onChange, onBlur, value } }) => (
-                        <input
-                            name="userName"
-                            type="text"
-                            value={value}
-                            onChange={onChange}
-                            className="w-full px-4 py-2 mt-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            placeholder="John Smith"
-                        />
-                    )}
-                />
-                {errors?.userName && (<p className="mt-1 text-red-600">{errors?.userName?.message}</p>)}
-            </div>
-
-            {(!errors?.userName) && (
-                <p className="text-red-600">{error}</p>
-            )}
-            <button
-                type="submit"
-                className={`mt-3 w-full flex gap-2 items-center justify-center px-4 py-2 font-semibold text-white bg-[#15A9B2] rounded-full hover:bg-[#05929c] cursor-pointer transition`}
-                onClick={() => setModalData({ ...modalData, ModalName: 'confirm email' })}
-                disabled={isPending ? true : false}
-            >
-                <p>Create my account</p>
-                <div className=' rounded-full px-1 py- bg-[#60cfd6]'>
-                    <EastIcon style={{ fontSize: 20 }} />
+        <SignIn_modal1 >
+            <div className="px-10 w-full mt-5 flex flex-col gap-2">
+                <div className='w-full flex justify-center lg:justify-start'>
+                    <img
+                        src={logo}
+                        alt="Banner"
+                        className="lg:w-24 lg:h-24 object-fit "
+                    />
                 </div>
-            </button>
-        </div>
+                <h2 className="text-2xl font-bold text-gray-800 md:text-2xl md:font-semibold ">Forgot Email</h2>
+                {/* <p className="text-[#656565] text-sm">Add a username that's unique to you, this is how you'll appear to others.</p> */}
+                {/* <p className="text-[#656565] text-sm font-bold">You can't change your username, so choose wisely.</p> */}
+                <div className="w-full mt-2">
+                    <label className="block text-sm font-medium text-gray-700">Enter email</label>
+                    <Controller
+                        control={control}
+                        name="email"
+                        render={({ field: { onChange, onBlur, value } }) => (
+                            <input
+                                name="userName"
+                                type="text"
+                                value={value}
+                                onChange={onChange}
+                                className="w-full px-4 py-2 mt-1 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                placeholder="abc@gmail.com"
+                            />
+                        )}
+                    />
+                    {errors?.email && (<p className="mt-1 text-red-600">{errors?.email?.message}</p>)}
+                </div>
+
+                {(!errors?.userName) && (
+                    <p className="text-red-600">{error}</p>
+                )}
+                <button
+                    type="submit"
+                    className={`mt-3 w-full flex gap-2 items-center justify-center px-4 py-2 font-semibold text-white bg-[#15A9B2] rounded-full hover:bg-[#05929c] cursor-pointer transition`}
+                    onClick={handleSubmit(onSubmit)}
+                    disabled={isPending ? true : false}
+                >
+                    <p>Submit</p>
+                    <div className=' rounded-full px-1 py- bg-[#60cfd6]'>
+                        <EastIcon style={{ fontSize: 20 }} />
+                    </div>
+                </button>
+            </div>
+        </SignIn_modal1>
     )
 }
 

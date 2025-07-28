@@ -21,6 +21,7 @@ import ProposalModal from "../../component/ProposalModal";
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import { downloadFile } from "../../../functions/download_pdf";
+
 export const ProjectDetailClient = () => {
 
   const { id } = useParams()

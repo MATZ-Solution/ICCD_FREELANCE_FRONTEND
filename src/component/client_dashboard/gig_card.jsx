@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import FavoriteIcon from '@mui/icons-material/Favorite';
+import { memo } from 'react';
 
 const GigCard = ({
   image,
@@ -51,4 +52,4 @@ const GigCard = ({
   );
 };
 
-export default GigCard;
+export default memo(GigCard);

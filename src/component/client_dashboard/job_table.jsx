@@ -2,6 +2,7 @@ import order_logo from '../../assets/freelancer_dashboard/order_logo.png';
 import { useNavigate } from 'react-router-dom';
 import { useLocation } from 'react-router-dom';
 import { formatDate } from '../../../functions/timeFormat';
+import { memo } from 'react';
 
 function Jobs_table({ data }) {
 
@@ -96,4 +97,4 @@ function Jobs_table({ data }) {
   )
 }
 
-export default Jobs_table
+export default memo(Jobs_table)

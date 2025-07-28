@@ -5,13 +5,15 @@ import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 
-const VerifyOtp = () => {
+const VerifyOtp = ({ handleSwitch, email }) => {
 
   const location = useLocation();
-  const { email } = location.state || {}
-  console.log("location: ", email)
 
-  const { handleOtp, isSuccess, isPending, isError, error, data } = useSubmitOtp()
+  const { handleOtp, isSuccess, isPending, isError, error, data } = useSubmitOtp({
+    onSuccess: (response) => {
+      handleSwitch("change-password")
+    },
+  })
 
   const schema = yup.object({
     otp: yup.string().required('Otp is required')

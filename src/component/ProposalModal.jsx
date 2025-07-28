@@ -25,8 +25,7 @@ const schema = yup.object().shape({
 });
 
 const ProposalModal = ({ onClose, data, freelancerData }) => {
-    console.log("freelancerData: ", freelancerData)
-    const { firstName, lastName, id: freelancerId } = freelancerData
+    const { firstName, lastName, id: freelancerId, email } = freelancerData
     const clientID = data[0]?.clientID
     const projectID = data[0]?.id
     const pathName = useLocation().pathname
@@ -37,7 +36,8 @@ const ProposalModal = ({ onClose, data, freelancerData }) => {
     } = useForm({
         resolver: yupResolver(schema),
         defaultValues: {
-            name: firstName + " " + lastName
+            name: firstName + " " + lastName,
+            email: email
         }
     });
     const { submitProposals, isSuccess, isPending, isError, error } = useApplyProject()
@@ -57,7 +57,6 @@ const ProposalModal = ({ onClose, data, freelancerData }) => {
                 formData.append(key, updateData[key])
             }
         }
-        // submitProposals(formData)
         if (pathName.includes('manage-jobs')) {
             submitJob(formData)
         } else {

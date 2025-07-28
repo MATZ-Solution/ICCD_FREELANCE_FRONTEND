@@ -5,6 +5,7 @@ const API_ROUTE = {
     sendOtp: "sendOtp",
     submitOtp: "submitOtp",
     checkapi: "checkapi",
+    changePasword: "changePasword"
   },
   project: {
     getAllProject: "/project/getAllProject",
@@ -21,7 +22,8 @@ const API_ROUTE = {
     addJob: "/job/addJob",
     getJobsByClient: '/job/getJobsByClient',
     editJob: '/job/editJob',
-    applyjob: "/job/applyJob"
+    applyjob: "/job/applyJob",
+    getJobPropsalByClient: "/job/getJobPropsalByClient"
   },
   gigs: {
     getGigs: "/gigs/getGigs",
@@ -37,7 +39,8 @@ const API_ROUTE = {
     checkIsFreelancer: '/freelancer/checkIsFreelancer',
     getFreelancerProfile: '/freelancer/getFreelancerProfile',
     addProfile: '/freelancer/addProfile',
-    editProfile: '/freelancer/editProfile'
+    editProfile: '/freelancer/editProfile',
+    getFreelancerDashboardData : '/freelancer/getFreelancerDashboardData'
   },
   client : {
     getClientDashboardData: '/client/getClientDashboardData',

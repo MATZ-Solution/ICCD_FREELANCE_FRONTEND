@@ -1,10 +1,11 @@
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, memo } from "react"
 import { X, Package, Truck, RotateCcw, Minus, Plus, Check } from "lucide-react"
 import { useDispatch } from "react-redux";
 import { setOrderDetails } from "../../../redux/slices/orderSlice";
 import { useNavigate } from "react-router-dom"
-export default function OrderOptions({
+
+ function OrderOptions({
   isOpen,
   onClose,
   packageType,
@@ -204,3 +205,5 @@ const navigate = useNavigate();
     </>
   );
 }
+
+export default memo(OrderOptions)

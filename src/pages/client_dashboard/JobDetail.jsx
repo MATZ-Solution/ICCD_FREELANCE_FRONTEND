@@ -1,16 +1,19 @@
 import { MapPin, Clock, DollarSign, Users, Briefcase, Heart, Share2 } from "lucide-react"
-import { useGetJobById } from "../../../api/client/job"
+import { useGetJobById, getJobPropsalByClient } from "../../../api/client/job"
 import { useParams } from "react-router-dom"
-
+import { useRef } from "react"
+import { downloadFile } from "../../../functions/download_pdf"
 export default function JobDetailPage() {
 
-  const { id } = useParams() 
+  const { id } = useParams()
   const { data, isSuccess, isPending, isError, isLoading } = useGetJobById(id)
+  const { jobProposals, error } = getJobPropsalByClient()
+  console.log("jobProposals: ", jobProposals)
 
-  if(isLoading){
+  if (isLoading) {
     return <p>Loading...</p>
   }
-  if(data?.length === 0){
+  if (data?.length === 0) {
     return <p>No jobs to show</p>
   }
   return (
@@ -37,10 +40,10 @@ export default function JobDetailPage() {
               </div>
             </div>
             <div className="flex flex-col sm:flex-row gap-3">
-           
+
               <button className="px-6 py-3 bg-white text-gray-700 font-medium rounded-lg border border-gray-300 hover:bg-gray-50 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 flex items-center gap-2">
                 <Share2 className="w-4 h-4" />
-                  Share this Job
+                Share this Job
               </button>
             </div>
           </div>
@@ -50,6 +53,41 @@ export default function JobDetailPage() {
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-6">
             {/* Job Description */}
+               {/* Propsals */}
+            <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300">
+              <div className="bg-gradient-to-r from-emerald-50 to-teal-50 p-6 border-b border-gray-200">
+                <h2 className="text-xl font-bold text-gray-900">Clients & Proposals</h2>
+              </div>
+              <div className="px-4 overflow-x-auto rounded-lg">
+                <table className="min-w-full bg-white">
+                  <thead className="bg-[#47AAB3] text-white text-sm sticky top-0">
+                    <tr>
+                      <th className="px-6 py-3 text-left font-medium">Name</th>
+                      <th className="px-6 py-3 text-left font-medium">Experience</th>
+                      <th className="px-6 py-3 text-center font-medium">CVs</th>
+                      <th className="px-6 py-3"></th>
+                    </tr>
+                  </thead>
+                  <tbody className="text-sm divide-y divide-gray-200">
+                    {jobProposals?.map((item, index) => (
+                      <tr key={index} className="hover:bg-gray-50">
+                        <td className="px-6 py-4 whitespace-nowrap flex items-center gap-3">
+                          <img src={item?.candidateImg} className="w-9 h-9 rounded-full "></img>
+                          <span className="font-medium">{item?.freelancerName}</span>
+                        </td>
+                        <td className="px-6 py-4">{item?.experience}</td>
+                        <td className="px-6 py-4 text-right">
+                          <button onClick={() => downloadFile(item?.fileUrl, item?.freelancerName)} className="text-[#47AAB3] hover:underline text-sm">
+                            Download CV
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
               <h2 className="text-xl font-semibold text-gray-900 mb-4">Job Description</h2>
               <div className="prose prose-gray max-w-none">
@@ -59,13 +97,13 @@ export default function JobDetailPage() {
               </div>
             </div>
 
-          
+
           </div>
 
           {/* Sidebar */}
           <div className=" space-y-6">
 
-             {/* Company Info */}
+            {/* Company Info */}
             {/* <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
               <h2 className="text-xl font-semibold text-gray-900 mb-3">About the Company</h2>
               <div className="space-y-3">
@@ -85,8 +123,11 @@ export default function JobDetailPage() {
                 </div>
               </div>
             </div> */}
+
+         
+
             {/* Job Details */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+           <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
               <h2 className="text-xl font-semibold text-gray-900 mb-4">Job Details</h2>
               <div className="space-y-4">
                 <div className="flex items-start gap-3 p-3 bg-green-50 rounded-lg">
