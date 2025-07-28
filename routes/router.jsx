@@ -96,6 +96,16 @@ export const router = createBrowserRouter([
       // </AuthRoute>
     ),
   },
+   {
+    path: "/browse-projects",
+    element: (
+      // <AuthRoute>
+      <MainTemplate isShowFooter={false}>
+        <FreelancerProjects />
+      </MainTemplate>
+      // </AuthRoute>
+    ),
+  },
 
    {
     path: "/find-talent",
@@ -107,6 +117,19 @@ export const router = createBrowserRouter([
       // </AuthRoute>
     ),
   },
+   {
+    path: "/post-job",
+    element: (
+      // <AuthRoute>
+      <MainTemplate isShowFooter={true}>
+          <Post_job />
+      </MainTemplate>
+      // </AuthRoute>
+    ),
+  },
+
+
+
 
 
   {

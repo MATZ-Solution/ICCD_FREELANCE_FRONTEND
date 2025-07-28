@@ -9,6 +9,10 @@ const initialState = {
   packageDescription: "",
   delivery: "",
   revisions: "",
+  freelancer_id:  "",
+  client_id: "",
+  gig_id: "",
+
 };
 
 const orderSlice = createSlice({

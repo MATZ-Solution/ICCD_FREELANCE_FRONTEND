@@ -47,7 +47,7 @@ const OrderTable = ({ data }) => {
                       {/* Price */}
                       <div className="sm:w-1/6 w-full">
                         <p className="text-[#737373] text-sm sm:text-base">Price</p>
-                        <p className="text-[#043A53] text-base sm:text-lg font-semibold">${item.price}</p>
+                        <p className="text-[#043A53] text-base sm:text-lg font-semibold">${item.base_price}</p>
                       </div>
 
                       {/* Due */}

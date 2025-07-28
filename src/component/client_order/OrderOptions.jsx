@@ -12,6 +12,9 @@ export default function OrderOptions({
   delivery,
   revisions,
   basePrice = 2980,
+  freelancer_id,     
+  client_id,          
+  gig_id 
 }) {
   const [quantity, setQuantity] = useState(1);
   const [orderType, setOrderType] = useState("single");
@@ -40,6 +43,9 @@ const navigate = useNavigate();
     packageDescription,
     delivery,
     revisions,
+     freelancer_id,
+  client_id,
+  gig_id
   }));
 
   navigate("/payment"); // redirect to payment page
@@ -121,6 +127,8 @@ const navigate = useNavigate();
           <div>
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm font-medium text-gray-900">Gig Quantity</span>
+
+      
               <div className="flex items-center space-x-3 bg-gray-50 rounded-lg p-1">
                 <button
                   onClick={decrementQuantity}

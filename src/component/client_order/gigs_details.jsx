@@ -3,6 +3,7 @@ import SidebarCard from "./sidebarcard";
 import OrderOptions from "./OrderOptions";
 import { useGetSingleGigs } from "../../../api/client/gigs";
 import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 export default function ServicePage() {
   const [activeNavTab, setActiveNavTab] = useState("Basic");
@@ -14,6 +15,7 @@ export default function ServicePage() {
   const gig = data?.[0];
   const gigInfo = gig?.gigsDescription;
   const freelancer = gig?.freelancerDetails;
+  const userDetails = useSelector(state => state.user.userDetails);
 
   const selectedPackage = gig?.packagesDetails?.find(
     (pkg) => pkg?.packageType?.toLowerCase() === activeNavTab.toLowerCase()
@@ -160,6 +162,9 @@ export default function ServicePage() {
           delivery={selectedPackage.deliverytime || "3 Days"}
           revisions={selectedPackage.revisions}
           basePrice={selectedPackage.price}
+          freelancer_id={freelancer.freelancerId}     
+          gig_id={gigInfo.gigsID}        
+          client_id={userDetails.id}
         />
       )}
 

@@ -18,7 +18,7 @@ function Homepage() {
             <Banner4 />
             <Banner3 />
             <Banner6 />
-            <Banner7 />
+            {/* <Banner7 /> */}
             <Footer />
         </div>
     )
