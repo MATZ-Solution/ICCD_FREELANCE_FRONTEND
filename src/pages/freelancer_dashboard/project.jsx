@@ -4,6 +4,7 @@ import Tabs from "../../component/freelancer_dashboard/tabs";
 import Projects_table from "../../component/client_dashboard/project_table";
 import { useNavigate } from "react-router-dom";
 import { useGetAllProjects } from "../../../api/client/project";
+import ICCDLoader from "../../component/loader";
 
 function FreelancerProjects() {
   const navigate = useNavigate();
@@ -13,6 +14,9 @@ function FreelancerProjects() {
 
   const { data, isSuccess, isPending, isError, isLoading } = useGetAllProjects();
   console.log("data: ", data);
+   if(isLoading){
+        return <ICCDLoader />
+    }
 
   return (
     <div className="px-4 sm:px-6 lg:px-10 w-full">

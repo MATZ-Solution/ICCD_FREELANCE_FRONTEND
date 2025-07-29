@@ -3,6 +3,7 @@ import { useGetJobById, getJobPropsalByClient } from "../../../api/client/job"
 import { useParams } from "react-router-dom"
 import { useRef } from "react"
 import { downloadFile } from "../../../functions/download_pdf"
+import ICCDLoader from "../../component/loader"
 export default function JobDetailPage() {
 
   const { id } = useParams()
@@ -11,8 +12,9 @@ export default function JobDetailPage() {
   console.log("jobProposals: ", jobProposals)
 
   if (isLoading) {
-    return <p>Loading...</p>
+    return <ICCDLoader /> 
   }
+  
   if (data?.length === 0) {
     return <p>No jobs to show</p>
   }

@@ -2,12 +2,16 @@ import { useState } from "react";
 import OrderTable from "../../component/freelancer_dashboard/order_table";
 import SearchIcon from '@mui/icons-material/Search';
 import { useGetOrderByFreelancer } from "../../../api/client/order";
+import ICCDLoader from "../../component/loader";
 
 function Orders() {
   const [active, setActive] = useState('Active');
   const navigation = ['Active', 'Pending Approval', 'Requires Modification', 'Draft', 'Denied', 'Paused'];
 
   const { data, error, isLoading, isError } = useGetOrderByFreelancer();
+  if (isLoading ) {
+         return <ICCDLoader /> 
+       }
 
   return (
     <div className="px-4 sm:px-6 lg:px-10">

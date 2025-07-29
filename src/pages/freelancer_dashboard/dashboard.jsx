@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { Bell, Mail, HelpCircle, Star, TrendingUp, FileText, Users, Filter, X, Menu } from "lucide-react";
+import { Bell, Mail, HelpCircle, Star, TrendingUp, FileText, Users, Filter, X, Menu, Loader } from "lucide-react";
 import OverviewChart from "../../component/freelancer_dashboard/overview";
 import DCard from "../../component/freelancer_dashboard/cards";
 import logo from "../../assets/ICCD-01.png";
@@ -12,8 +12,9 @@ import { useDispatch } from "react-redux";
 import { useGetFreelancerProfile, useGetFreelDashboardData } from "../../../api/client/freelancer";
 import { useEffect } from "react";
 import { getUserProfile } from "../../../redux/slices/userProfileSlice";
-import { useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 import { setUserType } from "../../../redux/slices/userType";
+import ICCDLoader from "../../component/loader";
 
 export default function FreelancerDashboard() {
   const [activeNavTab, setActiveNavTab] = useState("Dashboard");
@@ -25,6 +26,9 @@ export default function FreelancerDashboard() {
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [showMobileSidebar, setShowMobileSidebar] = useState(false);
   const navigate = useNavigate()
+    const profileDetails = useSelector(state => state.userProfile.userProfile)
+  const { educations, certifications, skills, languages } = profileDetails
+  console.log("profileDetails: ", profileDetails)
 
   const orders = [
     { id: 1, name: "DONGYONG PENG", type: "Graphics", amount: 20, date: "6 May 2023", status: "active" },
@@ -66,6 +70,7 @@ export default function FreelancerDashboard() {
   const { data: dashData, isError: dashDataIsErr, isLoading: dashDataIsLoad } = useGetFreelDashboardData()
   console.log("dashData: ", dashData)
 
+
   useEffect(() => {
     if (data && data.length > 0) {
       dispatch(getUserProfile(data[0]));
@@ -73,12 +78,12 @@ export default function FreelancerDashboard() {
     }
   }, [data]);
 
-  if (dashDataIsLoad) {
-    return <p>Loading...</p>
+  if (dashDataIsLoad  || isLoading) {
+    return <ICCDLoader />
   }
 
   return (
-    <div className="min-h-screen px-4  sm:px-6  bg-white">
+    <div className="min-h-screen px-4   sm:px-6  bg-white">
       {/* Header */}
 
       {showMobileSidebar && (
@@ -98,7 +103,7 @@ export default function FreelancerDashboard() {
             </button>
           </div>
 
-          <div className="mb-6 bg-[#F8F8F8] rounded-lg p-4">
+          <div className="mb-6 bg-[#F8F8F8] mt-7 rounded-lg p-4">
             <div className="flex flex-col items-center gap-3">
               <img
                 src={dp}
@@ -116,19 +121,41 @@ export default function FreelancerDashboard() {
           </div>
 
           <div className="mb-6  bg-[#F8F8F8] rounded-lg p-4 ">
-            <h4 className="font-semibold mb-4 text-sm">Level Overview</h4>
-            <div className="space-y-3 text-xs">
-              <div className="flex justify-between">
+
+              <div className="space-y-2">
+            <h4 className="text-sm font-medium text-gray-900">Profile Stats</h4>
+            <div className="grid grid-cols-2 gap-3 text-center">
+              <div className="p-2 bg-gray-50 rounded-md">
+                <div className="text-lg font-semibold text-gray-900">{(profileDetails && profileDetails.educations) && educations.length}</div>
+                <div className="text-xs text-gray-500">Education</div>
+              </div>
+              <div className="p-2 bg-gray-50 rounded-md">
+                <div className="text-lg font-semibold text-gray-900">{(profileDetails && profileDetails.certifications) && certifications.length}</div>
+                <div className="text-xs text-gray-500">Certificates</div>
+              </div>
+              <div className="p-2 bg-gray-50 rounded-md">
+                <div className="text-lg font-semibold text-gray-900">{(profileDetails && profileDetails.skills) && skills.length}</div>
+                <div className="text-xs text-gray-500">Skills</div>
+              </div>
+              <div className="p-2 bg-gray-50 rounded-md">
+                <div className="text-lg font-semibold text-gray-900">{(profileDetails && profileDetails.languages) && languages.length}</div>
+                <div className="text-xs text-gray-500">Languages</div>
+              </div>
+            </div>
+          </div>
+            {/* <h4 className="font-semibold mb-4 text-sm">Level Overview</h4>
+            {/* <div className="space-y-3 text-xs">
+              {/* <div className="flex justify-between">
                 <span className="text-gray-600">My level</span>
                 <span className="font-medium">Level 2</span>
-              </div>
-              <div className="flex justify-between">
+              </div> */}
+              {/* <div className="flex justify-between">
                 <span className="text-gray-600">Success score</span>
                 <div className="flex items-center gap-1">
                   {[...Array(5)].map((_, i) => <Star key={i} className="w-3 h-3 fill-yellow-400 text-yellow-400" />)}
                 </div>
-              </div>
-              <div className="flex justify-between">
+              </div> */}
+              {/* <div className="flex justify-between">
                 <span className="text-gray-600">Rating</span>
                 <span className="font-medium">5.0</span>
               </div>
@@ -136,31 +163,17 @@ export default function FreelancerDashboard() {
                 <span className="text-gray-600">Response rate</span>
                 <span className="font-medium">30 Mins</span>
               </div>
-            </div>
-            <button className="w-full px-4 border border-[#01AEAD] py-2 text-sm  rounded-md hover:bg-gray-50 text-gray-700 mt-4">View Progress</button>
-          </div>
+            </div> */}  
+   <button
+      onClick={() => navigate('/freelancer/edit-profile')}
+      className="w-full px-4 border border-[#01AEAD] py-2 text-sm rounded-md hover:bg-gray-50 text-gray-700 mt-4"
+    >
+      View 
+    </button>         
+     </div>
 
-          <div className="mb-6 bg-[#F8F8F8] rounded-lg p-4 ">
-            <h4 className="font-semibold mb-2 text-lg ">Availability</h4>
-            <p className="text-xs text-gray-600 mb-4">While unavailable, your Gigs are hidden and you will not receive new orders.</p>
-            <button
-              onClick={toggleAvailability}
-              className={`w-full px-4 py-2 text-sm rounded-md font-medium ${isAvailable ? "bg-red-500 hover:bg-red-600  text-white" : "border border-[#01AEAD] hover:bg-green-600 hover:text-white text-gray-700"
-                }`}
-            >
-              {isAvailable ? "Set as Unavailable" : "Set your availability"}
-            </button>
-            {isAvailable && (
-              <div className="mt-2 p-2 bg-green-50 border border-green-200 rounded-md">
-                <p className="text-xs text-green-700">✓ You are currently available for new orders</p>
-              </div>
-            )}
-          </div>
+          
 
-          <div className="flex bg-[#F8F8F8] p-4 rounded-xl justify-between">
-            <h4 className="font-semibold text-lg">Inbox</h4>
-            <button onClick={() => navigate('/messages')} className="text-xs text-cyan-500 hover:text-cyan-600">View All</button>
-          </div>
 
         </aside>
         {/* Main Content */}

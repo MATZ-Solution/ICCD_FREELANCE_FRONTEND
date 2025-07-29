@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setOrderDetails } from "../../../redux/slices/orderSlice";
+import ICCDLoader from "../../component/loader";
 
 function SuccessPage() {
   const [searchParams] = useSearchParams();
@@ -13,6 +14,7 @@ function SuccessPage() {
   const dispatch = useDispatch();
   const order = useSelector((state) => state.order);
 
+  
   useEffect(() => {
     const sessionId = searchParams.get("session_id");
 
@@ -24,6 +26,10 @@ function SuccessPage() {
 
     fetchSessionAndProcessOrder(sessionId);
   }, [searchParams]);
+
+  if (loading ) {
+         return <ICCDLoader /> 
+       }
 
   const fetchSessionAndProcessOrder = async (sessionId) => {
     try {

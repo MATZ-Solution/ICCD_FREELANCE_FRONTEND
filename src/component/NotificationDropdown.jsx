@@ -7,7 +7,6 @@ import { useSelector } from "react-redux"
 
 export default function NotificationDropdown() {
   console.log("NotificationDropdown")
-  const freelancer = useSelector((state) => state.user.userDetails);
   const user = useSelector((state) => state.userType.user);
   const [showDropdown, setShowDropdown] = useState(false)
   const dropdownRef = useRef(null)

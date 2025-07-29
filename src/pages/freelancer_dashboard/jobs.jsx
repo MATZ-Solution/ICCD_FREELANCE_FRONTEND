@@ -9,15 +9,11 @@ import PaymentIcon from '@mui/icons-material/Payment';
 import CasesIcon from '@mui/icons-material/Cases';
 import ReactSelect from 'react-select';
 import Modal from '../../component/modal';
-import { useNavigate } from 'react-router-dom';
 import { useGetAllJobs, useGetJobById } from '../../../api/client/job';
-import { useEffect } from 'react';
-import useDebounce from '../../../hooks/useDebounce';
 import { useSelector } from 'react-redux';
 import ProposalModal from '../../component/ProposalModal';
-
+import Select from "../../component/buttonSelect.jsx"
 function Jobs() {
-  const navigate = useNavigate();
   let [obj, setObj] = useState({})
   const [show, setShow] = useState(false);
   const filterNames = ['jobType', 'joblocation'];
@@ -27,7 +23,7 @@ function Jobs() {
   // Fetch all jobs
   const { data: allJobs, isSuccess: allJobsSuccess } = useGetAllJobs(obj);
 
-  const { data: jobDetails, isSuccess: jobDetailsSuccess } = useGetJobById(selectedJobId, {
+  const { data: jobDetails, isSuccess: jobDetailsSuccess  } = useGetJobById(selectedJobId, {
     enabled: !!selectedJobId, 
   });
 
@@ -78,37 +74,63 @@ function Jobs() {
       </div>
 
       {/* Search Bar */}
-      <div className="w-full flex flex-col items-center gap-4 p-5 mt-5 rounded-2xl bg-gray-100 shadow-lg lg:flex-row lg:gap-0">
+   
+      {/* Browse Jobs */}
+      <div className="w-full shadow-lg  mt-5 rounded-2xl bg-gray-100">
+           <div className="w-full flex flex-col items-center mb-5 mt-5 rounded-2xl bg-gray-100 shadow-md lg:flex-row lg:gap-0">
         <div className="w-full relative">
           <SearchOutlinedIcon className="absolute top-2 left-2" />
           <input onChange={(e) => setObj({ ...obj, jobTitle: e.target.value })} className="w-full h-10 px-10 outline-none" placeholder="Job title, keywords, or company" />
         </div>
-        <div className="w-full relative lg:border-l-[1px] lg:border-r-gray-400">
+
+        <div className="w-full flex flex-wrap gap-3 py-5 mt-5">
+     {filterNames.map((filterName) => (
+        <div key={filterName} className="w-40 relative">
+          <Select
+            option={filterOptions[filterName]}
+            placeholder={filterName}
+            value={
+              obj[filterName]
+                ? filterOptions[filterName]?.find(opt => opt.value === obj[filterName])
+                : null
+            }
+            onChange={(selectedOption) =>
+              setObj({ ...obj, [filterName]: selectedOption?.value })
+            }
+            isClearable={false} // if using your own clear button
+          />
+
+          {obj[filterName] && (
+            <button
+              onClick={() => {
+                const newFilters = { ...obj };
+                delete newFilters[filterName];
+                setObj(newFilters); // field will auto-reset because value is tied to obj
+              }}
+              className="absolute -top-2 -right-2 bg-black text-white rounded-full px-2 text-sm font-bold hover:bg-[#3C939D]"
+              title="Clear filter"
+            >
+              ×
+            </button>
+          )}
+        </div>
+      ))}
+
+
+        </div>
+        
+        {/* <div className="w-full relative lg:border-l-[1px] lg:border-r-gray-400">
           <LocationOnIcon className="absolute top-2 left-2" />
           <input className="w-full h-10 px-10 outline-none" placeholder='City, state, zip code, or "remote"' />
           <button className="hidden absolute top-0 right-2 bg-[#15A9B2] rounded-md text-white px-7 py-2 lg:flex">
             Search
           </button>
-        </div>
+        </div> */}
         <button className="w-full flex bg-[#15A9B2] rounded-md text-white text-center px-7 py-2 lg:hidden">
           Search
         </button>
       </div>
 
-      {/* Browse Jobs */}
-      <div className="w-full shadow-lg p-5 mt-5 rounded-2xl bg-gray-100">
-        <div className="w-full flex flex-wrap gap-3 py-5 mt-5">
-          {filterNames.map((filterName) => (
-            <div key={filterName} className="w-40">
-              <ReactSelect
-                options={filterOptions[filterName]}
-                placeholder={`${filterName}`}
-                className="text-[#3d3d3d] font-semibold rounded-lg bg-gray-300 p-1"
-                onChange={(selectedOption) => setObj({ ...obj, [filterName]: selectedOption.value })}
-              />
-            </div>
-          ))}
-        </div>
 
         <p>
           Sort by: <span className="text-black font-semibold">relevance</span>
@@ -129,7 +151,7 @@ function Jobs() {
                 >
                   <BookmarkBorderIcon style={{ scale: 1.3 }} className="absolute right-4 top-5" />
                   <h1 className="font-bold text-xl">{job.jobTitle}</h1>
-                  <p className="mt-3">{job.jobType}</p>
+                  <p className=" capitalize mt-3">{job.jobType}</p>
                   <p className="mt-3">{job.name}</p>
                   <p>{job.companyName}</p>
                   <p className="mt-3">{job.joblocation}</p>

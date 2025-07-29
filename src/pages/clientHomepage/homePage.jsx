@@ -3,6 +3,7 @@ import GigCard from "../../component/client_dashboard/gig_card";
 import { useGetGigs } from "../../../api/client/gigs";
 import { useNavigate, useLocation } from "react-router-dom";
 import { SearchIcon } from "lucide-react";
+import ICCDLoader from "../../component/loader";
 
 export default function ClientHomepage() {
   const navigate = useNavigate();
@@ -16,6 +17,9 @@ export default function ClientHomepage() {
 
   const { gigs, error, isLoading, isError } = useGetGigs({ search: searchTermFromUrl });
 
+   if (isLoading ) {
+       return <ICCDLoader /> 
+     }
   function handleSearch() {
     if (search.trim() === searchTermFromUrl.trim()) return; // no change
     navigate(`?query=${encodeURIComponent(search.trim())}`, { replace: true });

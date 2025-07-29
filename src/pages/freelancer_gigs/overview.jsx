@@ -10,6 +10,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useParams } from 'react-router-dom';
 import * as yup from "yup";
 import { useEditGigs, useGetSingleGigs } from '../../../api/client/gigs';
+import ICCDLoader from '../../component/loader';
 
 function Overview() {
 
@@ -20,6 +21,7 @@ function Overview() {
   const { data: gigsData, isSuccess, isPending, isError, isLoading } = useGetSingleGigs(id)
   const { editGigs, isSuccess: editGigsIsSucc, isPending: editGigIsPend, isError: editGigIsErr, error } = useEditGigs(id,'json')
 
+ 
   const schema = yup.object({
     gigsTitle: yup.string().required("title not selected"),
     category: yup.string().required("category not selected"),
@@ -66,7 +68,10 @@ function Overview() {
       });
     }
   }, [gigsData, reset]);
-
+  
+ if(isLoading || editGigIsPend){
+        return <ICCDLoader />
+    }
   return (
     <Profile>
       <div className='flex flex-col rounded-md mt-7 gap-6 sm:border-[#AFAFAF] sm:border-[1px] sm:mt-20 sm:gap-10 sm:p-10'>

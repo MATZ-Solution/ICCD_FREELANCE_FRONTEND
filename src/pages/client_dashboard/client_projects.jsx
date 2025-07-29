@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { useGetGigsByUser } from "../../../api/client/gigs";
 import Projects_table from "../../component/client_dashboard/project_table";
 import { useGetProjectsByClient } from "../../../api/client/project";
+import ICCDLoader from "../../component/loader";
 
 function ClientProjects() {
 
@@ -16,7 +17,9 @@ function ClientProjects() {
 
     const { data, isSuccess, isPending, isError, isLoading } = useGetProjectsByClient()
     console.log("data: ", data)
-
+if (isLoading) {
+        return <ICCDLoader />
+    }
     return (
         <div className="px-5 sm:px-5 lg:px-10">
             <div className="flex flex-wrap justify-between mt-10 p-5 bg-[#F8F8F8] rounded-md">

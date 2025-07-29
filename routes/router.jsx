@@ -60,6 +60,7 @@ import ReviewPage from "../src/pages/superadmin_dashboard/review-page";
 import ContactPage from '../src/pages/contactpage';
 import AboutUsPage from '../src/pages/aboutuspage';
 import LoginController from "../src/component/loginController";
+import ICCDLoader from '../src/component/loader';
 
 const stripePromise = loadStripe("pk_test_51QCl1eCDh3RtIJ6XkYcN5vHd3KTO2f8enRSNv9Wx7Li0iCI7cr9khTDQx0vS5RmbazZoaECNW83FesOMwLeIgMLb00BJG4pPZR");
 
@@ -70,6 +71,13 @@ export const router = createBrowserRouter([
       <Homepage />
     ,
   },
+   {
+    path: "/loader",
+    element:
+      <ICCDLoader />
+    ,
+  },
+ 
    {
     path: "/contactus",
     element:

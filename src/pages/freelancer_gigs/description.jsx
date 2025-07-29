@@ -11,6 +11,7 @@ import * as yup from "yup";
 import { useSelector } from "react-redux";
 import { useParams } from 'react-router-dom';
 import { useGetSingleGigs, useEditGigs } from '../../../api/client/gigs';
+import ICCDLoader from '../../component/loader';
 
 function Description() {
 
@@ -24,7 +25,9 @@ function Description() {
     const { data: gigsData, isSuccess, isPending, isError, isLoading } = useGetSingleGigs(id)
     const { editGigs, isSuccess: editGigsIsSucc, isPending: editGigIsPend, isError: editGigIsErr, error } = useEditGigs(id, 'json')
 
-
+   if(isLoading || editGigIsPend){
+        return <ICCDLoader />
+    }
     const schema = yup.object({
         description: yup.string().required("description not selected"),
     })

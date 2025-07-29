@@ -4,6 +4,7 @@ import OrderOptions from "./OrderOptions";
 import { useGetSingleGigs } from "../../../api/client/gigs";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
+import ICCDLoader from "../loader";
 
 export default function ServicePage() {
   const [activeNavTab, setActiveNavTab] = useState("Basic");
@@ -21,7 +22,7 @@ export default function ServicePage() {
     (pkg) => pkg?.packageType?.toLowerCase() === activeNavTab.toLowerCase()
   );
 
-  if (isLoading) return <p className="text-center mt-10">Loading...</p>;
+  if (isLoading) return <ICCDLoader /> ;
 
 
   console.log("Gig Data:", gig);

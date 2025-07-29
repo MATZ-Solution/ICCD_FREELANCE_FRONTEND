@@ -21,6 +21,7 @@ import ProposalModal from "../../component/ProposalModal";
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import { downloadFile } from "../../../functions/download_pdf";
+import ICCDLoader from "../../component/loader";
 
 export const ProjectDetailClient = () => {
 
@@ -30,10 +31,12 @@ export const ProjectDetailClient = () => {
   const { data, isSuccess, isPending, isError, isLoading } = useGetProjectsById(id)
   const { data: propData, isSuccess: propSucc, isPending: propIsPend, isError: propIsErr, isLoading: propIsLoad } = useGetProjectProposalByClient(id)
 
+  
   console.log("props data: ", propData)
-  if (isLoading) {
-    return <p>Loading...</p>
-  }
+  if (isLoading || propIsLoad) {
+     return <ICCDLoader /> 
+   }
+   
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">

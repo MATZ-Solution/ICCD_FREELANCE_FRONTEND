@@ -8,6 +8,7 @@ import { useGetGigsByUser } from "../../../api/client/gigs";
 import { useGetOrderByClient } from "../../../api/client/order";
 import OrderTable from "../freelancer_dashboard/order_table";
 import { memo } from "react";
+import ICCDLoader from "../loader";
 
 function ClientOrders() {
   const navigate = useNavigate()
@@ -17,6 +18,7 @@ function ClientOrders() {
   const { data, isSuccess, isPending, isError, isLoading } = useGetOrderByClient()
   console.log("data: ", data)
 
+  if (isLoading) return <ICCDLoader /> ;
 
 
   return (

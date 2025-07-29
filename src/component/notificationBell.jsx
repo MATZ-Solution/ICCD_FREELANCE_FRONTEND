@@ -14,6 +14,7 @@ const NotificationBell = ({ isShowNot, setIsShowNot }) => {
     const user = useSelector((state) => state.userType.user);
     const client = useSelector((state) => state.user.userDetails);
     const socket = useMemo(() => { return getSocket(client.id) }, [client.id]);
+    console.log("user: ", user)
     const { data, error, isLoading, isError } = useGetUnReadCountNot(user)
 
     useEffect(() => {

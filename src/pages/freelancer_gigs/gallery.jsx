@@ -7,6 +7,7 @@ import { useAddGigs, useGetSingleGigs, useEditGigs, useGetGigsFiles, useEditGigs
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { resetGigDetails } from '../../../redux/slices/gigsDetailSlice';
+import TopCenterToast from '../../component/TopCenterToast';
 
 function Gallery() {
   const { id } = useParams();
@@ -66,6 +67,8 @@ function Gallery() {
     }
 
   };
+
+  
 
   return (
     <Profile>
@@ -129,9 +132,16 @@ function Gallery() {
 
       </div>
 
-      <div className="mt-5 flex sm:justify-end">
+      {/* <div className="mt-5 flex sm:justify-end">
+        <Button className='px-5 py-2' onClick={onSubmit}>Save & Continue</Button>
+      </div> */}
+
+      <div>
+
+         <div className="mt-5 flex sm:justify-end">
         <Button className='px-5 py-2' onClick={onSubmit}>Save & Continue</Button>
       </div>
+    </div>
     </Profile>
   );
 }
