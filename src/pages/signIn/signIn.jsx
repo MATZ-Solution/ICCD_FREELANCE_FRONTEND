@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import EastIcon from '@mui/icons-material/East';
 import SignIn_modal1 from '../../component/modal/signIn_Modal1';
 
-function Login({ modalData, setModalData }) {
+function Login({ handleSwitch }) {
 
   const navigate = useNavigate()
   const { userLogin, isSuccess, isPending, isError, reset, error, data } = useLogin()
@@ -41,7 +41,6 @@ function Login({ modalData, setModalData }) {
   };
 
   return (
-    <SignIn_modal1>
       <div className="px-10 w-full mt-5 flex flex-col gap-2">
         <div className='w-full flex justify-center lg:justify-start'>
           {/* <img
@@ -109,10 +108,10 @@ function Login({ modalData, setModalData }) {
                   <p>At least 1 number</p>
                 </div> */}
         <div className="flex justify-between">
-          <p className="underline" onClick={() => navigate('/signUp')}>Sign Up</p>
+          <p className="underline" onClick={() => handleSwitch('signup')}>Sign Up</p>
+          <p className="underline" onClick={() => handleSwitch('forgotPassword')}>forgot Password?</p>
         </div>
       </div>
-    </SignIn_modal1>
   )
 }
 

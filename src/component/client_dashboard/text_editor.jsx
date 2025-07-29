@@ -1,7 +1,8 @@
 import React, { useState, useRef, useCallback, useEffect } from "react"
 import { Bold, Underline, List } from "lucide-react"
+import { memo } from 'react';
 
-export default function RichTextEditor({ placeholder = "Start typing...", value = "", onChange }) {
+ function RichTextEditor({ placeholder = "Start typing...", value = "", onChange }) {
   const editorRef = useRef(null)
   const [activeFormats, setActiveFormats] = useState({
     bold: false,
@@ -134,3 +135,5 @@ export default function RichTextEditor({ placeholder = "Start typing...", value 
     </div>
   )
 }
+
+export default memo(RichTextEditor)

@@ -59,6 +59,7 @@ import ManageDispute from "../src/pages/superadmin_dashboard/manage_dispute";
 import ReviewPage from "../src/pages/superadmin_dashboard/review-page";
 import ContactPage from '../src/pages/contactpage';
 import AboutUsPage from '../src/pages/aboutuspage';
+import LoginController from "../src/component/loginController";
 
 const stripePromise = loadStripe("pk_test_51QCl1eCDh3RtIJ6XkYcN5vHd3KTO2f8enRSNv9Wx7Li0iCI7cr9khTDQx0vS5RmbazZoaECNW83FesOMwLeIgMLb00BJG4pPZR");
 
@@ -135,7 +136,7 @@ export const router = createBrowserRouter([
   {
     path: "/login",
     element:
-      <Login />
+      <LoginController />
     ,
   },
   {
@@ -153,17 +154,17 @@ export const router = createBrowserRouter([
   {
     path: "/verify-otp",
     element:
-      <ProtectedRoute>
+      // <ProtectedRoute>
         <VerifyOtp />
-      </ProtectedRoute>
+      // </ProtectedRoute>
     ,
   },
   {
     path: "/change-password",
     element:
-      <ProtectedRoute>
+      // <ProtectedRoute>
         <ChangePassword />
-      </ProtectedRoute>
+      // </ProtectedRoute>
     ,
   },
   {
@@ -570,6 +571,16 @@ export const router = createBrowserRouter([
       // <AuthRoute>
       <MainTemplate isShowFooter={false}>
         <ClientJobs />
+      </MainTemplate>
+      // </AuthRoute>
+    ),
+  },
+    {
+    path: "/client/jobs/:id",
+    element: (
+      // <AuthRoute>
+      <MainTemplate isShowFooter={false}>
+         <JobDetailPage />
       </MainTemplate>
       // </AuthRoute>
     ),

@@ -8,29 +8,31 @@ import { memo } from "react";
 
 const NotificationBell = ({ isShowNot, setIsShowNot }) => {
 
-    const [count, setCount] = useState(0);
+    const [countClient, setCountClient] = useState(0);
+    const [countFreelancer, setCountFreelancer] = useState(0);
     const pathName = useLocation().pathname
-    
-    const client = useSelector((state) => state.user.userDetails);
-    const freelancer = useSelector((state) => state.userProfile.userProfile);
-
     const user = useSelector((state) => state.userType.user);
-
-    console.log("user: ", user)
-
-    const socket = useMemo(() => { return getSocket(user.id, 'notification')}, [user.id]);
-
+    const client = useSelector((state) => state.user.userDetails);
+    const socket = useMemo(() => { return getSocket(client.id) }, [client.id]);
     const { data, error, isLoading, isError } = useGetUnReadCountNot(user)
 
     useEffect(() => {
-        if (data && data?.length > 0) {
-            setCount(data[0]?.count);
+        if (data && data?.length > 0 && data[0]?.type === 'client') {
+            setCountClient(data[0]?.count);
+        }
+        if (data && data?.length > 0 && data[0]?.type === 'freelancer') {
+            setCountFreelancer(data[0]?.count);
         }
     }, [data]);
 
     useEffect(() => {
-        const handleCount = () => {
-            setCount(prev => prev + 1);
+        const handleCount = (data) => {
+            console.log("socket data: ", data)
+            if (data?.type === 'client') {
+                setCountClient(prev => prev + 1);
+            } else if (data?.type === 'freelancer') {
+                setCountFreelancer(prev => prev + 1);
+            }
         }
         socket.on("notification", handleCount);
         return () => {
@@ -39,15 +41,26 @@ const NotificationBell = ({ isShowNot, setIsShowNot }) => {
     }, [socket]);
 
     const handleOnClick = () => {
-        setCount(0)
+        if (pathName.includes('client')) {
+            setCountClient(0)
+        } else if (pathName.includes('freelancer')) {
+            setCountFreelancer(0)
+        }
         setIsShowNot(!isShowNot)
     }
     return (
         <div className="relative cursor-pointer" onClick={handleOnClick}>
             <Bell className="h-5 w-5 text-gray-600 group-hover:text-gray-800 transition-colors" />
-            {count > 0 && (
+
+            {(countClient > 0 && pathName.includes('client')) && (
                 <span className="absolute top-[-5px] right-[-5px] bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
-                    {count}
+                    {countClient}
+                </span>
+            )}
+
+            {(countFreelancer > 0 && pathName.includes('freelancer')) && (
+                <span className="absolute top-[-5px] right-[-5px] bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
+                    {countFreelancer}
                 </span>
             )}
         </div>

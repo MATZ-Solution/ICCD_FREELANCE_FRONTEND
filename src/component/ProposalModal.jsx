@@ -3,7 +3,8 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { useApplyProject } from '../../api/client/project';
-
+import { useLocation } from 'react-router-dom';
+import { useApplyJob } from '../../api/client/job';
 const schema = yup.object().shape({
     name: yup.string().required('Name is required'),
     email: yup.string().email('Invalid email').required('Email is required'),
@@ -23,24 +24,27 @@ const schema = yup.object().shape({
         }),
 });
 
-const CVUploadModal = ({ onClose, data, freelancerData }) => {
-    const {firstName, lastName} = freelancerData
+const ProposalModal = ({ onClose, data, freelancerData }) => {
+    const { firstName, lastName, id: freelancerId, email } = freelancerData
     const clientID = data[0]?.clientID
     const projectID = data[0]?.id
+    const pathName = useLocation().pathname
     const {
         register,
         handleSubmit,
         formState: { errors },
     } = useForm({
         resolver: yupResolver(schema),
-        defaultValues:{
-            name: firstName + " " +lastName
+        defaultValues: {
+            name: firstName + " " + lastName,
+            email: email
         }
     });
     const { submitProposals, isSuccess, isPending, isError, error } = useApplyProject()
+    const { submitJob } = useApplyJob()
 
     const onSubmit = (data) => {
-        const updateData = {...data, projectId: projectID, clientId: clientID}
+        const updateData = { ...data, projectId: projectID, clientId: clientID, freelancerId: freelancerId }
         const formData = new FormData()
         for (const key in updateData) {
             if (key === 'files') {
@@ -53,7 +57,11 @@ const CVUploadModal = ({ onClose, data, freelancerData }) => {
                 formData.append(key, updateData[key])
             }
         }
-        submitProposals(formData)
+        if (pathName.includes('manage-jobs')) {
+            submitJob(formData)
+        } else {
+            submitProposals(formData)
+        }
         onClose()
     };
 
@@ -131,4 +139,4 @@ const CVUploadModal = ({ onClose, data, freelancerData }) => {
     );
 };
 
-export default CVUploadModal;
+export default ProposalModal;

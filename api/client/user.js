@@ -35,7 +35,6 @@ export function useCheckIsFreelancer() {
   };
 }
 
-
 export function useLogin() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -53,7 +52,7 @@ export function useLogin() {
     onSuccess: (response) => {
       setToken(response?.data?.token);
       dispatch(setUserDetails(response?.data?.data));
-      dispatch(setUserType({ id: response?.data?.data.id, type: 'client'}))
+      dispatch(setUserType({ id: response?.data?.data.id, type: 'client' }))
       navigate("/client");
       // if (localStorage.get("verify-otp") || localStorage.get("change_pass")) {
       //   localStorage.removeItem("verify-otp");
@@ -73,8 +72,7 @@ export function useLogin() {
   };
 }
 
-export function useSignUp() {
-  const navigate = useNavigate();
+export function useSignUp(options = {}) {
 
   const {
     mutate: userSignUp,
@@ -86,12 +84,7 @@ export function useSignUp() {
     data,
   } = useMutation({
     mutationFn: (data) => api.post(API_ROUTE.user.signUp, data),
-    onSuccess: (response) => {
-      navigate("/login");
-    },
-    // onError: (response) => {
-    //   console.log("response: ", response);
-    // },
+    ...options,
   });
 
   return {
@@ -105,7 +98,7 @@ export function useSignUp() {
   };
 }
 
-export function useSendOtp() {
+export function useSendOtp(options = {}) {
   const navigate = useNavigate();
 
   const {
@@ -118,12 +111,8 @@ export function useSendOtp() {
     data,
   } = useMutation({
     mutationFn: (data) => api.post(API_ROUTE.user.sendOtp, data),
-    onSuccess: (response, data) => {
-      navigate("/verify-otp", {
-        state: { email: data?.email },
-      });
-      // localStorage.setItem("verify-otp", true);
-    },
+    ...options,
+
   });
 
   return {
@@ -137,7 +126,7 @@ export function useSendOtp() {
   };
 }
 
-export function useSubmitOtp() {
+export function useSubmitOtp(options = {}) {
   const navigate = useNavigate();
 
   const {
@@ -150,14 +139,38 @@ export function useSubmitOtp() {
     data,
   } = useMutation({
     mutationFn: (data) => api.post(API_ROUTE.user.submitOtp, data),
-    onSuccess: (response) => {
-      navigate("/change-password");
-      // localStorage.setItem("change_pass", true);
-    },
+    ...options,
   });
 
   return {
     handleOtp,
+    isSuccess,
+    isPending,
+    isError,
+    reset,
+    error: error?.response?.data?.message,
+    data,
+  };
+}
+
+export function useChangePassword(options = {}) {
+  const navigate = useNavigate();
+
+  const {
+    mutate: change_pass,
+    isSuccess,
+    isPending,
+    isError,
+    reset,
+    error,
+    data,
+  } = useMutation({
+    mutationFn: (data) => api.put(API_ROUTE.user.changePasword, data),
+    ...options,
+  });
+
+  return {
+    change_pass,
     isSuccess,
     isPending,
     isError,

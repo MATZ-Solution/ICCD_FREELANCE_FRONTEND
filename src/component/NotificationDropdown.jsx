@@ -8,6 +8,7 @@ import { useSelector } from "react-redux"
 export default function NotificationDropdown() {
   console.log("NotificationDropdown")
   const freelancer = useSelector((state) => state.user.userDetails);
+  const user = useSelector((state) => state.userType.user);
   const [showDropdown, setShowDropdown] = useState(false)
   const dropdownRef = useRef(null)
 
@@ -22,8 +23,10 @@ export default function NotificationDropdown() {
   }, [])
 
 
-  const { data, error, isLoading, isError } = useGetNotification(freelancer?.id, { type: 'freelancer' })
-  const { error: isUpdateErr, isLoading: isUpdateLoad, isError: isUpdateLoadIsErr } = useUpdateReadNot(freelancer?.id)
+  const { data, error, isLoading, isError } = useGetNotification(user)
+  const { error: isUpdateErr, isLoading: isUpdateLoad, isError: isUpdateLoadIsErr } = useUpdateReadNot(user)
+  console.log("user noti: ", data)
+
   return (
     <div className="relative" ref={dropdownRef}>
       {/* <NotificationBell showDropdown={showDropdown} setShowDropdown={setShowDropdown} /> */}

@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { useGetGigsByUser } from "../../../api/client/gigs";
 import { useGetOrderByClient } from "../../../api/client/order";
 import OrderTable from "../freelancer_dashboard/order_table";
+import { memo } from "react";
 
 function ClientOrders() {
   const navigate = useNavigate()
@@ -43,5 +44,5 @@ function ClientOrders() {
   )
 }
 
-export default ClientOrders
+export default memo(ClientOrders)
 

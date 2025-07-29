@@ -9,6 +9,7 @@ import { useAddJob, useEditJobs, useGetJobById } from "../../../api/client/job";
 import { useLocation } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { useEffect } from "react";
+import { memo } from 'react';
 
 
 
@@ -57,7 +58,7 @@ const locationOptions = [
   { value: "Sialkot", label: "Sialkot" },
 ];
 
-export default function JobForm() {
+ function JobForm() {
   const pathName = useLocation().pathname
   const { id } = useParams()
   const { addjob, isSuccess, isPending, isError, error } = useAddJob()
@@ -413,3 +414,4 @@ export default function JobForm() {
     </div>
   );
 }
+export default memo(JobForm);

@@ -7,6 +7,7 @@ import * as yup from 'yup';
 import { SquarePen } from 'lucide-react';
 import { Pencil } from 'lucide-react';
 import { useEditClientProfile } from '../../../api/client/clients';
+import { memo } from 'react';
 
 const schema = yup.object().shape({
     name: yup.string().required('Name is required'),
@@ -120,4 +121,4 @@ const AboutModal = ({ onClose }) => {
     );
 };
 
-export default AboutModal;
+export default memo(AboutModal);

@@ -1,6 +1,7 @@
 import order_logo from '../../assets/freelancer_dashboard/order_logo.png';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { formatDate } from '../../../functions/timeFormat';
+import { memo } from 'react';
 
 function Projects_table({ data }) {
   const pathName = useLocation().pathname;
@@ -102,4 +103,4 @@ function Projects_table({ data }) {
   );
 }
 
-export default Projects_table;
+export default memo(Projects_table);

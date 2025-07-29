@@ -43,8 +43,8 @@ const WhatsAppClone = () => {
   });
 
   const socket = useMemo(() => {
-    return getSocket(user.id, 'messages');
-  }, [user.id]);
+    return getSocket(client.id);
+  }, [client.id]);
 
   const handleSubmitMessages = () => {
     if (!messageInput.trim() || !friend) return;

@@ -132,6 +132,21 @@ export function useGetAllJobByClient(params = {}) {
   };
 }
 
+export function getJobPropsalByClient(params = {}) {
+  const constructQueryString = (params) => {
+    const query = new URLSearchParams(params).toString();
+    return query ? `&${query}` : "";
+  };
+  const queryKey = [API_ROUTE.job.getJobPropsalByClient, params];
+  const { data, error, isLoading, isError } = useQuery({
+    queryKey,
+    queryFn: () =>
+      api.get(`${API_ROUTE.job.getJobPropsalByClient}?${constructQueryString(params)}`),
+  });
+  return { jobProposals: data?.data?.data, error, isLoading, isError };
+}
+
+
 export function useEditJobs(id) {
   // const pathname = usePathname();
   const queryClient = useQueryClient();
@@ -167,4 +182,30 @@ export function useEditJobs(id) {
     },
   });
   return { editJob, isSuccess, isPending, isError, error };
+}
+
+export function useApplyJob() {
+    
+    const { mutate: submitJob, isSuccess, isPending, isError, error} = useMutation({
+        mutationFn: async (data) =>
+            await api.post(`${API_ROUTE.job.applyjob}`, data, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                    Authorization: api.defaults.headers.common["Authorization"],
+                },
+                timeout: 30000,
+            }),
+        onSuccess: (data) => {
+            alert("CV send successfully!")
+
+        },
+        onError: (error) => {
+            // Toast.show({
+            //     type: "error",
+            //     text1: "Error",
+            //     text2: "Failed to edit scout",
+            // });
+        },
+    });
+    return { submitJob, isSuccess, isPending, isError, error };
 }

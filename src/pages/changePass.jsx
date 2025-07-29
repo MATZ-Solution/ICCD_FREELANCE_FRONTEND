@@ -1,8 +1,9 @@
 // ChangePassword.tsx
 import React, { useState } from "react";
+import { useChangePassword } from "../../api/client/user";
 
-const ChangePassword = () => {
-    
+const ChangePassword = ({ handleSwitch, email, setEmail }) => {
+
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
 
@@ -12,9 +13,18 @@ const ChangePassword = () => {
       alert("Passwords do not match!");
       return;
     }
-    console.log("New password submitted:", password);
-    // Call your update password API
+    change_pass({ password: password, email: email })
   };
+
+  const { change_pass, isSuccess, isPending, isError, error, data } = useChangePassword({
+    onSuccess: (response, data) => {
+      handleSwitch('login')
+      setEmail("")
+    },
+    onError: (err) => {
+      console.error("Signup error:", err);
+    },
+  })
 
   return (
     <div className="flex items-center justify-center min-h-screen px-4 bg-gray-100">

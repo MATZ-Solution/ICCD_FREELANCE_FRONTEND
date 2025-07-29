@@ -1,6 +1,7 @@
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import { memo } from 'react';
 
-export default function DCard({
+ function DCard({
   title = "Default Title",
   value = "0",
   subtitle,
@@ -72,3 +73,5 @@ export default function DCard({
     </div>
   );
 }
+
+export default memo(DCard)
