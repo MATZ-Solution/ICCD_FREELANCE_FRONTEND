@@ -6,12 +6,13 @@ import { useGetOrderByFreelancer } from "../../../api/client/order";
 function Orders() {
   const [active, setActive] = useState('Active');
   const navigation = ['Active', 'Pending Approval', 'Requires Modification', 'Draft', 'Denied', 'Paused'];
+  let [search, setSearch] = useState('')
 
-  const { data, error, isLoading, isError } = useGetOrderByFreelancer();
+  const { data, error, isLoading, isError } = useGetOrderByFreelancer({ search: search });
 
   return (
     <div className="px-4 sm:px-6 lg:px-10">
-      
+
       {/* Header Section */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between mt-10 p-5 bg-[#F8F8F8] rounded-md gap-4 sm:gap-0">
         <p className="text-base sm:text-lg md:text-xl lg:text-2xl font-semibold text-[#043A53]">
@@ -20,6 +21,7 @@ function Orders() {
 
         <div className="relative w-full sm:w-72">
           <input
+            onChange={(e) => setSearch(e.target.value)}
             type="search"
             className="border border-gray-400 rounded-md bg-white w-full h-10 px-3 pr-10 text-sm sm:text-base
               focus:outline-none focus:ring-2 focus:ring-[#3DBF07]"
@@ -30,22 +32,22 @@ function Orders() {
       </div>
 
       {/* Navigation Buttons */}
-      <nav
-        aria-label="Order navigation"
-        className="mt-8 flex flex-wrap gap-3 sm:gap-6 justify-start"
-      >
-        {navigation.map((item, index) => (
-          <button
-            key={index}
-            onClick={() => setActive(item)}
-            className={`cursor-pointer py-1 px-3 rounded-md transition-colors duration-200
-              ${active === item ? 'bg-[#3DBF07] text-white' : 'text-[#A8A8A8] hover:text-[#3DBF07] hover:bg-gray-100'}`}
-            aria-current={active === item ? 'page' : undefined}
-          >
-            <span className="font-semibold text-xs sm:text-sm">{item}</span>
-          </button>
-        ))}
-      </nav>
+      {/* <nav
+          aria-label="Order navigation"
+          className="mt-8 flex flex-wrap gap-3 sm:gap-6 justify-start"
+        >
+          {navigation.map((item, index) => (
+            <button
+              key={index}
+              onClick={() => setActive(item)}
+              className={`cursor-pointer py-1 px-3 rounded-md transition-colors duration-200
+                ${active === item ? 'bg-[#3DBF07] text-white' : 'text-[#A8A8A8] hover:text-[#3DBF07] hover:bg-gray-100'}`}
+              aria-current={active === item ? 'page' : undefined}
+            >
+              <span className="font-semibold text-xs sm:text-sm">{item}</span>
+            </button>
+          ))}
+        </nav> */}
 
       {/* Table Container */}
       <div className="mt-6 overflow-x-auto rounded-md border border-gray-200">

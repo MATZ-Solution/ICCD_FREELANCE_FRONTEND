@@ -238,14 +238,15 @@ const WhatsAppClone = () => {
                 <>
                   {message?.map((message, index) => {
                     const isOwnMessage = message.senderId == client.id;
+                    const introMsg = message.messages === 'You are now communication each other';
                     return (
                       <div
                         key={index}
-                        className={`flex mb-4 ${isOwnMessage ? 'justify-end' : 'justify-start'}`}
+                        className={`flex mb-4 ${introMsg ? 'justify-center' : (isOwnMessage ? 'justify-end' : 'justify-start')}`}
                       >
                         <div
                           className={`max-w-xs px-4 py-2 rounded-lg shadow-md
-                            ${isOwnMessage
+                            ${ introMsg ? 'bg-[#FEFCE8] font-serif text-black rounded-br-none' : isOwnMessage
                               ? 'bg-[#08B0BD] text-white rounded-br-none'
                               : 'bg-white text-gray-800 rounded-bl-none'
                             }
@@ -259,7 +260,6 @@ const WhatsAppClone = () => {
                         </div>
                       </div>
                     )
-
                   })}
                 </>
               )

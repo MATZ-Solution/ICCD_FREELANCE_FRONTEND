@@ -39,10 +39,10 @@ function Gigs_table({ data }) {
                       </div>
 
                       {/* Clicks */}
-                      <div className="flex flex-col w-full sm:w-1/2 md:w-[15%]">
+                      {/* <div className="flex flex-col w-full sm:w-1/2 md:w-[15%]">
                         <p className="text-sm text-[#737373]">Clicks</p>
                         <p className="text-[#043A53] font-semibold text-base sm:text-lg">{item.due}</p>
-                      </div>
+                      </div> */}
 
                       {/* Category */}
                       <div className="flex flex-col w-full sm:w-1/2 md:w-[15%]">
@@ -50,10 +50,9 @@ function Gigs_table({ data }) {
                         <p className="text-[#043A53] font-semibold text-base sm:text-lg">{item?.category}</p>
                       </div>
 
-                      {/* Orders */}
                       <div className="flex flex-col w-full sm:w-1/2 md:w-[15%]">
-                        <p className="text-sm text-[#737373]">Orders</p>
-                        <p className="text-[#043A53] font-semibold text-base sm:text-lg">{item.due}</p>
+                        <p className="text-sm text-[#737373]">Sub Category</p>
+                        <p className="text-[#043A53] font-semibold text-base sm:text-lg">{item?.subCategory}</p>
                       </div>
 
                  {/* Edit Button */}

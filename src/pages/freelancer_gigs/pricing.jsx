@@ -759,7 +759,7 @@ export default function PricingForm() {
           </div>
         </div>
 
-        <h1 className="text-lg sm:text-xl font-semibold py-4 mb-4">Add Extra Services</h1>
+        {/* <h1 className="text-lg sm:text-xl font-semibold py-4 mb-4">Add Extra Services</h1>
         <div className="border border-gray-300 bg-white rounded-lg mb-6">
           <div className="border-b border-gray-200 p-4 sm:p-6">
             <Controller
@@ -843,9 +843,9 @@ export default function PricingForm() {
               ))}
             </div>
           )}
-        </div>
+        </div> */}
 
-        <div className="space-y-4 mb-6">
+        {/* <div className="space-y-4 mb-6">
           {extraServicesList.map((service) => (
             <div key={service.key} className="bg-white border border-gray-200 rounded-lg p-4 sm:p-6">
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
@@ -975,7 +975,7 @@ export default function PricingForm() {
           >
             + Add Extra
           </button>
-        )}
+        )} */}
 
         <div className="flex flex-col sm:flex-row items-center justify-end gap-4 pt-6 border-t border-gray-200">
           <button

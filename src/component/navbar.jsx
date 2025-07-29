@@ -71,11 +71,10 @@ export default function Navbar() {
       <button
         key={idx}
         onClick={() => navigate(path)}
-        className={`cursor-pointer px-3 py-2 text-sm font-medium rounded-md ${
-          pathname === path
+        className={`cursor-pointer px-3 py-2 text-sm font-medium rounded-md ${pathname === path
             ? "text-cyan-500 bg-cyan-50"
             : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
-        }`}
+          }`}
       >
         {name}
       </button>
@@ -85,18 +84,18 @@ export default function Navbar() {
     const options =
       type === "freelancer"
         ? [
-            { name: "Switch to Client", action: handleSwitchClient },
-            { name: "View Profile", action: () => navigate("/freelancer/edit-profile") },
-            { name: "Settings", action: () => navigate("/settings") },
-            { name: "Logout", action: logout },
-          ]
+          { name: "Switch to Client", action: handleSwitchClient },
+          { name: "View Profile", action: () => navigate("/freelancer/edit-profile") },
+          { name: "Settings", action: () => navigate("/settings") },
+          { name: "Logout", action: logout },
+        ]
         : [
-            { name: "Switch to Freelancer", action: handleSwitchClient },
-            { name: "Dashboard", action: () => navigate("/client/dashboard") },
-            { name: "View Profile", action: () => navigate("/client/profile") },
-            { name: "Order", action: () => navigate("/client/order") },
-            { name: "Logout", action: logout },
-          ];
+          { name: "Switch to Freelancer", action: handleSwitchClient },
+          { name: "Dashboard", action: () => navigate("/client/dashboard") },
+          { name: "View Profile", action: () => navigate("/client/profile") },
+          { name: "Order", action: () => navigate("/client/order") },
+          { name: "Logout", action: logout },
+        ];
 
     return (
       <div className="px-3 border border-gray-300 absolute right-0 mt-2 w-52 bg-white rounded-md shadow-lg py-1 z-50">
@@ -138,7 +137,7 @@ export default function Navbar() {
             {renderNavTabs(navTabsClientDashboard)}
           </nav>
         ) : pathname === "/client" ? (
-        <nav className="ml-10 sm:flex space-x-1 gap-4 hidden md:flex">
+          <nav className="ml-10 sm:flex space-x-1 gap-4 hidden md:flex">
             <div className="relative">
               <input
                 value={search}
@@ -150,13 +149,7 @@ export default function Navbar() {
                 <SearchIcon className="text-white" />
               </div>
             </div>
-            <button
-              onClick={() =>
-                freelancerCheck?.length === 0
-                  ? navigate(`/freelancer/profile-form/1`)
-                  : (navigate(`/freelancer/dashboard`),
-                    dispatch(setUserType({ id: freelancer?.id, type: "freelancer" })))
-              }
+            <button onClick={() => navigate(`/freelancer/dashboard`)}
               className="px-3 py-2 text-sm font-medium rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-50"
             >
               Switch to freelancer
@@ -177,7 +170,7 @@ export default function Navbar() {
                 className="text-black font-semibold hover:text-[#15A9B2] transition"
               >
                 {item.name !== "Login" && item.name}
-                {!["Contact Us", "Login"].includes(item.name) }
+                {!["Contact Us", "Login"].includes(item.name)}
               </a>
             ))}
           </nav>
@@ -188,13 +181,8 @@ export default function Navbar() {
           <div className="flex items-center gap-2 relative">
             <NotificationBell isShowNot={isShowNot} setIsShowNot={setIsShowNot} />
             {isShowNot && <NotificationDropdown />}
-            <button onClick={() => setMessages(0)} className="p-2 hover:bg-gray-100 rounded-md relative">
+            <button onClick={() => navigate('/messages')} className="p-2 hover:bg-gray-100 rounded-md relative">
               <Mail className="h-5 w-5 text-gray-600" />
-              {messages > 0 && (
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                  {messages}
-                </span>
-              )}
             </button>
             <HelpCircle className="h-5 w-5 text-gray-600 cursor-pointer" />
             <div className="relative">
@@ -263,11 +251,10 @@ export default function Navbar() {
                   navigate(item.path);
                   setIsOpen(false);
                 }}
-                className={`text-left px-3 py-2 text-sm font-medium rounded-md ${
-                  pathname === item.path
+                className={`text-left px-3 py-2 text-sm font-medium rounded-md ${pathname === item.path
                     ? "text-cyan-500 bg-cyan-50"
                     : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
-                }`}
+                  }`}
               >
                 {item.name}
               </button>
@@ -282,11 +269,10 @@ export default function Navbar() {
                   navigate(item.path);
                   setIsOpen(false);
                 }}
-                className={`text-left px-3 py-2 text-sm font-medium rounded-md ${
-                  pathname === item.path
+                className={`text-left px-3 py-2 text-sm font-medium rounded-md ${pathname === item.path
                     ? "text-cyan-500 bg-cyan-50"
                     : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
-                }`}
+                  }`}
               >
                 {item.name}
               </button>

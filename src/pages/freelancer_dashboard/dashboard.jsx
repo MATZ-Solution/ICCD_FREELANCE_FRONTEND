@@ -14,6 +14,7 @@ import { useEffect } from "react";
 import { getUserProfile } from "../../../redux/slices/userProfileSlice";
 import { useNavigate } from "react-router-dom";
 import { setUserType } from "../../../redux/slices/userType";
+import { useCheckIsFreelancer } from "../../../api/client/user";
 
 export default function FreelancerDashboard() {
   const [activeNavTab, setActiveNavTab] = useState("Dashboard");
@@ -52,28 +53,25 @@ export default function FreelancerDashboard() {
 
   const timeTabs = ["1Day", "5Days", "1Month", "6Months", "1Year", "MAX"];
 
-  const handleNavigation = (tab) => {
-    setActiveNavTab(tab);
-    setShowMobileSidebar(false);
-  };
-
   const toggleAvailability = () => setIsAvailable(prev => !prev);
   const userDetails = useSelector(state => state.user.userDetails)
-  console.log("userDetails: ", userDetails)
 
   const dispatch = useDispatch()
-  const { data, isSuccess, isPending, isError, isLoading } = useGetFreelancerProfile()
+  const { data, isSuccess, isPending, isError, isLoading } = useCheckIsFreelancer()
   const { data: dashData, isError: dashDataIsErr, isLoading: dashDataIsLoad } = useGetFreelDashboardData()
-  console.log("dashData: ", dashData)
+  console.log("data: ", data)
 
   useEffect(() => {
-    if (data && data.length > 0) {
+    if (data && data?.length > 0) {
       dispatch(getUserProfile(data[0]));
       dispatch(setUserType({ id: data[0]?.id, type: 'freelancer' }))
     }
+    else{
+      navigate(`/freelancer/profile-form/1`)
+    }
   }, [data]);
 
-  if (dashDataIsLoad) {
+  if (dashDataIsLoad && isLoading) {
     return <p>Loading...</p>
   }
 
@@ -106,12 +104,12 @@ export default function FreelancerDashboard() {
                 className="w-16 h-16 rounded-full"
               />
               <div className="text-center">
-                <h3 className="capitalize font-semibold text-sm">{userDetails.name} </h3>
-                <p className="text-xs text-gray-500">{userDetails.email}</p>
+                <h3 className="capitalize font-semibold text-sm">{userDetails?.name} </h3>
+                <p className="text-xs text-gray-500">{userDetails?.email}</p>
               </div>
             </div>
-            <button className="w-full mt-4 px-4 py-2 text-sm border border-[#01AEAD] rounded-md hover:bg-gray-50 text-gray-700">
-              View Profile
+            <button onClick={()=> navigate('/freelancer/edit-profile')} className="w-full mt-4 px-4 py-2 text-sm border border-[#01AEAD] rounded-md hover:bg-gray-50 text-gray-700">
+              Edit Profile
             </button>
           </div>
 
@@ -227,21 +225,21 @@ export default function FreelancerDashboard() {
             /> */}
             <DCard
               title="Total Gigs Added"
-              value={dashData[0]?.totalGigsAdded}
+              value={dashData  && dashData[0]?.totalGigsAdded}
               bottomText="48.7% You earned Last Month "
               variant="teal"
               icon={<span className="text-2xl">💼</span>}
             />
             <DCard
               title="Applied Job"
-              value={dashData[0]?.totalAppliedJobs}
+              value={dashData && dashData[0]?.totalAppliedJobs}
               bottomText="You Offered Last Month"
               variant="brown"
               icon={<FileText className="w-6 h-6" />}
             />
             <DCard
               title="Applied Projects"
-              value={dashData[0]?.totalAppliedProject}
+              value={dashData && dashData[0]?.totalAppliedProject}
               bottomText="You earned Last Month"
               variant="indigo"
               icon={<Users className="w-6 h-6" />}

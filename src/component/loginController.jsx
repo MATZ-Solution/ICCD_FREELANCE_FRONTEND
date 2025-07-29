@@ -5,7 +5,6 @@ import VerifyOtp from "./signIn/verifyOtp";
 import ForgotPassword from "./signIn/ForgotPassword";
 import ChangePassword from "./signIn/ChangePassword";
 import login_banner from '../../src/assets/login_banner_img.png'
-import { CircleX } from "lucide-react";
 import CloseIcon from '@mui/icons-material/Close';
 
 const LoginController = () => {
