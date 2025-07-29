@@ -40,7 +40,7 @@ function Overview() {
   let data = [
     { name: 'Gig title', details: 'As your Gig storefront, your title is the most important place to include keywords that buyers would likely use to search for a service like yours.' },
     { name: 'Category', details: 'Choose the category and sub-category most suitable for your Gig.' },
-    { name: 'Search tags', details: 'Tag your Gig with buzz words that are relevant to the services you offer. Use all 5 tags to get found.' },
+    // { name: 'Search tags', details: 'Tag your Gig with buzz words that are relevant to the services you offer. Use all 5 tags to get found.' },
   ]
   const options = [
     { value: 'chocolate', label: 'Chocolate' },
@@ -55,6 +55,7 @@ function Overview() {
       editGigs(data)
       navigate(`/freelancer/manage-gigs/pricing/edit/${id}`)
     } else {
+      dispatch(setGigsDetails(data));
       navigate('/freelancer/manage-gigs/pricing')
     }
   }
@@ -139,7 +140,7 @@ function Overview() {
                   </div>
                 )
               }
-              {item.name === 'Search tags' &&
+              {/* {item.name === 'Search tags' &&
                 (
                   <div className='w-full flex flex-col gap-1'>
                     <p className='font-semibold sm:text-lg'>Positive keywords</p>
@@ -148,7 +149,7 @@ function Overview() {
                     <p className='text-sm'>5 tags maximum. Use letters and numbers only.</p>
                   </div>
                 )
-              }
+              } */}
             </div>
           ))
         }

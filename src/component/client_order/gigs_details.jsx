@@ -24,9 +24,6 @@ export default function ServicePage() {
 
   if (isLoading) return <ICCDLoader /> ;
 
-
-  console.log("Gig Data:", gig);
-
   return (
     <div className="min-h-screen bg-white px-4 py-6 md:px-8 lg:px-12">
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">

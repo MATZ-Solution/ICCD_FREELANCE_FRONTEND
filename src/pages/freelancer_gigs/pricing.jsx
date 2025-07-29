@@ -408,13 +408,15 @@ export default function PricingForm() {
   
 
   const onSubmit = (data) => {
+    console.log("1")
     // dispatch(setGigsDetails(data));
     if (location.pathname.includes('edit')) {
       console.log("data: ", data)
       editGigs(data)
       navigate(`/freelancer/manage-gigs/description/edit/${id}`)
     } else {
-      navigate('/freelancer/manage-gigs/pricing')
+      dispatch(setGigsDetails(data));
+      navigate('/freelancer/manage-gigs/description')
     }
   }
 
@@ -535,14 +537,13 @@ export default function PricingForm() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {isPending && <div>Loading...</div>}
-      {isError && <div>Error loading gig data. Please try again.</div>}
+  
       <form onSubmit={handleSubmit(onSubmit)} className="p-4 sm:p-6 lg:p-8 bg-gray-50 max-w-7xl mx-auto">
         <h2 className="text-2xl sm:text-3xl font-bold mb-6 text-center sm:text-left">Scope & Pricing</h2>
 
         {/* Mobile Package Cards */}
         <div className="block lg:hidden space-y-6 mb-10">
-          {packageNames.map((pkg) => (
+          {packageNames?.map((pkg) => (
             <div key={pkg} className="bg-white rounded-lg shadow-sm border border-gray-200">
               <div className="bg-gray-100 p-4 rounded-t-lg">
                 <h3 className="text-lg font-semibold capitalize text-center">{pkg}</h3>
@@ -986,10 +987,10 @@ export default function PricingForm() {
           </button>
           <button
             type="submit"
-            disabled={isSubmitting || editGigIsPending}
+            // disabled={isSubmitting || editGigIsPending}
             className="w-full sm:w-auto px-8 py-3 bg-[#01AEAD] text-white rounded-md hover:bg-teal-600 focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200 order-1 sm:order-2"
           >
-            {(isSubmitting || editGigIsPending) ? "Saving..." : "Save & Continue"}
+            Save & Continue
           </button>
         </div>
       </form>

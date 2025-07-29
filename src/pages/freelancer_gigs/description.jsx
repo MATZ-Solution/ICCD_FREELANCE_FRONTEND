@@ -45,6 +45,7 @@ function Description() {
             editGigs(data)
             navigate(`/freelancer/manage-gigs/gallery/edit/${id}`)
         } else {
+            dispatch(setGigsDetails(data));
             navigate('/freelancer/manage-gigs/gallery')
         }
     }
