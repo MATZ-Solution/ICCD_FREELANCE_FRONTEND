@@ -6,6 +6,7 @@ import Button from "../../component/button";
 import { useNavigate } from "react-router-dom";
 import { useGetGigsByUser } from "../../../api/client/gigs";
 import { useSelector } from "react-redux";
+import ICCDLoader from "../../component/loader";
 
 function ManageGigsAndProjects() {
     const navigate = useNavigate();
@@ -14,6 +15,10 @@ function ManageGigsAndProjects() {
 
     const profileDetails = useSelector(state => state.userProfile.userProfile);
     const { data, isSuccess, isPending, isError, isLoading } = useGetGigsByUser(profileDetails.id);
+
+    if(isLoading){
+        return <ICCDLoader />
+    }
 
     return (
         <div className="px-4 sm:px-6 lg:px-10 w-full">

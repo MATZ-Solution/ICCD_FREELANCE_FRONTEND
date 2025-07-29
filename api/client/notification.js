@@ -1,7 +1,6 @@
 import API_ROUTE from "../endpoints";
 import api from "../axios/index";
 import { useQuery } from "@tanstack/react-query";
-import { useSelector } from "react-redux";
 
 export function useGetNotification( params = {}) {
     const constructQueryString = (params) => {

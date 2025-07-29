@@ -21,6 +21,7 @@ import ProposalModal from "../../component/ProposalModal";
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
+import ICCDLoader from "../../component/loader";
 
 const ProjectDetailFreelancer = () => {
 
@@ -30,8 +31,9 @@ const ProjectDetailFreelancer = () => {
     const freelancerData = useSelector(state => state.userProfile.userProfile)
     const { data, isSuccess, isPending, isError, isLoading } = useGetProjectsById(id)
 
-    if (isLoading) {
-        return <p>Loading...</p>
+    
+     if(isLoading){
+        return <ICCDLoader />
     }
 
     return (

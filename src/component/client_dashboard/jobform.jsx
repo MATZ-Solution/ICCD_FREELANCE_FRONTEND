@@ -10,6 +10,7 @@ import { useLocation } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { useEffect } from "react";
 import { memo } from 'react';
+import ICCDLoader from "../loader";
 
 
 
@@ -67,6 +68,8 @@ const locationOptions = [
 
   console.log("data: ", data)
 
+    if (getJobIsLoad ) return <ICCDLoader /> ;
+  
   const {
     control,
     handleSubmit,

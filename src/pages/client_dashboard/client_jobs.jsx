@@ -4,14 +4,18 @@ import Button from "../../component/button";
 import { useNavigate } from "react-router-dom";
 import Jobs_table from "../../component/client_dashboard/job_table";
 import { useGetAllJobByClient } from "../../../api/client/job";
+import ICCDLoader from "../../component/loader";
 
 function ClientJobs() {
 
     const navigate = useNavigate()
     const [active, setActive] = useState('Active')
     const datas = ['Active', 'Pending Approval', 'Requires Modification', 'Draft', 'Denied', 'Paused']
-    const { data, isSuccess, isPending, isError, isLoading } = useGetAllJobByClient()
+    const { data, isSuccess, isError, isLoading } = useGetAllJobByClient()
     console.log("data: ", data)
+    if (isLoading) {
+        return <ICCDLoader />
+    }
 
     return (
         <div className="px-5 sm:px-5 lg:px-10">

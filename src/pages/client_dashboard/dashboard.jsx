@@ -23,6 +23,7 @@ import { useSelector } from "react-redux";
 import { useGetClientDashboardData } from "../../../api/client/clients";
 import { SquarePen } from "lucide-react";
 import AboutModal from "../../component/client_dashboard/aboutModal";
+import ICCDLoader from "../../component/loader";
 
 export default function ClientDashboard() {
   const [activeNavTab, setActiveNavTab] = useState("Dashboard");
@@ -54,7 +55,12 @@ export default function ClientDashboard() {
   const { data: dashboardData, isSuccess: clientIsSucc, isPending: clientIsPend, isError: clientIsErr, isLoading: clientIsLoad } = useGetClientDashboardData()
   console.log("data: ", dashboardData)
 
+
   const [showAboutModal, setShowAboutModal] = useState(false)
+
+
+  if(isLoading || clientIsLoad){
+    return <ICCDLoader /> }
   return (
     <div className="min-h-screen px-4 bg-white">
       {/* Header */}

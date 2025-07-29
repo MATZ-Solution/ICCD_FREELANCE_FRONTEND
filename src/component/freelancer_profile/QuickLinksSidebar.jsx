@@ -32,14 +32,8 @@ const QuickLinksSidebar = ({ openSidebar }) => {
               <Edit2 className="w-4 h-4" />
               <span>Edit Profile</span>
             </button>
-            <button className="w-full flex items-center justify-center space-x-2 p-2 bg-blue-50 text-blue-700 rounded-md hover:bg-blue-100 transition-colors text-sm">
-              <Share2 className="w-4 h-4" />
-              <span>Share Profile</span>
-            </button>
-            <button className="w-full flex items-center justify-center space-x-2 p-2 bg-gray-50 text-gray-700 rounded-md hover:bg-gray-100 transition-colors text-sm">
-              <EyeIcon className="w-4 h-4" />
-              <span>Preview Mode</span>
-            </button>
+           
+          
           </div>
           <hr className="my-4 border-gray-200" />
           <div className="space-y-2">

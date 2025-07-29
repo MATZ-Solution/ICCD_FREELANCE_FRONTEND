@@ -2,6 +2,7 @@ import { useState } from "react";
 import OrderTable from "../../component/freelancer_dashboard/order_table";
 import SearchIcon from '@mui/icons-material/Search';
 import { useGetOrderByFreelancer } from "../../../api/client/order";
+import ICCDLoader from "../../component/loader";
 
 function Orders() {
   const [active, setActive] = useState('Active');
@@ -9,6 +10,9 @@ function Orders() {
   let [search, setSearch] = useState('')
 
   const { data, error, isLoading, isError } = useGetOrderByFreelancer({ search: search });
+  if (isLoading ) {
+         return <ICCDLoader /> 
+       }
 
   return (
     <div className="px-4 sm:px-6 lg:px-10">
