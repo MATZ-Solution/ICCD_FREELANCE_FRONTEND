@@ -10,23 +10,12 @@ import { resetGigDetails } from '../../../redux/slices/gigsDetailSlice';
 import TopCenterToast from '../../component/TopCenterToast';
 
 function Gallery() {
-  const { id } = useParams();
-  const location = useLocation()
-  const data = useSelector(state => state.gigs.gigsDetails);
+
+  const [images, setImages] = useState([]);
+  const dispatch = useDispatch()
+  const gigs_details = useSelector(state => state.gigs.gigsDetails);
   const profileDetails = useSelector(state => state.userProfile.userProfile);
   const { addGigs, isSuccess, isPending, isError, error } = useAddGigs();
-  const { data: gigsData } = useGetGigsFiles(id);
-  
-  const [images, setImages] = useState([]);
-  const [delImgFileKey, setDelImgFileKey] = useState([]);
-  
-  console.log("images: ", images);
-  console.log("delImgFileKey: ", delImgFileKey);
-  
-
-  useEffect(() => {
-    setImages(gigsData)
-  }, [gigsData])
 
   const handleUpload = (e) => {
     const file = e.target.files[0];
@@ -35,40 +24,41 @@ function Gallery() {
     if (images.length >= 3) {
       return alert("Only 3 images allowed");
     }
-
     const fileUrl = URL.createObjectURL(file); // Preview
     setImages((prev) => [...prev, { file, fileUrl }]);
   };
 
   const handleDeleteImage = (fileObj) => {
-    if(fileObj?.fileKey){
+    if (fileObj?.fileKey) {
       setDelImgFileKey((prevItems) => [...prevItems, fileObj.fileKey]);
     }
     setImages((prev) => prev.filter((img) => img.fileUrl !== fileObj.fileUrl));
   };
 
-  const { editGigsFiles, isPending: editGigIsPending } = useEditGigsFiles(id)
-
   const onSubmit = () => {
+    let { gigsTitle, category, subCategory, description, packages } = gigs_details
+    let data = { gigsTitle, category, subCategory, description, packages }
     const formData = new FormData();
-    if(delImgFileKey.length>0){
-      formData.append("delFilesKey", JSON.stringify(delImgFileKey))
+    {
+      (images && images.length > 0) && images?.forEach((img) => {
+        if (img.file) formData.append("files", img.file);
+      });
     }
-    images.forEach((img) => {
-      if (img.file) formData.append("files", img.file);
-    });
-    if (location.pathname.includes('edit')) {
-
-      editGigsFiles(formData)
-      // navigate(`/freelancer/manage-gigs/description/edit/${id}`)
-    } else {
-      addGigs(formData);
-      // navigate('/freelancer/manage-gigs/pricing')
+    for (const key in data) {
+      if (Array.isArray(data[key])) {
+        formData.append(key, JSON.stringify(data[key]));
+      }
+      else if (typeof data[key] === "object") {
+        formData.append(key, JSON.stringify(data[key]));
+      }
+      else {
+        formData.append(key, data[key])
+      }
     }
-
+    formData.append("freelancerId", profileDetails.id);
+    addGigs(formData);
+    dispatch(resetGigDetails())
   };
-
-  
 
   return (
     <Profile>
@@ -82,13 +72,11 @@ function Gallery() {
           </p>
         </div>
       </div>
-
       <div className='py-5 sm:border-y-2 sm:border-[#ecebeb] sm:py-8'>
         <p className='text-medium font-bold'>Images (up to 3)</p>
         <p className='text-[#515151] text-sm'>Get noticed by the right buyers with visual example of your services.</p>
 
         <div className="mt-4 flex gap-4 flex-wrap sm:flex-nowrap">
-          {/* Existing or uploaded images */}
           {images?.map((item, index) => (
             <div
               key={index}
@@ -107,8 +95,6 @@ function Gallery() {
               </button>
             </div>
           ))}
-
-          {/* Upload "drop a photo" cards if space left */}
           {images?.length < 3 &&
             Array.from({ length: 3 - images.length }).map((_, i) => (
               <div
@@ -129,19 +115,12 @@ function Gallery() {
               </div>
             ))}
         </div>
-
       </div>
-
-      {/* <div className="mt-5 flex sm:justify-end">
-        <Button className='px-5 py-2' onClick={onSubmit}>Save & Continue</Button>
-      </div> */}
-
       <div>
-
-         <div className="mt-5 flex sm:justify-end">
-        <Button className='px-5 py-2' onClick={onSubmit}>Save & Continue</Button>
+        <div className="mt-5 flex sm:justify-end">
+          <Button className='px-5 py-2' onClick={onSubmit}>Save & Continue</Button>
+        </div>
       </div>
-    </div>
     </Profile>
   );
 }

@@ -12,7 +12,7 @@ import { useDispatch } from "react-redux";
 import { useGetFreelancerProfile, useGetFreelDashboardData } from "../../../api/client/freelancer";
 import { useEffect } from "react";
 import { getUserProfile } from "../../../redux/slices/userProfileSlice";
-import {  useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { setUserType } from "../../../redux/slices/userType";
 import { useCheckIsFreelancer } from "../../../api/client/user";
 import ICCDLoader from "../../component/loader";
@@ -27,9 +27,8 @@ export default function FreelancerDashboard() {
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [showMobileSidebar, setShowMobileSidebar] = useState(false);
   const navigate = useNavigate()
-    const profileDetails = useSelector(state => state.userProfile.userProfile)
+  const profileDetails = useSelector(state => state.userProfile.userProfile)
   const { educations, certifications, skills, languages } = profileDetails
-  console.log("profileDetails: ", profileDetails)
 
   const orders = [
     { id: 1, name: "DONGYONG PENG", type: "Graphics", amount: 20, date: "6 May 2023", status: "active" },
@@ -63,20 +62,18 @@ export default function FreelancerDashboard() {
   const dispatch = useDispatch()
   const { data, isSuccess, isPending, isError, isLoading } = useCheckIsFreelancer()
   const { data: dashData, isError: dashDataIsErr, isLoading: dashDataIsLoad } = useGetFreelDashboardData()
-  console.log("data: ", data)
-
 
   useEffect(() => {
     if (data && data?.length > 0) {
       dispatch(getUserProfile(data[0]));
       dispatch(setUserType({ id: data[0]?.id, type: 'freelancer' }))
     }
-    else{
+    else {
       navigate(`/freelancer/profile-form/1`)
     }
   }, [data]);
 
-  if (dashDataIsLoad  || isLoading) {
+  if (dashDataIsLoad || isLoading) {
     return <ICCDLoader />
   }
 
@@ -113,47 +110,47 @@ export default function FreelancerDashboard() {
                 <p className="text-xs text-gray-500">{userDetails?.email}</p>
               </div>
             </div>
-            <button onClick={()=> navigate('/freelancer/edit-profile')} className="w-full mt-4 px-4 py-2 text-sm border border-[#01AEAD] rounded-md hover:bg-gray-50 text-gray-700">
+            <button onClick={() => navigate('/freelancer/edit-profile')} className="w-full mt-4 px-4 py-2 text-sm border border-[#01AEAD] rounded-md hover:bg-gray-50 text-gray-700">
               Edit Profile
             </button>
           </div>
 
           <div className="mb-6  bg-[#F8F8F8] rounded-lg p-4 ">
 
-              <div className="space-y-2">
-            <h4 className="text-sm font-medium text-gray-900">Profile Stats</h4>
-            <div className="grid grid-cols-2 gap-3 text-center">
-              <div className="p-2 bg-gray-50 rounded-md">
-                <div className="text-lg font-semibold text-gray-900">{(profileDetails && profileDetails.educations) && educations.length}</div>
-                <div className="text-xs text-gray-500">Education</div>
-              </div>
-              <div className="p-2 bg-gray-50 rounded-md">
-                <div className="text-lg font-semibold text-gray-900">{(profileDetails && profileDetails.certifications) && certifications.length}</div>
-                <div className="text-xs text-gray-500">Certificates</div>
-              </div>
-              <div className="p-2 bg-gray-50 rounded-md">
-                <div className="text-lg font-semibold text-gray-900">{(profileDetails && profileDetails.skills) && skills.length}</div>
-                <div className="text-xs text-gray-500">Skills</div>
-              </div>
-              <div className="p-2 bg-gray-50 rounded-md">
-                <div className="text-lg font-semibold text-gray-900">{(profileDetails && profileDetails.languages) && languages.length}</div>
-                <div className="text-xs text-gray-500">Languages</div>
+            <div className="space-y-2">
+              <h4 className="text-sm font-medium text-gray-900">Profile Stats</h4>
+              <div className="grid grid-cols-2 gap-3 text-center">
+                <div className="p-2 bg-gray-50 rounded-md">
+                  <div className="text-lg font-semibold text-gray-900">{(profileDetails && profileDetails.educations) && educations.length}</div>
+                  <div className="text-xs text-gray-500">Education</div>
+                </div>
+                <div className="p-2 bg-gray-50 rounded-md">
+                  <div className="text-lg font-semibold text-gray-900">{(profileDetails && profileDetails.certifications) && certifications.length}</div>
+                  <div className="text-xs text-gray-500">Certificates</div>
+                </div>
+                <div className="p-2 bg-gray-50 rounded-md">
+                  <div className="text-lg font-semibold text-gray-900">{(profileDetails && profileDetails.skills) && skills.length}</div>
+                  <div className="text-xs text-gray-500">Skills</div>
+                </div>
+                <div className="p-2 bg-gray-50 rounded-md">
+                  <div className="text-lg font-semibold text-gray-900">{(profileDetails && profileDetails.languages) && languages.length}</div>
+                  <div className="text-xs text-gray-500">Languages</div>
+                </div>
               </div>
             </div>
-          </div>
             {/* <h4 className="font-semibold mb-4 text-sm">Level Overview</h4>
             {/* <div className="space-y-3 text-xs">
               {/* <div className="flex justify-between">
                 <span className="text-gray-600">My level</span>
                 <span className="font-medium">Level 2</span>
               </div> */}
-              {/* <div className="flex justify-between">
+            {/* <div className="flex justify-between">
                 <span className="text-gray-600">Success score</span>
                 <div className="flex items-center gap-1">
                   {[...Array(5)].map((_, i) => <Star key={i} className="w-3 h-3 fill-yellow-400 text-yellow-400" />)}
                 </div>
               </div> */}
-              {/* <div className="flex justify-between">
+            {/* <div className="flex justify-between">
                 <span className="text-gray-600">Rating</span>
                 <span className="font-medium">5.0</span>
               </div>
@@ -161,18 +158,14 @@ export default function FreelancerDashboard() {
                 <span className="text-gray-600">Response rate</span>
                 <span className="font-medium">30 Mins</span>
               </div>
-            </div> */}  
-   <button
-      onClick={() => navigate('/freelancer/edit-profile')}
-      className="w-full px-4 border border-[#01AEAD] py-2 text-sm rounded-md hover:bg-gray-50 text-gray-700 mt-4"
-    >
-      View 
-    </button>         
-     </div>
-
-          
-
-
+            </div> */}
+            <button
+              onClick={() => navigate('/freelancer/edit-profile')}
+              className="w-full px-4 border border-[#01AEAD] py-2 text-sm rounded-md hover:bg-gray-50 text-gray-700 mt-4"
+            >
+              View
+            </button>
+          </div>
         </aside>
         {/* Main Content */}
         <main className="mt-10 flex-1 ">
@@ -238,7 +231,7 @@ export default function FreelancerDashboard() {
             /> */}
             <DCard
               title="Total Gigs Added"
-              value={dashData  && dashData[0]?.totalGigsAdded}
+              value={dashData && dashData[0]?.totalGigsAdded}
               bottomText="48.7% You earned Last Month "
               variant="teal"
               icon={<span className="text-2xl">💼</span>}

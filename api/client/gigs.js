@@ -3,6 +3,7 @@ import { useMutation } from "@tanstack/react-query";
 import api from "../axios/index";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 export function useAddGigs() {
   // const pathname = usePathname();
@@ -25,7 +26,7 @@ export function useAddGigs() {
         timeout: 30000,
       }),
     onSuccess: (data) => {
-       queryClient.invalidateQueries({
+      queryClient.invalidateQueries({
         queryKey: [API_ROUTE.gigs.getGigsByUserId],
       });
     },
@@ -91,7 +92,7 @@ export function useGetGigsOverview(id) {
 }
 
 export function useGetGigsByUser() {
-  const freelancerDetails = useSelector(state=> state.userProfile.userProfile)
+  const freelancerDetails = useSelector(state => state.userProfile.userProfile)
   const { data, isSuccess, isPending, isError, isLoading } = useQuery({
     queryKey: [API_ROUTE.gigs.getGigsByUserId, freelancerDetails.id],
     queryFn: async () => await api.get(`${API_ROUTE.gigs.getGigsByUserId}/${freelancerDetails.id}`),
@@ -123,7 +124,7 @@ export function useGetGigsFiles(id) {
   };
 }
 
-export function useEditGigs(id, formType='json') {
+export function useEditGigs(id, formType = 'json') {
   // const pathname = usePathname();
   const queryClient = useQueryClient();
   // const { dispatch } = useGlobalState();
@@ -144,7 +145,7 @@ export function useEditGigs(id, formType='json') {
         timeout: 30000,
       }),
     onSuccess: (data) => {
-       queryClient.invalidateQueries({
+      queryClient.invalidateQueries({
         queryKey: [API_ROUTE.gigs.editGigs],
       });
     },
@@ -160,10 +161,8 @@ export function useEditGigs(id, formType='json') {
 }
 
 export function useEditGigsFiles(id) {
-  // const pathname = usePathname();
+  const navigate = useNavigate()
   const queryClient = useQueryClient();
-  // const { dispatch } = useGlobalState();
-
   const {
     mutate: editGigsFiles,
     isSuccess,
@@ -180,9 +179,10 @@ export function useEditGigsFiles(id) {
         timeout: 30000,
       }),
     onSuccess: (data) => {
-       queryClient.invalidateQueries({
+      queryClient.invalidateQueries({
         queryKey: [API_ROUTE.gigs.editGigs],
       });
+      navigate('/freelancer/manage-gigs')
     },
     onError: (error) => {
       // Toast.show({
