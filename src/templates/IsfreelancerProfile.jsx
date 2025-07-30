@@ -7,15 +7,11 @@ function IsFreelancerProfile({ children }) {
 
     const navigate = useNavigate();
     const freelancer = useSelector(state => state.userProfile.userProfile);
-
     useEffect(() => {
         if (!freelancer?.id) {
             navigate('/freelancer/profile-form/1');
         }
     }, [freelancer, navigate]);
-
-    if (!freelancer?.id) return <ICCDLoader />
-
     return <>{children}</>;
 }
 

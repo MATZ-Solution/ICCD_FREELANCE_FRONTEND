@@ -4,10 +4,16 @@ import { useGetGigs } from "../../../api/client/gigs";
 import { useNavigate, useLocation } from "react-router-dom";
 import { SearchIcon } from "lucide-react";
 import ICCDLoader from "../../component/loader";
+import { useCheckIsFreelancer } from "../../../api/client/user";
+import { useDispatch } from "react-redux";
+import { getUserProfile } from "../../../redux/slices/userProfileSlice";
 
 export default function ClientHomepage() {
+
   const navigate = useNavigate();
   const location = useLocation();
+  const dispatch = useDispatch();
+
 
   // Get search param from URL query string
   const query = new URLSearchParams(location.search);
@@ -17,9 +23,7 @@ export default function ClientHomepage() {
 
   const { gigs, error, isLoading, isError } = useGetGigs({ search: searchTermFromUrl });
 
-   if (isLoading ) {
-       return <ICCDLoader /> 
-     }
+
   function handleSearch() {
     if (search.trim() === searchTermFromUrl.trim()) return; // no change
     navigate(`?query=${encodeURIComponent(search.trim())}`, { replace: true });
@@ -29,6 +33,18 @@ export default function ClientHomepage() {
     if (e.key === "Enter") {
       handleSearch();
     }
+  }
+
+// to set freelancer details in redux
+  const { data, isSuccess, isPending } = useCheckIsFreelancer()
+  useEffect(() => {
+    if (data && data?.length > 0) {
+      dispatch(getUserProfile(data[0]));
+    }
+  }, [data]);
+
+  if (isLoading) {
+    return <ICCDLoader />
   }
 
   return (

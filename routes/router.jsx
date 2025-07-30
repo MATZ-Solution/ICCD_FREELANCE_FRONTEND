@@ -197,11 +197,10 @@ export const router = createBrowserRouter([
     path: "/freelancer/manage-gigs/overview",
     element: (
       // <AuthRoute>
-      <IsFreelancerProfile>
-        <MainTemplate isShowFooter={false}>
-          <Overview />
-        </MainTemplate>
-      </IsFreelancerProfile>
+
+      <MainTemplate isShowFooter={false}>
+        <Overview />
+      </MainTemplate>
       // </AuthRoute>
     ),
   },
@@ -328,9 +327,12 @@ export const router = createBrowserRouter([
     path: "/freelancer/dashboard",
     element: (
       // <AuthRoute>
-      <MainTemplate isShowFooter={false}>
-        <FreelancerDashboard />
-      </MainTemplate>
+      <IsFreelancerProfile>
+        <MainTemplate isShowFooter={false}>
+          <FreelancerDashboard />
+        </MainTemplate>
+      </IsFreelancerProfile>
+
       // </AuthRoute>
     ),
   },

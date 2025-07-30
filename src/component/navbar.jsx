@@ -16,7 +16,6 @@ import {
   navTabsFreelancerDashboard,
   navTabsClientDashboard,
 } from "../../constants/navbar_navigation";
-import { useCheckIsFreelancer } from "../../api/client/user";
 import NotificationDropdown from "./NotificationDropdown";
 import NotificationBell from "./notificationBell";
 import { setUserType } from "../../redux/slices/userType";
@@ -37,7 +36,6 @@ export default function Navbar() {
   const client = userDetails;
   const freelancer = useSelector((state) => state.userProfile.userProfile);
 
-  const { data: freelancerCheck } = useCheckIsFreelancer();
   const logout = useLogout();
 
   useEffect(() => {
@@ -128,11 +126,11 @@ export default function Navbar() {
         </div>
 
         {/* Navigation Tabs for Desktop */}
-        {pathname.includes("/freelancer") ? (
+        {(pathname.includes("/freelancer") ) ? (
           <nav className="ml-10 sm:flex space-x-1 hidden md:flex">
             {renderNavTabs(navTabsFreelancerDashboard)}
           </nav>
-        ) : pathname.includes("/client/") ? (
+        ) : (pathname.includes("/client/")) ? (
           <nav className="ml-10 sm:flex space-x-1 hidden md:flex">
             {renderNavTabs(navTabsClientDashboard)}
           </nav>

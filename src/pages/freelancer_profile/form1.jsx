@@ -1,14 +1,14 @@
 "use client"
 
 import { useForm, Controller } from "react-hook-form"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import * as Yup from "yup"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { useNavigate } from "react-router-dom"
 import { useAddProfile } from "../../../api/client/freelancer"
 import { useDispatch } from "react-redux"
-import { setUserProfile } from "../../../redux/slices/userProfileSlice"
-
+import { setUserProfile, resetUserProfile } from "../../../redux/slices/userProfileSlice"
+import { fileToBase64 } from "../../../functions/base64FileConversion"
 const validationSchema = Yup.object({
   firstName: Yup.string()
     .required("First name is required")
@@ -25,12 +25,13 @@ const validationSchema = Yup.object({
     .max(500, "about_description cannot exceed 500 characters"),
   files: Yup.mixed()
     .required("Profile picture is required")
-    .test("fileSize", "File size must be less than 5MB", (value) =>
-      value && value[0] && value[0].size <= 5 * 1024 * 1024
-    )
-    .test("fileType", "Only image files are allowed", (value) =>
-      value && value[0] && ["image/jpeg", "image/png", "image/gif"].includes(value[0].type)
-    ),
+  // .test("fileSize", "File size must be less than 5MB", (value) =>
+  //   value && value[0] && value[0].size <= 5 * 1024 * 1024
+  // )
+  // .test("fileType", "Only image files are allowed", (value) =>
+  //   value && value[0] && ["image/jpeg", "image/png", "image/gif"].includes(value[0].type)
+  // )
+  ,
   languages: Yup.array()
     .min(1, "At least one language is required")
     .of(
@@ -42,9 +43,11 @@ const validationSchema = Yup.object({
 })
 
 export default function PersonalInfoStep() {
+  const [image, setImages] = useState(null)
   const [languages, setLanguages] = useState([])
   const [currentLanguage, setCurrentLanguage] = useState("")
   const [currentLevel, setCurrentLevel] = useState("")
+  console.log("image: ", image)
 
   const navigate = useNavigate()
   const dispatch = useDispatch()
@@ -61,7 +64,7 @@ export default function PersonalInfoStep() {
       lastName: "",
       displayName: "",
       about_description: "",
-      files: null,
+      files: [],
       languages: [],
     },
   })
@@ -81,12 +84,17 @@ export default function PersonalInfoStep() {
     setLanguages(newLanguages)
     setValue("languages", newLanguages) // Update react-hook-form value for validation
   }
-  const onSubmit = (data) => {
-    console.log("data: ", data)
-    dispatch(setUserProfile(data))
+  const onSubmit = async (data) => {
+    const base64Files = await Promise.all(
+      data?.files.map(async (file) => ({
+        name: file.name,
+        type: file.type,
+        base64: await fileToBase64(file),
+      }))
+    );
+    dispatch(setUserProfile({ ...data, files: base64Files }))
     navigate("/freelancer/profile-form/2")
   };
-
 
   return (
     <div className="max-w-6xl mx-auto p-5">

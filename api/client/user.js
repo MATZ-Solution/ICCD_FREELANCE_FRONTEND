@@ -25,6 +25,7 @@ export function useCheckIsFreelancer() {
   const { data, error, isSuccess, isPending, isError } = useQuery({
     queryKey: [API_ROUTE.freelancer.checkIsFreelancer],
     queryFn: () => api.get(API_ROUTE.freelancer.checkIsFreelancer),
+    // staleTime: 7 * 24 * 60 * 60 * 1000 // 7 days
   });
   return {
     data: data?.data?.data,

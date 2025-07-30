@@ -8,6 +8,9 @@ import Select from 'react-select'
 import ReactSelect from "../../component/buttonSelect"
 import { useSelector } from "react-redux"
 import { useAddProfile } from "../../../api/client/freelancer"
+import { useDispatch } from "react-redux"
+import { resetUserProfile } from "../../../redux/slices/userProfileSlice"
+import { base64ToFile } from "../../../functions/base64FileConversion"
 
 const validationSchema = Yup.object({
   occupation: Yup.string().required("Occupation is required"),
@@ -54,6 +57,7 @@ const defaultPlaceholderConfig = {
 
 export default function ProfessionalInfoStep({ placeholderConfig = defaultPlaceholderConfig }) {
   // Dropdown lists
+  const dispatch = useDispatch()
   const occupationslist = [
     { value: "Digital Marketing", label: "Digital Marketing" },
     { value: "Web", label: "Web Development" },
@@ -214,22 +218,23 @@ export default function ProfessionalInfoStep({ placeholderConfig = defaultPlaceh
   const userProfileDetail = useSelector(state => state.userProfile.userProfile)
 
   const onSubmit = (data) => {
-    let updateData = { ...data, ...userProfileDetail }
     const formData = new FormData();
+    let updateData = { ...data, ...userProfileDetail }
+    let { files } = updateData
+    let file = base64ToFile(files[0]?.base64, files[0]?.name, files[0]?.type)
+    formData.append("files", file);
     for (const key in updateData) {
-      if (key === 'files') {
-        updateData.files.forEach((file) => {
-          formData.append("files", file);
-        });
-      }
-      else if (Array.isArray(updateData[key])) {
-        formData.append(key, JSON.stringify(updateData[key]));
-      }
-      else {
-        formData.append(key, updateData[key])
+      if (key !== 'files') {
+        if (Array.isArray(updateData[key])) {
+          formData.append(key, JSON.stringify(updateData[key]));
+        }
+        else {
+          formData.append(key, updateData[key])
+        }
       }
     }
     addProfile(formData)
+    dispatch(resetUserProfile())
   };
 
   return (
@@ -494,8 +499,10 @@ export default function ProfessionalInfoStep({ placeholderConfig = defaultPlaceh
         {/* Submit Button */}
         <div className="flex justify-end">
           <button
+            disabled={isPending ? true : false}
             type="submit"
-            className="flex items-center gap-2 px-6 py-3 bg-[#01AEAD] text-white rounded hover:bg-cyan-600 transition-colors"
+            className={`flex items-center gap-2 px-6 py-3  text-white rounded  transition-colors
+              ${isPending ? 'bg-[#01aeae97]' : 'bg-[#01AEAD] hover:bg-cyan-600'}`}
           >
             Next <ArrowRight className="w-5 h-5" />
           </button>

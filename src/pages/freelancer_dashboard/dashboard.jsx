@@ -58,22 +58,17 @@ export default function FreelancerDashboard() {
 
   const toggleAvailability = () => setIsAvailable(prev => !prev);
   const userDetails = useSelector(state => state.user.userDetails)
+  const user = useSelector((state) => state.userType.user);
+  const freelancer = useSelector(state => state.userProfile.userProfile);
 
   const dispatch = useDispatch()
-  const { data, isSuccess, isPending, isError, isLoading } = useCheckIsFreelancer()
   const { data: dashData, isError: dashDataIsErr, isLoading: dashDataIsLoad } = useGetFreelDashboardData()
 
   useEffect(() => {
-    if (data && data?.length > 0) {
-      dispatch(getUserProfile(data[0]));
-      dispatch(setUserType({ id: data[0]?.id, type: 'freelancer' }))
-    }
-    else {
-      navigate(`/freelancer/profile-form/1`)
-    }
-  }, [data]);
+    dispatch(setUserType({ id: freelancer?.id, type: 'freelancer' }))
+  }, [])
 
-  if (dashDataIsLoad || isLoading) {
+  if (dashDataIsLoad) {
     return <ICCDLoader />
   }
 

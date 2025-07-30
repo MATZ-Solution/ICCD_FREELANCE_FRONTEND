@@ -12,7 +12,7 @@ export const userTypeSlice = createSlice({
       state.user = {...state.user, ...action.payload};
     },
      resetUserType: (state) => {
-      state.user = null;
+      state.user = {};
     },
   },
 });
