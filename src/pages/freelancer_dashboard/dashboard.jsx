@@ -96,12 +96,12 @@ export default function FreelancerDashboard() {
           <div className="mb-6 bg-[#F8F8F8] mt-7 rounded-lg p-4">
             <div className="flex flex-col items-center gap-3">
               <img
-                src={dp}
+                src={freelancer?.fileUrl}
                 alt="Profilepic"
                 className="w-16 h-16 rounded-full"
               />
               <div className="text-center">
-                <h3 className="capitalize font-semibold text-sm">{userDetails?.name} </h3>
+                <h3 className="capitalize font-semibold text-sm">{freelancer?.firstName} {freelancer?.lastName} </h3>
                 <p className="text-xs text-gray-500">{userDetails?.email}</p>
               </div>
             </div>

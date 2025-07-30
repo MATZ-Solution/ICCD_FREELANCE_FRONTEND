@@ -189,7 +189,7 @@ export default function Navbar() {
                 className="w-10 h-10 rounded-full overflow-hidden border border-gray-300"
               >
                 <img
-                  src={pathname.includes("freelancer") ? dp : userDetails?.userImg}
+                  src={pathname.includes("freelancer") ? freelancer?.fileUrl : userDetails?.userImg}
                   alt="User Profile"
                   className="w-full h-full object-cover"
                 />

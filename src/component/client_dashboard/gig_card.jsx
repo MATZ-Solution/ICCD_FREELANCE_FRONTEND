@@ -19,7 +19,7 @@ const GigCard = ({
     <div onClick={onClick} className="cursor-pointer w-full h-full flex flex-col bg-white rounded-xl shadow-sm overflow-hidden  hover:shadow-lg transition relative">
       {/* Image with heart overlay */}
       <div className="relative">
-        <img src={image} alt={title} className="w-full h-36 object-cover" />
+        <img src={image} alt="gigs_cards" className="w-full h-36 object-cover" />
         <button
           onClick={() => setLiked(!liked)}
           className="absolute top-2 right-2 p-1 rounded-ful  "
