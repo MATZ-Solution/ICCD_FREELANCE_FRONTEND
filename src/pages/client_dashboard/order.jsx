@@ -16,10 +16,12 @@ function ClientOrders() {
 
     const { data, isSuccess, isPending, isError, isLoading } = useGetProjectsByUser()
     console.log("data: ", data)
- if (isLoading) {
+ if (isLoading || isPending) {
     return <ICCDLoader /> 
   }
-  
+   if (isError) {
+    return  <ICCDError message={isError} />
+  }
     return (
         <div className="px-5 sm:px-5 lg:px-10">
             <div className="flex flex-wrap justify-between mt-10 p-5 bg-[#F8F8F8] rounded-md">

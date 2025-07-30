@@ -1,5 +1,4 @@
-import { Clock } from "lucide-react";
-import React, { memo, useState } from "react";
+import  { memo, useState } from "react";
 import SidebarCard from "./sidebarcard";
 
  function Sidebar() {

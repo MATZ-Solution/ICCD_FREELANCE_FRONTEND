@@ -10,6 +10,9 @@ import { useEditProfile, useGetFreelancerProfile } from "../../../api/client/fre
 import { useDispatch, useSelector } from "react-redux";
 import { getUserProfile } from "../../../redux/slices/userProfileSlice";
 import Button from "../../component/button";
+import ICCDError from "../../component/ICCDError";
+import ICCDLoader from "../../component/loader";
+import { toast } from "react-toastify";
 
 const FreelancerEditProfile = () => {
 
@@ -31,24 +34,49 @@ const FreelancerEditProfile = () => {
     setSidebarType(null);
   };
 
-  const handleSaveChanges = () => {
+  // const handleSaveChanges = () => {
 
-    const formData = new FormData();
-    for (const key in profileDetails) {
-      if (key === 'files') {
-        updateData.files.forEach((file) => {
-          formData.append("files", file);
-        });
-      }
-      else if (Array.isArray(profileDetails[key])) {
-        formData.append(key, JSON.stringify(profileDetails[key]));
-      }
-      else {
-        formData.append(key, profileDetails[key])
-      }
+  //   const formData = new FormData();
+  //   for (const key in profileDetails) {
+  //     if (key === 'files') {
+  //       updateData.files.forEach((file) => {
+  //         formData.append("files", file);
+  //       });
+  //     }
+  //     else if (Array.isArray(profileDetails[key])) {
+  //       formData.append(key, JSON.stringify(profileDetails[key]));
+  //     }
+  //     else {
+  //       formData.append(key, profileDetails[key])
+  //     }
+  //   }
+  //   editProfile(formData)
+  // }
+
+    const handleSaveChanges = async () => {
+  const formData = new FormData();
+  
+  for (const key in profileDetails) {
+    if (key === "files") {
+      updateData.files.forEach((file) => {
+        formData.append("files", file);
+      });
+    } else if (Array.isArray(profileDetails[key])) {
+      formData.append(key, JSON.stringify(profileDetails[key]));
+    } else {
+      formData.append(key, profileDetails[key]);
     }
-    editProfile(formData)
   }
+
+  try {
+    await editProfile(formData); // mutation
+    toast.success("Profile updated successfully!");
+  } catch (error) {
+    toast.error("Failed to update profile.");
+    console.error("Error updating profile:", error);
+  }
+};
+
 
   const { data, isSuccess, isPending, isError, isLoading } = useGetFreelancerProfile()
 
@@ -58,6 +86,12 @@ const FreelancerEditProfile = () => {
     }
   }, [data]);
 
+  if (isLoading || isPending) {
+    return <ICCDLoader />;
+  }
+  if (isError || isErrProfile ) {
+    return <ICCDError message={error} />;
+  }
   return (
     <div className="max-w-7xl mx-auto px-4 py-6 relative">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">

@@ -2,13 +2,13 @@ import order_logo from '../../assets/freelancer_dashboard/order_logo.png';
 import { useNavigate } from 'react-router-dom';
 
 function Gigs_table({ data }) {
-  const statusColors = {
-    'IN PROGRESS': 'bg-[#1467B0]',
-    PENDING: 'bg-yellow-500',
-    COMPLETED: 'bg-green-600',
-    'IN REVIEW': 'bg-purple-500',
-    'ON HOLD': 'bg-red-500',
-  };
+  // const statusColors = {
+  //   'IN PROGRESS': 'bg-[#1467B0]',
+  //   PENDING: 'bg-yellow-500',
+  //   COMPLETED: 'bg-green-600',
+  //   'IN REVIEW': 'bg-purple-500',
+  //   'ON HOLD': 'bg-red-500',
+  // };
 
   const navigate = useNavigate();
   console.log("data: ", data);

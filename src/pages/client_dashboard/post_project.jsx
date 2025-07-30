@@ -181,6 +181,10 @@ const ProjectForm = () => {
     }
   }, [getProData, reset]);
 
+   if (isError || error) {
+      return  <ICCDError message={isError} />
+    }
+
   return (
     <div
       className="bg-fixed bg-cover bg-center"

@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { useGetGigsByUser } from "../../../api/client/gigs";
 import { useSelector } from "react-redux";
 import ICCDLoader from "../../component/loader";
+import ICCDError from "../../component/ICCDError";
 
 function ManageGigsAndProjects() {
     const navigate = useNavigate();
@@ -18,6 +19,9 @@ function ManageGigsAndProjects() {
 
     if(isLoading){
         return <ICCDLoader />
+    }
+    if(isError){
+        return <ICCDError />
     }
 
     return (

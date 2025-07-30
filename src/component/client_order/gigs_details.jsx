@@ -5,6 +5,7 @@ import { useGetSingleGigs } from "../../../api/client/gigs";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import ICCDLoader from "../loader";
+import GigCarousel from "./GigCarousel"; // Make sure the path is correct
 
 export default function ServicePage() {
   const [activeNavTab, setActiveNavTab] = useState("Basic");
@@ -51,18 +52,8 @@ export default function ServicePage() {
             </div>
           </div>
 
-          <div className="aspect-video rounded-lg  bg-gray-100">
-            {data[0]?.gigsDescription?.gigsFiles?.split(',')?.map((item, index)=>{
-              return (
-                <img
-                key={index}
-                  src={item}
-                  alt="gig banner"
-                  className="w-full h-full object-cover"
-                />
-              )
-            })}
-          </div>
+          <GigCarousel images={gigInfo?.gigsFiles?.split(",")} />
+
 
           <div className="bg-white border border-gray-200 rounded-xl shadow-sm p-6">
             <h3 className="text-2xl font-bold mb-4">About this Gig</h3>

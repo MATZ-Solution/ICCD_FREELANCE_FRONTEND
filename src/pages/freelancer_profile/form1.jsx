@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom"
 import { useAddProfile } from "../../../api/client/freelancer"
 import { useDispatch } from "react-redux"
 import { setUserProfile } from "../../../redux/slices/userProfileSlice"
+import { toast } from "react-toastify"
 
 const validationSchema = Yup.object({
   firstName: Yup.string()
@@ -84,7 +85,9 @@ export default function PersonalInfoStep() {
   const onSubmit = (data) => {
     console.log("data: ", data)
     dispatch(setUserProfile(data))
+    toast.success("Personal info saved successfully!");
     navigate("/freelancer/profile-form/2")
+    
   };
 
 

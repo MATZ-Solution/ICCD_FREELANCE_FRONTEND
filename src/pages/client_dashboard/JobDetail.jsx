@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom"
 import { useRef } from "react"
 import { downloadFile } from "../../../functions/download_pdf"
 import ICCDLoader from "../../component/loader"
+import ICCDError from '../../component/ICCDError';
 export default function JobDetailPage() {
 
   const { id } = useParams()
@@ -11,10 +12,12 @@ export default function JobDetailPage() {
   const { jobProposals, error } = getJobPropsalByClient()
   console.log("jobProposals: ", jobProposals)
 
-  if (isLoading) {
+  if (isLoading || isPending) {
     return <ICCDLoader /> 
   }
-  
+  if (isError) {
+    return  <ICCDError message={isError} />
+  }
   if (data?.length === 0) {
     return <p>No jobs to show</p>
   }

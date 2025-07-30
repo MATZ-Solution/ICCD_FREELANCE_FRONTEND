@@ -1,7 +1,6 @@
 import { Edit2 } from "lucide-react";
 import { memo } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { setUserProfile } from "../../../redux/slices/userProfileSlice";
+import {  useSelector } from "react-redux";
 
 const AboutSection = ({ openSidebar }) => {
   const profileDetails = useSelector(state => state.userProfile.userProfile)

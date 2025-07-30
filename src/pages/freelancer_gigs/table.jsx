@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, memo } from 'react';
 
 const Table = ({ title, tabs, data, getStatusColor }) => {
   const [activeTab, setActiveTab] = useState(tabs?.[0] || "All");
@@ -63,4 +63,5 @@ const Table = ({ title, tabs, data, getStatusColor }) => {
   );
 };
 
-export default Table;
+// Export with memo
+export default memo(Table);

@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import { useAddProfile } from "../../../api/client/freelancer";
 import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 const validationSchema = Yup.object({
   occupation: Yup.string()
@@ -170,8 +171,16 @@ export default function ProfessionalInfoStep() {
   };
   const { addProfile, isSuccess, isPending, isError, error } = useAddProfile()
 
+  if (isError || error) {
+    toast.error("Failed to update profile.");
+    console.error("Error updating profile:", error);
+  }
+
+  
+
   console.log("userProfile ", userProfileDetail)
   const onSubmit = (data) => {
+    toast.success("Professional info saved successfully!");
     let updateData = { ...data, ...userProfileDetail }
     console.log("updateData: ", updateData)
     const formData = new FormData();

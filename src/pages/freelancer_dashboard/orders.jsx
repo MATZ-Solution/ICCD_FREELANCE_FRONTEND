@@ -3,6 +3,7 @@ import OrderTable from "../../component/freelancer_dashboard/order_table";
 import SearchIcon from '@mui/icons-material/Search';
 import { useGetOrderByFreelancer } from "../../../api/client/order";
 import ICCDLoader from "../../component/loader";
+import ICCDError from "../../component/ICCDError";
 
 function Orders() {
   const [active, setActive] = useState('Active');
@@ -13,6 +14,11 @@ function Orders() {
   if (isLoading ) {
          return <ICCDLoader /> 
        }
+
+         if (error || isError) {
+         return <ICCDError /> 
+       }
+
 
   return (
     <div className="px-4 sm:px-6 lg:px-10">

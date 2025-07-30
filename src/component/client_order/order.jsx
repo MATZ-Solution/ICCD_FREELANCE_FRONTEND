@@ -18,7 +18,8 @@ function ClientOrders() {
   const { data, isSuccess, isPending, isError, isLoading } = useGetOrderByClient({search: search})
   console.log("data: ", data)
 
-  if (isLoading) return <ICCDLoader /> ;
+  if (isLoading || isPending) return <ICCDLoader /> ;
+  if (isError) return <ICCDError />;
 
 
   return (

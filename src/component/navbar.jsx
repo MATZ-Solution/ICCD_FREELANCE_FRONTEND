@@ -15,6 +15,7 @@ import {
   navigation,
   navTabsFreelancerDashboard,
   navTabsClientDashboard,
+  navTabsSuperAdminDashboard
 } from "../../constants/navbar_navigation";
 import { useCheckIsFreelancer } from "../../api/client/user";
 import NotificationDropdown from "./NotificationDropdown";
@@ -161,7 +162,11 @@ export default function Navbar() {
               Orders
             </button>
           </nav>
-        ) : (
+        ) :pathname.includes("/superadmin") ? (
+          <nav className="ml-10 sm:flex space-x-1 hidden md:flex">
+            {renderNavTabs(navTabsSuperAdminDashboard)}
+          </nav> 
+        ):(
           <nav className="show_nav_links_desktop space-x-6 items-center hidden md:flex">
             {navigation.map((item) => (
               <a
@@ -238,7 +243,7 @@ export default function Navbar() {
                 >
                   {item.name}
                 </button>
-                {!["Contact Us", "Login"].includes(item.name) && <KeyboardArrowDownIcon />}
+                {!["Contact Us", "Login"].includes(item.name) }
               </div>
             ))}
 

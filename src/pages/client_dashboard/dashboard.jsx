@@ -58,8 +58,12 @@ export default function ClientDashboard() {
 
   const [showAboutModal, setShowAboutModal] = useState(false)
 
+ if (isError || error || clientIsErr) {
+  console.log("Error details:", error, isError, clientIsErr);
+  return <ICCDError message="Failed to load data. Please try again." />;
+}
 
-  if(isLoading || clientIsLoad){
+  if(isLoading || clientIsLoad || clientIsPend){
     return <ICCDLoader /> }
   return (
     <div className="min-h-screen px-4 bg-white">

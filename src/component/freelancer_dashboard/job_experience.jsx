@@ -1,5 +1,4 @@
 import React from 'react'
-import thank_you_pic from '../../assets/freelancer_dashboard/thank_you_pic.png'
 import Button from '../button'
 import { useNavigate } from 'react-router-dom';
 

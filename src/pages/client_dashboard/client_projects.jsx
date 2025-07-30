@@ -8,6 +8,7 @@ import { useGetGigsByUser } from "../../../api/client/gigs";
 import Projects_table from "../../component/client_dashboard/project_table";
 import { useGetProjectsByClient } from "../../../api/client/project";
 import ICCDLoader from "../../component/loader";
+import ICCDError from "../../component/ICCDError";
 
 function ClientProjects() {
 
@@ -19,6 +20,9 @@ function ClientProjects() {
     console.log("data: ", data)
 if (isLoading) {
         return <ICCDLoader />
+    }
+    if (isError) {
+        return <ICCDError />
     }
     return (
         <div className="px-5 sm:px-5 lg:px-10">

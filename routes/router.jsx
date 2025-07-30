@@ -1,66 +1,67 @@
 // src/routes/router.tsx
 import { createBrowserRouter } from "react-router-dom";
-import Login from "../src/pages/signIn/signIn";
-import Dashboard from "../src/pages/dashboard";
-import AuthRoute from "../utils/authRoute";
-import Homepage from "../src/pages/homepage";
-import ForgotPassword from "../src/pages/forgotPass";
-import VerifyOtp from "../src/pages/otpVerification";
-import ChangePassword from "../src/pages/changePass";
-import ProtectedRoute from "../utils/protectRoute";
-import FreelancerProfile from "../src/pages/freelancerProfile";
-import Overview from "../src/pages/freelancer_gigs/overview";
-import Description from "../src/pages/freelancer_gigs/description";
-import Requirement from "../src/pages/freelancer_gigs/requirement";
-import Gallery from "../src/pages/freelancer_gigs/gallery";
-import Publish from "../src/pages/freelancer_gigs/publish";
-import MainTemplate from "../src/templates/mainTemplate";
-import Pricing from "../src/pages/freelancer_gigs/pricing";
-import Orders from "../src/pages/freelancer_dashboard/orders";
-import StartSelling from "../src/pages/freelancer_profile/guideline1";
-import ManageGigsAndProjects from "../src/pages/freelancer_dashboard/gig_projects";
-import Jobs from "../src/pages/freelancer_dashboard/jobs";
-import ICCDProfileTipsPage from "../src/pages/freelancer_profile/guideline2";
-import ICCDGuidelinesPage from "../src/pages/freelancer_profile/guideline3";
-import Add_resume from "../src/pages/freelancer_dashboard/add_resume";
-import Success from "../src/component/freelancer_dashboard/success";
-import Job_experience from "../src/component/freelancer_dashboard/job_experience";
-import ClientDashboard from "../src/pages/client_dashboard/dashboard";
-import FreelancerDashboard from "../src/pages/freelancer_dashboard/dashboard";
-import FreelancerAnalytics from "../src/pages/freelancer_dashboard/analytics";
-import SignUp from "../src/pages/signUp";
-import Post_job from "../src/pages/client_dashboard/post_job";
-import ClientOrders from "../src/component/client_order/order";
-import Gigs_details from "../src/pages/client_dashboard/gigs_details";
-import MultiStepForm from "../src/pages/freelancer_profile/form1";
-import ProfessionalInfoStep from "../src/pages/freelancer_profile/form2";
-import AccountSecurityStep from "../src/pages/freelancer_profile/form3";
-import ProjectForm from "../src/pages/client_dashboard/post_project";
-import Payment from "../src/pages/payment/payment";
-import PricingForm from "../src/component/gigs_pricing_scope";
-import ClientHomepage from "../src/pages/clientHomepage/homePage";
-import ClientProjects from "../src/pages/client_dashboard/client_projects";
-import FreelancerEditProfile from "../src/pages/freelancer_profile/edit_profile";
-import FreelancerProjects from "../src/pages/freelancer_dashboard/project";
-import ProjectDetailClient from "../src/pages/client_dashboard/projectDetailClient";
-import Check from "../src/pages/check";
-import ProjectDetailFreelancer from "../src/pages/freelancer_dashboard/projectDetailFreelancer";
-import { loadStripe } from "@stripe/stripe-js";
-import { Elements } from "@stripe/react-stripe-js";
-import PaymentSuccess from "../src/pages/payment/PaymentSuccess";
-import PaymentCancel from "../src/pages/payment/PaymentCancel";
-import OrderOptions from "../src/component/client_order/OrderOptions";
-import ClientJobs from "../src/pages/client_dashboard/client_jobs";
-import WhatsAppClone from "../src/pages/messages";
-import JobDetailPage from "../src/pages/client_dashboard/JobDetail";
-import SuperAdminDashboard from "../src/pages/superadmin_dashboard/dashboard";
-import ManageUsers from "../src/pages/superadmin_dashboard/manage_dispute";
-import ManageDispute from "../src/pages/superadmin_dashboard/manage_dispute";
-import ReviewPage from "../src/pages/superadmin_dashboard/review-page";
-import ContactPage from '../src/pages/contactpage';
-import AboutUsPage from '../src/pages/aboutuspage';
-import LoginController from "../src/component/loginController";
-import ICCDLoader from '../src/component/loader';
+import React, { lazy } from 'react';
+
+const Login = lazy(() => import("../src/pages/signIn/signIn"));
+const Dashboard = lazy(() => import("../src/pages/dashboard"));
+const Homepage = lazy(() => import("../src/pages/homepage"));
+const ForgotPassword = lazy(() => import("../src/pages/forgotPass"));
+const VerifyOtp = lazy(() => import("../src/pages/otpVerification"));
+const ChangePassword = lazy(() => import("../src/pages/changePass"));
+const FreelancerProfile = lazy(() => import("../src/pages/freelancerProfile"));
+const Overview = lazy(() => import("../src/pages/freelancer_gigs/overview"));
+const Description = lazy(() => import("../src/pages/freelancer_gigs/description"));
+const Requirement = lazy(() => import("../src/pages/freelancer_gigs/requirement"));
+const Gallery = lazy(() => import("../src/pages/freelancer_gigs/gallery"));
+const Publish = lazy(() => import("../src/pages/freelancer_gigs/publish"));
+const Pricing = lazy(() => import("../src/pages/freelancer_gigs/pricing"));
+const Orders = lazy(() => import("../src/pages/freelancer_dashboard/orders"));
+const StartSelling = lazy(() => import("../src/pages/freelancer_profile/guideline1"));
+const ManageGigsAndProjects = lazy(() => import("../src/pages/freelancer_dashboard/gig_projects"));
+const Jobs = lazy(() => import("../src/pages/freelancer_dashboard/jobs"));
+const ICCDProfileTipsPage = lazy(() => import("../src/pages/freelancer_profile/guideline2"));
+const ICCDGuidelinesPage = lazy(() => import("../src/pages/freelancer_profile/guideline3"));
+const Add_resume = lazy(() => import("../src/pages/freelancer_dashboard/add_resume"));
+const Success = lazy(() => import("../src/component/freelancer_dashboard/success"));
+const Job_experience = lazy(() => import("../src/component/freelancer_dashboard/job_experience"));
+const ClientDashboard = lazy(() => import("../src/pages/client_dashboard/dashboard"));
+const FreelancerDashboard = lazy(() => import("../src/pages/freelancer_dashboard/dashboard"));
+const FreelancerAnalytics = lazy(() => import("../src/pages/freelancer_dashboard/analytics"));
+const SignUp = lazy(() => import("../src/pages/signUp"));
+const Post_job = lazy(() => import("../src/pages/client_dashboard/post_job"));
+const ClientOrders = lazy(() => import("../src/component/client_order/order"));
+const Gigs_details = lazy(() => import("../src/pages/client_dashboard/gigs_details"));
+const MultiStepForm = lazy(() => import("../src/pages/freelancer_profile/form1"));
+const ProfessionalInfoStep = lazy(() => import("../src/pages/freelancer_profile/form2"));
+const AccountSecurityStep = lazy(() => import("../src/pages/freelancer_profile/form3"));
+const ProjectForm = lazy(() => import("../src/pages/client_dashboard/post_project"));
+const Payment = lazy(() => import("../src/pages/payment/payment"));
+const PricingForm = lazy(() => import("../src/component/gigs_pricing_scope"));
+const ClientHomepage = lazy(() => import("../src/pages/clientHomepage/homePage"));
+const ClientProjects = lazy(() => import("../src/pages/client_dashboard/client_projects"));
+const FreelancerEditProfile = lazy(() => import("../src/pages/freelancer_profile/edit_profile"));
+const FreelancerProjects = lazy(() => import("../src/pages/freelancer_dashboard/project"));
+const ProjectDetailClient = lazy(() => import("../src/pages/client_dashboard/projectDetailClient"));
+const Check = lazy(() => import("../src/pages/check"));
+const ProjectDetailFreelancer = lazy(() => import("../src/pages/freelancer_dashboard/projectDetailFreelancer"));
+const PaymentSuccess = lazy(() => import("../src/pages/payment/PaymentSuccess"));
+const PaymentCancel = lazy(() => import("../src/pages/payment/PaymentCancel"));
+const OrderOptions = lazy(() => import("../src/component/client_order/OrderOptions"));
+const ClientJobs = lazy(() => import("../src/pages/client_dashboard/client_jobs"));
+const WhatsAppClone = lazy(() => import("../src/pages/messages"));
+const JobDetailPage = lazy(() => import("../src/pages/client_dashboard/JobDetail"));
+const SuperAdminDashboard = lazy(() => import("../src/pages/superadmin_dashboard/dashboard"));
+const ManageUsers = lazy(() => import("../src/pages/superadmin_dashboard/manage_dispute"));
+const ManageDispute = lazy(() => import("../src/pages/superadmin_dashboard/manage_dispute"));
+const ReviewPage = lazy(() => import("../src/pages/superadmin_dashboard/review-page"));
+const ContactPage = lazy(() => import("../src/pages/contactpage"));
+const AboutUsPage = lazy(() => import("../src/pages/aboutuspage"));
+const LoginController = lazy(() => import("../src/component/loginController"));
+import { loadStripe } from '@stripe/stripe-js';
+import ICCDLoader from "../src/component/loader";
+import MainTemplate from '../src/templates/mainTemplate';
+import { Elements } from '@stripe/react-stripe-js';
+import SuperAdminAllOrders from '../src/component/super_admin/AdminAllOrders';
 
 const stripePromise = loadStripe("pk_test_51QCl1eCDh3RtIJ6XkYcN5vHd3KTO2f8enRSNv9Wx7Li0iCI7cr9khTDQx0vS5RmbazZoaECNW83FesOMwLeIgMLb00BJG4pPZR");
 
@@ -646,7 +647,17 @@ export const router = createBrowserRouter([
       // </AuthRoute>
     ),
   },
-
+ {
+    path: "/superadmin/orders",
+    element: (
+      // <AuthRoute>
+      <MainTemplate isShowFooter={false}>
+       <SuperAdminAllOrders/>
+        
+      </MainTemplate>
+      // </AuthRoute>
+    ),
+  },
   {
     path: "/payment",
     element: (

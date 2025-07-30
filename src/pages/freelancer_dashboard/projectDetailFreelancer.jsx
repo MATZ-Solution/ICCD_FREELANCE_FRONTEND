@@ -22,6 +22,7 @@ import { useState } from "react";
 import { useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import ICCDLoader from "../../component/loader";
+import ICCDError from "../../component/ICCDError";
 
 const ProjectDetailFreelancer = () => {
 
@@ -32,8 +33,11 @@ const ProjectDetailFreelancer = () => {
     const { data, isSuccess, isPending, isError, isLoading } = useGetProjectsById(id)
 
     
-     if(isLoading){
+     if(isLoading || isPending){
         return <ICCDLoader />
+    }
+    if(isError){
+        return <ICCDError />
     }
 
     return (

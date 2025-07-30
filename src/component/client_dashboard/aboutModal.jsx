@@ -8,6 +8,8 @@ import { SquarePen } from 'lucide-react';
 import { Pencil } from 'lucide-react';
 import { useEditClientProfile } from '../../../api/client/clients';
 import { memo } from 'react';
+import ICCDError from '../ICCDError';
+import ICCDLoader from '../loader';
 
 const schema = yup.object().shape({
     name: yup.string().required('Name is required'),
@@ -41,7 +43,15 @@ const AboutModal = ({ onClose }) => {
             setImage({ imageUrl: imageUrl, imageFile: file });  // update image state
         }
     };
-    const { editClientProfile, isSuccess, isPending, isError, error } = useEditClientProfile()
+    const { editClientProfile, isPending, isError, error } = useEditClientProfile()
+        if (isError && error) {
+            <ICCDError />
+        }
+        if (isPending) { 
+            <ICCDLoader />
+        }
+ 
+
     const onSubmit = (data) => {
         const updateData = { ...data, userId: user?.id, files: image?.imageFile, fileKey: delFileKey }
         const formData = new FormData()
