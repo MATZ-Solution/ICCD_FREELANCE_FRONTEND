@@ -66,20 +66,11 @@ const locationOptions = [
   const { data, isSuccess: getJobIsSucc, isPending: getJobIsPend, isError: getJobIsErr, isLoading: getJobIsLoad } = useGetJobById(id)
   const { editJob, isSuccess: editJobIsSucc, isPending: editJobIsPend, isError: editJobIsErr, error: editJobErr } = useEditJobs(id)
 
-  if (getJobIsLoad || getJobIsPend || editJobIsPend || isPending) {
-  return <ICCDLoader />;
-}
+  
 
-// Show error component if any error occurs
-if (getJobIsErr || editJobIsErr || isError) {
-  const combinedError = error || getJobIsErr || editJobErr;
-  console.error("Error: ", combinedError);
-  return <ICCDError error={combinedError} />;
-}
 
   console.log("data: ", data)
 
-    if (getJobIsLoad ) return <ICCDLoader /> ;
   
   const {
     control,
@@ -124,6 +115,15 @@ if (getJobIsErr || editJobIsErr || isError) {
       }
     }, [data, reset]);
 
+if (getJobIsLoad)  {
+  return <ICCDLoader />;
+}
+// Show error component if any error occurs
+if (getJobIsErr || editJobIsErr || isError) {
+  const combinedError = error || getJobIsErr || editJobErr;
+  console.error("Error: ", combinedError);
+  return <ICCDError error={combinedError} />;
+}
   return (
     <div
       className="min-h-screen bg-fixed bg-cover bg-center"

@@ -1,73 +1,137 @@
-import { useForm, Controller } from "react-hook-form";
-import { useState } from "react";
-import * as Yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { useNavigate } from "react-router-dom";
-import { ArrowRight } from "lucide-react";
-import { useAddProfile } from "../../../api/client/freelancer";
-import { useSelector } from "react-redux";
-import { toast } from "react-toastify";
+
+import { useForm, Controller } from "react-hook-form"
+import * as Yup from "yup"
+import { yupResolver } from "@hookform/resolvers/yup"
+import { ArrowRight } from "lucide-react"
+import { useState } from "react"
+import Select from 'react-select'
+import ReactSelect from "../../component/buttonSelect"
+import { useSelector } from "react-redux"
+import { useAddProfile } from "../../../api/client/freelancer"
+import { useDispatch } from "react-redux"
+import { resetUserProfile } from "../../../redux/slices/userProfileSlice"
+import { base64ToFile } from "../../../functions/base64FileConversion"
 
 const validationSchema = Yup.object({
-  occupation: Yup.string()
-  // .required("Occupation is required")
-  ,
+  occupation: Yup.string().required("Occupation is required"),
   skills: Yup.array()
     .min(1, "At least one skill is required")
     .of(
       Yup.object({
-        skill: Yup.string()
-        // .required("Skill is required")
-        ,
-        level: Yup.string()
-          .required("Skill level is required"),
-      })
+        skill: Yup.string().required("Skill is required"),
+        level: Yup.string().required("Skill level is required"),
+      }),
     ),
   education: Yup.array().of(
     Yup.object({
-      institution: Yup.string()
-      // .required("Institution is required")
-      ,
-      level: Yup.string()
-      // .required("Education level is required")
-      ,
+      institution: Yup.string().required("Institution is required"),
+      country: Yup.string().required("Country name is required"),
       title: Yup.string(),
       major: Yup.string(),
       year: Yup.string(),
-    })
+    }),
   ),
   certifications: Yup.array().of(
     Yup.object({
-      name: Yup.string()
-      // .required("Certificate name is required")
-      ,
-      from: Yup.string()
-      // .required("Certified from is required")
-      ,
+      name: Yup.string().required("Certificate name is required"),
+      from: Yup.string().required("Certified from is required"),
       year: Yup.string(),
-    })
+    }),
   ),
-  personalWebsite: Yup.string()
-  // .url("Must be a valid URL")
-  // .nullable()
-  ,
-  newOccupation: Yup.string().when("showNewOccupation", {
-    is: true,
-    then: (schema) => schema.required("New occupation is required"),
-    otherwise: (schema) => schema.nullable(),
-  }),
-});
+  personalWebsite: Yup.string().url("Must be a valid URL").nullable(),
+})
 
-export default function ProfessionalInfoStep() {
-  const userProfileDetail = useSelector(state => state.userProfile.userProfile)
-  const [showNewOccupation, setShowNewOccupation] = useState(false);
-  const navigate = useNavigate();
+const defaultPlaceholderConfig = {
+  occupation: "Select your occupation",
+  skill: "Select a skill",
+  skillLevel: "Select skill level",
+  institution: "Select institution",
+  country: " country",
+  title: " title",
+  major: "major",
+  year: " year",
+  certificationName: "certificate name",
+  certificationFrom: "certified from",
+  personalWebsite: "Provide a link to your professional website",
+}
+
+export default function ProfessionalInfoStep({ placeholderConfig = defaultPlaceholderConfig }) {
+  // Dropdown lists
+  const dispatch = useDispatch()
+  const occupationslist = [
+    { value: "Digital Marketing", label: "Digital Marketing" },
+    { value: "Web", label: "Web Development" },
+    { value: "Graphic", label: "Graphic Designing" },
+    { value: "figma", label: "Figma Design" },
+  ]
+
+  const skillslist = occupationslist
+
+  const skilllevellist = [
+    { value: "Beginner", label: "Beginner" },
+    { value: "Intermediate", label: "Intermediate" },
+    { value: "Expert", label: "Expert" },
+  ]
+
+  const institutionList = [
+    { value: "harvard", label: "Harvard University" },
+    { value: "mit", label: "MIT" },
+    { value: "stanford", label: "Stanford University" },
+    { value: "berkeley", label: "UC Berkeley" },
+  ]
+
+  const countryList = [
+    { value: "usa", label: "United States" },
+    { value: "uk", label: "United Kingdom" },
+    { value: "canada", label: "Canada" },
+    { value: "australia", label: "Australia" },
+  ]
+
+  const titleList = [
+    { value: "bachelor", label: "Bachelor" },
+    { value: "master", label: "Master" },
+    { value: "doctor", label: "Doctor" },
+  ]
+
+  const majorList = [
+    { value: "computer-science", label: "Computer Science" },
+    { value: "business", label: "Business" },
+    { value: "marketing", label: "Marketing" },
+    { value: "design", label: "Design" },
+  ]
+
+  const yearList = [
+    { value: "2024", label: "2024" },
+    { value: "2023", label: "2023" },
+    { value: "2022", label: "2022" },
+    { value: "2021", label: "2021" },
+  ]
+
+  // Local state for managing arrays
+  const [skillsList, setSkillsList] = useState([])
+  const [educationList, setEducationList] = useState([])
+  const [certificationsList, setCertificationsList] = useState([])
+
+  // Current input states
+  const [currentSkill, setCurrentSkill] = useState(null)
+  const [currentSkillLevel, setCurrentSkillLevel] = useState(null)
+  const [currentEducation, setCurrentEducation] = useState({
+    institution: null,
+    country: null,
+    title: null,
+    major: null,
+    year: null,
+  })
+  const [currentCertification, setCurrentCertification] = useState({
+    name: "",
+    from: "",
+    year: null,
+  })
 
   const {
     control,
     handleSubmit,
     setValue,
-    getValues,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(validationSchema),
@@ -77,311 +141,148 @@ export default function ProfessionalInfoStep() {
       education: [],
       certifications: [],
       personalWebsite: "",
-      newOccupation: "",
-      currentSkill: "",
-      currentSkillLevel: "",
-      currentEducation: {
-        institution: "",
-        level: "",
-        title: "",
-        major: "",
-        year: "",
-      },
-      currentCertification: {
-        name: "",
-        from: "",
-        year: "",
-      },
     },
-  });
+  })
 
+  // Add functions
   const addSkill = () => {
-    const { currentSkill, currentSkillLevel } = getValues();
     if (currentSkill && currentSkillLevel) {
-      const updatedSkills = [
-        ...getValues().skills,
-        { skill: currentSkill, level: currentSkillLevel },
-      ];
-      setValue("skills", updatedSkills);
-      setValue("currentSkill", "");
-      setValue("currentSkillLevel", "");
+      const newSkill = { skill: currentSkill.value, level: currentSkillLevel.value }
+      const updatedSkills = [...skillsList, newSkill]
+      setSkillsList(updatedSkills)
+      setValue("skills", updatedSkills)
+      setCurrentSkill(null)
+      setCurrentSkillLevel(null)
     }
-  };
-
-  const removeSkill = (index) => {
-    const updatedSkills = getValues().skills.filter((_, i) => i !== index);
-    setValue("skills", updatedSkills);
-  };
-
-  const addEducation = () => {
-    const { currentEducation } = getValues();
-    if (currentEducation.institution && currentEducation.level) {
-      const updatedEducation = [
-        ...getValues().education,
-        currentEducation,
-      ];
-      setValue("educations", updatedEducation);
-      setValue("currentEducation", {
-        institution: "",
-        level: "",
-        title: "",
-        major: "",
-        year: "",
-      });
-    }
-  };
-
-  const removeEducation = (index) => {
-    const updatedEducation = getValues().education.filter(
-      (_, i) => i !== index
-    );
-    setValue("education", updatedEducation);
-  };
-
-  const addCertification = () => {
-    const { currentCertification } = getValues();
-    if (currentCertification.name && currentCertification.from) {
-      const updatedCertifications = [
-        ...getValues().certifications,
-        currentCertification,
-      ];
-      setValue("certifications", updatedCertifications);
-      setValue("currentCertification", {
-        name: "",
-        from: "",
-        year: "",
-      });
-    }
-  };
-
-  const removeCertification = (index) => {
-    const updatedCertifications = getValues().certifications.filter(
-      (_, i) => i !== index
-    );
-    setValue("certifications", updatedCertifications);
-  };
-
-  const addNewOccupation = () => {
-    const newOccupation = getValues().newOccupation;
-    if (newOccupation.trim()) {
-      setValue("occupation", newOccupation.trim());
-      setValue("newOccupation", "");
-      setShowNewOccupation(false);
-    }
-  };
-  const { addProfile, isSuccess, isPending, isError, error } = useAddProfile()
-
-  if (isError || error) {
-    toast.error("Failed to update profile.");
-    console.error("Error updating profile:", error);
   }
 
-  
+  const removeSkill = (index) => {
+    const updatedSkills = skillsList.filter((_, i) => i !== index)
+    setSkillsList(updatedSkills)
+    setValue("skills", updatedSkills)
+  }
 
-  console.log("userProfile ", userProfileDetail)
+  const addEducation = () => {
+    if (currentEducation.institution && currentEducation.country) {
+      const newEducation = {
+        institution: currentEducation.institution?.value || "",
+        country: currentEducation.country?.value || "",
+        title: currentEducation.title?.value || "",
+        major: currentEducation.major?.value || "",
+        year: currentEducation.year?.value || "",
+      }
+      const updatedEducation = [...educationList, newEducation]
+      setEducationList(updatedEducation)
+      setValue("education", updatedEducation)
+      setCurrentEducation({
+        institution: null,
+        country: null,
+        title: null,
+        major: null,
+        year: null,
+      })
+    }
+  }
+
+  const removeEducation = (index) => {
+    const updatedEducation = educationList.filter((_, i) => i !== index)
+    setEducationList(updatedEducation)
+    setValue("education", updatedEducation)
+  }
+
+  const addCertification = () => {
+    if (currentCertification.name && currentCertification.from) {
+      const newCertification = {
+        name: currentCertification.name,
+        from: currentCertification.from,
+        year: currentCertification.year?.value || "",
+      }
+      const updatedCertifications = [...certificationsList, newCertification]
+      setCertificationsList(updatedCertifications)
+      setValue("certifications", updatedCertifications)
+      setCurrentCertification({
+        name: "",
+        from: "",
+        year: null,
+      })
+    }
+  }
+
+  const removeCertification = (index) => {
+    const updatedCertifications = certificationsList.filter((_, i) => i !== index)
+    setCertificationsList(updatedCertifications)
+    setValue("certifications", updatedCertifications)
+  }
+
+  const { addProfile, isSuccess, isPending, isError, error } = useAddProfile()
+  const userProfileDetail = useSelector(state => state.userProfile.userProfile)
+
   const onSubmit = (data) => {
-    toast.success("Professional info saved successfully!");
-    let updateData = { ...data, ...userProfileDetail }
-    console.log("updateData: ", updateData)
     const formData = new FormData();
+    let updateData = { ...data, ...userProfileDetail }
+    let { files } = updateData
+    let file = base64ToFile(files[0]?.base64, files[0]?.name, files[0]?.type)
+    formData.append("files", file);
     for (const key in updateData) {
-      if (key === 'files') {
-        updateData.files.forEach((file) => {
-          formData.append("files", file);
-        });
-      }
-      else if (Array.isArray(updateData[key])) {
-        formData.append(key, JSON.stringify(updateData[key]));
-      }
-      else {
-        formData.append(key, updateData[key])
+      if (key !== 'files') {
+        if (Array.isArray(updateData[key])) {
+          formData.append(key, JSON.stringify(updateData[key]));
+        }
+        else {
+          formData.append(key, updateData[key])
+        }
       }
     }
     addProfile(formData)
+    dispatch(resetUserProfile())
   };
 
   return (
     <div className="max-w-6xl mx-auto p-5">
-      {/* Progress Bar Section */}
-      <div className="mb-8">
-        <div className="bg-gray-300 my-6 h-px w-full"></div>
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0 md:space-x-3 mb-5">
-          <div className="flex flex-wrap items-center gap-3">
-            {[1, 2, 3].map((step) => (
-              <div key={step} className="flex items-center gap-1">
-                <div
-                  className={`w-8 h-8 rounded-full flex items-center justify-center ${step === 3
-                    ? "border border-gray-300 bg-white text-gray-300" // active green step 1
-                    : "bg-[#01AEAD] text-white" // inactive steps 2 & 3 "bg-[#01AEAD] text-white"
-                    }`}
-                >
-                  {step}
-                </div>
-                <span
-                  className={`${step === 2 ? "text-[#01AEAD]" : "text-gray-600"
-                    }`}
-                >
-                  {step === 1
-                    ? "Personal Info"
-                    : step === 2
-                      ? "Professional Info"
-                      : "Account Security Info"}
-                </span>
-              </div>
-            ))}
-
-          </div>
-          <div className="w-full md:w-auto">
-            <div className="text-gray-500 text-sm md:text-base mb-2 md:mb-0">
-              Completion Rate: 50%
-            </div>
-            <div className="h-2 w-full bg-gray-200 rounded overflow-hidden">
-              <div
-                className="h-full bg-[#01AEAD] rounded"
-                style={{ width: "66%" }}
-              ></div>
-            </div>
-          </div>
-        </div>
-        <div className="bg-gray-300 my-6 h-px w-full"></div>
-      </div>
-
-      <div className="flex flex-col md:flex-row justify-between md:items-center mb-8">
-        <div>
-          <h2 className="text-2xl font-bold mb-3">Professional Info</h2>
-          <p className="text-gray-600 whitespace-pre-wrap mb-6">
-            {"This is your time to shine. Let potential buyers know what you do\nbest and how you gained your skills, certifications, and experience."}
-          </p>
-        </div>
-        <p className="text-[#01AEAD] text-lg italic font-semibold md:self-end">
-          * Mandatory fields
-        </p>
-      </div>
-
-      <div className="bg-gray-300 mb-4 h-px w-full"></div>
-
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
         {/* Occupation */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
           <div>
-            <label className="block font-semibold text-lg mb-2">
-              Your Occupation *
-            </label>
+            <label className="block font-semibold text-lg mb-2">Your Occupation *</label>
           </div>
           <div>
             <Controller
               name="occupation"
               control={control}
               render={({ field }) => (
-                <select
-                  {...field}
-                  className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-cyan-500"
-                >
-                  <option value="">Select Occupation</option>
-                  <option value="digital-marketing">Digital Marketing</option>
-                  <option value="web-development">Web Development</option>
-                  <option value="graphic-design">Graphic Design</option>
-                  <option value="content-writing">Content Writing</option>
-                  <option value="data-analysis">Data Analysis</option>
-                </select>
+                <ReactSelect
+                  placeholder={placeholderConfig.occupation}
+                  value={occupationslist.find(option => option.value === field.value)}
+                  onChange={(selected) => field.onChange(selected ? selected.value : "")}
+                  option={occupationslist}
+                />
               )}
             />
-            {!showNewOccupation ? (
-              <button
-                type="button"
-                onClick={() => setShowNewOccupation(true)}
-                className="mt-3 text-[#01AEAD] font-bold hover:text-cyan-600 text-sm"
-              >
-                + Add New
-              </button>
-            ) : (
-              <div className="mt-3 flex flex-col sm:flex-row gap-2">
-                <Controller
-                  name="newOccupation"
-                  control={control}
-                  render={({ field }) => (
-                    <input
-                      {...field}
-                      type="text"
-                      placeholder="Enter new occupation"
-                      className="w-full p-2 border border-gray-300 rounded text-sm"
-                    />
-                  )}
-                />
-                <button
-                  type="button"
-                  onClick={addNewOccupation}
-                  className="w-full sm:w-auto px-3 py-2 bg-[#01AEAD] text-white rounded text-sm hover:bg-cyan-600"
-                >
-                  Add
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setValue("newOccupation", "");
-                    setShowNewOccupation(false);
-                  }}
-                  className="w-full sm:w-auto px-3 py-2 bg-gray-300 text-gray-700 rounded text-sm hover:bg-gray-400"
-                >
-                  Cancel
-                </button>
-              </div>
-            )}
-            {errors.occupation && (
-              <p className="text-red-500 text-sm mt-2">
-                {errors.occupation.message}
-              </p>
-            )}
-            {errors.newOccupation && (
-              <p className="text-red-500 text-sm mt-2">
-                {errors.newOccupation.message}
-              </p>
-            )}
+            {errors.occupation && <p className="text-red-500 text-sm mt-2">{errors.occupation.message}</p>}
           </div>
         </div>
 
         {/* Skills */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
           <div>
             <label className="block font-semibold text-lg mb-2">Skills *</label>
             <p className="text-sm text-gray-600 whitespace-pre-wrap">
-              {"List the skills related to the services you're offering and\nadd your experience level."}
+              {"List the skills related to the services you're offering\nand add your experience level."}
             </p>
           </div>
           <div>
             <div className="flex flex-col border p-3 rounded-lg border-gray-300 sm:flex-row gap-3 items-stretch sm:items-center mb-4">
-              <Controller
-                name="currentSkill"
-                control={control}
-                render={({ field }) => (
-                  <select
-                    {...field}
-                    className="w-full sm:flex-1 p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-cyan-500"
-                  >
-                    <option value="">Add Skill (e.g. Voice Talent)</option>
-                    <option value="voice-talent">Voice Talent</option>
-                    <option value="video-editing">Video Editing</option>
-                    <option value="copywriting">Copywriting</option>
-                    <option value="seo">SEO</option>
-                    <option value="social-media">Social Media</option>
-                    <option value="web-design">Web Design</option>
-                  </select>
-                )}
+              <ReactSelect
+                placeholder={placeholderConfig.skill}
+                value={currentSkill}
+                onChange={setCurrentSkill}
+                option={skillslist}
               />
-              <Controller
-                name="currentSkillLevel"
-                control={control}
-                render={({ field }) => (
-                  <select
-                    {...field}
-                    className="w-full sm:w-auto sm:min-w-[150px] p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-cyan-500"
-                  >
-                    <option value="">Experience Level</option>
-                    <option value="beginner">Beginner</option>
-                    <option value="intermediate">Intermediate</option>
-                    <option value="expert">Expert</option>
-                  </select>
-                )}
+              <ReactSelect
+                placeholder={placeholderConfig.skillLevel}
+                value={currentSkillLevel}
+                onChange={setCurrentSkillLevel}
+                option={skilllevellist}
               />
               <button
                 type="button"
@@ -392,20 +293,18 @@ export default function ProfessionalInfoStep() {
               </button>
             </div>
 
-            {getValues().skills.length > 0 && (
+            {skillsList.length > 0 && (
               <div className="space-y-2 mb-4">
-                {getValues().skills.map((skill, index) => (
-                  <div
-                    key={index}
-                    className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-gray-50 p-3 rounded"
-                  >
-                    <span className="capitalize">
+                <h4 className="font-medium">Added Skills:</h4>
+                {skillsList.map((skill, index) => (
+                  <div key={index} className="flex justify-between items-center bg-gray-50 p-3 rounded">
+                    <span>
                       {skill.skill} - {skill.level}
                     </span>
                     <button
                       type="button"
                       onClick={() => removeSkill(index)}
-                      className="text-red-500 hover:text-red-700 text-sm mt-2 sm:mt-0"
+                      className="text-red-500 hover:text-red-700 text-sm"
                     >
                       Remove
                     </button>
@@ -413,16 +312,12 @@ export default function ProfessionalInfoStep() {
                 ))}
               </div>
             )}
-            {errors.skills && (
-              <p className="text-red-500 text-sm mt-2">
-                {errors.skills.message}
-              </p>
-            )}
+            {errors.skills && <p className="text-red-500 text-sm mt-2">{errors.skills.message}</p>}
           </div>
         </div>
 
-        {/* Education Section */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+        {/* Education */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
           <div>
             <label className="block font-semibold text-lg mb-2">Education</label>
             <p className="text-sm text-gray-600 whitespace-pre-wrap">
@@ -432,85 +327,37 @@ export default function ProfessionalInfoStep() {
           <div>
             <div className="space-y-3 border p-3 rounded-lg border-gray-300 mb-4">
               <div className="flex flex-col sm:flex-row gap-3">
-                <Controller
-                  name="currentEducation.institution"
-                  control={control}
-                  render={({ field }) => (
-                    <select
-                      {...field}
-                      className="w-full sm:flex-1 p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-cyan-500"
-                    >
-                      <option value="">Country or College/University</option>
-                      <option value="harvard">Harvard University</option>
-                      <option value="mit">MIT</option>
-                      <option value="stanford">Stanford University</option>
-                      <option value="berkeley">UC Berkeley</option>
-                    </select>
-                  )}
+                <ReactSelect
+                  placeholder={placeholderConfig.institution}
+                  value={currentEducation.institution}
+                  onChange={(selected) => setCurrentEducation({ ...currentEducation, institution: selected })}
+                  option={institutionList}
                 />
-                <Controller
-                  name="currentEducation.level"
-                  control={control}
-                  render={({ field }) => (
-                    <select
-                      {...field}
-                      className="w-full sm:w-auto sm:min-w-[150px] p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-cyan-500"
-                    >
-                      <option value="">Country</option>
-                      <option value="bachelors">Bachelor's</option>
-                      <option value="masters">Master's</option>
-                      <option value="phd">PhD</option>
-                    </select>
-                  )}
+                <ReactSelect
+                  placeholder={placeholderConfig.country}
+                  value={currentEducation.country}
+                  onChange={(selected) => setCurrentEducation({ ...currentEducation, country: selected })}
+                  option={countryList}
                 />
               </div>
-              <div className="flex flex-col  sm:flex-row gap-3 items-stretch">
-                <Controller
-                  name="currentEducation.title"
-                  control={control}
-                  render={({ field }) => (
-                    <select
-                      {...field}
-                      className="w-full sm:w-auto p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-cyan-500"
-                    >
-                      <option value="">Title</option>
-                      <option value="bachelor">Bachelor</option>
-                      <option value="master">Master</option>
-                      <option value="doctor">Doctor</option>
-                    </select>
-                  )}
+              <div className="flex flex-col sm:flex-row gap-3 items-stretch">
+                <ReactSelect
+                  placeholder={placeholderConfig.title}
+                  value={currentEducation.title}
+                  onChange={(selected) => setCurrentEducation({ ...currentEducation, title: selected })}
+                  option={titleList}
                 />
-                <Controller
-                  name="currentEducation.major"
-                  control={control}
-                  render={({ field }) => (
-                    <select
-                      {...field}
-                      className="w-full sm:flex-1 p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-cyan-500"
-                    >
-                      <option value="">Major</option>
-                      <option value="computer-science">Computer Science</option>
-                      <option value="business">Business</option>
-                      <option value="marketing">Marketing</option>
-                      <option value="design">Design</option>
-                    </select>
-                  )}
+                <ReactSelect
+                  placeholder={placeholderConfig.major}
+                  value={currentEducation.major}
+                  onChange={(selected) => setCurrentEducation({ ...currentEducation, major: selected })}
+                  option={majorList}
                 />
-                <Controller
-                  name="currentEducation.year"
-                  control={control}
-                  render={({ field }) => (
-                    <select
-                      {...field}
-                      className="w-full sm:w-auto sm:min-w-[100px] p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-cyan-500"
-                    >
-                      <option value="">Year</option>
-                      <option value="2024">2024</option>
-                      <option value="2023">2023</option>
-                      <option value="2022">2022</option>
-                      <option value="2021">2021</option>
-                    </select>
-                  )}
+                <ReactSelect
+                  placeholder={placeholderConfig.year}
+                  value={currentEducation.year}
+                  onChange={(selected) => setCurrentEducation({ ...currentEducation, year: selected })}
+                  option={yearList}
                 />
                 <button
                   type="button"
@@ -522,21 +369,18 @@ export default function ProfessionalInfoStep() {
               </div>
             </div>
 
-            {getValues().education.length > 0 && (
+            {educationList.length > 0 && (
               <div className="space-y-2 mb-4">
-                {getValues().education.map((edu, index) => (
-                  <div
-                    key={index}
-                    className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-gray-50 p-3 rounded"
-                  >
+                <h4 className="font-medium">Added Education:</h4>
+                {educationList.map((edu, index) => (
+                  <div key={index} className="flex justify-between items-center bg-gray-50 p-3 rounded">
                     <span>
-                      {edu.title} in {edu.major} from {edu.institution} (
-                      {edu.year})
+                      {edu.title} in {edu.major} from {edu.institution} ({edu.year})
                     </span>
                     <button
                       type="button"
                       onClick={() => removeEducation(index)}
-                      className="text-red-500 hover:text-red-700 text-sm mt-2 sm:mt-0"
+                      className="text-red-500 hover:text-red-700 text-sm"
                     >
                       Remove
                     </button>
@@ -544,60 +388,57 @@ export default function ProfessionalInfoStep() {
                 ))}
               </div>
             )}
+            {errors.education && <p className="text-red-500 text-sm mt-2">{errors.education.message}</p>}
           </div>
         </div>
 
         {/* Certification */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
           <div>
-            <label className="block font-semibold text-lg mb-2">
-              Certification
-            </label>
+            <label className="block font-semibold text-lg mb-2">Certification</label>
             <p className="text-sm text-gray-600 whitespace-pre-wrap">
               {"Include any certificates or awards that are relevant to\nthe services you offer."}
             </p>
           </div>
           <div>
-            <div className="flex flex-col border p-3 rounded-lg border-gray-300 sm:flex-row gap-3 mb-4">
+            <div className="flex w-full lg:w-xl flex-col sm:flex-row border p-3 rounded-lg border-gray-300 gap-2 mb-4">
               <Controller
-                name="currentCertification.name"
+                name="certificationName"
                 control={control}
                 render={({ field }) => (
                   <input
                     {...field}
                     type="text"
-                    placeholder="Certificate name"
-                    className="w-full sm:flex-1 p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                    placeholder={placeholderConfig.certificationName}
+                    className=" sm:flex-1 p-3  lg:p-1 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                    onChange={(e) => {
+                      field.onChange(e)
+                      setCurrentCertification({ ...currentCertification, name: e.target.value })
+                    }}
                   />
                 )}
               />
               <Controller
-                name="currentCertification.from"
+                name="certificationFrom"
                 control={control}
                 render={({ field }) => (
                   <input
                     {...field}
                     type="text"
-                    placeholder="Certified from"
-                    className="w-full sm:flex-1 p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                    placeholder={placeholderConfig.certificationFrom}
+                    className=" sm:flex-1  p-3 lg:p-1 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                    onChange={(e) => {
+                      field.onChange(e)
+                      setCurrentCertification({ ...currentCertification, from: e.target.value })
+                    }}
                   />
                 )}
               />
-              <Controller
-                name="currentCertification.year"
-                control={control}
-                render={({ field }) => (
-                  <select
-                    {...field}
-                    className="w-full sm:w-auto sm:min-w-[100px] p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-cyan-500"
-                  >
-                    <option value="">Year</option>
-                    <option value="2024">2024</option>
-                    <option value="2023">2023</option>
-                    <option value="2022">2022</option>
-                    <option value="2021">2021</option>
-                  </select>
-                )}
+              <ReactSelect
+                placeholder={placeholderConfig.year}
+                value={currentCertification.year}
+                onChange={(selected) => setCurrentCertification({ ...currentCertification, year: selected })}
+                option={yearList}
               />
               <button
                 type="button"
@@ -607,20 +448,19 @@ export default function ProfessionalInfoStep() {
                 Add
               </button>
             </div>
-            {getValues().certifications.length > 0 && (
+
+            {certificationsList.length > 0 && (
               <div className="space-y-2">
-                {getValues().certifications.map((cert, index) => (
-                  <div
-                    key={index}
-                    className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-gray-50 p-3 rounded"
-                  >
+                <h4 className="font-medium">Added Certifications:</h4>
+                {certificationsList.map((cert, index) => (
+                  <div key={index} className="flex justify-between items-center bg-gray-50 p-3 rounded">
                     <span>
                       {cert.name} from {cert.from} ({cert.year})
                     </span>
                     <button
                       type="button"
                       onClick={() => removeCertification(index)}
-                      className="text-red-500 hover:text-red-700 text-sm mt-2 sm:mt-0"
+                      className="text-red-500 hover:text-red-700 text-sm"
                     >
                       Remove
                     </button>
@@ -632,16 +472,14 @@ export default function ProfessionalInfoStep() {
         </div>
 
         {/* Personal Website */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
           <div>
-            <label className="block font-semibold text-lg mb-2">
-              Personal Website
-            </label>
+            <label className="block font-semibold text-lg mb-2">Personal Website</label>
             <p className="text-sm text-gray-600 whitespace-pre-wrap">
               {"If you have a personal website, portfolio, or blog,\nadd the link here."}
             </p>
           </div>
-          <div className="border p-3 border-gray-300 rounded-lg " >
+          <div className="border p-3 border-gray-300 rounded-lg">
             <Controller
               name="personalWebsite"
               control={control}
@@ -649,29 +487,27 @@ export default function ProfessionalInfoStep() {
                 <input
                   {...field}
                   type="text"
-                  placeholder="Provide a link to your own professional website"
-                  className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                  placeholder={placeholderConfig.personalWebsite}
+                  className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-cyan-500"
                 />
               )}
             />
-            {errors.personalWebsite && (
-              <p className="text-red-500 text-sm mt-2">
-                {errors.personalWebsite.message}
-              </p>
-            )}
+            {errors.personalWebsite && <p className="text-red-500 text-sm mt-2">{errors.personalWebsite.message}</p>}
           </div>
         </div>
 
         {/* Submit Button */}
-        <div className="flex ">
+        <div className="flex justify-end">
           <button
+            disabled={isPending ? true : false}
             type="submit"
-            className="px-6 py-3 flex  bg-[#043A53] text-white rounded-3xl hover:bg-cyan-600"
+            className={`flex items-center gap-2 px-6 py-3  text-white rounded  transition-colors
+              ${isPending ? 'bg-[#01aeae97]' : 'bg-[#01AEAD] hover:bg-cyan-600'}`}
           >
-            Continue <ArrowRight className="h-6 w-5" />
+            Next <ArrowRight className="w-5 h-5" />
           </button>
         </div>
       </form>
     </div>
-  );
+  )
 }

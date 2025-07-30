@@ -17,7 +17,6 @@ import {
   navTabsClientDashboard,
   navTabsSuperAdminDashboard
 } from "../../constants/navbar_navigation";
-import { useCheckIsFreelancer } from "../../api/client/user";
 import NotificationDropdown from "./NotificationDropdown";
 import NotificationBell from "./notificationBell";
 import { setUserType } from "../../redux/slices/userType";
@@ -38,7 +37,6 @@ export default function Navbar() {
   const client = userDetails;
   const freelancer = useSelector((state) => state.userProfile.userProfile);
 
-  const { data: freelancerCheck } = useCheckIsFreelancer();
   const logout = useLogout();
 
   useEffect(() => {
@@ -129,11 +127,11 @@ export default function Navbar() {
         </div>
 
         {/* Navigation Tabs for Desktop */}
-        {pathname.includes("/freelancer") ? (
+        {(pathname.includes("/freelancer") ) ? (
           <nav className="ml-10 sm:flex space-x-1 hidden md:flex">
             {renderNavTabs(navTabsFreelancerDashboard)}
           </nav>
-        ) : pathname.includes("/client/") ? (
+        ) : (pathname.includes("/client/")) ? (
           <nav className="ml-10 sm:flex space-x-1 hidden md:flex">
             {renderNavTabs(navTabsClientDashboard)}
           </nav>
@@ -169,14 +167,14 @@ export default function Navbar() {
         ):(
           <nav className="show_nav_links_desktop space-x-6 items-center hidden md:flex">
             {navigation.map((item) => (
-              <a
+              <Link
                 key={item.name}
-                href={item.href}
+                to={item.href}
                 className="text-black font-semibold hover:text-[#15A9B2] transition"
               >
                 {item.name !== "Login" && item.name}
                 {!["Contact Us", "Login"].includes(item.name)}
-              </a>
+              </Link>
             ))}
           </nav>
         )}
@@ -196,7 +194,7 @@ export default function Navbar() {
                 className="w-10 h-10 rounded-full overflow-hidden border border-gray-300"
               >
                 <img
-                  src={pathname.includes("freelancer") ? dp : userDetails?.userImg}
+                  src={pathname.includes("freelancer") ? freelancer?.fileUrl : userDetails?.userImg}
                   alt="User Profile"
                   className="w-full h-full object-cover"
                 />

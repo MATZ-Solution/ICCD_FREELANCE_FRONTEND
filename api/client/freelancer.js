@@ -4,7 +4,8 @@ import API_ROUTE from "../endpoints";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { setFreelancerID } from "../../redux/slices/userSlice";
 import { useSelector } from "react-redux";
-
+import { useNavigate } from "react-router-dom";
+import { setUserProfile } from "../../redux/slices/userProfileSlice";
 
 export function useGetFreelDashboardData() {
    const freelancerDetails = useSelector(state=> state.userProfile.userProfile)
@@ -42,6 +43,7 @@ export function useGetFreelancerProfile() {
 
 export function useAddProfile() {
   const queryClient = useQueryClient();
+  const navigate = useNavigate()
   const dispatch = useDispatch()
   const {
     mutate: addProfile,
@@ -60,10 +62,14 @@ export function useAddProfile() {
       }),
     onSuccess: (data, res) => {
       alert("Profile added successfully!");
-      dispatch(setFreelancerID(data?.data?.freelancerId))
+      dispatch(setUserProfile({id: data?.data?.freelancerId}))
       queryClient.invalidateQueries({
         queryKey: [API_ROUTE.freelancer.getFreelancerProfile],
       });
+      queryClient.invalidateQueries({
+        queryKey: [API_ROUTE.freelancer.checkIsFreelancer],
+      });
+      navigate('/client')
     },
     onError: (error) => {
       // Toast.show({

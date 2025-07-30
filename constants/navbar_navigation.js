@@ -29,4 +29,5 @@
     { name: "Users", path: '/superadmin/reviews' },
     { name: "Jobs", path: '/superadmin/manage-jobs'},
     { name: "Analytics", path: '/superadmin/reviews',  },
+    // { name: "Analytics", path: '/freelancer/analytics',  },
   ];

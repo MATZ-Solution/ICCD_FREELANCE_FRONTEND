@@ -9,6 +9,7 @@ import { useAddproject, useEditProjects, useGetProjectsById } from "../../../api
 import { useParams } from "react-router-dom";
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import ICCDError from '../../component/ICCDError';
 
 // Yup schema with Language as an array
 const schema = yup.object({
@@ -393,7 +394,7 @@ const ProjectForm = () => {
                 type="date"
                 id="deadline"
                 value={value ? new Date(value).toISOString().split("T")[0] : ""}
-                onChange={(e) => onChange(e.target.value ? new Date(e.target.value) : null)}
+                onChange={(e) => onChange(e.target.value ? new Date(e.target.value).toISOString().slice(0, 19).replace('T', ' ') : null)}
                 className="w-full border rounded px-3 py-2 mt-1 focus:ring-teal-500 focus:border-teal-500"
                 aria-label="Project deadline"
               />
