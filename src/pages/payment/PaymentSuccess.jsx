@@ -13,25 +13,10 @@ function SuccessPage() {
 
   const dispatch = useDispatch();
   const order = useSelector((state) => state.order);
+  const userDetails = useSelector((state) => state.user.userDetails);
 
-  
-  useEffect(() => {
-    const sessionId = searchParams.get("session_id");
 
-    if (!sessionId) {
-      setError("Session ID not found in URL");
-      setLoading(false);
-      return;
-    }
-
-    fetchSessionAndProcessOrder(sessionId);
-  }, [searchParams]);
-
-  if (loading ) {
-         return <ICCDLoader /> 
-       }
-
-  const fetchSessionAndProcessOrder = async (sessionId) => {
+    const fetchSessionAndProcessOrder = async (sessionId) => {
     try {
       // Fetch session data from Stripe
       const sessionResponse = await fetch(`http://localhost:2300/stripe/session?session_id=${sessionId}`);
@@ -58,6 +43,7 @@ function SuccessPage() {
         freelancer_id: order.freelancer_id,
         client_id: order.client_id,
         gig_id: order.gig_id,
+        customerId: userDetails.id
       };
 
 
@@ -99,6 +85,22 @@ function SuccessPage() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    const sessionId = searchParams.get("session_id");
+
+    if (!sessionId) {
+      setError("Session ID not found in URL");
+      setLoading(false);
+      return;
+    }
+
+    fetchSessionAndProcessOrder(sessionId);
+  }, [searchParams]);
+
+
+
+
 
   if (loading) {
     return (
@@ -157,6 +159,10 @@ function SuccessPage() {
         </button>
       </div>
     );
+  }
+
+  if (loading) {
+    return <ICCDLoader />
   }
 
   return (

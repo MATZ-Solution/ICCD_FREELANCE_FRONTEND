@@ -1,3 +1,4 @@
+import { useSelector } from "react-redux";
 import api from "../axios";
 import API_ROUTE from "../endpoints";
 import { useMutation, useQuery, useQueryClient, useInfiniteQuery } from "@tanstack/react-query";
@@ -35,9 +36,14 @@ export function useAddMessage() {
 }
 
 export function useGetAllMessagesByUser() {
+    const user = useSelector(state => state.userType.user)
+    const constructQueryString = (params) => {
+        const query = new URLSearchParams(params).toString();
+        return query ? `&${query}` : "";
+    };
     const { data, isSuccess, isPending, isError, isLoading } = useQuery({
         queryKey: [API_ROUTE.messages.getAllMessageByUser],
-        queryFn: async () => await api.get(`${API_ROUTE.messages.getAllMessageByUser}`),
+        queryFn: async () => await api.get(`${API_ROUTE.messages.getAllMessageByUser}?${constructQueryString(user)}`),
     });
     return {
         data: data?.data?.data,

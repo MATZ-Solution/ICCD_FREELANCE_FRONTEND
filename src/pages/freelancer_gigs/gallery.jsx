@@ -29,9 +29,9 @@ function Gallery() {
   };
 
   const handleDeleteImage = (fileObj) => {
-    if (fileObj?.fileKey) {
-      setDelImgFileKey((prevItems) => [...prevItems, fileObj.fileKey]);
-    }
+    // if (fileObj?.fileKey) {
+    //   setDelImgFileKey((prevItems) => [...prevItems, fileObj.fileKey]);
+    // }
     setImages((prev) => prev.filter((img) => img.fileUrl !== fileObj.fileUrl));
   };
 
