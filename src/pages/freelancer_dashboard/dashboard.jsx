@@ -49,7 +49,7 @@ export default function FreelancerDashboard() {
             </div>
             <button
               onClick={() => navigate("/freelancer/edit-profile")}
-              className="w-full mt-4 px-4 py-2 text-sm border border-[#01AEAD] rounded-md text-gray-700"
+              className="w-full mt-4 px-4 py-2 text-sm border border-[#01AEAD] rounded-md text-gray-700 hover:bg-green-600 hover:text-white cursor-pointer"
             >
               Edit Profile
             </button>
@@ -65,7 +65,7 @@ export default function FreelancerDashboard() {
             </div>
             <button
               onClick={() => navigate("/freelancer/edit-profile")}
-              className="w-full mt-4 px-4 py-2 text-sm border border-[#01AEAD] rounded-md text-gray-700"
+              className="w-full mt-4 px-4 py-2 text-sm border border-[#01AEAD] rounded-md text-gray-700 hover:bg-green-600 hover:text-white cursor-pointer"
             >
               View
             </button>

@@ -773,7 +773,17 @@ export const router = createBrowserRouter([
     ),
   },
   {
-    path: "/messages",
+    path: "/client/messages",
+    element: (
+      // <AuthRoute>
+      <MainTemplate isShowFooter={false}>
+        <WhatsAppClone />
+      </MainTemplate>
+      // </AuthRoute>
+    ),
+  },
+  {
+    path: "/freelancer/messages",
     element: (
       // <AuthRoute>
       <MainTemplate isShowFooter={false}>

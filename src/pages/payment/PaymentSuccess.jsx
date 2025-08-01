@@ -87,8 +87,8 @@ function SuccessPage() {
   };
 
   useEffect(() => {
+    console.log("useEffect is called!")
     const sessionId = searchParams.get("session_id");
-
     if (!sessionId) {
       setError("Session ID not found in URL");
       setLoading(false);
@@ -96,8 +96,7 @@ function SuccessPage() {
     }
 
     fetchSessionAndProcessOrder(sessionId);
-  }, [searchParams]);
-
+  }, []);
   // if (loading ) {
   //        return <ICCDLoader /> 
   //      }

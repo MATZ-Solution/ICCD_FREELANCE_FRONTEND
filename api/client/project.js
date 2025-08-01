@@ -2,38 +2,30 @@ import { toast } from "react-toastify";
 import api from "../axios";
 import API_ROUTE from "../endpoints";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 
 // multipart form data
 export function useAddproject() {
-    // const pathname = usePathname();
-    // const queryClient = useQueryClient();
-    // const { dispatch } = useGlobalState();
-
-    const { mutate: addProject, isSuccess, isPending, isError, error} = useMutation({
-        mutationFn: async (data) =>
-            await api.post(`${API_ROUTE.project.addProject}`, data, {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                    Authorization: api.defaults.headers.common["Authorization"],
-                },
-                timeout: 30000,
-            }),
-        onSuccess: (data) => {
-            toast.success("Project added successfully!")
-            
-
+  const navigate = useNavigate()
+  const { mutate: addProject, isSuccess, isPending, isError, error } = useMutation({
+    mutationFn: async (data) =>
+      await api.post(`${API_ROUTE.project.addProject}`, data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: api.defaults.headers.common["Authorization"],
         },
-        onError: (error) => {
-            // Toast.show({
-            //     type: "error",
-            //     text1: "Error",
-            //     text2: "Failed to edit scout",
-            // });
-              toast.error("Error in Adding Project added !" )
+        timeout: 30000,
+      }),
+    onSuccess: (data) => {
+      toast.success("Project added successfully!")
+      navigate('/client/projects')
+    },
+    onError: (error) => {
+      toast.error("Error in Adding Project added !")
 
-        },
-    });
-    return { addProject, isSuccess, isPending, isError, error };
+    },
+  });
+  return { addProject, isSuccess, isPending, isError, error };
 }
 
 // get project by user
@@ -82,31 +74,31 @@ export function useGetProjectsById(id) {
 }
 
 export function useApplyProject() {
-    
-    const { mutate: submitProposals, isSuccess, isPending, isError, error} = useMutation({
-        mutationFn: async (data) =>
-            await api.post(`${API_ROUTE.project.submitProposals}`, data, {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                    Authorization: api.defaults.headers.common["Authorization"],
-                },
-                timeout: 30000,
-            }),
-        onSuccess: (data) => {
-            toast.success("CV send successfully!")
 
+  const { mutate: submitProposals, isSuccess, isPending, isError, error } = useMutation({
+    mutationFn: async (data) =>
+      await api.post(`${API_ROUTE.project.submitProposals}`, data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: api.defaults.headers.common["Authorization"],
         },
-        onError: (error) => {
-            // Toast.show({
-            //     type: "error",
-            //     text1: "Error",
-            //     text2: "Failed to edit scout",
-            // });
-                        toast.error("error in sending cv !")
+        timeout: 30000,
+      }),
+    onSuccess: (data) => {
+      toast.success("CV send successfully!")
 
-        },
-    });
-    return { submitProposals, isSuccess, isPending, isError, error };
+    },
+    onError: (error) => {
+      // Toast.show({
+      //     type: "error",
+      //     text1: "Error",
+      //     text2: "Failed to edit scout",
+      // });
+      toast.error("error in sending cv !")
+
+    },
+  });
+  return { submitProposals, isSuccess, isPending, isError, error };
 }
 
 export function useGetProjectProposalByClient(id) {
@@ -124,10 +116,7 @@ export function useGetProjectProposalByClient(id) {
 }
 
 export function useEditProjects(id) {
-  // const pathname = usePathname();
-  // const queryClient = useQueryClient();
-  // const { dispatch } = useGlobalState();
-
+  const navigate = useNavigate()
   const {
     mutate: editProject,
     isSuccess,
@@ -144,10 +133,9 @@ export function useEditProjects(id) {
         timeout: 30000,
       }),
     onSuccess: (data) => {
-      //  queryClient.invalidateQueries({
-      //   queryKey: [API_ROUTE.project.getProjectByClient],
-      // });
-      toast.success("project Edit Successfully")
+      toast.success("Project Edit Successfully")
+      navigate('/client/projects')
+
     },
     onError: (error) => {
       // Toast.show({
@@ -155,7 +143,7 @@ export function useEditProjects(id) {
       //     text1: "Error",
       //     text2: "Failed to edit scout",
       // });
-            toast.error("error in Editing project " )
+      toast.error("error in Editing project ")
 
     },
   });
