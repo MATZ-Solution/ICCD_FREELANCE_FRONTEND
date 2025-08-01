@@ -92,7 +92,7 @@ export default function Navbar() {
           { name: "Switch to Freelancer", action: handleSwitchClient },
           { name: "Dashboard", action: () => navigate("/client/dashboard") },
           { name: "View Profile", action: () => navigate("/client/profile") },
-          { name: "Order", action: () => navigate("/client/order") },
+          { name: "Order", action: () => navigate("/client/orders") },
           { name: "Logout", action: logout },
         ];
 

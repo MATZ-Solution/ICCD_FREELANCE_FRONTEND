@@ -6,19 +6,19 @@ import ICCDLoader from "../../component/loader";
 import ICCDError from "../../component/ICCDError";
 
 function Orders() {
+  
   const [active, setActive] = useState('Active');
   const navigation = ['Active', 'Pending Approval', 'Requires Modification', 'Draft', 'Denied', 'Paused'];
   let [search, setSearch] = useState('')
-
   const { data, error, isLoading, isError } = useGetOrderByFreelancer({ search: search });
-  console.log("data: ", data);
-  if (isLoading ) {
-         return <ICCDLoader /> 
-       }
 
-         if (error || isError) {
-         return <ICCDError /> 
-       }
+  // if (isLoading ) {
+  //        return <ICCDLoader /> 
+  //      }
+
+  //        if (error || isError) {
+  //        return <ICCDError /> 
+  //      }
 
 
   return (
@@ -32,6 +32,7 @@ function Orders() {
 
         <div className="relative w-full sm:w-72">
           <input
+          value={search}
             onChange={(e) => setSearch(e.target.value)}
             type="search"
             className="border border-gray-400 rounded-md bg-white w-full h-10 px-3 pr-10 text-sm sm:text-base

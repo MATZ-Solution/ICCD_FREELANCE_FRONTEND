@@ -79,7 +79,7 @@ export default function FreelancerDashboard() {
           </h1>
           <p className="text-xs text-gray-600 mb-4">Find helpful resources and stats here.</p>
 
-          {showVerificationAlert && (
+          {/* {showVerificationAlert && (
             <div className="flex items-start sm:items-center gap-3 bg-yellow-50 w-full rounded-lg p-4 relative">
               <div className="w-6 h-6 bg-yellow-400 rounded-full flex items-center justify-center">
                 <span className="text-black text-xs font-bold">!</span>
@@ -97,7 +97,7 @@ export default function FreelancerDashboard() {
                 </button>
               </div>
             </div>
-          )}
+          )} */}
 
           {/* Stats Cards */}
           <div className="grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 my-6">

@@ -2,6 +2,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 
 const OrderTable = ({ data }) => {
 
+  console.log("data: ", data)
     const pathName = useLocation().pathname;
     const navigate = useNavigate();
   

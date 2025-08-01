@@ -8,6 +8,7 @@ const Payment = () => {
 
   const order = useSelector((state) => state.order)
   const { quantity, basePrice, totalPrice, packageType, packageDescription, delivery, revisions } = order
+  console.log("orders: ", order)
 
   if (!order.packageType)
     return (
