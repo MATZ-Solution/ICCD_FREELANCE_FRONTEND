@@ -51,7 +51,10 @@ const API_ROUTE = {
     getAllOrderByClient: '/order/getAllOrderByClient'
   },
   stripeorder: {
+  getOrderByFreelancer: '/stripe/getAllOrderByFreelancer',   
   getOrderAllOrder: '/stripe/getAllOrder',
+  getSingleOrderByFreelancer: '/stripe/getSingleOrderByFreelancer',
+
   },
   messages: {
     addMessageByUser: '/messages/addMessageByUser',

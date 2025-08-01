@@ -150,7 +150,7 @@ function Jobs() {
                   <BookmarkBorderIcon className="absolute right-4 top-5 scale-125" />
                   <h1 className="font-bold text-xl">{job.jobTitle}</h1>
                   <p className="capitalize mt-3">{job.jobType}</p>
-                  <p className="mt-3">{job.name}</p>
+                  <p className=" capitalize mt-3">{job.name}</p>
                   <p>{job.companyName}</p>
                   <p className="mt-3">{job.joblocation}</p>
                   <div className="flex gap-2 mt-2">
@@ -212,7 +212,10 @@ function Jobs() {
                       </div>
                     </div>
                     <h1 className="mt-4 text-lg font-bold">Description</h1>
-                    <p className="mt-2 text-sm bg-gray-200 p-1 rounded-md">{job.jobDescription}</p>
+<div
+  className="mt-2 text-sm bg-gray-200 p-1 rounded-md"
+  dangerouslySetInnerHTML={{ __html: job.jobDescription }}
+/>
                   </div>
                 </div>
               </div>

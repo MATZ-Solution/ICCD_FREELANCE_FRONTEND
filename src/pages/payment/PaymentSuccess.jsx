@@ -15,22 +15,6 @@ function SuccessPage() {
   const order = useSelector((state) => state.order);
 
   
-  useEffect(() => {
-    const sessionId = searchParams.get("session_id");
-
-    if (!sessionId) {
-      setError("Session ID not found in URL");
-      setLoading(false);
-      return;
-    }
-
-    fetchSessionAndProcessOrder(sessionId);
-  }, [searchParams]);
-
-  if (loading ) {
-         return <ICCDLoader /> 
-       }
-
   const fetchSessionAndProcessOrder = async (sessionId) => {
     try {
       // Fetch session data from Stripe
@@ -99,6 +83,23 @@ function SuccessPage() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    const sessionId = searchParams.get("session_id");
+
+    if (!sessionId) {
+      setError("Session ID not found in URL");
+      setLoading(false);
+      return;
+    }
+
+    fetchSessionAndProcessOrder(sessionId);
+  }, [searchParams]);
+
+  // if (loading ) {
+  //        return <ICCDLoader /> 
+  //      }
+
 
   if (loading) {
     return (

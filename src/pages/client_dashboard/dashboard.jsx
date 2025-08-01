@@ -24,6 +24,7 @@ import { useGetClientDashboardData } from "../../../api/client/clients";
 import { SquarePen } from "lucide-react";
 import AboutModal from "../../component/client_dashboard/aboutModal";
 import ICCDLoader from "../../component/loader";
+import ICCDError from "../../component/ICCDError";
 
 export default function ClientDashboard() {
   const [activeNavTab, setActiveNavTab] = useState("Dashboard");

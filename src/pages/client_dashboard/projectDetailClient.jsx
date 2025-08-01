@@ -159,9 +159,11 @@ export const ProjectDetailClient = () => {
                 <h2 className="text-xl font-bold text-gray-900">Deliverables</h2>
               </div>
               <div className="p-8 space-y-6">
-                <p className="text-gray-700 leading-relaxed text-lg">
-                  {data[0]?.deliverable}
-                </p>
+               
+                 <div
+                className="prose prose-sm prose-gray max-w-none"
+                dangerouslySetInnerHTML={{ __html: data[0]?.deliverable }}
+              />
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {/* <div className="bg-gradient-to-br from-orange-50 to-red-50 p-6 rounded-xl border border-orange-200">

@@ -11,6 +11,7 @@ function Orders() {
   let [search, setSearch] = useState('')
 
   const { data, error, isLoading, isError } = useGetOrderByFreelancer({ search: search });
+  console.log("data: ", data);
   if (isLoading ) {
          return <ICCDLoader /> 
        }

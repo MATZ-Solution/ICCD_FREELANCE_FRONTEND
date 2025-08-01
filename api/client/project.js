@@ -1,3 +1,4 @@
+import { toast } from "react-toastify";
 import api from "../axios";
 import API_ROUTE from "../endpoints";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -18,7 +19,8 @@ export function useAddproject() {
                 timeout: 30000,
             }),
         onSuccess: (data) => {
-            alert("Project added successfully!")
+            toast.success("Project added successfully!")
+            
 
         },
         onError: (error) => {
@@ -27,6 +29,8 @@ export function useAddproject() {
             //     text1: "Error",
             //     text2: "Failed to edit scout",
             // });
+              toast.error("Error in Adding Project added !" )
+
         },
     });
     return { addProject, isSuccess, isPending, isError, error };
@@ -89,7 +93,7 @@ export function useApplyProject() {
                 timeout: 30000,
             }),
         onSuccess: (data) => {
-            alert("CV send successfully!")
+            toast.success("CV send successfully!")
 
         },
         onError: (error) => {
@@ -98,6 +102,8 @@ export function useApplyProject() {
             //     text1: "Error",
             //     text2: "Failed to edit scout",
             // });
+                        toast.error("error in sending cv !")
+
         },
     });
     return { submitProposals, isSuccess, isPending, isError, error };
@@ -141,7 +147,7 @@ export function useEditProjects(id) {
       //  queryClient.invalidateQueries({
       //   queryKey: [API_ROUTE.project.getProjectByClient],
       // });
-      alert("project Edit Successfully")
+      toast.success("project Edit Successfully")
     },
     onError: (error) => {
       // Toast.show({
@@ -149,6 +155,8 @@ export function useEditProjects(id) {
       //     text1: "Error",
       //     text2: "Failed to edit scout",
       // });
+            toast.error("error in Editing project " )
+
     },
   });
   return { editProject, isSuccess, isPending, isError, error };

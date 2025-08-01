@@ -96,9 +96,11 @@ export default function JobDetailPage() {
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
               <h2 className="text-xl font-semibold text-gray-900 mb-4">Job Description</h2>
               <div className="prose prose-gray max-w-none">
-                <pre className="whitespace-pre-wrap font-sans text-sm leading-relaxed text-gray-700">
-                  {data[0]?.jobDescription}
-                </pre>
+              <div
+                className="prose prose-sm prose-gray max-w-none"
+                dangerouslySetInnerHTML={{ __html: data[0]?.jobDescription }}
+              />
+
               </div>
             </div>
 

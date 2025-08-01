@@ -1,7 +1,7 @@
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import { memo } from 'react';
 
- function DCard({
+function DCard({
   title = "Default Title",
   value = "0",
   subtitle,
@@ -23,55 +23,45 @@ import { memo } from 'react';
 
   return (
     <div
-      className="rounded-xl p-4 text-white hover:shadow-xl transition-shadow cursor-pointer relative overflow-hidden"
-      style={{ backgroundColor: bgColor, minHeight: "120px" }}
+      className="relative rounded-2xl p-5 text-white overflow-hidden shadow-md hover:shadow-xl transition-shadow cursor-pointer"
+      style={{ backgroundColor: bgColor, minHeight: "130px" }}
     >
-      {/* BACKGROUND BARS */}
-      <div className="absolute bottom-0 left-0 w-full flex justify-between items-end  h-full z-0">
-        <div className="bg-white/30 w-1/5 h-[20%]"></div>
-        <div className="bg-white/40 w-1/5 h-[30%]"></div>
-        <div className="bg-white/50 w-1/5 h-[40%]"></div>
+      {/* BACKGROUND BARS (glass-like) */}
+      <div className="absolute inset-0 flex justify-between items-end z-0">
+        <div className="bg-white/20 w-1/5 h-[25%] rounded-t-md"></div>
+        <div className="bg-white/30 w-1/5 h-[40%] rounded-t-md"></div>
+        <div className="bg-white/40 w-1/5 h-[55%] rounded-t-md"></div>
+        <div className="bg-white/20 w-1/5 h-[35%] rounded-t-md"></div>
+        <div className="bg-white/30 w-1/5 h-[20%] rounded-t-md"></div>
       </div>
 
-
-
       {/* MAIN CONTENT */}
-      <div className="relative mb-2 z-10 flex items-start gap-3">
-
+      <div className="relative z-10 flex gap-4 items-start">
+        {/* Icon */}
         {icon && (
-          <div className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center flex-shrink-0">
+          <div className="w-11 h-11 bg-white/15 rounded-xl flex items-center justify-center shadow-inner">
             {icon}
           </div>
         )}
 
+        {/* Text */}
+        <div className="flex-1 flex flex-col gap-1">
+          <p className="text-sm text-white/80 font-medium leading-tight">{title}</p>
+          <p className="text-3xl font-bold leading-none">{value}</p>
 
-        <div className="flex flex-col">
-          <p className="text-white/70 text-wrap text-sm">{title}</p>
-
-          <p className="text-2xl font-bold mb-0">{value}</p>
-
-          {month && subtitle && (
-            <div className="flex mb-4 text-wrap items-center gap-2">
-              <span className="text-xs text-white/70">{subtitle} <span className="font-bold" >{month}</span> </span>
-
+          {subtitle && month && (
+            <div className="text-xs text-white/70 mt-1">
+              {subtitle} <span className="font-semibold text-white">{month}</span>
             </div>
           )}
 
           {bottomText && (
             <p className="text-xs text-white/70 mt-2">{bottomText}</p>
           )}
-
-          {/* Sort Icon Button */}
-          {/* <div className="flex flex-wrap   z-10">
-            <button className="flex  gap-1 bg-white/10 text-white text-xs rounded-md hover:bg-white/20 transition">
-              <CalendarMonthIcon className="text-sm" />
-              Sort by
-            </button>
-          </div> */}
         </div>
       </div>
     </div>
   );
 }
 
-export default memo(DCard)
+export default memo(DCard);

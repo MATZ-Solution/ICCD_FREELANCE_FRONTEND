@@ -101,8 +101,10 @@ const ProjectDetailFreelancer = () => {
                             </div>
                             <div className="p-8 space-y-6">
                                 <p className="text-gray-700 leading-relaxed text-lg">
-                                    {data[0]?.overview}
+                                    <div dangerouslySetInnerHTML={{ __html: data[0]?.overview }} />
                                 </p>
+
+
                                 <div className="bg-blue-50 border-l-4 border-blue-400 p-6 rounded-r-lg">
                                     <p className="text-blue-800 leading-relaxed">
                                         This project could be followed by other similar projects in the coming months as we are looking for
@@ -119,7 +121,8 @@ const ProjectDetailFreelancer = () => {
                             </div>
                             <div className="p-8 space-y-6">
                                 <p className="text-gray-700 leading-relaxed text-lg">
-                                    {data[0]?.deliverable}
+                                <div dangerouslySetInnerHTML={{ __html: data[0]?.deliverable }} />
+
                                 </p>
 
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

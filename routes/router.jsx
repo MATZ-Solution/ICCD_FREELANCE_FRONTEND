@@ -66,6 +66,9 @@ import SuperAdminAllOrders from '../src/component/super_admin/AdminAllOrders';
 // pull code
 import EditGallery from "../src/pages/freelancer_gigs/editGallery";
 import IsFreelancerProfile from "../src/templates/IsfreelancerProfile";
+import OrderDetailPage from "../src/pages/freelancer_dashboard/OrderDetailPage";
+
+
 
 const stripePromise = loadStripe("pk_test_51QCl1eCDh3RtIJ6XkYcN5vHd3KTO2f8enRSNv9Wx7Li0iCI7cr9khTDQx0vS5RmbazZoaECNW83FesOMwLeIgMLb00BJG4pPZR");
 
@@ -321,6 +324,18 @@ export const router = createBrowserRouter([
       <IsFreelancerProfile>
         <MainTemplate isShowFooter={false}>
           <Orders />
+        </MainTemplate>
+      </IsFreelancerProfile>
+      // </AuthRoute>
+    ),
+  },
+   {
+    path: "/freelancer/orders/:orderId",
+    element: (
+      // <AuthRoute>
+      <IsFreelancerProfile>
+        <MainTemplate isShowFooter={true}>
+          <OrderDetailPage />
         </MainTemplate>
       </IsFreelancerProfile>
       // </AuthRoute>
@@ -692,17 +707,7 @@ export const router = createBrowserRouter([
       // </AuthRoute>
     ),
   },
- {
-    path: "/superadmin/orders",
-    element: (
-      // <AuthRoute>
-      <MainTemplate isShowFooter={false}>
-       <SuperAdminAllOrders/>
-        
-      </MainTemplate>
-      // </AuthRoute>
-    ),
-  },
+
   {
     path: "/payment",
     element: (

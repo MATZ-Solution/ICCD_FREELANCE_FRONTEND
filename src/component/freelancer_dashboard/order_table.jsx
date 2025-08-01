@@ -1,10 +1,22 @@
+import { useLocation, useNavigate } from "react-router-dom";
+
 const OrderTable = ({ data }) => {
+
+    const pathName = useLocation().pathname;
+    const navigate = useNavigate();
+  
   const statusColors = {
     'IN PROGRESS': 'bg-[#1467B0]',
     'pending': 'bg-yellow-500',
     'paid': 'bg-green-600',
     'IN REVIEW': 'bg-purple-500',
     'ON HOLD': 'bg-red-500',
+  };
+
+    const handleNavigate = (id) => {
+    if (pathName.includes('freelancer')) {
+      navigate(`/freelancer/orders/${id}`);
+    } 
   };
 
   return (
@@ -83,9 +95,15 @@ const OrderTable = ({ data }) => {
 
                         {/* View Button */}
                         <div className="sm:w-1/6 w-full">
-                          <button className="w-full h-12 sm:h-16 flex justify-center items-center mt-2 bg-[#EDEDED] rounded-2xl p-3 text-[#043A53] font-semibold hover:bg-gray-300 transition">
-                            View
-                          </button>
+                                <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleNavigate(item?.id);
+                          }}
+                          className="w-full h-12 bg-[#EDEDED] rounded-2xl p-3 flex justify-center items-center"
+                        >
+                          <p className="text-[#043A53] font-semibold">View</p>
+                        </button>
                         </div>
                       </div>
                     </td>

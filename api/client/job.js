@@ -1,6 +1,7 @@
 import api from "../axios";
 import API_ROUTE from "../endpoints";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from 'react-toastify';
 
 
 export function useGetAllJobs(params = {}) {
@@ -83,7 +84,8 @@ export function useAddJob() {
                 timeout: 30000,
             }),
         onSuccess: (data) => {
-            alert("job added successfully!")
+           toast.success("Job Added successfully!")
+            
 
         },
         onError: (error) => {
@@ -92,6 +94,8 @@ export function useAddJob() {
             //     text1: "Error",
             //     text2: "Failed to edit scout",
             // });
+          toast.error("Error In Addding Job Added !")
+
         },
     });
     return { addjob, isSuccess, isPending, isError, error };
@@ -171,7 +175,7 @@ export function useEditJobs(id) {
        queryClient.invalidateQueries({
         queryKey: [API_ROUTE.job.getJobsByClient],
       });
-      alert("Job Edit Successfully")
+      toast.success("Job Edit Successfully")
     },
     onError: (error) => {
       // Toast.show({
@@ -179,6 +183,8 @@ export function useEditJobs(id) {
       //     text1: "Error",
       //     text2: "Failed to edit scout",
       // });
+            toast.error("Error in Editing Job ! ")
+
     },
   });
   return { editJob, isSuccess, isPending, isError, error };
@@ -196,7 +202,7 @@ export function useApplyJob() {
                 timeout: 30000,
             }),
         onSuccess: (data) => {
-            alert("CV send successfully!")
+                  toast.success("CV send successfully!")
 
         },
         onError: (error) => {
@@ -205,6 +211,8 @@ export function useApplyJob() {
             //     text1: "Error",
             //     text2: "Failed to edit scout",
             // });
+                              toast.success("Failed to Send CV send !")
+
         },
     });
     return { submitJob, isSuccess, isPending, isError, error };

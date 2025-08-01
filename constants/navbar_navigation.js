@@ -20,7 +20,7 @@
     { name: "Project", path: '/freelancer/projects' },
     { name: "Jobs", path: '/freelancer/manage-jobs'},
     { name: "Orders", path: '/freelancer/orders'},
-    { name: "Analytics", path: '/freelancer/analytics',  },
+    // { name: "Analytics", path: '/freelancer/analytics',  },
   ];
    export const navTabsSuperAdminDashboard = [
     { name: "Dashboard", path: '/superadmin/dashboard'},

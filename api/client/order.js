@@ -11,11 +11,11 @@ export function useGetOrderByFreelancer(params = {}) {
         const query = new URLSearchParams(params).toString();
         return query ? `&${query}` : "";
     };
-    const queryKey = [API_ROUTE.order.getOrderByFreelancer, params];
+    const queryKey = [API_ROUTE.stripeorder.getOrderByFreelancer, params];
     const { data, error, isLoading, isError } = useQuery({
         queryKey,
         queryFn: () =>
-            api.get(`${API_ROUTE.order.getOrderByFreelancer}/${id}?${constructQueryString(params)}`),
+            api.get(`${API_ROUTE.stripeorder.getOrderByFreelancer}/${id}?${constructQueryString(params)}`),
     });
     return { data: data?.data?.data, error, isLoading, isError };
 }
@@ -35,3 +35,15 @@ export function useGetOrderByClient(params = {}) {
     });
     return { data: data?.data?.data, error, isLoading, isError };
 }
+
+export function useSingleOrderByFreelancer(id) {
+  return useQuery({
+    queryKey: ['singleOrderByFreelancer', id],
+    queryFn: async () => {
+      const response = await api.get(`${API_ROUTE.stripeorder.getSingleOrderByFreelancer}/${id}`);
+      return response.data.data; // Backend response ka jo asli order data hai
+    },
+    enabled: Boolean(id),
+  });
+}
+
