@@ -182,7 +182,7 @@ export default function Navbar() {
             <button onClick={() => navigate('/messages')} className="p-2 hover:bg-gray-100 rounded-md relative">
               <Mail className="h-5 w-5 text-gray-600" />
             </button>
-            <HelpCircle className="h-5 w-5 text-gray-600 cursor-pointer" />
+            {/* <HelpCircle className="h-5 w-5 text-gray-600 cursor-pointer" /> */}
             <div className="relative">
               <button
                 onClick={() => setShowProfileMenu((prev) => !prev)}

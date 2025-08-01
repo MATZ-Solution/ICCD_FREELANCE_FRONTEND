@@ -72,7 +72,7 @@ function Jobs_table({ data }) {
                       </div>
 
                       {/* View */}
-                      <div className="w-[15%]">
+                      <div className="flex gap-3 flex-row  w-[25%]">
                          <button 
                         onClick={()=> navigate(`/client/jobs/${item?.id}`)} 
                         className="w-full h-16 flex justify-center items-center mt-2 bg-[#EDEDED] rounded-2xl p-3">

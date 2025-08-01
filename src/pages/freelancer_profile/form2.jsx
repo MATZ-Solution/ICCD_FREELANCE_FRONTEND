@@ -239,6 +239,57 @@ export default function ProfessionalInfoStep({ placeholderConfig = defaultPlaceh
 
   return (
     <div className="max-w-6xl mx-auto p-5">
+          <div className="mb-8">
+        <div className="bg-gray-300 my-6 h-px w-full"></div>
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0 md:space-x-3 mb-5">
+          <div className="flex flex-wrap items-center gap-3">
+            {[1, 2].map((step) => (
+              <div key={step} className="flex items-center gap-1">
+                <div
+                  className={`w-8 h-8 rounded-full flex items-center justify-center ${step === 2
+                    ? "bg-[#01AEAD] text-white" // active green step 1
+                    : "border border-gray-300 bg-white text-gray-300" // inactive steps 2 & 3
+                    }`}
+                >
+                  {step}
+                </div>
+                <span
+                  className={`${step === 2 ? "text-[#01AEAD]" : "text-gray-600"
+                    }`}
+                >
+                  {step === 1
+                    ? "Personal Info"
+                    : "Professional Info"
+                  }
+                </span>
+              </div>
+            ))}
+
+          </div>
+          <div className="w-full md:w-auto">
+            <div className="text-gray-500 text-sm md:text-base mb-2 md:mb-0">
+              Completion Rate: 100%
+            </div>
+            <div className="h-2 w-full bg-gray-200 rounded overflow-hidden">
+              <div className="h-full bg-[#01AEAD] rounded" style={{ width: "100%" }}></div>
+            </div>
+          </div>
+        </div>
+        <div className="bg-gray-300 my-6 h-px w-full"></div>
+      </div>
+
+      <div className="flex flex-col md:flex-row justify-between md:items-center mb-8">
+        <div>
+          <h2 className="text-2xl font-bold mb-3">Professional Info</h2>
+          <p className="text-gray-600 whitespace-pre-wrap mb-6">
+            Tell us a bit about yourself. This information will appear on your public profile, so
+            that potential buyers can get to know you better.
+          </p>
+        </div>
+        <p className="text-[#01AEAD] text-lg italic font-semibold md:self-end">
+          * Mandatory fields
+        </p>
+      </div>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
         {/* Occupation */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
@@ -504,7 +555,7 @@ export default function ProfessionalInfoStep({ placeholderConfig = defaultPlaceh
             className={`flex items-center gap-2 px-6 py-3  text-white rounded  transition-colors
               ${isPending ? 'bg-[#01aeae97]' : 'bg-[#01AEAD] hover:bg-cyan-600'}`}
           >
-            Next <ArrowRight className="w-5 h-5" />
+            Submit 
           </button>
         </div>
       </form>

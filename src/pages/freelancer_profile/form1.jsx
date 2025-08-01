@@ -103,7 +103,7 @@ export default function PersonalInfoStep() {
         <div className="bg-gray-300 my-6 h-px w-full"></div>
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0 md:space-x-3 mb-5">
           <div className="flex flex-wrap items-center gap-3">
-            {[1, 2, 3].map((step) => (
+            {[1, 2].map((step) => (
               <div key={step} className="flex items-center gap-1">
                 <div
                   className={`w-8 h-8 rounded-full flex items-center justify-center ${step === 1
@@ -119,9 +119,9 @@ export default function PersonalInfoStep() {
                 >
                   {step === 1
                     ? "Personal Info"
-                    : step === 2
-                      ? "Professional Info"
-                      : "Account Security Info"}
+                    : 
+                      "Professional Info"
+                    }
                 </span>
               </div>
             ))}
@@ -129,10 +129,10 @@ export default function PersonalInfoStep() {
           </div>
           <div className="w-full md:w-auto">
             <div className="text-gray-500 text-sm md:text-base mb-2 md:mb-0">
-              Completion Rate: 25%
+              Completion Rate: 50%
             </div>
             <div className="h-2 w-full bg-gray-200 rounded overflow-hidden">
-              <div className="h-full bg-[#01AEAD] rounded" style={{ width: "28%" }}></div>
+              <div className="h-full bg-[#01AEAD] rounded" style={{ width: "50%" }}></div>
             </div>
           </div>
         </div>

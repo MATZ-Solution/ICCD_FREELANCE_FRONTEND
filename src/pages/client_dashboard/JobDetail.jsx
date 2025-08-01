@@ -46,10 +46,7 @@ export default function JobDetailPage() {
             </div>
             <div className="flex flex-col sm:flex-row gap-3">
 
-              <button className="px-6 py-3 bg-white text-gray-700 font-medium rounded-lg border border-gray-300 hover:bg-gray-50 transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 flex items-center gap-2">
-                <Share2 className="w-4 h-4" />
-                Share this Job
-              </button>
+            
             </div>
           </div>
         </div>

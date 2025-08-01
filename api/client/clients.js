@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setUserDetails } from "../../redux/slices/userSlice";
 import { useQueryClient } from "@tanstack/react-query";
+import { toast } from "react-toastify";
 
 export function useGetClientDashboardData() {
   const { data, isSuccess, isPending, isError, isLoading } = useQuery({
@@ -40,18 +41,20 @@ export function useEditClientProfile() {
         timeout: 30000,
       }),
     onSuccess: (data, res) => {
-      alert("Profile edit successfully!");
+      toast.success("Profile edit successfully!");
       // console.log(data?.data?.data)
       dispatch(setUserDetails(data?.data?.data))
     },
     onError: (error) => {
 
-      alert("failed")
+      // alert("failed")
       // Toast.show({
       //     type: "error",
       //     text1: "Error",
       //     text2: "Failed to edit scout",
       // });
+            toast.error("error int editing profile !");
+
     },
   });
   return { editClientProfile, isSuccess, isPending, isError, error };

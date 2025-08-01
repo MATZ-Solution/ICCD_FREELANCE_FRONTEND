@@ -12,7 +12,7 @@ import { getUserProfile } from "../../../redux/slices/userProfileSlice";
 import Button from "../../component/button";
 import ICCDError from "../../component/ICCDError";
 import ICCDLoader from "../../component/loader";
-import { toast } from "react-toastify";
+// import { toast } from "react-toastify";
 
 const FreelancerEditProfile = () => {
 
@@ -70,9 +70,9 @@ const FreelancerEditProfile = () => {
 
   try {
     await editProfile(formData); // mutation
-    toast.success("Profile updated successfully!");
+    // toast.success("Profile updated successfully!");
   } catch (error) {
-    toast.error("Failed to update profile.");
+    // toast.error("Failed to update profile.");
     console.error("Error updating profile:", error);
   }
 };
@@ -96,7 +96,8 @@ const FreelancerEditProfile = () => {
     <div className="max-w-7xl mx-auto px-4 py-6 relative">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 space-y-8">
-          <ProfileHeader openSidebar={openSidebar} />
+          <ProfileHeader  />
+          {/* <ProfileHeader openSidebar={openSidebar} /> */}
           <AboutSection openSidebar={openSidebar} />
           <EducationSection openSidebar={openSidebar} />
           <CertificationsSection openSidebar={openSidebar} />

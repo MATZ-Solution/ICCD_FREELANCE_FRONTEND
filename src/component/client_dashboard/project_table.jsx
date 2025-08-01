@@ -69,7 +69,7 @@ function Projects_table({ data }) {
                       </div>
 
                       {/* Buttons */}
-                      <div className="w-full md:w-[15%] flex flex-col gap-2 mt-2 md:mt-0">
+                      <div className="w-full md:w-[25%] flex flex-col lg:flex-row gap-2 mt-2 md:mt-0">
                         {pathName.includes('client') && (
                           <button
                             onClick={(e) => {

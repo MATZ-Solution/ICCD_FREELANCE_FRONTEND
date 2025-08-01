@@ -67,7 +67,7 @@ export default function ClientDashboard() {
   if(isLoading || clientIsLoad || clientIsPend){
     return <ICCDLoader /> }
   return (
-    <div className="min-h-screen px-4 bg-white">
+    <div className="min-h-screen px-4 mt-4 bg-white">
       {/* Header */}
 
       {showAboutModal && (<AboutModal onClose={()=> setShowAboutModal(false)}/>)} 

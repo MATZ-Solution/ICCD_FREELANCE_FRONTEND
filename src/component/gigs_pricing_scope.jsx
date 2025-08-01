@@ -2,6 +2,7 @@ import React, { useState } from "react"
 import { useForm, Controller } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup"
+import { toast } from "react-toastify"
 
 const packageNames = ["basic", "standard", "premium"]
 const features = [
@@ -306,36 +307,36 @@ export default function PricingForm() {
       const hasAtLeastOnePackage = Object.values(data.packages).some((pkg) => pkg.name && pkg.description && pkg.price)
 
       if (!hasAtLeastOnePackage) {
-        alert("Please complete at least one package before submitting.")
+        toast.error("Please complete at least one package before submitting.")
         return
       }
 
       console.log("Submitted data:", data)
-      alert("Form submitted successfully!")
+      toast.success("Form submitted successfully!")
     } catch (error) {
       console.error("Submission error:", error)
-      alert("There was an error submitting the form. Please try again.")
+      toast.error("There was an error submitting the form. Please try again.")
     }
   }
 
   const validateNewService = () => {
     if (!newLabel.trim()) {
-      alert("Please enter a valid service name.")
+      toast.error("Please enter a valid service name.")
       return false
     }
 
     if (newLabel.trim().length < 3) {
-      alert("Service name must be at least 3 characters long.")
+      toast.error("Service name must be at least 3 characters long.")
       return false
     }
 
     if (newLabel.trim().length > 50) {
-      alert("Service name cannot exceed 50 characters.")
+      toast.error("Service name cannot exceed 50 characters.")
       return false
     }
 
     if (!/^[a-zA-Z0-9\s-_]+$/.test(newLabel.trim())) {
-      alert("Service name can only contain letters, numbers, spaces, hyphens, and underscores.")
+      toast.error("Service name can only contain letters, numbers, spaces, hyphens, and underscores.")
       return false
     }
 
@@ -345,12 +346,12 @@ export default function PricingForm() {
       .replace(/[^a-z0-9_]/gi, "")
 
     if (!key) {
-      alert("Please enter a valid service name.")
+      toast.error("Please enter a valid service name.")
       return false
     }
 
     if (extraServicesList.find((e) => e.key === key)) {
-      alert("This service already exists.")
+      toast.error("This service already exists.")
       return false
     }
 

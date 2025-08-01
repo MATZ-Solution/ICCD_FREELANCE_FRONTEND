@@ -24,7 +24,7 @@ const QuickLinksSidebar = ({ openSidebar }) => {
           </div>
           <hr className="my-4 border-gray-200" />
           <div className="space-y-3">
-            <h4 className="text-sm font-medium text-gray-900">Actions</h4>
+            {/* <h4 className="text-sm font-medium text-gray-900">Actions</h4>
             <button
               onClick={() => openSidebar("profile")}
               className="w-full flex items-center justify-center space-x-2 p-2 bg-green-50 text-[#47AAB3] rounded-md hover:text-black transition-colors text-sm"
@@ -32,7 +32,7 @@ const QuickLinksSidebar = ({ openSidebar }) => {
               <Edit2 className="w-4 h-4" />
               <span>Edit Profile</span>
             </button>
-           
+            */}
           
           </div>
           <hr className="my-4 border-gray-200" />

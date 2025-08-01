@@ -24,7 +24,7 @@ const ProfileHeader = ({openSidebar}) => {
             className="opacity-0 group-hover:opacity-100 p-1 hover:bg-gray-100 rounded transition-opacity"
             aria-label="Edit profile"
           >
-            <Edit2 className="w-4 h-4 text-gray-500" />
+            {/* <Edit2 className="w-4 h-4 text-gray-500" /> */}
           </button>
         </div>
         <div className="flex items-center space-x-4 mb-2">
@@ -47,7 +47,7 @@ const ProfileHeader = ({openSidebar}) => {
                 className="opacity-0 group-hover:opacity-100 p-1 hover:bg-gray-100 rounded transition-opacity"
                 aria-label="Edit languages"
               >
-                <Edit2 className="w-3 h-3 text-gray-500" />
+                {/* <Edit2 className="w-3 h-3 text-gray-500" /> */}
               </button>
             </div>
           </div>

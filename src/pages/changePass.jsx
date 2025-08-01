@@ -1,6 +1,8 @@
 // ChangePassword.tsx
 import React, { useState } from "react";
 import { useChangePassword } from "../../api/client/user";
+import Success from '../component/freelancer_dashboard/success';
+import { toast } from "react-toastify";
 
 const ChangePassword = ({ handleSwitch, email, setEmail }) => {
 
@@ -10,7 +12,7 @@ const ChangePassword = ({ handleSwitch, email, setEmail }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (password !== confirm) {
-      alert("Passwords do not match!");
+      toast.error("Passwords do not match!");
       return;
     }
     change_pass({ password: password, email: email })

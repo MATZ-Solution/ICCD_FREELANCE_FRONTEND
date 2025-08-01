@@ -231,8 +231,45 @@ export const ProjectDetailClient = () => {
               </div>
             </div>
 
-            {/* Skills and Freelancer Type */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+           
+          </div>
+
+          {/* Sidebar */}
+
+          <div className="lg:col-span-1">
+
+            <div className="sticky top-6 space-y-8">
+
+              {/* Budget */}
+              <div className="bg-white  rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300">
+                <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-6 border-b border-gray-200">
+                  <div className="text-sm font-medium text-emerald-600 uppercase tracking-wide mb-2">Client Budget</div>
+                  <div className="text-3xl font-bold text-gray-900 mb-4">{data[0]?.budget} $</div>
+                  <div className="flex items-center gap-3">
+                    <div className="flex">
+                      {[...Array(5)].map((_, i) => (
+                        <div
+                          key={i}
+                          className={`w-3 h-3 rounded-sm mr-1 ${i < 3 ? "bg-emerald-400" : "bg-gray-300"}`}
+                        ></div>
+                      ))}
+                    </div>
+                    <span className="text-sm text-gray-600 font-medium">{propData && propData?.length} Proposals</span>
+                  </div>
+                </div>
+                {pathName.includes('freelancer') && (
+                  <div className="p-6 space-y-4">
+                    <button onClick={() => setShow(true)} className="cursor-pointer w-full bg-[#01AEAD] hover:bg-[#05929c]  text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center gap-3">
+                      <span className="text-xl">👍</span>
+                      <span>{"I'm interested"}</span>
+                    </button>
+                  </div>
+                )}
+
+                 {/* Skills and Freelancer Type */}
+           
+              </div>
+               <div className="grid grid-cols-1 md:grid-cols-1  mt-8 gap-8">
               <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300">
                 <div className="bg-gradient-to-r from-yellow-50 to-orange-50 p-6 border-b border-gray-200">
                   <h2 className="text-xl font-bold text-gray-900">Required Skills</h2>
@@ -272,40 +309,6 @@ export const ProjectDetailClient = () => {
                 </div>
               </div>
             </div>
-          </div>
-
-          {/* Sidebar */}
-
-          <div className="lg:col-span-1">
-
-            <div className="sticky top-6 space-y-8">
-
-              {/* Budget */}
-              <div className="bg-white  rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300">
-                <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-6 border-b border-gray-200">
-                  <div className="text-sm font-medium text-emerald-600 uppercase tracking-wide mb-2">Client Budget</div>
-                  <div className="text-3xl font-bold text-gray-900 mb-4">{data[0]?.budget} $</div>
-                  <div className="flex items-center gap-3">
-                    <div className="flex">
-                      {[...Array(5)].map((_, i) => (
-                        <div
-                          key={i}
-                          className={`w-3 h-3 rounded-sm mr-1 ${i < 3 ? "bg-emerald-400" : "bg-gray-300"}`}
-                        ></div>
-                      ))}
-                    </div>
-                    <span className="text-sm text-gray-600 font-medium">{propData && propData?.length} Proposals</span>
-                  </div>
-                </div>
-                {pathName.includes('freelancer') && (
-                  <div className="p-6 space-y-4">
-                    <button onClick={() => setShow(true)} className="cursor-pointer w-full bg-[#01AEAD] hover:bg-[#05929c]  text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center gap-3">
-                      <span className="text-xl">👍</span>
-                      <span>{"I'm interested"}</span>
-                    </button>
-                  </div>
-                )}
-              </div>
 
               {/* About the Employer */}
               {/* <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300">
@@ -343,28 +346,7 @@ export const ProjectDetailClient = () => {
                 </div>
               </div> */}
 
-              {/* Share this project */}
-              <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300">
-                <div className="bg-gradient-to-r from-purple-50 to-pink-50 p-6 border-b border-gray-200">
-                  <h3 className="text-xl font-bold text-gray-900">Share this project</h3>
-                </div>
-                <div className="p-6">
-                  <div className="grid grid-cols-4 gap-3">
-                    <button className="p-3 border-2 border-blue-200 rounded-xl hover:bg-blue-50 hover:border-blue-400 transition-all duration-300 group">
-                      <Facebook className="w-5 h-5 text-blue-600 mx-auto group-hover:scale-110 transition-transform" />
-                    </button>
-                    <button className="p-3 border-2 border-sky-200 rounded-xl hover:bg-sky-50 hover:border-sky-400 transition-all duration-300 group">
-                      <Twitter className="w-5 h-5 text-sky-600 mx-auto group-hover:scale-110 transition-transform" />
-                    </button>
-                    <button className="p-3 border-2 border-blue-200 rounded-xl hover:bg-blue-50 hover:border-blue-400 transition-all duration-300 group">
-                      <Linkedin className="w-5 h-5 text-blue-700 mx-auto group-hover:scale-110 transition-transform" />
-                    </button>
-                    <button className="p-3 border-2 border-pink-200 rounded-xl hover:bg-pink-50 hover:border-pink-400 transition-all duration-300 group">
-                      <Instagram className="w-5 h-5 text-pink-600 mx-auto group-hover:scale-110 transition-transform" />
-                    </button>
-                  </div>
-                </div>
-              </div>
+              
             </div>
           </div>
         </div>

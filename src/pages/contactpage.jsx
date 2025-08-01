@@ -8,6 +8,8 @@ import * as yup from "yup"
 import dp from "../assets/contactheader.png"
 import { ChevronRight, Disc } from "lucide-react"
 import ticker from "../assets/tick.png"
+import Success from '../component/freelancer_dashboard/success';
+import { toast } from "react-toastify"
 
 export default function ContactPage() {
   // Yup validation schema
@@ -120,7 +122,7 @@ export default function ContactPage() {
     try {
       console.log("Form submitted with values:", data)
       await new Promise((resolve) => setTimeout(resolve, 1000))
-      alert("Form submitted successfully!")
+      toast.Success("Form submitted successfully!")
       reset()
     } catch (error) {
       console.error("Form submission error:", error)

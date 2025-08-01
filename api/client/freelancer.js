@@ -63,7 +63,7 @@ export function useAddProfile() {
         timeout: 30000,
       }),
     onSuccess: (data, res) => {
-      toast.Success("Profile added successfully!");
+      toast.success("Profile added successfully!");
       dispatch(setUserProfile({id: data?.data?.freelancerId}))
       queryClient.invalidateQueries({
         queryKey: [API_ROUTE.freelancer.getFreelancerProfile],

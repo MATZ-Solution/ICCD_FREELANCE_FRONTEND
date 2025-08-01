@@ -6,7 +6,7 @@ import backgroundd from "../../assets/client_dashboard/Group.png";
 import Select from "react-select";
 import RichTextEditor from "./text_editor";
 import { useAddJob, useEditJobs, useGetJobById } from "../../../api/client/job";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { useEffect } from "react";
 import { memo } from 'react';
@@ -71,7 +71,7 @@ function JobForm() {
 
   console.log("data: ", data)
 
-
+  const navigate = useNavigate();
 
   const {
     control,
@@ -97,7 +97,10 @@ function JobForm() {
       editJob(data)
     } else {
       addjob(data)
+
     }
+          navigate('/client/jobs')
+
   };
 
   useEffect(() => {
