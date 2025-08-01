@@ -170,7 +170,7 @@ export default function ClientDashboard() {
 
         {/* Main Content */}
         <main className="flex-1">
-          <div className="mb-6">
+          <div className="mt-4">
             <h1 className="capitalize text-2xl font-bold mb-2">
               Welcome, {userDetails.name}
             </h1>
@@ -179,7 +179,7 @@ export default function ClientDashboard() {
               here.
             </p>
 
-            {showVerificationAlert && (
+            {/* {showVerificationAlert && (
               <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 bg-yellow-50 w-full rounded-lg p-4 relative">
                 <div className="w-6 h-6 bg-yellow-400 rounded-full flex items-center justify-center">
                   <span className="text-black text-xs font-bold">!</span>
@@ -204,7 +204,7 @@ export default function ClientDashboard() {
                   </button>
                 </div>
               </div>
-            )}
+            )} */}
           </div>
 
           {/* Stats Cards */}

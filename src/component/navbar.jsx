@@ -85,7 +85,7 @@ export default function Navbar() {
         ? [
           { name: "Switch to Client", action: handleSwitchClient },
           { name: "View Profile", action: () => navigate("/freelancer/edit-profile") },
-          { name: "Settings", action: () => navigate("/settings") },
+          // { name: "Settings", action: () => navigate("/settings") },
           { name: "Logout", action: logout },
         ]
         : [
@@ -179,7 +179,7 @@ export default function Navbar() {
           <div className="flex items-center gap-2 relative">
             <NotificationBell isShowNot={isShowNot} setIsShowNot={setIsShowNot} />
             {isShowNot && <NotificationDropdown />}
-            <button onClick={() => navigate('/messages')} className="p-2 hover:bg-gray-100 rounded-md relative">
+            <button onClick={() => pathname.includes('client') ? navigate('/client/messages') : navigate('/freelancer/messages')} className="p-2 hover:bg-gray-100 rounded-md relative">
               <Mail className="h-5 w-5 text-gray-600" />
             </button>
             {/* <HelpCircle className="h-5 w-5 text-gray-600 cursor-pointer" /> */}

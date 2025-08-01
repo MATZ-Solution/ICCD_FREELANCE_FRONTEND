@@ -1,7 +1,9 @@
 import React, { useState, memo, useCallback } from 'react';
 import AccountSecurityStep from '../freelancer_profile/form3';
+import { useNavigate } from 'react-router-dom';
 
 const Table = ({ title, tabs = [], data = [] }) => {
+  const navigate = useNavigate()
   // Dynamically return status styles
   const getStatusColor = (status) => {
     switch (status.toLowerCase()) {
@@ -32,7 +34,8 @@ const Table = ({ title, tabs = [], data = [] }) => {
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-base font-semibold text-gray-800">{title}</h3>
         <button
-          className="text-xs text-cyan-600 hover:text-cyan-700 transition-colors"
+        onClick={()=> navigate('/freelancer/orders')}
+          className="cursor-pointer text-xs text-cyan-600 hover:text-cyan-700 transition-colors"
           aria-label="View All Items"
         >
           View All →
