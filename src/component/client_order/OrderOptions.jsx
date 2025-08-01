@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { setOrderDetails } from "../../../redux/slices/orderSlice";
 import { useNavigate } from "react-router-dom"
 
- function OrderOptions({
+function OrderOptions({
   isOpen,
   onClose,
   packageType,
@@ -13,17 +13,18 @@ import { useNavigate } from "react-router-dom"
   delivery,
   revisions,
   basePrice = 2980,
-  freelancer_id,     
-  client_id,          
-  gig_id 
+  freelancer_id,
+  freelancer_client_id,
+  client_id,
+  gig_id
 }) {
   const [quantity, setQuantity] = useState(1);
   const [orderType, setOrderType] = useState("single");
   const [isLoading, setIsLoading] = useState(false);
 
 
-const dispatch = useDispatch();
-const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const subtotal = basePrice * quantity;
   const totalPrice = subtotal;
@@ -32,25 +33,26 @@ const navigate = useNavigate();
   const decrementQuantity = () => setQuantity((prev) => Math.max(prev - 1, 1));
 
   const handleContinue = async () => {
-  setIsLoading(true);
-  await new Promise((resolve) => setTimeout(resolve, 1000));
-  setIsLoading(false);
+    setIsLoading(true);
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    setIsLoading(false);
 
-  dispatch(setOrderDetails({
-    quantity,
-    basePrice,
-    totalPrice,
-    packageType,
-    packageDescription,
-    delivery,
-    revisions,
-     freelancer_id,
-  client_id,
-  gig_id
-  }));
+    dispatch(setOrderDetails({
+      quantity,
+      basePrice,
+      totalPrice,
+      packageType,
+      packageDescription,
+      delivery,
+      revisions,
+      freelancer_id,
+      freelancer_client_id,
+      client_id,
+      gig_id
+    }));
 
-  navigate("/payment"); // redirect to payment page
-};
+    navigate("/payment"); // redirect to payment page
+  };
 
   useEffect(() => {
     if (!isOpen) {
@@ -101,19 +103,17 @@ const navigate = useNavigate();
           <div>
             <h4 className="font-medium mb-3 text-gray-900">How often do you need this order?</h4>
             <div
-              className={`border rounded-lg p-3 cursor-pointer ${
-                orderType === "single"
+              className={`border rounded-lg p-3 cursor-pointer ${orderType === "single"
                   ? "border-teal-500 bg-teal-50 shadow-sm"
                   : "border-gray-200 bg-gray-50 hover:border-gray-300"
-              }`}
+                }`}
               onClick={() => setOrderType("single")}
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
                   <div
-                    className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${
-                      orderType === "single" ? "border-teal-500 bg-teal-500" : "border-gray-300"
-                    }`}
+                    className={`w-4 h-4 rounded-full border-2 flex items-center justify-center ${orderType === "single" ? "border-teal-500 bg-teal-500" : "border-gray-300"
+                      }`}
                   >
                     {orderType === "single" && <Check className="w-2 h-2 text-white" />}
                   </div>
@@ -129,7 +129,7 @@ const navigate = useNavigate();
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm font-medium text-gray-900">Gig Quantity</span>
 
-      
+
               <div className="flex items-center space-x-3 bg-gray-50 rounded-lg p-1">
                 <button
                   onClick={decrementQuantity}

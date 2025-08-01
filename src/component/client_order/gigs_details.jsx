@@ -151,6 +151,7 @@ export default function ServicePage() {
           delivery={selectedPackage.deliverytime || "3 Days"}
           revisions={selectedPackage.revisions}
           basePrice={selectedPackage.price}
+          freelancer_client_id={freelancer.freelancerClientId}
           freelancer_id={freelancer.freelancerId}     
           gig_id={gigInfo.gigsID}        
           client_id={userDetails.id}

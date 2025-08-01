@@ -47,7 +47,8 @@ const API_ROUTE = {
     clientEditProfile: '/client/clientEditProfile'
   },
   order: {
-    getOrderByFreelancer: '/order/getAllOrderByFreelancer',
+    getAllOrderByFreelancer: '/order/getAllOrderByFreelancer',
+    getSingleOrderByFreelancer: '/order/getSingleOrderByFreelancer',
     getAllOrderByClient: '/order/getAllOrderByClient'
   },
   stripeorder: {
