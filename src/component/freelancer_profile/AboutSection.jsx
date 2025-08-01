@@ -21,7 +21,8 @@ const AboutSection = ({ openSidebar }) => {
             </button>
           </div>
           <p className="text-gray-700 leading-relaxed mb-4">
-            {about_description} <button className="text-[#47AAB3] hover:underline">Read more</button>
+            {about_description} 
+            {/* <button className="text-[#47AAB3] hover:underline">Read more</button> */}
           </p>
         </div>
         <h3 className="text-md font-semibold mb-2">Skills</h3>
