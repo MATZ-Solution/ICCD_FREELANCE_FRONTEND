@@ -13,6 +13,7 @@ function SuccessPage() {
 
   const dispatch = useDispatch();
   const order = useSelector((state) => state.order);
+  const userDetails = useSelector((state) => state.user.userDetails);
 
   
   const fetchSessionAndProcessOrder = async (sessionId) => {
@@ -42,6 +43,7 @@ function SuccessPage() {
         freelancer_id: order.freelancer_id,
         client_id: order.client_id,
         gig_id: order.gig_id,
+        customerId: userDetails.id
       };
 
 
@@ -158,6 +160,10 @@ function SuccessPage() {
         </button>
       </div>
     );
+  }
+
+  if (loading) {
+    return <ICCDLoader />
   }
 
   return (

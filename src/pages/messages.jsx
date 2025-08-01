@@ -63,11 +63,8 @@ const WhatsAppClone = () => {
   useEffect(() => {
     const container = containerRef.current;
     if (!container || !singleData?.length) return;
-
     const prevScrollHeight = container.scrollHeight;
-
     setMessages((prev) => [...singleData, ...prev]);
-
     setTimeout(() => {
       const newScrollHeight = container.scrollHeight;
       const scrollDifference = newScrollHeight - prevScrollHeight;
@@ -123,14 +120,17 @@ const WhatsAppClone = () => {
 
   // Reset on friend change
   useEffect(() => {
-    setMessages([]);
+    // setMessages([]);
     setPage(1);
     shouldScrollRef.current = true;
     isFetchingRef.current = false;
   }, [friend]);
 
   const handleFriend = (item) => {
-    setIsActiveChat(item?.id)
+    if (item?.message_id !== isActiveChat) {
+      setMessages([]);
+    }
+    setIsActiveChat(item?.message_id)
     setFriend(item);
   };
 
@@ -184,7 +184,7 @@ const WhatsAppClone = () => {
               <button
                 key={index}
                 className={`flex gap-4 items-center p-4 w-full text-left border-b border-gray-300 hover:bg-gray-50 transition-colors duration-200
-                   ${isActiveChat === chat.id ? 'bg-teal-50 bg-opacity-50 border-l-4 border-l-[#08B0BD] border-b-[#08B0BD] ' : ''}
+                   ${isActiveChat === chat?.message_id ? 'bg-teal-50 bg-opacity-50 border-l-4 border-l-[#08B0BD] border-b-[#08B0BD] ' : ''}
                  `}
                 onClick={() => handleFriend(chat)}
               >
@@ -206,28 +206,28 @@ const WhatsAppClone = () => {
           {/* Chat Header */}
           {
             friend && (
-          <div className="flex items-center justify-between p-4 bg-white border-b border-gray-200 shadow-sm">
-            <div className="flex gap-3 items-center">
-              <div
-                className="capitaize w-12 h-12 bg-[#A78BFA] font-bold text-2xl text-white rounded-full flex items-center justify-center shadow-sm"
-              >{friend?.chat_partner_name[0]}</div>
-              <h2 className="font-semibold text-lg text-gray-800">{friend?.chat_partner_name}</h2>
-            </div>
-            <div className="flex space-x-4">
-              {/* Call Icon */}
-              <button className="text-gray-500 hover:text-green-600 transition-colors duration-200 p-2 rounded-full hover:bg-gray-100">
-                <i className="fas fa-phone text-xl"></i>
-              </button>
-              {/* Video Call Icon */}
-              <button className="text-gray-500 hover:text-green-600 transition-colors duration-200 p-2 rounded-full hover:bg-gray-100">
-                <i className="fas fa-video text-xl"></i>
-              </button>
-              {/* More Options Icon */}
-              <button className="text-gray-500 hover:text-green-600 transition-colors duration-200 p-2 rounded-full hover:bg-gray-100">
-                <i className="fas fa-ellipsis-v text-xl"></i>
-              </button>
-            </div>
-          </div>
+              <div className="flex items-center justify-between p-4 bg-white border-b border-gray-200 shadow-sm">
+                <div className="flex gap-3 items-center">
+                  <div
+                    className="capitaize w-12 h-12 bg-[#A78BFA] font-bold text-2xl text-white rounded-full flex items-center justify-center shadow-sm"
+                  >{friend?.chat_partner_name[0]}</div>
+                  <h2 className="font-semibold text-lg text-gray-800">{friend?.chat_partner_name}</h2>
+                </div>
+                <div className="flex space-x-4">
+                  {/* Call Icon */}
+                  <button className="text-gray-500 hover:text-green-600 transition-colors duration-200 p-2 rounded-full hover:bg-gray-100">
+                    <i className="fas fa-phone text-xl"></i>
+                  </button>
+                  {/* Video Call Icon */}
+                  <button className="text-gray-500 hover:text-green-600 transition-colors duration-200 p-2 rounded-full hover:bg-gray-100">
+                    <i className="fas fa-video text-xl"></i>
+                  </button>
+                  {/* More Options Icon */}
+                  <button className="text-gray-500 hover:text-green-600 transition-colors duration-200 p-2 rounded-full hover:bg-gray-100">
+                    <i className="fas fa-ellipsis-v text-xl"></i>
+                  </button>
+                </div>
+              </div>
             )
           }
 
@@ -246,7 +246,7 @@ const WhatsAppClone = () => {
                       >
                         <div
                           className={`max-w-xs px-4 py-2 rounded-lg shadow-md
-                            ${ introMsg ? 'bg-[#FEFCE8] font-serif text-black rounded-br-none' : isOwnMessage
+                            ${introMsg ? 'bg-[#FEFCE8] font-serif text-black rounded-br-none' : isOwnMessage
                               ? 'bg-[#08B0BD] text-white rounded-br-none'
                               : 'bg-white text-gray-800 rounded-bl-none'
                             }

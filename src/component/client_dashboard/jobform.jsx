@@ -59,7 +59,7 @@ const locationOptions = [
   { value: "Sialkot", label: "Sialkot" },
 ];
 
- function JobForm() {
+function JobForm() {
   const pathName = useLocation().pathname
   const { id } = useParams()
   const { addjob, isSuccess, isPending, isError, error } = useAddJob()
@@ -71,7 +71,8 @@ const locationOptions = [
 
   console.log("data: ", data)
 
-  
+
+
   const {
     control,
     handleSubmit,
@@ -99,21 +100,23 @@ const locationOptions = [
     }
   };
 
-   useEffect(() => {
-      if (data && data?.length > 0) {
-        reset({
-          jobTitle: data[0]?.jobTitle || '',
-          joblocation: data[0]?.joblocation || '',
-          jobType: data[0]?.jobType || "",
-          payType: data[0]?.payType || "",
-          minSalaray: data[0]?.minSalaray || 0,
-          maxSalaray: data[0]?.maxSalaray || 0,
-          jobDescription: data[0]?.jobDescription || "",
-          totalPersontoHire: data[0]?.totalPersontoHire || 1
+  useEffect(() => {
+    if (data && data?.length > 0) {
+      reset({
+        jobTitle: data[0]?.jobTitle || '',
+        joblocation: data[0]?.joblocation || '',
+        jobType: data[0]?.jobType || "",
+        payType: data[0]?.payType || "",
+        minSalaray: data[0]?.minSalaray || 0,
+        maxSalaray: data[0]?.maxSalaray || 0,
+        jobDescription: data[0]?.jobDescription || "",
+        totalPersontoHire: data[0]?.totalPersontoHire || 1
 
-        });
-      }
-    }, [data, reset]);
+      });
+    }
+  }, [data, reset]);
+
+  if (getJobIsLoad) return <ICCDLoader />;
 
 if (getJobIsLoad)  {
   return <ICCDLoader />;
