@@ -165,14 +165,7 @@ export default function OrderDetailPage() {
                 <DetailRow label="Email" icon={Mail}>
                   <span className="flex items-center gap-1">{order.email}</span>
                 </DetailRow>
-                <DetailRow label="Client ID">
-                  <div className="flex items-center gap-2">
-                    <div className="h-6 w-6 rounded-full bg-blue-400 bg-opacity-50 text-white flex items-center justify-center text-xs">
-                      CL
-                    </div>
-                    {order.client_id}
-                  </div>
-                </DetailRow>
+              
                 <DetailRow label="Session ID" isFullWidth>
                   <span className="text-sm font-mono bg-white bg-opacity-20 px-2 py-1 rounded text-black">
                     {order.session_id}

@@ -4,6 +4,7 @@ import api from "../axios/index";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export function useAddGigs() {
   // const pathname = usePathname();
@@ -29,6 +30,7 @@ export function useAddGigs() {
       queryClient.invalidateQueries({
         queryKey: [API_ROUTE.gigs.getGigsByUserId],
       });
+      toast.success("Gigs added successfully!");
     },
     onError: (error) => {
       // Toast.show({
@@ -36,6 +38,8 @@ export function useAddGigs() {
       //     text1: "Error",
       //     text2: "Failed to edit scout",
       // });
+            toast.error("error in adding gigs!");
+
     },
   });
   return { addGigs, isSuccess, isPending, isError, error };
@@ -149,6 +153,7 @@ export function useEditGigs(id, formType = 'json') {
         queryKey: [API_ROUTE.gigs.editGigs],
       });
       
+      toast.success("Gigs edit successfully!");
     },
     onError: (error) => {
       // Toast.show({
@@ -156,6 +161,8 @@ export function useEditGigs(id, formType = 'json') {
       //     text1: "Error",
       //     text2: "Failed to edit scout",
       // });
+            toast.error("Erorr in editting Gigs!");
+      
     },
   });
   return { editGigs, isSuccess, isPending, isError, error };
@@ -184,6 +191,8 @@ export function useEditGigsFiles(id) {
         queryKey: [API_ROUTE.gigs.editGigs],
       });
       navigate('/freelancer/manage-gigs')
+      toast.success("Gigs Files edit successfully!");
+
     },
     onError: (error) => {
       // Toast.show({
@@ -191,6 +200,8 @@ export function useEditGigsFiles(id) {
       //     text1: "Error",
       //     text2: "Failed to edit scout",
       // });
+            toast.error("error in editing Gigs Files !");
+
     },
   });
   return { editGigsFiles, isSuccess, isPending, isError, error };

@@ -7,7 +7,6 @@ import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import { useGetSingleGigs, useEditGigs } from '../../../api/client/gigs';
-import { toast } from 'react-toastify';
 
 const Profile = lazy(() => import('../../component/freelancers_gigs/profile'));
 const Button = lazy(() => import('../../component/button'));
@@ -59,12 +58,10 @@ const Description = () => {
         if (location.pathname.includes('edit')) {
             editGigs(data);
             navigate(`/freelancer/manage-gigs/gallery/edit/${id}`);
-            toast.success("Gig description Eduted!");
 
         } else {
             dispatch(setGigsDetails(data));
             navigate('/freelancer/manage-gigs/gallery');
-            toast.success("Gig description saved!");
 
         }
     };

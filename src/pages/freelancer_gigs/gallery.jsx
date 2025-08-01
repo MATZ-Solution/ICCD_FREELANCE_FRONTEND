@@ -2,7 +2,7 @@ import Profile from '../../component/freelancers_gigs/profile';
 import { useEffect, useState } from 'react';
 import Button from '../../component/button';
 import CollectionsIcon from '@mui/icons-material/Collections';
-import { useNavigate, useLocation, useParams } from 'react-router-dom';
+import { useNavigate, useLocation, useParams, Navigate } from 'react-router-dom';
 import { useAddGigs, useGetSingleGigs, useEditGigs, useGetGigsFiles, useEditGigsFiles } from '../../../api/client/gigs';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
@@ -18,6 +18,7 @@ function Gallery() {
   const { addGigs, isSuccess, isPending, isError, error } = useAddGigs();
   // const [DelImgFileKey, setDelImgFileKey] = useState([]);
 
+  const navigate = useNavigate();
 
   
 
@@ -62,6 +63,7 @@ function Gallery() {
     formData.append("freelancerId", profileDetails.id);
     addGigs(formData);
     dispatch(resetGigDetails())
+    navigate('/freelancer/manage-gigs');
   };
 
   return (

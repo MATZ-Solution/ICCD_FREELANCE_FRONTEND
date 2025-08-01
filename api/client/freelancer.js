@@ -6,6 +6,8 @@ import { setFreelancerID } from "../../redux/slices/userSlice";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setUserProfile } from "../../redux/slices/userProfileSlice";
+import Success from '../../src/component/freelancer_dashboard/success';
+import { toast } from "react-toastify";
 
 export function useGetFreelDashboardData() {
    const freelancerDetails = useSelector(state=> state.userProfile.userProfile)
@@ -61,7 +63,7 @@ export function useAddProfile() {
         timeout: 30000,
       }),
     onSuccess: (data, res) => {
-      alert("Profile added successfully!");
+      toast.Success("Profile added successfully!");
       dispatch(setUserProfile({id: data?.data?.freelancerId}))
       queryClient.invalidateQueries({
         queryKey: [API_ROUTE.freelancer.getFreelancerProfile],
@@ -77,6 +79,8 @@ export function useAddProfile() {
       //     text1: "Error",
       //     text2: "Failed to edit scout",
       // });
+            toast.error("Profile Not Added Error!");
+
     },
   });
   return { addProfile, isSuccess, isPending, isError, error };
@@ -101,14 +105,14 @@ export function useEditProfile(freelancerId) {
         timeout: 30000,
       }),
     onSuccess: (data, res) => {
-      alert("Profile edit successfully!");
+      toast.success("Profile edit successfully!");
       queryClient.invalidateQueries({
         queryKey: [API_ROUTE.freelancer.getFreelancerProfile],
       });
     },
     onError: (error) => {
 
-      alert("failed")
+      toast.error("failed")
       // Toast.show({
       //     type: "error",
       //     text1: "Error",

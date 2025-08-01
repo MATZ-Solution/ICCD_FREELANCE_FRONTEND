@@ -92,7 +92,7 @@ export default function Navbar() {
           { name: "Switch to Freelancer", action: handleSwitchClient },
           { name: "Dashboard", action: () => navigate("/client/dashboard") },
           { name: "View Profile", action: () => navigate("/client/profile") },
-          { name: "Order", action: () => navigate("/client/order") },
+          { name: "Order", action: () => navigate("/client/orders") },
           { name: "Logout", action: logout },
         ];
 
@@ -153,12 +153,7 @@ export default function Navbar() {
             >
               Switch to freelancer
             </button>
-            <button
-              onClick={() => (`/client/order`)}
-              className="px-3 py-2 text-sm font-medium rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-50"
-            >
-              Orders
-            </button>
+            
           </nav>
         ) :pathname.includes("/superadmin") ? (
           <nav className="ml-10 sm:flex space-x-1 hidden md:flex">
