@@ -1,42 +1,46 @@
-import React, { useEffect, useState, lazy, Suspense } from 'react';
-import EastIcon from '@mui/icons-material/East';
-import job_opp_pic from '../../assets/freelancer_dashboard/job_opp_pic.png';
-import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
-import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
-import LinkIcon from '@mui/icons-material/Link';
-import PaymentIcon from '@mui/icons-material/Payment';
-import CasesIcon from '@mui/icons-material/Cases';
-import { useSelector } from 'react-redux';
-import { useGetAllJobs, useGetJobById } from '../../../api/client/job';
+import React, { useEffect, useState, lazy, Suspense } from "react";
+import EastIcon from "@mui/icons-material/East";
+import job_opp_pic from "../../assets/freelancer_dashboard/job_opp_pic.png";
+import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+import BookmarkBorderIcon from "@mui/icons-material/BookmarkBorder";
+import LinkIcon from "@mui/icons-material/Link";
+import PaymentIcon from "@mui/icons-material/Payment";
+import CasesIcon from "@mui/icons-material/Cases";
+import { useSelector } from "react-redux";
+import { useGetAllJobs, useGetJobById } from "../../../api/client/job";
 import Select from "../../component/buttonSelect.jsx";
+import { useLocation } from "react-router-dom";
 
-const ProposalModal = lazy(() => import('../../component/ProposalModal'));
+const ProposalModal = lazy(() => import("../../component/ProposalModal"));
 
 function Jobs() {
   const [obj, setObj] = useState({});
   const [show, setShow] = useState(false);
   const [selectedJobId, setSelectedJobId] = useState(null);
 
-  const freelancerData = useSelector(state => state.userProfile.userProfile);
+  const freelancerData = useSelector((state) => state.userProfile.userProfile);
 
   const { data: allJobs, isSuccess: allJobsSuccess } = useGetAllJobs(obj);
-  const { data: jobDetails, isSuccess: jobDetailsSuccess } = useGetJobById(selectedJobId, {
-    enabled: !!selectedJobId,
-  });
+  const { data: jobDetails, isSuccess: jobDetailsSuccess } = useGetJobById(
+    selectedJobId,
+    {
+      enabled: !!selectedJobId,
+    }
+  );
 
-  const filterNames = ['jobType', 'joblocation'];
+  const filterNames = ["jobType", "joblocation"];
 
   const filterOptions = {
     jobType: [
-      { value: 'Full Time', label: 'Full Time' },
-      { value: 'part_time', label: 'Part Time' },
-      { value: 'contract', label: 'Contract' },
+      { value: "Full Time", label: "Full Time" },
+      { value: "part_time", label: "Part Time" },
+      { value: "contract", label: "Contract" },
     ],
     joblocation: [
-      { value: 'remote', label: 'Remote' },
-      { value: 'karachi', label: 'Karachi' },
-      { value: 'lahore', label: 'Lahore' },
+      { value: "remote", label: "Remote" },
+      { value: "karachi", label: "Karachi" },
+      { value: "lahore", label: "Lahore" },
     ],
   };
 
@@ -45,6 +49,10 @@ function Jobs() {
       setSelectedJobId(allJobs[0].id);
     }
   }, [allJobsSuccess, allJobs, selectedJobId]);
+
+  const location = useLocation();
+
+  const isFreelancerPath = location.pathname.includes("/freelancer");
 
   return (
     <div className="px-6 sm:px-10">
@@ -67,18 +75,24 @@ function Jobs() {
               Jobs Opportunities
             </h1>
             <p className="text-[#767676] mb-6">
-              Create an account or sign in to see your personalized job recommendations.
+              Create an account or sign in to see your personalized job
+              recommendations.
             </p>
             <button className="shadow-xl flex gap-3 bg-[#15A9B2] text-white px-6 py-3 rounded-full hover:bg-[#05929c] transition cursor-pointer">
               <p className="text-white">Get Started</p>
               <EastIcon />
             </button>
             <p className="mt-5 text-[#767676]">
-              <span className="text-[#05929c]">Post your CV</span> - It only takes a few seconds
+              <span className="text-[#05929c]">Post your CV</span> - It only
+              takes a few seconds
             </p>
           </div>
           <div className="w-full sm:w-1/2">
-            <img src={job_opp_pic} alt="Banner" className="w-full h-auto object-contain" />
+            <img
+              src={job_opp_pic}
+              alt="Banner"
+              className="w-full h-auto object-contain"
+            />
           </div>
         </section>
       </div>
@@ -103,7 +117,9 @@ function Jobs() {
                   placeholder={filterName}
                   value={
                     obj[filterName]
-                      ? filterOptions[filterName]?.find(opt => opt.value === obj[filterName])
+                      ? filterOptions[filterName]?.find(
+                          (opt) => opt.value === obj[filterName]
+                        )
                       : null
                   }
                   onChange={(selectedOption) =>
@@ -167,59 +183,81 @@ function Jobs() {
 
           {/* Right: Job Details */}
           <div className="hidden px-5 lg:flex lg:w-1/2 lg:h-screen sticky top-0">
-            {jobDetailsSuccess && jobDetails?.map((job, index) => (
-              <div key={index} className="w-full mt-5 p-5 border-[1px] border-gray-400 rounded-lg hover:border-[#15A9B2]">
-                <h1 className="font-bold text-xl">{job.jobTitle} {job.mode}</h1>
-                <p className="mt-3">{job.name}</p>
-                <p>{job.joblocation}</p>
-                <div className="flex gap-2 mt-2">
-                  <p className="font-semibold text-sm bg-gray-200 p-1 rounded-md">
-                    Rs {job.minSalaray} - Rs {job.maxSalaray} a {job.payType}
-                  </p>
-                  <p className="font-semibold text-sm bg-gray-200 p-1 rounded-md">{job.jobType}</p>
-                </div>
-                <div className="mt-3 flex gap-4 items-center">
-                  <button
-                    onClick={() => setShow(true)}
-                    className="bg-[#15A9B2] rounded-md text-white px-7 py-2"
-                  >
-                    Apply Now
-                  </button>
-                  <button className="bg-gray-300 p-1 rounded-md">
-                    <BookmarkBorderIcon className="text-black" />
-                  </button>
-                  <button className="bg-gray-300 p-1 rounded-md">
-                    <LinkIcon className="text-black" />
-                  </button>
-                </div>
-                <div className="h-[50vh] overflow-y-scroll mt-10 border-t-[1px] border-t-gray-400">
-                  <h1 className="mt-4 font-bold text-xl">Job Details</h1>
-                  <div className="mt-4 flex flex-col gap-3">
-                    <div className="flex gap-3">
-                      <PaymentIcon />
-                      <div>
-                        <p className="font-semibold">Pay</p>
-                        <p className="mt-2 font-semibold text-sm bg-gray-200 p-1 rounded-md">
-                          Rs {job.minSalaray} - Rs {job.maxSalaray} a {job.payType}
-                        </p>
+            {jobDetailsSuccess &&
+              jobDetails?.map((job, index) => (
+                <div
+                  key={index}
+                  className="w-full mt-5 p-5 border-[1px] border-gray-400 rounded-lg hover:border-[#15A9B2]"
+                >
+                  <h1 className="font-bold text-xl">
+                    {job.jobTitle} {job.mode}
+                  </h1>
+                  <p className="mt-3">{job.name}</p>
+                  <p>{job.joblocation}</p>
+                  <div className="flex gap-2 mt-2">
+                    <p className="font-semibold text-sm bg-gray-200 p-1 rounded-md">
+                      Rs {job.minSalaray} - Rs {job.maxSalaray} a {job.payType}
+                    </p>
+                    <p className="font-semibold text-sm bg-gray-200 p-1 rounded-md">
+                      {job.jobType}
+                    </p>
+                  </div>
+                  <div className="mt-3 flex gap-4 items-center">
+                    <button
+                      onClick={() => {
+                        if (
+                          !freelancerData ||
+                          Object.keys(freelancerData).length === 0 ||
+                          !isFreelancerPath
+                        ) {
+                          window.location.href = "/login"; // or open login modal
+                        } else {
+                          setShow(true);
+                        }
+                      }}
+                      className="bg-[#15A9B2] rounded-md text-white px-7 py-2"
+                    >
+                      Apply Now
+                    </button>
+
+                    <button className="bg-gray-300 p-1 rounded-md">
+                      <BookmarkBorderIcon className="text-black" />
+                    </button>
+                    <button className="bg-gray-300 p-1 rounded-md">
+                      <LinkIcon className="text-black" />
+                    </button>
+                  </div>
+                  <div className="h-[65vh] overflow-y-scroll mt-10 border-t-[1px] border-t-gray-400">
+                    <h1 className="mt-4 font-bold text-xl">Job Details</h1>
+                    <div className="mt-4 flex flex-col gap-3">
+                      <div className="flex gap-3">
+                        <PaymentIcon />
+                        <div>
+                          <p className="font-semibold">Pay</p>
+                          <p className="mt-2 font-semibold text-sm bg-gray-200 p-1 rounded-md">
+                            Rs {job.minSalaray} - Rs {job.maxSalaray} a{" "}
+                            {job.payType}
+                          </p>
+                        </div>
                       </div>
-                    </div>
-                    <div className="flex gap-3">
-                      <CasesIcon />
-                      <div>
-                        <p className="font-semibold">Job Type</p>
-                        <p className="mt-2 font-semibold text-sm bg-gray-200 p-1 rounded-md">{job.jobType}</p>
+                      <div className="flex gap-3">
+                        <CasesIcon />
+                        <div>
+                          <p className="font-semibold">Job Type</p>
+                          <p className="mt-2 font-semibold text-sm bg-gray-200 p-1 rounded-md">
+                            {job.jobType}
+                          </p>
+                        </div>
                       </div>
+                      <h1 className="mt-4 text-lg font-bold">Description</h1>
+                      <div
+                        className="mt-2  text-sm bg-gray-200 p-1 rounded-md"
+                        dangerouslySetInnerHTML={{ __html: job.jobDescription }}
+                      />
                     </div>
-                    <h1 className="mt-4 text-lg font-bold">Description</h1>
-<div
-  className="mt-2 text-sm bg-gray-200 p-1 rounded-md"
-  dangerouslySetInnerHTML={{ __html: job.jobDescription }}
-/>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
           </div>
         </div>
       </div>

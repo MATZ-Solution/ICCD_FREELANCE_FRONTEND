@@ -118,7 +118,7 @@ const Payment = () => {
                 )}
               </div>
 
-              {/* PayPal Option */}
+              {/* PayPal Option
               <div>
                 <button
                   onClick={() => setMethod("paypal")}
@@ -158,7 +158,7 @@ const Payment = () => {
                     </div>
                   </div>
                 )}
-              </div>
+              </div> */}
             </div>
 
             {/* Billing Info */}
