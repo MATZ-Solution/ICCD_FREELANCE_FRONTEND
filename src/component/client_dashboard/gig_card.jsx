@@ -11,7 +11,8 @@ const GigCard = ({
   reviews,
   price,
   offersVideoConsultation,
-  onClick
+  onClick,
+  authorImg
 }) => {
   const [liked, setLiked] = useState(false);
 
@@ -32,10 +33,17 @@ const GigCard = ({
       </div>
 
       <div className="p-4">
-        <h3 className="text-sm text-gray-700 mb-1">{title}</h3>
-        <p className="text-xs text-gray-500 mb-1">
-          <span className="font-semibold">{author}</span> 
-        </p>
+
+
+        <div className="flex items-center gap-2">
+          <img src={authorImg} className="w-9 h-9 rounded-full"></img>
+          <p className="text-sm text-black mb-1">
+            <span className="font-bold">{author}</span>
+          </p>
+        </div>
+
+        <h3 className="mt-2 font-semibold text-gray-700 mb-1">{title?.length > 20 ? title.slice(0,60) + '...' : title}</h3>
+
         {/* <p className="text-xs text-yellow-500 font-medium mb-1">
           ⭐ {rating} <span className="text-gray-400">({reviews})</span>
         </p>
