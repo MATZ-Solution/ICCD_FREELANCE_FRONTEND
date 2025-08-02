@@ -6,14 +6,15 @@ import 'react-toastify/dist/ReactToastify.css';
 import { Suspense } from "react";
 import ICCDLoader from './component/loader';
 
+
 function App() {
 
   return (
     <div >
       <ToastContainer position="top-center" autoClose={3000} />
-      <Suspense fallback={<ICCDLoader />}>
+      {/* <Suspense fallback={<ICCDLoader />}> */}
         <RouterProvider router={router} />
-      </Suspense>
+      {/* </Suspense> */}
     </div>
   )
 }

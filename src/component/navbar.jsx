@@ -71,8 +71,8 @@ export default function Navbar() {
         key={idx}
         onClick={() => navigate(path)}
         className={`cursor-pointer px-3 py-2 text-sm font-medium rounded-md ${pathname === path
-            ? "text-cyan-500 bg-cyan-50"
-            : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
+          ? "text-cyan-500 bg-cyan-50"
+          : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
           }`}
       >
         {name}
@@ -115,7 +115,9 @@ export default function Navbar() {
     <header className="bg-white shadow fontFamily-montreal border-b border-b-[#c4c4c4]">
       <div className="max-w-7xl mx-auto px-6 sm:px-12 flex justify-between items-center">
         {/* Logo */}
-        <div onClick={() => navigate("/")} className="w-20 h-20 md:w-24 md:h-24 cursor-pointer">
+        <div
+          // onClick={() => navigate("/")}
+          className="w-20 h-20 md:w-24 md:h-24 cursor-pointer">
           <img src={logo} alt="logo" className="w-full h-full object-contain" />
         </div>
 
@@ -127,7 +129,7 @@ export default function Navbar() {
         </div>
 
         {/* Navigation Tabs for Desktop */}
-        {(pathname.includes("/freelancer") ) ? (
+        {(pathname.includes("/freelancer")) ? (
           <nav className="ml-10 sm:flex space-x-1 hidden md:flex">
             {renderNavTabs(navTabsFreelancerDashboard)}
           </nav>
@@ -153,13 +155,13 @@ export default function Navbar() {
             >
               Switch to freelancer
             </button>
-            
+
           </nav>
-        ) :pathname.includes("/superadmin") ? (
+        ) : pathname.includes("/superadmin") ? (
           <nav className="ml-10 sm:flex space-x-1 hidden md:flex">
             {renderNavTabs(navTabsSuperAdminDashboard)}
-          </nav> 
-        ):(
+          </nav>
+        ) : (
           <nav className="show_nav_links_desktop space-x-6 items-center hidden md:flex">
             {navigation.map((item) => (
               <Link
@@ -236,7 +238,7 @@ export default function Navbar() {
                 >
                   {item.name}
                 </button>
-                {!["Contact Us", "Login"].includes(item.name) }
+                {!["Contact Us", "Login"].includes(item.name)}
               </div>
             ))}
 
@@ -250,8 +252,8 @@ export default function Navbar() {
                   setIsOpen(false);
                 }}
                 className={`text-left px-3 py-2 text-sm font-medium rounded-md ${pathname === item.path
-                    ? "text-cyan-500 bg-cyan-50"
-                    : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
+                  ? "text-cyan-500 bg-cyan-50"
+                  : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
                   }`}
               >
                 {item.name}
@@ -268,8 +270,8 @@ export default function Navbar() {
                   setIsOpen(false);
                 }}
                 className={`text-left px-3 py-2 text-sm font-medium rounded-md ${pathname === item.path
-                    ? "text-cyan-500 bg-cyan-50"
-                    : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
+                  ? "text-cyan-500 bg-cyan-50"
+                  : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
                   }`}
               >
                 {item.name}
