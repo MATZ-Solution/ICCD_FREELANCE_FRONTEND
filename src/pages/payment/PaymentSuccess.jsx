@@ -43,7 +43,8 @@ function SuccessPage() {
         freelancer_id: order.freelancer_id,
         client_id: order.client_id,
         gig_id: order.gig_id,
-        freelancer_client_id: order.freelancer_client_id
+        freelancer_client_id: order.freelancer_client_id,
+        session_id: sessionId
       };
 
 

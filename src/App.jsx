@@ -11,11 +11,9 @@ function App() {
   return (
     <div >
       <ToastContainer position="top-center" autoClose={3000} />
-          <Suspense fallback={<ICCDLoader />}>
-
-      <RouterProvider router={router} />
-          </Suspense>
-
+      <Suspense fallback={<ICCDLoader />}>
+        <RouterProvider router={router} />
+      </Suspense>
     </div>
   )
 }
