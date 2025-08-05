@@ -81,7 +81,7 @@ const Table = ({ title, tabs = [], data = [] }) => {
               {/* Placeholder avatar */}
               <div className="w-8 h-8 bg-gray-300 rounded-full shrink-0" >
                 <img
-                  src={item?.gigsImage?.split(',')[0]} />
+                  src={item?.gigsImage?.split(',')[0]} className='rounded-full h-8 w-8 '  />
                 </div>
 
               {/* Title and Package */}
@@ -102,8 +102,8 @@ const Table = ({ title, tabs = [], data = [] }) => {
 
               {/* Price and Status Badge */}
               <div className="text-right">
-                <p className="text-xs font-semibold text-gray-800">
-                  PKR {item.base_price}
+                <p className="text-xs flex gap-1 flex-row font-semibold text-gray-800">
+                  <span> PKR</span>  {item.base_price}
                 </p>
  
                 <span

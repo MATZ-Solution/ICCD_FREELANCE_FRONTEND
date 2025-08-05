@@ -10,7 +10,8 @@ import {
   formatTo12HourTime,
 } from "../../functions/timeFormat";
 import { useQueryClient } from "@tanstack/react-query";
-import { Send } from "lucide-react";
+import { Send, ArrowLeft } from "lucide-react";
+
 const WhatsAppClone = () => {
   let lastLabel = null;
   const [page, setPage] = useState(1);
@@ -24,10 +25,8 @@ const WhatsAppClone = () => {
   const [message, setMessages] = useState([]);
   const [isActiveChat, setIsActiveChat] = useState(null);
 
-
   const client = useSelector((state) => state.user.userDetails);
   const user = useSelector((state) => state.userType.user);
-
 
   const { data } = useGetAllMessagesByUser();
   const {
@@ -59,7 +58,6 @@ const WhatsAppClone = () => {
     setMessagesInput("");
   };
 
-  // Fetch and prepend new messages
   useEffect(() => {
     const container = containerRef.current;
     if (!container || !singleData?.length) return;
@@ -73,7 +71,6 @@ const WhatsAppClone = () => {
     }, 0);
   }, [singleData]);
 
-  // Scroll detection to fetch more
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
@@ -94,7 +91,6 @@ const WhatsAppClone = () => {
     return () => container.removeEventListener("scroll", handleScroll);
   }, [singleData]);
 
-  // Scroll to bottom on new message
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
@@ -105,10 +101,8 @@ const WhatsAppClone = () => {
     }
   }, [message]);
 
-  // Socket listener
   useEffect(() => {
     const handleReceiveMessage = (data) => {
-      console.log("data: ", data)
       shouldScrollRef.current = true;
       setMessages((prev) => [...prev, data]);
     };
@@ -118,9 +112,7 @@ const WhatsAppClone = () => {
     };
   }, [socket]);
 
-  // Reset on friend change
   useEffect(() => {
-    // setMessages([]);
     setPage(1);
     shouldScrollRef.current = true;
     isFetchingRef.current = false;
@@ -130,21 +122,17 @@ const WhatsAppClone = () => {
     if (item?.message_id !== isActiveChat) {
       setMessages([]);
     }
-    setIsActiveChat(item?.message_id)
+    setIsActiveChat(item?.message_id);
     setFriend(item);
   };
 
-  console.log("friend: ", friend)
-  console.log("message: ", message)
-
   return (
-    <div className="flex h-screen antialiased text-gray-800 bg-gray-100 font-inter">
-
-      <div className="flex flex-row h-full w-full overflow-hidden rounded-lg shadow-xl  bg-white">
-        {/* Left Sidebar - Chat List */}
-        <div className="flex flex-col w-1/3 border-r border-gray-200 bg-gray-50 overflow-hidden">
-          {/* Sidebar Header */}
-          <div className="flex items-center justify-between p-4 bg-white border-b border-gray-200 shadow-sm">
+    <div className="flex flex-col md:flex-row h-screen antialiased text-gray-800 bg-gray-100 font-inter">
+<div
+  className={`flex flex-col w-full md:w-1/3 border-r border-gray-200 bg-gray-50 overflow-hidden ${
+    friend ? "hidden md:flex" : "flex"
+  }`}
+>          <div className="flex items-center justify-between p-4 bg-white border-b border-gray-200 shadow-sm">
             <div className="flex items-center">
               <img
                 src="https://placehold.co/100x100/60A5FA/ffffff?text=You"
@@ -153,19 +141,7 @@ const WhatsAppClone = () => {
               />
               <span className="font-semibold text-lg text-gray-800">My Chats</span>
             </div>
-            <div className="flex space-x-4">
-              {/* New Chat Icon */}
-              <button className="text-gray-500 hover:text-green-600 transition-colors duration-200 p-2 rounded-full hover:bg-gray-100">
-                <i className="fas fa-comment-dots text-xl"></i>
-              </button>
-              {/* Settings Icon */}
-              <button className="text-gray-500 hover:text-green-600 transition-colors duration-200 p-2 rounded-full hover:bg-gray-100">
-                <i className="fas fa-cog text-xl"></i>
-              </button>
-            </div>
           </div>
-
-          {/* Search Bar */}
           <div className="p-4 border-b border-gray-200 bg-white">
             <div className="relative">
               <input
@@ -176,125 +152,115 @@ const WhatsAppClone = () => {
               <i className="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
             </div>
           </div>
-
-          {/* Chat List */}
           <div className="flex-1 overflow-y-auto bg-white">
-
             {data?.map((chat, index) => (
               <button
                 key={index}
-                className={`flex gap-4 items-center p-4 w-full text-left border-b border-gray-300 hover:bg-gray-50 transition-colors duration-200
-                   ${isActiveChat === chat?.message_id ? 'bg-teal-50 bg-opacity-50 border-l-4 border-l-[#08B0BD] border-b-[#08B0BD] ' : ''}
-                 `}
+                className={`flex gap-4 items-center p-4 w-full text-left border-b border-gray-300 hover:bg-gray-50 transition-colors duration-200 ${
+                  isActiveChat === chat?.message_id
+                    ? "bg-teal-50 bg-opacity-50 border-l-4 border-l-[#08B0BD] border-b-[#08B0BD]"
+                    : ""
+                }`}
                 onClick={() => handleFriend(chat)}
               >
-                <div
-                  className="capitalize w-12 h-12 bg-[#A78BFA] font-bold text-2xl text-white rounded-full flex items-center justify-center shadow-sm"
-                >{chat.chat_partner_name[0]}</div>
-                <div className="flex-1 ">
-                  <h3 className="font-semibold text-gray-800 truncate capitalize">{chat.chat_partner_name}</h3>
+                <div className="capitalize w-12 h-12 bg-[#A78BFA] font-bold text-2xl text-white rounded-full flex items-center justify-center shadow-sm">
+                  {chat.chat_partner_name[0]}
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-semibold text-gray-800 truncate capitalize">
+                    {chat.chat_partner_name}
+                  </h3>
                   <p className="text-sm text-gray-500 truncate">{chat.messages}</p>
                 </div>
-                <span className="text-xs text-gray-400 ml-2">{getDateLabel(chat.created_at)}</span>
+                <span className="text-xs text-gray-400 ml-2">
+                  {getDateLabel(chat.created_at)}
+                </span>
               </button>
             ))}
           </div>
         </div>
 
-        {/* Right Main Chat Area */}
+      {friend && (
         <div className="flex flex-col flex-1 bg-white">
-          {/* Chat Header */}
-          {
-            friend && (
-              <div className="flex items-center justify-between p-4 bg-white border-b border-gray-200 shadow-sm">
-                <div className="flex gap-3 items-center">
-                  <div
-                    className="capitaize w-12 h-12 bg-[#A78BFA] font-bold text-2xl text-white rounded-full flex items-center justify-center shadow-sm"
-                  >{friend?.chat_partner_name[0]}</div>
-                  <h2 className="font-semibold text-lg text-gray-800">{friend?.chat_partner_name}</h2>
-                </div>
-                <div className="flex space-x-4">
-                  {/* Call Icon */}
-                  <button className="text-gray-500 hover:text-green-600 transition-colors duration-200 p-2 rounded-full hover:bg-gray-100">
-                    <i className="fas fa-phone text-xl"></i>
-                  </button>
-                  {/* Video Call Icon */}
-                  <button className="text-gray-500 hover:text-green-600 transition-colors duration-200 p-2 rounded-full hover:bg-gray-100">
-                    <i className="fas fa-video text-xl"></i>
-                  </button>
-                  {/* More Options Icon */}
-                  <button className="text-gray-500 hover:text-green-600 transition-colors duration-200 p-2 rounded-full hover:bg-gray-100">
-                    <i className="fas fa-ellipsis-v text-xl"></i>
-                  </button>
-                </div>
+          <div className="flex items-center justify-between p-4 bg-white border-b border-gray-200 shadow-sm">
+            <div className="flex gap-3 items-center">
+              <button
+                onClick={() => setFriend(null)}
+                className=" text-gray-600 hover:text-[#08B0BD] p-2 rounded-full"
+              >
+                <ArrowLeft />
+              </button>
+              <div className="capitalize w-12 h-12 bg-[#A78BFA] font-bold text-2xl text-white rounded-full flex items-center justify-center shadow-sm">
+                {friend?.chat_partner_name[0]}
               </div>
-            )
-          }
+              <h2 className="font-semibold text-lg text-gray-800">
+                {friend?.chat_partner_name}
+              </h2>
+            </div>
+          </div>
 
-          {/* Message Display Area */}
-          <div ref={containerRef} className=" h-[60vh] flex-1 p-6 overflow-y-auto bg-gray-50">
-            {
-              friend && (
-                <>
-                  {message?.map((message, index) => {
-                    const isOwnMessage = message.senderId == client.id;
-                    const introMsg = message.messages === 'You are now communication each other';
-                    return (
-                      <div
-                        key={index}
-                        className={`flex mb-4 ${introMsg ? 'justify-center' : (isOwnMessage ? 'justify-end' : 'justify-start')}`}
-                      >
-                        <div
-                          className={`max-w-xs px-4 py-2 rounded-lg shadow-md
-                            ${introMsg ? 'bg-[#FEFCE8] font-serif text-black rounded-br-none' : isOwnMessage
-                              ? 'bg-[#08B0BD] text-white rounded-br-none'
-                              : 'bg-white text-gray-800 rounded-bl-none'
-                            }
-                    `
-                          }
-                        >
-                          <p className="">{message.messages}</p>
-                          <span className={` text-xs `}>
-                            {formatTo12HourTime(message.created_at)}
-                          </span>
-                        </div>
-                      </div>
-                    )
-                  })}
-                </>
-              )
-            }
+          <div
+            ref={containerRef}
+            className="h-[60vh] flex-1 p-4 sm:p-6 overflow-y-auto bg-gray-50"
+          >
+            {message?.map((message, index) => {
+              const isOwnMessage = message.senderId == client.id;
+              const introMsg =
+                message.messages === "You are now communication each other";
+              return (
+                <div
+                  key={index}
+                  className={`flex mb-4 ${
+                    introMsg
+                      ? "justify-center"
+                      : isOwnMessage
+                      ? "justify-end"
+                      : "justify-start"
+                  }`}
+                >
+                  <div
+                    className={`max-w-xs sm:max-w-md px-4 py-2 rounded-lg shadow-md ${
+                      introMsg
+                        ? "bg-[#FEFCE8] font-serif text-black rounded-br-none"
+                        : isOwnMessage
+                        ? "bg-[#08B0BD] text-white rounded-br-none"
+                        : "bg-white text-gray-800 rounded-bl-none"
+                    }`}
+                  >
+                    <p>{message.messages}</p>
+                    <span className="text-xs">
+                      {formatTo12HourTime(message.created_at)}
+                    </span>
+                  </div>
+                </div>
+              );
+            })}
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Message Input Area */}
-          {
-            friend && (
-              <div className="flex items-center p-4 bg-white border-t border-gray-200 shadow-sm">
-                <button className="text-gray-500 hover:text-green-600 transition-colors duration-200 p-2 rounded-full hover:bg-gray-100 mr-2">
-                  <i className="fas fa-smile text-xl"></i>
-                </button>
-                <button className="text-gray-500 hover:text-green-600 transition-colors duration-200 p-2 rounded-full hover:bg-gray-100 mr-2">
-                  <i className="fas fa-paperclip text-xl"></i>
-                </button>
-                <input
-                  type="text"
-                  value={messageInput}
-                  onChange={(e) => setMessagesInput(e.target.value)}
-                  placeholder="Type a message"
-                  className="flex-1 px-4 py-2 rounded-full bg-gray-100 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#08B0BD] focus:border-transparent text-sm"
-                />
-                <button
-                  onClick={handleSubmitMessages}
-                  className="cursor-pointer ml-2 bg-[#08B0BD] hover:[#08B0BD] text-white p-2 rounded-full shadow-md transition-colors duration-200">
-
-                  <Send />
-                </button>
-              </div>
-            )
-          }
+          <div className="flex items-center p-2 sm:p-4 bg-white border-t border-gray-200 shadow-sm">
+            <button className="text-gray-500 hover:text-green-600 p-2 rounded-full hover:bg-gray-100 mr-2">
+              <i className="fas fa-smile text-xl"></i>
+            </button>
+            <button className="text-gray-500 hover:text-green-600 p-2 rounded-full hover:bg-gray-100 mr-2">
+              <i className="fas fa-paperclip text-xl"></i>
+            </button>
+            <input
+              type="text"
+              value={messageInput}
+              onChange={(e) => setMessagesInput(e.target.value)}
+              placeholder="Type a message"
+              className="flex-1 px-4 py-2 rounded-full bg-gray-100 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#08B0BD] focus:border-transparent text-sm"
+            />
+            <button
+              onClick={handleSubmitMessages}
+              className="ml-2 bg-[#08B0BD] text-white p-2 rounded-full shadow-md hover:bg-[#08B0BD]"
+            >
+              <Send />
+            </button>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

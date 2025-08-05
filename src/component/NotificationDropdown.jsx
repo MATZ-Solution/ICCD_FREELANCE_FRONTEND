@@ -29,8 +29,8 @@ export default function NotificationDropdown() {
 
   return (
     <div className="relative" ref={dropdownRef}>
-
-      <div className="absolute right-0 mt-3 w-96 max-h-[500px] bg-white border border-gray-200/60 rounded-2xl shadow-2xl z-50 overflow-hidden backdrop-blur-sm">
+1
+      <div className="absolute right-0 mt-3 w-52 lg:w-96 max-h-[500px] bg-white border border-gray-200/60 rounded-2xl shadow-2xl z-50 overflow-hidden backdrop-blur-sm">
         {/* Header */}
 
         {data?.length === 0 ?
