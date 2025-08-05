@@ -16,7 +16,7 @@ import { useSingleOrderByFreelancer } from "../../../api/client/order";
 
 const DetailRow = ({ label, icon: Icon, children, isFullWidth = false }) => (
   <div
-    className={`flex items-center justify-between ${
+    className={`flex flex-col sm:flex-row sm:items-center justify-between gap-y-1 ${
       isFullWidth ? "col-span-full" : ""
     }`}
   >
@@ -24,7 +24,9 @@ const DetailRow = ({ label, icon: Icon, children, isFullWidth = false }) => (
       {Icon && <Icon className="h-4 w-4 text-white/70" aria-hidden="true" />}
       {label}
     </dt>
-    <dd className="text-white/90">{children}</dd>
+    <dd className="text-white/90 break-words w-full sm:w-auto text-sm sm:text-base">
+      {children}
+    </dd>
   </div>
 );
 
@@ -94,22 +96,22 @@ export default function OrderDetailPage() {
     }).format(value || 0);
   }
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex flex-col items-center py-8 px-4">
-      <div className="w-full max-w-4xl">
-        <h1 className="text-4xl font-extrabold mb-2 text-center text-gray-900">
+ return (
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex flex-col items-center py-6 px-2 sm:px-4 md:px-6 lg:px-8">
+      <div className="w-full max-w-5xl">
+        <h1 className="text-3xl sm:text-4xl font-extrabold mb-2 text-center text-gray-900">
           Order Details
         </h1>
-        <p className="text-lg text-gray-600 mb-8 text-center">
+        <p className="text-base sm:text-lg text-gray-600 mb-6 sm:mb-8 text-center">
           Comprehensive overview of your project order.
         </p>
 
-        <div className="rounded-lg shadow-md bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white">
+        <div className="rounded-lg shadow-md bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white overflow-hidden">
           {/* Card Header */}
-          <div className="flex flex-row items-center justify-between space-y-0 pb-4 p-6 border-b border-white/30">
-            <h2 className="text-3xl font-bold">Order #{order.id}</h2>
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 sm:p-6 border-b border-white/30 gap-2">
+            <h2 className="text-2xl sm:text-3xl font-bold">Order #{order.id}</h2>
             <span
-              className={`inline-flex items-center px-3 py-1 rounded-full text-base font-medium capitalize ${getStatusClasses(
+              className={`inline-flex items-center px-3 py-1 rounded-full text-sm sm:text-base font-medium capitalize ${getStatusClasses(
                 order.status
               )}`}
             >
@@ -118,20 +120,13 @@ export default function OrderDetailPage() {
           </div>
 
           {/* Card Content */}
-          <div className="grid gap-8 pt-6 p-6">
-            {/* Order Summary Section */}
-            <section aria-labelledby="order-summary-title" className="mb-8">
-              <h3
-                id="order-summary-title"
-                className="text-xl font-semibold mb-4 flex items-center gap-2 text-white"
-              >
-                <DollarSign
-                  className="h-5 w-5"
-                  aria-hidden="true"
-                />{" "}
-                Order Summary
+          <div className="grid gap-6 sm:gap-8 p-4 sm:p-6">
+            {/* Order Summary */}
+            <section>
+              <h3 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4 flex items-center gap-2 text-white">
+                <DollarSign className="h-5 w-5" /> Order Summary
               </h3>
-              <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4 text-base">
+              <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4 text-sm sm:text-base">
                 <DetailRow label="Total Price" icon={DollarSign}>
                   <span className="font-bold">{formatCurrency(order.total_price)}</span>
                 </DetailRow>
@@ -151,40 +146,33 @@ export default function OrderDetailPage() {
               </dl>
             </section>
 
-            <div className="border-t border-white/30 my-6"></div>
+            <div className="border-t border-white/30" />
 
-            {/* Client Details Section */}
-            <section aria-labelledby="client-details-title" className="mb-8">
-              <h3
-                id="client-details-title"
-                className="text-xl font-semibold mb-4 flex items-center gap-2 text-white"
-              >
-                <User className="h-5 w-5" aria-hidden="true" /> Client Details
+            {/* Client Details */}
+            <section>
+              <h3 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4 flex items-center gap-2 text-white">
+                <User className="h-5 w-5" /> Client Details
               </h3>
-              <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4 text-base">
+              <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4 text-sm sm:text-base">
                 <DetailRow label="Email" icon={Mail}>
-                  <span className="flex items-center gap-1">{order.email}</span>
+                  {order.email}
                 </DetailRow>
-              
                 <DetailRow label="Session ID" isFullWidth>
-                  <span className="text-sm font-mono bg-white bg-opacity-20 px-2 py-1 rounded text-black">
+                  <span className="text-xs font-mono bg-white bg-opacity-20 px-2 py-1 rounded text-black break-all">
                     {order.session_id}
                   </span>
                 </DetailRow>
               </dl>
             </section>
 
-            <div className="border-t border-white/30 my-6"></div>
+            <div className="border-t border-white/30" />
 
-            {/* Freelancer & Gig Details Section */}
-            <section aria-labelledby="freelancer-project-title" className="mb-8">
-              <h3
-                id="freelancer-project-title"
-                className="text-xl font-semibold mb-4 flex items-center gap-2 text-white"
-              >
-                <Briefcase className="h-5 w-5" aria-hidden="true" /> Project & Freelancer
+            {/* Freelancer Info */}
+            <section>
+              <h3 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4 flex items-center gap-2 text-white">
+                <Briefcase className="h-5 w-5" /> Project & Freelancer
               </h3>
-              <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-4 text-base">
+              <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4 text-sm sm:text-base">
                 <DetailRow label="Freelancer ID">
                   <div className="flex items-center gap-2">
                     <div className="h-6 w-6 rounded-full bg-green-400 bg-opacity-50 text-white flex items-center justify-center text-xs">
@@ -195,10 +183,10 @@ export default function OrderDetailPage() {
                 </DetailRow>
                 <DetailRow label="Gig ID">{order.gig_id}</DetailRow>
                 <DetailRow label="Created At" isFullWidth>
-                  <span className="flex items-center gap-2">
-                    <CalendarDays className="h-4 w-4 text-white/70" aria-hidden="true" />
+                  <span className="flex flex-wrap items-center gap-2">
+                    <CalendarDays className="h-4 w-4 text-white/70" />
                     {formattedDate}
-                    <Clock className="h-4 w-4 text-white/70 ml-2" aria-hidden="true" />
+                    <Clock className="h-4 w-4 text-white/70 ml-2" />
                     {formattedTime}
                   </span>
                 </DetailRow>
@@ -206,21 +194,21 @@ export default function OrderDetailPage() {
             </section>
           </div>
 
-          {/* Card Footer */}
-          <div className="flex flex-col sm:flex-row justify-end gap-4 pt-6 p-6 border-t border-white/30">
+          {/* Footer Actions */}
+          <div className="flex flex-col sm:flex-row justify-end items-center gap-3 p-4 sm:p-6 border-t border-white/30">
             <button
               onClick={() => navigate("/messages")}
-              aria-label="Message Freelancer"
-              className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-white/40 bg-white bg-opacity-20 text-black hover:bg-opacity-30 h-10 px-4 py-2 w-full sm:w-auto"
+              className="w-full sm:w-auto inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium border border-white/40 bg-white bg-opacity-20 text-black hover:bg-opacity-30 h-10 px-4 py-2"
             >
-              <MessageSquare className="mr-2 h-4 w-4" aria-hidden="true" /> Message Freelancer
+              <MessageSquare className="mr-2 h-4 w-4" /> Message Freelancer
             </button>
             <button
-              onClick={() => navigate(`/client/gigs/gigs_details/${order.gig_id}`)}
-              aria-label="View Gig Details"
-              className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-white bg-opacity-20 text-black hover:bg-opacity-30 h-10 px-4 py-2 w-full sm:w-auto"
+              onClick={() =>
+                navigate(`/client/gigs/gigs_details/${order.gig_id}`)
+              }
+              className="w-full sm:w-auto inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium bg-white bg-opacity-20 text-black hover:bg-opacity-30 h-10 px-4 py-2"
             >
-              <Eye className="mr-2 h-4 w-4" aria-hidden="true" /> View Gig Details
+              <Eye className="mr-2 h-4 w-4" /> View Gig Details
             </button>
           </div>
         </div>

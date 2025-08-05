@@ -130,9 +130,10 @@ const WhatsAppClone = () => {
     <div className="flex flex-col md:flex-row h-screen antialiased text-gray-800 bg-gray-100 font-inter">
 <div
   className={`flex flex-col w-full md:w-1/3 border-r border-gray-200 bg-gray-50 overflow-hidden ${
-    friend ? "hidden md:flex" : "flex"
+    friend ? "hidden md:flex hide-between-786-942" : "flex"
   }`}
->          <div className="flex items-center justify-between p-4 bg-white border-b border-gray-200 shadow-sm">
+>
+      <div className="flex items-center justify-between p-4 bg-white border-b border-gray-200 shadow-sm">
             <div className="flex items-center">
               <img
                 src="https://placehold.co/100x100/60A5FA/ffffff?text=You"
@@ -163,7 +164,7 @@ const WhatsAppClone = () => {
                 }`}
                 onClick={() => handleFriend(chat)}
               >
-                <div className="capitalize w-12 h-12 bg-[#A78BFA] font-bold text-2xl text-white rounded-full flex items-center justify-center shadow-sm">
+                <div className="capitalize w-10 h-10 p-4 bg-[#A78BFA] font-bold text-2xl text-white rounded-full flex items-center justify-center shadow-sm">
                   {chat.chat_partner_name[0]}
                 </div>
                 <div className="flex-1">
