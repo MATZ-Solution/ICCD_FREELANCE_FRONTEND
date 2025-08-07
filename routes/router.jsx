@@ -67,6 +67,7 @@ const ContactPage = lazy(() => import("../src/pages/contactpage"));
 const AboutUsPage = lazy(() => import("../src/pages/aboutuspage"));
 const LoginController = lazy(() => import("../src/component/loginController"));
 import AuthRoute from '../utils/authRoute';
+import FindTalent from "../src/pages/clientHomepage/findTalent";
 
 const stripePromise = loadStripe("pk_test_51QCl1eCDh3RtIJ6XkYcN5vHd3KTO2f8enRSNv9Wx7Li0iCI7cr9khTDQx0vS5RmbazZoaECNW83FesOMwLeIgMLb00BJG4pPZR");
 
@@ -115,7 +116,7 @@ export const router = createBrowserRouter([
     path: "/find-talent",
     element: withSuspense(
         <MainTemplate isShowFooter={true}>
-          <ClientHomepage />
+          <FindTalent />
         </MainTemplate>
     ),
   },

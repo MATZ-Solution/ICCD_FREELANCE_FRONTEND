@@ -7,8 +7,21 @@ import Banner6 from "../component/banner6"
 import Banner7 from "../component/banner7"
 import Navbar from "../component/navbar"
 import Footer from "../component/footer"
+import { useSelector } from "react-redux"
+import { useEffect } from "react"
+import { useNavigate } from "react-router-dom"
 
 function Homepage() {
+
+    const navigate = useNavigate()
+    const userDetails = useSelector((state) => state.user.userDetails);
+
+    useEffect(() => {
+        if (userDetails && userDetails?.id) {
+            navigate('/client')
+        }
+    }, [])
+
     return (
         <div>
             <Navbar />

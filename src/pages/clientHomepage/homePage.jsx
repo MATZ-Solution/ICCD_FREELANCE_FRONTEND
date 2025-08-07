@@ -81,7 +81,7 @@ export default function ClientHomepage() {
                 onClick={() => navigate(`/client/gigs/gigs_details/${data?.id}`)}
                 image={data?.fileUrls ? data?.fileUrls.split(",")[0] : ""}
                 title={data.title}
-                author={data.firstName + data.lastName}
+                author={data.firstName + " " + data.lastName}
                 authorImg={data?.freelancerImg}
                 level="Level 2++"
                 rating={4.7}

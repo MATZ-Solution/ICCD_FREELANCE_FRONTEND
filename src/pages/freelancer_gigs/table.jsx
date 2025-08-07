@@ -69,14 +69,12 @@ const Table = ({ title, tabs = [], data = [] }) => {
               className="flex items-center gap-4 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
             >
               {/* Status Dot */}
-              <div
+              {/* <div
                 className={`w-2 h-2 rounded-full shrink-0 ${
-                  getStatusColor(item.status).split(' ')[0] // Only color class for dot
+                  getStatusColor(item.status).split(' ')[0]
                 }`}
                 title={item.status}
-              />
-
-
+              /> */}
 
               {/* Placeholder avatar */}
               <div className="w-8 h-8 bg-gray-300 rounded-full shrink-0" >
