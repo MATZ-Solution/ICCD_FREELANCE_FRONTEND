@@ -77,6 +77,21 @@ export function useGetSingleGigs(id) {
   };
 }
 
+export function useGetGigsPackages(params = {}) {
+  const constructQueryString = (params) => {
+    const query = new URLSearchParams(params).toString();
+    return query ? `&${query}` : "";
+  };
+  const queryKey = [API_ROUTE.gigs.getGigsPackages, params];
+  const { data, error, isLoading, isError } = useQuery({
+    queryKey,
+    queryFn: () =>
+      api.get(`${API_ROUTE.gigs.getGigsPackages}?${constructQueryString(params)}`),
+    enabled: Boolean(params.id) && Boolean(params.category)
+  });
+  return { gigsPackages: data?.data?.data, error, isLoading, isError };
+}
+
 export function useGetGigsOverview(id) {
   const { data, isSuccess, isPending, isError, isLoading } = useQuery({
     queryKey: [API_ROUTE.gigs.getGigsOverview, id],

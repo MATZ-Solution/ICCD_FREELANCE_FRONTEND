@@ -6,10 +6,14 @@ import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import ICCDLoader from "../loader";
 import GigCarousel from "./GigCarousel"; // Make sure the path is correct
+import { useGetGigsPackages } from "../../../api/client/gigs";
 
 export default function ServicePage() {
+  
   const [activeNavTab, setActiveNavTab] = useState("Basic");
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const userDetails = useSelector(state => state.user.userDetails);
 
   const { id } = useParams();
   const { data, isLoading } = useGetSingleGigs(id);
@@ -17,13 +21,14 @@ export default function ServicePage() {
   const gig = data?.[0];
   const gigInfo = gig?.gigsDescription;
   const freelancer = gig?.freelancerDetails;
-  const userDetails = useSelector(state => state.user.userDetails);
 
-  const selectedPackage = gig?.packagesDetails?.find(
+  const { gigsPackages, isLoading: packageIsLoad } = useGetGigsPackages({ id: id, category: gigInfo?.gigsCategory })
+
+  const selectedPackage = gigInfo?.packages?.find(
     (pkg) => pkg?.packageType?.toLowerCase() === activeNavTab.toLowerCase()
   );
 
-  if (isLoading) return <ICCDLoader /> ;
+  if (isLoading) return <ICCDLoader />;
 
   return (
     <div className="min-h-screen bg-white px-4 py-6 md:px-8 lg:px-12">
@@ -44,7 +49,7 @@ export default function ServicePage() {
                 <h2 className="text-xl font-semibold">
                   {freelancer?.freelancerName}
                 </h2>
-                <p className="text-gray-500">UI Designer</p>
+                <p className="text-gray-500">UI Designers</p>
               </div>
             </div>
           </div>
@@ -96,8 +101,8 @@ export default function ServicePage() {
                     key={type}
                     onClick={() => setActiveNavTab(type)}
                     className={`flex-1 py-4 text-center text-sm font-medium border-b-2 transition-all ${activeNavTab.toLowerCase() === type.toLowerCase()
-                        ? "border-black bg-green-50 text-black"
-                        : "border-transparent text-gray-500 hover:text-black hover:bg-gray-50"
+                      ? "border-black bg-green-50 text-black"
+                      : "border-transparent text-gray-500 hover:text-black hover:bg-gray-50"
                       }`}
                   >
                     {type}
@@ -112,7 +117,7 @@ export default function ServicePage() {
                       price={selectedPackage.price}
                       title={selectedPackage.packageName}
                       description={`${selectedPackage.packageDescription}`}
-                      deliverytime={selectedPackage.deliveryTime }
+                      deliverytime={selectedPackage.deliveryTime}
                       Revisions={selectedPackage.revisions}
                       pages={selectedPackage.pages}
                       sourceFile={selectedPackage.sourceFile}
@@ -152,8 +157,8 @@ export default function ServicePage() {
           revisions={selectedPackage.revisions}
           basePrice={selectedPackage.price}
           freelancer_client_id={freelancer.freelancerClientId}
-          freelancer_id={freelancer.freelancerId}     
-          gig_id={gigInfo.gigsID}        
+          freelancer_id={freelancer.freelancerId}
+          gig_id={gigInfo.gigsID}
           client_id={userDetails.id}
         />
       )}

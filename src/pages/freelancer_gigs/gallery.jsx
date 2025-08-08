@@ -62,9 +62,11 @@ function Gallery() {
     }
     formData.append("freelancerId", profileDetails.id);
     addGigs(formData);
-    dispatch(resetGigDetails())
-    navigate('/freelancer/manage-gigs');
+    // dispatch(resetGigDetails())
+    // navigate('/freelancer/manage-gigs');
   };
+
+  console.log("gigs_details: ", gigs_details)
 
   return (
     <Profile>

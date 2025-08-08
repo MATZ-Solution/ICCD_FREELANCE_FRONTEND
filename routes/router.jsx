@@ -68,6 +68,7 @@ const AboutUsPage = lazy(() => import("../src/pages/aboutuspage"));
 const LoginController = lazy(() => import("../src/component/loginController"));
 import AuthRoute from '../utils/authRoute';
 import FindTalent from "../src/pages/clientHomepage/findTalent";
+import EditPricingForm from "../src/pages/freelancer_gigs/editPricing";
 
 const stripePromise = loadStripe("pk_test_51QCl1eCDh3RtIJ6XkYcN5vHd3KTO2f8enRSNv9Wx7Li0iCI7cr9khTDQx0vS5RmbazZoaECNW83FesOMwLeIgMLb00BJG4pPZR");
 
@@ -261,7 +262,7 @@ export const router = createBrowserRouter([
     element: withSuspense(
       <AuthRoute>
         <MainTemplate isShowFooter={false}>
-          <Pricing />
+          <EditPricingForm />
         </MainTemplate>
       </AuthRoute>
     ),

@@ -1,4 +1,4 @@
-import { useStatey, useEffect } from 'react';
+import { useEffect } from 'react';
 import ReactSelect from '../../component/buttonSelect';
 import Profile from '../../component/freelancers_gigs/profile';
 import Button from '../../component/button';
@@ -11,6 +11,7 @@ import { useParams } from 'react-router-dom';
 import * as yup from "yup";
 import { useEditGigs, useGetSingleGigs } from '../../../api/client/gigs';
 import ICCDLoader from '../../component/loader';
+import services from '../../../data/gigsServiceData';
 
 function Overview() {
 
@@ -19,16 +20,16 @@ function Overview() {
   const { id } = useParams()
 
   const { data: gigsData, isSuccess, isPending, isError, isLoading } = useGetSingleGigs(id)
-  const { editGigs, isSuccess: editGigsIsSucc, isPending: editGigIsPend, isError: editGigIsErr, error } = useEditGigs(id,'json')
+  const { editGigs, isSuccess: editGigsIsSucc, isPending: editGigIsPend, isError: editGigIsErr, error } = useEditGigs(id, 'json')
 
- 
+
   const schema = yup.object({
     gigsTitle: yup.string().required("title not selected"),
     category: yup.string().required("category not selected"),
     subCategory: yup.string().required("sub category not selected"),
   })
 
-  const { register, control, handleSubmit, reset, formState: { errors } } = useForm({
+  const { register, control, handleSubmit, watch, reset, formState: { errors } } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
       gigsTitle: gigsData && gigsData?.length > 0 ? gigsData[0]?.gigsDescription?.gigsTitle : '',
@@ -42,19 +43,19 @@ function Overview() {
     { name: 'Category', details: 'Choose the category and sub-category most suitable for your Gig.' },
     // { name: 'Search tags', details: 'Tag your Gig with buzz words that are relevant to the services you offer. Use all 5 tags to get found.' },
   ]
-  const options = [
-    { value: 'chocolate', label: 'Chocolate' },
-    { value: 'strawberry', label: 'Strawberry' },
-    { value: 'vanilla', label: 'Vanilla' },
-  ];
+
+  const categoryValue = watch("category");
+  const categoryOptions = services.categories?.map((item) => ({ value: item.name, label: item.name }))
+  const filterCategory = services.categories?.filter((item) => item.name === categoryValue)
+  const subCategoryOptions = filterCategory[0]?.subcategories?.map((item) => ({ value: item.name, label: item.name }))
 
   const onSubmit = (data) => {
     // dispatch(setGigsDetails(data));
-    console.log("data: ", data)
     if (location.pathname.includes('edit')) {
       editGigs(data)
       navigate(`/freelancer/manage-gigs/pricing/edit/${id}`)
     } else {
+      console.log("data: ", data)
       dispatch(setGigsDetails(data));
       navigate('/freelancer/manage-gigs/pricing')
     }
@@ -65,14 +66,14 @@ function Overview() {
       reset({
         gigsTitle: gigsData[0]?.gigsDescription?.gigsTitle || '',
         category: gigsData[0]?.gigsDescription?.gigsCategory || null,
-        subCategory: gigsData[0]?.gigsDescription?.gigsSubcategory|| null,
+        subCategory: gigsData[0]?.gigsDescription?.gigsSubcategory || null,
       });
     }
   }, [gigsData, reset]);
-  
- if(isLoading || editGigIsPend){
-        return <ICCDLoader />
-    }
+
+  if (isLoading || editGigIsPend) {
+    return <ICCDLoader />
+  }
   return (
     <Profile>
       <div className='flex flex-col rounded-md mt-7 gap-6 sm:border-[#AFAFAF] sm:border-[1px] sm:mt-20 sm:gap-10 sm:p-10'>
@@ -115,8 +116,8 @@ function Overview() {
                           <ReactSelect
                             placeholder='Select Category'
                             onChange={(selectedOption) => onChange(selectedOption?.value || '')}
-                            option={options}
-                            value={options.find(option => option.value === value) || null}
+                            option={categoryOptions}
+                            value={categoryOptions.find(option => option.value === value) || null}
                           />
                         )}
                       />
@@ -128,10 +129,10 @@ function Overview() {
                         name="subCategory"
                         render={({ field: { onChange, onBlur, value, } }) => (
                           <ReactSelect
-                            placeholder='Select Category'
+                            placeholder='Select Sub Category'
                             onChange={(selectedOption) => onChange(selectedOption?.value || '')}
-                            option={options}
-                            value={options.find(option => option.value === value) || null}
+                            option={subCategoryOptions}
+                            value={subCategoryOptions?.find(option => option.value === value) || null}
                           />
                         )}
                       />

@@ -31,6 +31,7 @@ const API_ROUTE = {
     addGigs: "/gigs/addGigs",
     getSingleGigs: "/gigs/getSingleGigs",
     getGigsByUserId: "/gigs/getGigsByUser",
+    getGigsPackages: "/gigs/getPackages",
     editGigs: "/gigs/editGigs",
     getGigsFiles: '/gigs/getGigsFiles',
     editGigsFiles: '/gigs/editGigsFiles'
