@@ -22,9 +22,7 @@ export default function ServicePage() {
   const gigInfo = gig?.gigsDescription;
   const freelancer = gig?.freelancerDetails;
 
-  const { gigsPackages, isLoading: packageIsLoad } = useGetGigsPackages({ id: id, category: gigInfo?.gigsCategory })
-
-  const selectedPackage = gigInfo?.packages?.find(
+  const selectedPackage = data?.[0]?.packagesDetails?.find(
     (pkg) => pkg?.packageType?.toLowerCase() === activeNavTab.toLowerCase()
   );
 

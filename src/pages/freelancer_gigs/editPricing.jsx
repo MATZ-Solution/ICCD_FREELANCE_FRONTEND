@@ -9,6 +9,7 @@ import { setGigsDetails } from '../../../redux/slices/gigsDetailSlice';
 import { useParams } from 'react-router-dom';
 import { useGetGigsPackages } from '../../../api/client/gigs';
 import { useEffect } from 'react';
+import { useEditGigs } from '../../../api/client/gigs';
 
 const packageTypes = ['Basic', 'Standard', 'Premium'];
 
@@ -37,11 +38,11 @@ export default function EditPricingForm() {
     const dispatch = useDispatch()
 
     const gigs_details = useSelector(state => state.gigs.gigsDetails);
-    const filterCategory = services.categories?.filter((item) => item.name === gigs_details.category)
-    const features = filterCategory[0]?.subcategories.flatMap((item => item.services))
+    const features = services.categories.filter(item => item.name === gigs_details.category)[0]?.
+        subcategories?.filter(item => item.name === gigs_details.subCategory)[0]?.services
 
-    const { gigsPackages, isLoading: packageIsLoad } = useGetGigsPackages({ id: id, category: gigs_details?.category })
-    console.log("gigsPackages: ", gigsPackages)
+    const { gigsPackages, isLoading: packageIsLoad } = useGetGigsPackages(id)
+    const { editGigs, isPending: editGigIsPend } = useEditGigs(id, 'json');
 
     const { control, register, reset, handleSubmit } = useForm();
 
@@ -49,46 +50,51 @@ export default function EditPricingForm() {
         const structuredData = {};
         packageTypes.forEach((pkgType, index) => {
             const pkgKey = pkgType.toLowerCase();
-            const raw = data.packages?.[index] || {};
+            const { name, description, deliveryTime, revisions, concepts, price, features = {} } = data.packages[index];
             const formattedFeatures = {};
-            features.forEach((feature) => {
-                formattedFeatures[feature.replace(/\s+/g, '_').toLowerCase()] = raw.features?.[feature] || false;
+            Object.keys(features).forEach(featureName => {
+                const backendKey = featureName.replace(/\s+/g, '_').toLowerCase();
+                formattedFeatures[backendKey] = features[featureName] || false;
             });
+            formattedFeatures.concepts = concepts?.value || '';
             structuredData[pkgKey] = {
                 packageType: pkgKey,
-                name: raw.name || '',
-                description: raw.description || '',
-                delivery_time: raw.deliveryTime?.value || '',
-                revisions: raw.revisions?.value || '',
-                concepts: raw.concepts?.value || '',
-                price: raw.price || '',
-                ...formattedFeatures
+                name: name || '',
+                description: description || '',
+                deliveryTime: deliveryTime?.value || '',
+                revisions: revisions?.value || '',
+                price: price || '',
+                packages: JSON.stringify(formattedFeatures)
             };
         });
-        console.log({ packages: structuredData });
-        editGigs(data)
-        navigate(`/freelancer/manage-gigs/description/edit/${id}`)
+        editGigs({ package: structuredData });
+        navigate(`/freelancer/manage-gigs/description/edit/${id}`);
     };
+
 
     useEffect(() => {
         if (!gigsPackages || !features) return;
+
         const formatted = gigsPackages.map((pkg) => {
+            const parsedFeatures = JSON.parse(pkg.packages || "{}");
             const featureData = {};
             features.forEach((feature) => {
-                const key = feature.replace(/\s+/g, '_').toLowerCase(); 
+                const key = feature.replace(/\s+/g, '_').toLowerCase();
+                featureData[feature] = parsedFeatures[key] ?? false;
             });
             return {
                 name: pkg.name,
                 description: pkg.description,
-                deliveryTime: deliveryOptions.find(opt => opt.value === String(pkg.delivery_time)) || null,
+                deliveryTime: deliveryOptions.find(opt => opt.value === String(pkg.deliveryTime)) || null,
                 revisions: revisionsOptions.find(opt => opt.value === String(pkg.revisions)) || null,
-                concepts: conceptsOptions.find(opt => opt.value === String(pkg.concepts)) || null,
+                concepts: conceptsOptions.find(opt => opt.value === String(parsedFeatures.concepts)) || null,
                 price: pkg.price,
-                features: featureData,
+                features: featureData
             };
         });
         reset({ packages: formatted });
     }, [gigsPackages]);
+
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} className="p-4 max-w-7xl mx-auto">

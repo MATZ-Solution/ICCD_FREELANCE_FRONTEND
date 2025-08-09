@@ -52,6 +52,7 @@ function Overview() {
   const onSubmit = (data) => {
     // dispatch(setGigsDetails(data));
     if (location.pathname.includes('edit')) {
+      dispatch(setGigsDetails(data));
       editGigs(data)
       navigate(`/freelancer/manage-gigs/pricing/edit/${id}`)
     } else {

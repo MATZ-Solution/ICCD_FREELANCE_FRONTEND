@@ -38,8 +38,7 @@ export function useAddGigs() {
       //     text1: "Error",
       //     text2: "Failed to edit scout",
       // });
-            toast.error("error in adding gigs!");
-
+      toast.error("error in adding gigs!");
     },
   });
   return { addGigs, isSuccess, isPending, isError, error };
@@ -63,7 +62,7 @@ export function useGetSingleGigs(id) {
   const { data, isSuccess, isPending, isError, isLoading } = useQuery({
     queryKey: [API_ROUTE.gigs.getSingleGigs, id],
     queryFn: async () => await api.get(`${API_ROUTE.gigs.getSingleGigs}/${id}`),
-    enabled: id !== undefined && id !== null
+    enabled: id !== undefined && id !== null,
     // refetchOnWindowFocus: true,
     // staleTime: 0,
     // refetchOnMount: true,
@@ -77,17 +76,11 @@ export function useGetSingleGigs(id) {
   };
 }
 
-export function useGetGigsPackages(params = {}) {
-  const constructQueryString = (params) => {
-    const query = new URLSearchParams(params).toString();
-    return query ? `&${query}` : "";
-  };
-  const queryKey = [API_ROUTE.gigs.getGigsPackages, params];
+export function useGetGigsPackages(id) {
   const { data, error, isLoading, isError } = useQuery({
-    queryKey,
-    queryFn: () =>
-      api.get(`${API_ROUTE.gigs.getGigsPackages}?${constructQueryString(params)}`),
-    enabled: Boolean(params.id) && Boolean(params.category)
+    queryKey: [API_ROUTE.gigs.getGigsPackages, id],
+    queryFn: () => api.get(`${API_ROUTE.gigs.getGigsPackages}/${id}`),
+    enabled: Boolean(id),
   });
   return { gigsPackages: data?.data?.data, error, isLoading, isError };
 }
@@ -95,8 +88,9 @@ export function useGetGigsPackages(params = {}) {
 export function useGetGigsOverview(id) {
   const { data, isSuccess, isPending, isError, isLoading } = useQuery({
     queryKey: [API_ROUTE.gigs.getGigsOverview, id],
-    queryFn: async () => await api.get(`${API_ROUTE.gigs.getGigsOverview}/${id}`),
-    enabled: id !== undefined && id !== null
+    queryFn: async () =>
+      await api.get(`${API_ROUTE.gigs.getGigsOverview}/${id}`),
+    enabled: id !== undefined && id !== null,
     // refetchOnWindowFocus: true,
     // staleTime: 0,
     // refetchOnMount: true,
@@ -111,10 +105,15 @@ export function useGetGigsOverview(id) {
 }
 
 export function useGetGigsByUser() {
-  const freelancerDetails = useSelector(state => state.userProfile.userProfile)
+  const freelancerDetails = useSelector(
+    (state) => state.userProfile.userProfile
+  );
   const { data, isSuccess, isPending, isError, isLoading } = useQuery({
     queryKey: [API_ROUTE.gigs.getGigsByUserId, freelancerDetails.id],
-    queryFn: async () => await api.get(`${API_ROUTE.gigs.getGigsByUserId}/${freelancerDetails.id}`),
+    queryFn: async () =>
+      await api.get(
+        `${API_ROUTE.gigs.getGigsByUserId}/${freelancerDetails.id}`
+      ),
   });
   return {
     data: data?.data?.data,
@@ -129,7 +128,7 @@ export function useGetGigsFiles(id) {
   const { data, isSuccess, isPending, isError, isLoading } = useQuery({
     queryKey: [API_ROUTE.gigs.getGigsFiles, id],
     queryFn: async () => await api.get(`${API_ROUTE.gigs.getGigsFiles}/${id}`),
-    enabled: id !== undefined && id !== null
+    enabled: id !== undefined && id !== null,
     // refetchOnWindowFocus: true,
     // staleTime: 0,
     // refetchOnMount: true,
@@ -143,14 +142,14 @@ export function useGetGigsFiles(id) {
   };
 }
 
-export function useEditGigs(id, formType = 'json') {
+export function useEditGigs(id, formType = "json") {
   // const pathname = usePathname();
   const queryClient = useQueryClient();
   // const { dispatch } = useGlobalState();
 
   const {
     mutate: editGigs,
-    isSuccess ,
+    isSuccess,
     isPending,
     isError,
     error,
@@ -158,7 +157,8 @@ export function useEditGigs(id, formType = 'json') {
     mutationFn: async (data) =>
       await api.put(`${API_ROUTE.gigs.editGigs}/${id}`, data, {
         headers: {
-          "Content-Type": formType === 'json' ? "application/json" : "multipart/form-data",
+          "Content-Type":
+            formType === "json" ? "application/json" : "multipart/form-data",
           Authorization: api.defaults.headers.common["Authorization"],
         },
         timeout: 30000,
@@ -167,8 +167,8 @@ export function useEditGigs(id, formType = 'json') {
       queryClient.invalidateQueries({
         queryKey: [API_ROUTE.gigs.editGigs],
       });
-      
-      toast.success("Gigs edit successfully!");
+
+      // toast.success("Gigs edit successfully!");
     },
     onError: (error) => {
       // Toast.show({
@@ -176,15 +176,14 @@ export function useEditGigs(id, formType = 'json') {
       //     text1: "Error",
       //     text2: "Failed to edit scout",
       // });
-            toast.error("Erorr in editting Gigs!");
-      
+      toast.error("Erorr in editting Gigs!");
     },
   });
   return { editGigs, isSuccess, isPending, isError, error };
 }
 
 export function useEditGigsFiles(id) {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const {
     mutate: editGigsFiles,
@@ -205,9 +204,8 @@ export function useEditGigsFiles(id) {
       queryClient.invalidateQueries({
         queryKey: [API_ROUTE.gigs.editGigs],
       });
-      navigate('/freelancer/manage-gigs')
+      navigate("/freelancer/manage-gigs");
       toast.success("Gigs Files edit successfully!");
-
     },
     onError: (error) => {
       // Toast.show({
@@ -215,8 +213,7 @@ export function useEditGigsFiles(id) {
       //     text1: "Error",
       //     text2: "Failed to edit scout",
       // });
-            toast.error("error in editing Gigs Files !");
-
+      toast.error("error in editing Gigs Files !");
     },
   });
   return { editGigsFiles, isSuccess, isPending, isError, error };
