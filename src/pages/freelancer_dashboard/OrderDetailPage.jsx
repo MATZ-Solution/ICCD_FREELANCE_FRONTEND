@@ -197,10 +197,10 @@ export default function OrderDetailPage() {
           {/* Footer Actions */}
           <div className="flex flex-col sm:flex-row justify-end items-center gap-3 p-4 sm:p-6 border-t border-white/30">
             <button
-              onClick={() => navigate("/messages")}
+              onClick={() => navigate("/freelancer/messages")}
               className="w-full sm:w-auto inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium border border-white/40 bg-white bg-opacity-20 text-black hover:bg-opacity-30 h-10 px-4 py-2"
             >
-              <MessageSquare className="mr-2 h-4 w-4" /> Message Freelancer
+              <MessageSquare className="mr-2 h-4 w-4" /> Message Client
             </button>
             <button
               onClick={() =>

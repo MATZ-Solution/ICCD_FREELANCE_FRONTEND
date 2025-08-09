@@ -47,17 +47,18 @@ const API_ROUTE = {
     getClientDashboardData: '/client/getClientDashboardData',
     clientEditProfile: '/client/clientEditProfile'
   },
+
+  superadmin: {
+    getAllUsers: '/superadmin/getAllUsers',
+  },
   order: {
     getAllOrderByFreelancer: '/order/getAllOrderByFreelancer',
     getSingleOrderByFreelancer: '/order/getSingleOrderByFreelancer',
-    getAllOrderByClient: '/order/getAllOrderByClient'
-  },
-  stripeorder: {
-  getOrderByFreelancer: '/stripe/getAllOrderByFreelancer',   
-  getOrderAllOrder: '/stripe/getAllOrder',
-  getSingleOrderByFreelancer: '/stripe/getSingleOrderByFreelancer',
+    getAllOrderByClient: '/order/getAllOrderByClient',
+    getAllOrderByAdmin: '/order/getAllOrderByAdmin',
 
   },
+  
   messages: {
     addMessageByUser: '/messages/addMessageByUser',
     getAllMessageByUser: '/messages/getAllMessageByUser',

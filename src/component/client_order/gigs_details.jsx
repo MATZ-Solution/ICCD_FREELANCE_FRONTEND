@@ -9,14 +9,14 @@ import GigCarousel from "./GigCarousel"; // Make sure the path is correct
 import { useGetGigsPackages } from "../../../api/client/gigs";
 
 export default function ServicePage() {
-  
   const [activeNavTab, setActiveNavTab] = useState("Basic");
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const userDetails = useSelector(state => state.user.userDetails);
+  const userDetails = useSelector((state) => state.user.userDetails);
 
   const { id } = useParams();
   const { data, isLoading } = useGetSingleGigs(id);
+  console.log("data", data);
 
   const gig = data?.[0];
   const gigInfo = gig?.gigsDescription;
@@ -54,11 +54,12 @@ export default function ServicePage() {
 
           <GigCarousel images={gigInfo?.gigsFiles?.split(",")} />
 
-
           <div className="bg-white border border-gray-200 rounded-xl shadow-sm p-6">
             <h3 className="text-2xl font-bold mb-4">About this Gig</h3>
             <h4 className="text-xl font-semibold mb-2">{gigInfo?.gigsTitle}</h4>
-            <p className="text-gray-700 leading-relaxed">{gigInfo?.gigsDescription}</p>
+            <p className="text-gray-700 leading-relaxed">
+              {gigInfo?.gigsDescription}
+            </p>
           </div>
 
           <div className="bg-white border border-gray-200 rounded-xl shadow-sm p-6">
@@ -72,7 +73,9 @@ export default function ServicePage() {
                 alt={freelancer?.freelancerName}
               />
               <div>
-                <h4 className="text-xl font-bold">{freelancer?.freelancerName}</h4>
+                <h4 className="text-xl font-bold">
+                  {freelancer?.freelancerName}
+                </h4>
                 <div className="flex flex-wrap gap-2 my-2">
                   <span className="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm">
                     UI Designer
@@ -98,10 +101,11 @@ export default function ServicePage() {
                   <button
                     key={type}
                     onClick={() => setActiveNavTab(type)}
-                    className={`flex-1 py-4 text-center text-sm font-medium border-b-2 transition-all ${activeNavTab.toLowerCase() === type.toLowerCase()
-                      ? "border-black bg-green-50 text-black"
-                      : "border-transparent text-gray-500 hover:text-black hover:bg-gray-50"
-                      }`}
+                    className={`flex-1 py-4 text-center text-sm font-medium border-b-2 transition-all ${
+                      activeNavTab.toLowerCase() === type.toLowerCase()
+                        ? "border-black bg-green-50 text-black"
+                        : "border-transparent text-gray-500 hover:text-black hover:bg-gray-50"
+                    }`}
                   >
                     {type}
                   </button>
@@ -114,17 +118,10 @@ export default function ServicePage() {
                       type={selectedPackage.packageType}
                       price={selectedPackage.price}
                       title={selectedPackage.packageName}
-                      description={`${selectedPackage.packageDescription}`}
+                      description={selectedPackage.packageDescription}
                       deliverytime={selectedPackage.deliveryTime}
                       Revisions={selectedPackage.revisions}
-                      pages={selectedPackage.pages}
-                      sourceFile={selectedPackage.sourceFile}
-                      vectorFile={selectedPackage.vectorFile}
-                      socialMediaKit={selectedPackage.socialMediaKit}
-                      logoTransparency={selectedPackage.logoTransparency}
-                      printableFile={selectedPackage.printableFile}
-                      stationeryDesigns={selectedPackage.stationeryDesigns}
-                    />
+                      packagesJson={selectedPackage.packages} />
 
                     <button
                       onClick={() => setIsModalOpen(true)}
@@ -160,7 +157,6 @@ export default function ServicePage() {
           client_id={userDetails.id}
         />
       )}
-
     </div>
   );
 }
