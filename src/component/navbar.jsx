@@ -238,7 +238,7 @@ export default function Navbar() {
           <div ref={profileMenuRef} className="relative">
               <button
                 onClick={() => setShowProfileMenu((prev) => !prev)}
-                className="w-10 h-10 rounded-full overflow-hidden border border-gray-300"
+                className="w-10 h-10 rounded-full flex justify-center items-center overflow-hidden border border-gray-300"
               >
                 <img
                   src={
