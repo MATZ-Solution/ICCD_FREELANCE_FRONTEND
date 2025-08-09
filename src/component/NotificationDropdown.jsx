@@ -25,11 +25,8 @@ export default function NotificationDropdown() {
   const { data, error, isLoading, isError } = useGetNotification(user)
   const { error: isUpdateErr, isLoading: isUpdateLoad, isError: isUpdateLoadIsErr } = useUpdateReadNot(user)
 
-
-
   return (
     <div className="relative" ref={dropdownRef}>
-1
       <div className="absolute right-0 mt-3 w-52 lg:w-96 max-h-[500px] bg-white border border-gray-200/60 rounded-2xl shadow-2xl z-50 overflow-hidden backdrop-blur-sm">
         {/* Header */}
 
