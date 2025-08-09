@@ -25,6 +25,7 @@ import { SquarePen } from "lucide-react";
 import AboutModal from "../../component/client_dashboard/aboutModal";
 import ICCDLoader from "../../component/loader";
 import ICCDError from "../../component/ICCDError";
+import { User } from "lucide-react";
 
 export default function ClientDashboard() {
   const [activeNavTab, setActiveNavTab] = useState("Dashboard");
@@ -59,18 +60,19 @@ export default function ClientDashboard() {
 
   const [showAboutModal, setShowAboutModal] = useState(false)
 
- if (isError || error || clientIsErr) {
-  console.log("Error details:", error, isError, clientIsErr);
-  return <ICCDError message="Failed to load data. Please try again." />;
-}
+  if (isError || error || clientIsErr) {
+    console.log("Error details:", error, isError, clientIsErr);
+    return <ICCDError message="Failed to load data. Please try again." />;
+  }
 
-  if(isLoading || clientIsLoad || clientIsPend){
-    return <ICCDLoader /> }
+  if (isLoading || clientIsLoad || clientIsPend) {
+    return <ICCDLoader />
+  }
   return (
     <div className="min-h-screen px-4 mt-4 bg-white">
       {/* Header */}
 
-      {showAboutModal && (<AboutModal onClose={()=> setShowAboutModal(false)}/>)} 
+      {showAboutModal && (<AboutModal onClose={() => setShowAboutModal(false)} />)}
 
       {showMobileSidebar && (
         <div
@@ -93,27 +95,33 @@ export default function ClientDashboard() {
 
           <div className="relative mb-6 bg-[#F8F8F8] rounded-lg p-4">
             <div className="flex flex-col items-center gap-3">
-              <img
-                src={userDetails?.userImg}
-                alt="Profilepic"
-                className="w-16 h-16 rounded-full"
-              />
+              {
+                userDetails?.userImg ?
+                  <img
+                    src={userDetails?.userImg}
+                    alt="Profilepic"
+                    className="w-16 h-16 rounded-full"
+                  />
+                  :
+                  <User />
+              }
+
 
               <div className="text-center">
                 <h3 className="capitalize font-semibold text-sm">{userDetails.name}</h3>
                 <p className="text-xs text-gray-500">{userDetails.email}</p>
               </div>
             </div>
-          <div className="mt-2 mb-6 bg-[#F8F8F8] rounded-lg py-2">
-            <div className="flex flex-col  gap-3">
-              <div className="text-center">
-                <h3 className=" capitalize font-semibold text-sm">About</h3>
-                <p className="mt-1 text-xs text-gray-500">{userDetails?.about}</p>
+            <div className="mt-2 mb-6 bg-[#F8F8F8] rounded-lg py-2">
+              <div className="flex flex-col  gap-3">
+                <div className="text-center">
+                  <h3 className=" capitalize font-semibold text-sm">About</h3>
+                  <p className="mt-1 text-xs text-gray-500">{userDetails?.about}</p>
+                </div>
               </div>
             </div>
-          </div>
             <button className="cursor-pointer w-full mt-3 px-4 py-2 text-sm border border-[#01AEAD] rounded-md hover:bg-green-600 hover:text-white text-gray-700"
-            onClick={()=> setShowAboutModal(true)}
+              onClick={() => setShowAboutModal(true)}
             >
               Edit Profile
             </button>
@@ -211,7 +219,7 @@ export default function ClientDashboard() {
           <div className="mt-5 grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
             <DCard
               title="Total Posted Projects"
-              value={ dashboardData?.length > 0 ? dashboardData[0]?.totalPostedProject : 0}
+              value={dashboardData?.length > 0 ? dashboardData[0]?.totalPostedProject : 0}
               subtitle="58% higher than "
               month="Last Month"
               percentChange="58%"
@@ -220,7 +228,7 @@ export default function ClientDashboard() {
             />
             <DCard
               title="Total Posted Jobs"
-              value={ dashboardData?.length > 0 ? dashboardData[0]?.totalPostedJob : 0}
+              value={dashboardData?.length > 0 ? dashboardData[0]?.totalPostedJob : 0}
               subtitle="58% higher than "
               month="Last Month"
               percentChange="58%"
@@ -229,7 +237,7 @@ export default function ClientDashboard() {
             />
             <DCard
               title="Total Orders"
-              value={dashboardData?.length>0 ? dashboardData[0]?.totalOrder : 0}
+              value={dashboardData?.length > 0 ? dashboardData[0]?.totalOrder : 0}
               subtitle="58% higher than "
               month="Last Month"
               percentChange="58%"
@@ -251,7 +259,7 @@ export default function ClientDashboard() {
                   onClick={() => navigate(`/client/gigs/gigs_details/${data?.id}`)}
                   image={data?.fileUrls ? data?.fileUrls.split(',')[0] : ''}
                   title={data.title}
-                  author={data.name}
+                  author={data.firstName + " " + data.lastName}
                   level="Level 2++"
                   rating={4.7}
                   reviews={187}

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Bell, Mail, Menu, HelpCircle, X } from "lucide-react";
+import { Bell, Mail, Menu, HelpCircle, X, User } from "lucide-react";
 import {
   Search as SearchIcon,
   East as EastIcon,
@@ -188,13 +188,24 @@ export default function Navbar() {
             <div className="relative">
               <button
                 onClick={() => setShowProfileMenu((prev) => !prev)}
-                className="w-10 h-10 rounded-full overflow-hidden border border-gray-300"
+                className="w-10 h-10 rounded-full flex justify-center items-center overflow-hidden border border-gray-300"
               >
-                <img
-                  src={pathname.includes("freelancer") ? freelancer?.fileUrl : userDetails?.userImg}
-                  alt="User Profile"
-                  className="w-full h-full object-cover"
-                />
+                {
+                  (pathname.includes("freelancer") && freelancer?.fileUrl) ?
+                    <img
+                      src={freelancer?.fileUrl}
+                      alt="User Profile"
+                      className="w-full h-full object-cover"
+                    />
+                    : (pathname.includes("client") && userDetails?.userImg) ?
+                      <img
+                        src={userDetails?.userImg}
+                        alt="User Profile"
+                        className="w-full h-full object-cover"
+                      />
+                      :
+                      <User />
+                }
               </button>
               {showProfileMenu &&
                 renderProfileMenu(pathname.includes("freelancer") ? "freelancer" : "client")}
