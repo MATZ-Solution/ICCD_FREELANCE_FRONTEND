@@ -78,10 +78,7 @@ export const router = createBrowserRouter([
     path: "/",
     element: withSuspense(<Homepage />),
   },
-  {
-    path: "/loader",
-    element: withSuspense(<ICCDLoader />),
-  },
+
   {
     path: "/contactus",
     element: withSuspense(
