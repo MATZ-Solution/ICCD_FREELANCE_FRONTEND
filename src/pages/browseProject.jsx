@@ -1,13 +1,11 @@
 import { useState, lazy, Suspense } from "react";
 import SearchIcon from '@mui/icons-material/Search';
-import Tabs from "../../component/freelancer_dashboard/tabs";
 import { useNavigate } from "react-router-dom";
-import { useGetAllProjects } from "../../../api/client/project";
-import ICCDLoader from "../../component/loader";
-import ICCDError from "../../component/ICCDError";
-
+import { useGetAllProjects } from "../../api/client/project";
+import ICCDLoader from "../component/loader";
+import ICCDError from "../component/ICCDError";
 // Lazy load Projects_table
-const Projects_table = lazy(() => import("../../component/client_dashboard/project_table"));
+const Projects_table = lazy(() => import("../component/client_dashboard/project_table"));
 
 function BrowseProjects() {
   const navigate = useNavigate();
