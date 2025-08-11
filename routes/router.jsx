@@ -70,6 +70,7 @@ import AuthRoute from '../utils/authRoute';
 import FindTalent from "../src/pages/clientHomepage/findTalent";
 import EditPricingForm from "../src/pages/freelancer_gigs/editPricing";
 import ManageUsers from "../src/pages/superadmin_dashboard/manage_users";
+import BrowseProjects from "../src/pages/browseProject";
 
 const stripePromise = loadStripe("pk_test_51QCl1eCDh3RtIJ6XkYcN5vHd3KTO2f8enRSNv9Wx7Li0iCI7cr9khTDQx0vS5RmbazZoaECNW83FesOMwLeIgMLb00BJG4pPZR");
 
@@ -107,7 +108,7 @@ export const router = createBrowserRouter([
     path: "/browse-projects",
     element: withSuspense(
         <MainTemplate isShowFooter={false}>
-          <FreelancerProjects />
+          <BrowseProjects />
         </MainTemplate>
     ),
   },
@@ -117,6 +118,16 @@ export const router = createBrowserRouter([
         <MainTemplate isShowFooter={true}>
           <FindTalent />
         </MainTemplate>
+    ),
+  },
+   {
+    path: "/find-talent/:id",
+    element: withSuspense(
+      // <AuthRoute>
+        <MainTemplate isShowFooter={false}>
+          <Gigs_details />
+        </MainTemplate>
+      // </AuthRoute>
     ),
   },
   {
@@ -582,11 +593,11 @@ export const router = createBrowserRouter([
   {
     path: "/client/gigs/gigs_details/:id",
     element: withSuspense(
-      <AuthRoute>
+      // <AuthRoute>
         <MainTemplate isShowFooter={false}>
           <Gigs_details />
         </MainTemplate>
-      </AuthRoute>
+      // </AuthRoute>
     ),
   },
   {

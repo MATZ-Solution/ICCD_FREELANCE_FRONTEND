@@ -10,13 +10,14 @@ import CasesIcon from "@mui/icons-material/Cases";
 import { useSelector } from "react-redux";
 import { useGetAllJobs, useGetJobById } from "../../../api/client/job";
 import Select from "../../component/buttonSelect.jsx";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const ProposalModal = lazy(() => import("../../component/ProposalModal"));
 
 function Jobs() {
   const [obj, setObj] = useState({});
   const [show, setShow] = useState(false);
+  const navigate = useNavigate()
   const [selectedJobId, setSelectedJobId] = useState(null);
 
   const freelancerData = useSelector((state) => state.userProfile.userProfile);
@@ -210,7 +211,7 @@ function Jobs() {
                           Object.keys(freelancerData).length === 0 ||
                           !isFreelancerPath
                         ) {
-                          window.location.href = "/login"; // or open login modal
+                          navigate("/login"); // or open login modal
                         } else {
                           setShow(true);
                         }

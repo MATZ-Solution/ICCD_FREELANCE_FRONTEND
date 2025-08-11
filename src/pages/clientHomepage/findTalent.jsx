@@ -26,7 +26,7 @@ export default function FindTalent() {
         navigate({ search: params.toString() }, { replace: true });
     }, [search]);
 
-
+    console.log("gigs: ", gigs)
     // if (isLoading) {
     //     return <ICCDLoader />
     // }
@@ -62,7 +62,7 @@ export default function FindTalent() {
                         {gigs?.map((data, index) => (
                             <GigCard
                                 key={index}
-                                onClick={() => navigate(`/client/gigs/gigs_details/${data?.id}`)}
+                                onClick={() => navigate(`/find-talent/${data?.id}`)}
                                 image={data?.fileUrls ? data?.fileUrls.split(",")[0] : ""}
                                 title={data.title}
                                 author={data.firstName + " " + data.lastName}
