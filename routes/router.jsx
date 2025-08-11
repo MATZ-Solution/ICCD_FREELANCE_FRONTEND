@@ -122,6 +122,16 @@ export const router = createBrowserRouter([
         </MainTemplate>
     ),
   },
+   {
+    path: "/find-talent/:id",
+    element: withSuspense(
+      // <AuthRoute>
+        <MainTemplate isShowFooter={false}>
+          <Gigs_details />
+        </MainTemplate>
+      // </AuthRoute>
+    ),
+  },
   {
     path: "/post-job",
     element: withSuspense(
@@ -585,11 +595,11 @@ export const router = createBrowserRouter([
   {
     path: "/client/gigs/gigs_details/:id",
     element: withSuspense(
-      <AuthRoute>
+      // <AuthRoute>
         <MainTemplate isShowFooter={false}>
           <Gigs_details />
         </MainTemplate>
-      </AuthRoute>
+      // </AuthRoute>
     ),
   },
   {

@@ -22,7 +22,6 @@ function OrderOptions({
   const [orderType, setOrderType] = useState("single");
   const [isLoading, setIsLoading] = useState(false);
 
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -104,8 +103,8 @@ function OrderOptions({
             <h4 className="font-medium mb-3 text-gray-900">How often do you need this order?</h4>
             <div
               className={`border rounded-lg p-3 cursor-pointer ${orderType === "single"
-                  ? "border-teal-500 bg-teal-50 shadow-sm"
-                  : "border-gray-200 bg-gray-50 hover:border-gray-300"
+                ? "border-teal-500 bg-teal-50 shadow-sm"
+                : "border-gray-200 bg-gray-50 hover:border-gray-300"
                 }`}
               onClick={() => setOrderType("single")}
             >

@@ -2,7 +2,7 @@ import { useState } from "react";
 import SidebarCard from "./sidebarcard";
 import OrderOptions from "./OrderOptions";
 import { useGetSingleGigs } from "../../../api/client/gigs";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import ICCDLoader from "../loader";
 import GigCarousel from "./GigCarousel"; // Make sure the path is correct
@@ -12,11 +12,12 @@ export default function ServicePage() {
   const [activeNavTab, setActiveNavTab] = useState("Basic");
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const navigate = useNavigate()
   const userDetails = useSelector((state) => state.user.userDetails);
 
   const { id } = useParams();
   const { data, isLoading } = useGetSingleGigs(id);
-  console.log("data", data);
+  console.log("id", id);
 
   const gig = data?.[0];
   const gigInfo = gig?.gigsDescription;
@@ -124,7 +125,7 @@ export default function ServicePage() {
                       packagesJson={selectedPackage.packages} />
 
                     <button
-                      onClick={() => setIsModalOpen(true)}
+                      onClick={() => userDetails === null ? navigate("/login") : setIsModalOpen(true)}
                       className="mt-4 w-full bg-black text-white py-2 rounded-lg hover:bg-gray-800 transition duration-200"
                     >
                       Continue
@@ -153,8 +154,8 @@ export default function ServicePage() {
           basePrice={selectedPackage.price}
           freelancer_client_id={freelancer.freelancerClientId}
           freelancer_id={freelancer.freelancerId}
-          gig_id={gigInfo.gigsID}
-          client_id={userDetails.id}
+          gig_id={gigInfo?.gigsID}
+          client_id={userDetails?.id}
         />
       )}
     </div>
