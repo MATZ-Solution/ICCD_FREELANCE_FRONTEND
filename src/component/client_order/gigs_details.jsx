@@ -1,5 +1,5 @@
 import { useState } from "react";
-import SidebarCard from "./sidebarcard";
+import SidebarCard from "./sidebarCard";
 import OrderOptions from "./OrderOptions";
 import { useGetSingleGigs } from "../../../api/client/gigs";
 import { useNavigate, useParams } from "react-router-dom";
