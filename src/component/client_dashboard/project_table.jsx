@@ -10,8 +10,11 @@ function Projects_table({ data }) {
   const handleNavigate = (id) => {
     if (pathName.includes('client')) {
       navigate(`/client/projects/${id}`);
-    } else {
+    } else if(pathName.includes('freelancer')) {
       navigate(`/freelancer/projects/${id}`);
+    }else{
+      navigate(`/browse-projects/${id}`);
+
     }
   };
 

@@ -112,6 +112,14 @@ export const router = createBrowserRouter([
         </MainTemplate>
     ),
   },
+    {
+    path: "/browse-projects/:id",
+    element: withSuspense(
+        <MainTemplate isShowFooter={false}>
+          <ProjectDetailClient /> 
+        </MainTemplate>
+    ),
+  },
   {
     path: "/find-talent",
     element: withSuspense(
