@@ -2,8 +2,9 @@ import axios from "axios";
 import { deleteToken } from "../../utils/auth";
 
 const api = axios.create({
-  // baseURL: 'https://jsonplaceholder.typicode.com/',
-  baseURL: "http://localhost:2300/",
+  // live database
+  baseURL: 'https://iccd.freelanceserver.matzsolutions.com/',
+  // baseURL: "http://localhost:2300/",
   headers: {
     "Content-Type": "application/json",
   },
