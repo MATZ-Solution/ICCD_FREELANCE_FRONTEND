@@ -1,13 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Bell, Mail, Menu, HelpCircle, X } from "lucide-react";
-import { useRef } from "react"; // add this
-
+import { Bell, Mail, Menu, X } from "lucide-react";
 import { Search as SearchIcon, East as EastIcon } from "@mui/icons-material";
 import logo from "../assets/ICCD-01.png";
 import "../../src/css/navbar.css";
-import dp from "../assets/client_dashboard/clientdp.png";
 
 import useLogout from "../../hooks/useLogout";
 import {
@@ -27,40 +24,12 @@ export default function Navbar() {
   const pathname = location.pathname;
 
   const notificationRef = useRef(null);
-    const profileMenuRef = useRef(null);
-
-
-  // close notification dropdown when clicking outside
- useEffect(() => {
-    const handleClickOutside = (event) => {
-      // Notification dropdown close
-      if (
-        notificationRef.current &&
-        !notificationRef.current.contains(event.target)
-      ) {
-        setIsShowNot(false);
-      }
-      // Profile menu close
-      if (
-        profileMenuRef.current &&
-        !profileMenuRef.current.contains(event.target)
-      ) {
-        setShowProfileMenu(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
+  const profileMenuRef = useRef(null);
 
   const [isOpen, setIsOpen] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [isShowNot, setIsShowNot] = useState(false);
   const [search, setSearch] = useState("");
-  const [messages, setMessages] = useState(5); // Ideally fetched from API
 
   const userDetails = useSelector((state) => state.user.userDetails);
   const client = userDetails;
@@ -68,13 +37,30 @@ export default function Navbar() {
 
   const logout = useLogout();
 
+  // Helper to check active state
+  const isActive = (path) => pathname === path;
+
+  // Close dropdowns on outside click
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (notificationRef.current && !notificationRef.current.contains(event.target)) {
+        setIsShowNot(false);
+      }
+      if (profileMenuRef.current && !profileMenuRef.current.contains(event.target)) {
+        setShowProfileMenu(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  // Prevent scroll when mobile menu is open
   useEffect(() => {
     document.body.style.overflow = isOpen ? "hidden" : "";
-    return () => {
-      document.body.style.overflow = "";
-    };
+    return () => (document.body.style.overflow = "");
   }, [isOpen]);
 
+  // Search param update
   useEffect(() => {
     const delayDebounce = setTimeout(() => {
       const params = new URLSearchParams(location.search);
@@ -100,7 +86,7 @@ export default function Navbar() {
         key={idx}
         onClick={() => navigate(path)}
         className={`cursor-pointer px-3 py-2 text-sm font-medium rounded-md ${
-          pathname === path
+          isActive(path)
             ? "text-cyan-500 bg-cyan-50"
             : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
         }`}
@@ -114,11 +100,7 @@ export default function Navbar() {
       type === "freelancer"
         ? [
             { name: "Switch to Client", action: handleSwitchClient },
-            {
-              name: "View Profile",
-              action: () => navigate("/freelancer/edit-profile"),
-            },
-            // { name: "Settings", action: () => navigate("/settings") },
+            { name: "View Profile", action: () => navigate("/freelancer/edit-profile") },
             { name: "Logout", action: logout },
           ]
         : [
@@ -148,24 +130,18 @@ export default function Navbar() {
     <header className="bg-white shadow fontFamily-montreal border-b border-b-[#c4c4c4]">
       <div className="max-w-7xl mx-auto px-6 sm:px-12 flex justify-between items-center">
         {/* Logo */}
-        <div
-          // onClick={() => navigate("/")}
-          className="w-20 h-20 md:w-24 md:h-24 cursor-pointer"
-        >
+        <div className="w-20 h-20 md:w-24 md:h-24 cursor-pointer">
           <img src={logo} alt="logo" className="w-full h-full object-contain" />
         </div>
 
         {/* Mobile Menu Button */}
         <div className="show_nav_links_mobile">
-          <button
-            onClick={() => setIsOpen(!isOpen)}
-            className="text-black focus:outline-none"
-          >
+          <button onClick={() => setIsOpen(!isOpen)} className="text-black focus:outline-none">
             {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
         </div>
 
-        {/* Navigation Tabs for Desktop */}
+        {/* Desktop Navigation */}
         {pathname.includes("/freelancer") ? (
           <nav className="ml-10 sm:flex space-x-1 hidden md:flex">
             {renderNavTabs(navTabsFreelancerDashboard)}
@@ -204,23 +180,23 @@ export default function Navbar() {
               <Link
                 key={item.name}
                 to={item.href}
-                className="text-black font-semibold hover:text-[#15A9B2] transition"
+                className={`text-black font-semibold transition ${
+                  isActive(item.href)
+                    ? "text-cyan-500 border-b-2 border-cyan-500"
+                    : "hover:text-[#15A9B2]"
+                }`}
               >
                 {item.name !== "Login" && item.name}
-                {!["Contact Us", "Login"].includes(item.name)}
               </Link>
             ))}
           </nav>
         )}
 
-        {/* Right Side Section */}
+        {/* Right Side */}
         {userDetails ? (
           <div className="flex items-center gap-2 relative">
             <div ref={notificationRef} className="relative">
-              <NotificationBell
-                isShowNot={isShowNot}
-                setIsShowNot={setIsShowNot}
-              />
+              <NotificationBell isShowNot={isShowNot} setIsShowNot={setIsShowNot} />
               {isShowNot && <NotificationDropdown />}
             </div>
 
@@ -234,8 +210,8 @@ export default function Navbar() {
             >
               <Mail className="h-5 w-5 text-gray-600" />
             </button>
-            {/* <HelpCircle className="h-5 w-5 text-gray-600 cursor-pointer" /> */}
-          <div ref={profileMenuRef} className="relative">
+
+            <div ref={profileMenuRef} className="relative">
               <button
                 onClick={() => setShowProfileMenu((prev) => !prev)}
                 className="w-10 h-10 rounded-full flex justify-center items-center overflow-hidden border border-gray-300"
@@ -251,9 +227,7 @@ export default function Navbar() {
                 />
               </button>
               {showProfileMenu &&
-                renderProfileMenu(
-                  pathname.includes("freelancer") ? "freelancer" : "client"
-                )}
+                renderProfileMenu(pathname.includes("freelancer") ? "freelancer" : "client")}
             </div>
           </div>
         ) : (
@@ -277,27 +251,25 @@ export default function Navbar() {
         )}
       </div>
 
-      {/* Mobile Dropdown Menu */}
+      {/* Mobile Menu */}
       {isOpen && (
         <div className="show_nav_links_mobile h-[80vh] px-4 pb-4 space-y-2 flex flex-col">
-          {/* General navigation only if NOT client/freelancer pages */}
+          {/* General Navigation */}
           {!pathname.includes("/client") &&
             !pathname.includes("/freelancer") &&
             navigation.map((item) => (
-              <div
-                key={item.name}
-                className="flex items-center justify-between"
-              >
+              <div key={item.name} className="flex items-center justify-between">
                 <button
                   onClick={() => {
                     navigate(item.href);
                     setIsOpen(false);
                   }}
-                  className="text-black hover:text-blue-600 transition"
+                  className={`transition ${
+                    isActive(item.href) ? "text-cyan-500 font-semibold" : "text-black hover:text-blue-600"
+                  }`}
                 >
                   {item.name}
                 </button>
-                {!["Contact Us", "Login"].includes(item.name)}
               </div>
             ))}
 
@@ -311,7 +283,7 @@ export default function Navbar() {
                   setIsOpen(false);
                 }}
                 className={`text-left px-3 py-2 text-sm font-medium rounded-md ${
-                  pathname === item.path
+                  isActive(item.path)
                     ? "text-cyan-500 bg-cyan-50"
                     : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
                 }`}
@@ -330,7 +302,7 @@ export default function Navbar() {
                   setIsOpen(false);
                 }}
                 className={`text-left px-3 py-2 text-sm font-medium rounded-md ${
-                  pathname === item.path
+                  isActive(item.path)
                     ? "text-cyan-500 bg-cyan-50"
                     : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
                 }`}
@@ -339,9 +311,8 @@ export default function Navbar() {
               </button>
             ))}
 
-          {/* Go to General Site Button */}
-          {(pathname.includes("/client") ||
-            pathname.includes("/freelancer")) && (
+          {/* Go to General Site */}
+          {(pathname.includes("/client") || pathname.includes("/freelancer")) && (
             <button
               onClick={() => {
                 navigate("/");
@@ -353,7 +324,7 @@ export default function Navbar() {
             </button>
           )}
 
-          {/* Show signup button only on general page AND if user NOT logged in */}
+          {/* Sign Up */}
           {!pathname.includes("/client") &&
             !pathname.includes("/freelancer") &&
             !userDetails && (
