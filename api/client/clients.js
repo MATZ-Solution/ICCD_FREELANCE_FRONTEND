@@ -1,4 +1,4 @@
-import API_ROUTE from "../endpoints";
+// import API_ROUTE from "../endpoints";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import api from "../axios/index";
 import { setToken } from "../../utils/auth";
