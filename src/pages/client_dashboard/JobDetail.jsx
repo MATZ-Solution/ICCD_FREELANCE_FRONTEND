@@ -9,7 +9,7 @@ export default function JobDetailPage() {
 
   const { id } = useParams()
   const { data, isSuccess, isPending, isError, isLoading } = useGetJobById(id)
-  const { jobProposals, error } = getJobPropsalByClient()
+  const { jobProposals, error } = getJobPropsalByClient({id: id})
   console.log("jobProposals: ", jobProposals)
 
   if (isLoading || isPending) {

@@ -69,6 +69,7 @@ const FreelancerEditProfile = () => {
   }
 
   try {
+    // console.log("data: ", data)
     await editProfile(formData); // mutation
     // toast.success("Profile updated successfully!");
   } catch (error) {
