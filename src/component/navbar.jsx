@@ -159,9 +159,9 @@ export default function Navbar() {
                 placeholder="What services are you looking for today"
                 className="rounded w-xl h-10 p-3 border border-gray-400"
               />
-              <div className="absolute w-10 h-10 top-0 right-0 flex items-center justify-center bg-black">
+              {/* <div className="absolute w-10 h-10 top-0 right-0 flex items-center justify-center bg-black">
                 <SearchIcon className="text-white" />
-              </div>
+              </div> */}
             </div>
             <button
               onClick={() => navigate(`/freelancer/dashboard`)}

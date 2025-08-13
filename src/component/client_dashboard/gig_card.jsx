@@ -21,7 +21,7 @@ const GigCard = ({
       {/* Image with heart overlay */}
       <div className="relative">
         <img src={image} alt="gigs_cards" className="w-full h-36 object-cover" />
-        <button
+        {/* <button
           onClick={() => setLiked(!liked)}
           className="absolute top-2 right-2 p-1 rounded-ful  "
         >
@@ -29,7 +29,7 @@ const GigCard = ({
             size={24}
             className={liked ? "text-red-500 fill-red-500" : "text-white fill-gray-500  "}
           />
-        </button>
+        </button> */}
       </div>
 
       <div className="p-4">

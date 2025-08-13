@@ -7,7 +7,7 @@ import ICCDLoader from "../../component/loader";
 import { useCheckIsFreelancer } from "../../../api/client/user";
 import { useDispatch } from "react-redux";
 import { getUserProfile } from "../../../redux/slices/userProfileSlice";
-
+import useDebounce from "../../../hooks/useDebounce";
 export default function ClientHomepage() {
 
   const navigate = useNavigate();
@@ -21,7 +21,7 @@ export default function ClientHomepage() {
 
   const [search, setSearch] = useState(searchTermFromUrl);
 
-  const { gigs, error, isLoading, isError } = useGetGigs({ search: searchTermFromUrl });
+  const { gigs, error, isLoading, isError } = useGetGigs({ search: useDebounce(searchTermFromUrl) });
 
 
   function handleSearch() {

@@ -14,7 +14,7 @@ import useDebounce from "../../../hooks/useDebounce";
 function ClientProjects() {
 
     const navigate = useNavigate()
-    const [search, setSearch] = useState('')
+    const [search, setSearch] = useState("")
     const [active, setActive] = useState('Active')
     const datas = ['Active', 'Pending Approval', 'Requires Modification', 'Draft', 'Denied', 'Paused']
 
