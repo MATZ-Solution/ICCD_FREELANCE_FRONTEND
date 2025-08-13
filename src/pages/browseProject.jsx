@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { useGetAllProjects } from "../../api/client/project";
 import ICCDLoader from "../component/loader";
 import ICCDError from "../component/ICCDError";
+import useDebounce from "../../hooks/useDebounce";
+
 // Lazy load Projects_table
 const Projects_table = lazy(() =>
   import("../component/client_dashboard/project_table")
@@ -11,6 +13,7 @@ const Projects_table = lazy(() =>
 
 function BrowseProjects() {
   const navigate = useNavigate();
+  const [search, setSearch] = useState('')
 
   const [active, setActive] = useState("Active");
   const datas = [
@@ -21,16 +24,12 @@ function BrowseProjects() {
     "Denied",
     "Paused",
   ];
+  // const debounce = useDebounce(searchVal, 500)
 
   const { data, isSuccess, isPending, isError, isLoading } =
-    useGetAllProjects();
+    useGetAllProjects({ search: useDebounce(search) });
 
-  // Show loader while fetching
-  if (isLoading || isPending) {
-    return <ICCDLoader />;
-  }
 
-  // Show error if fetching fails
   if (isError) {
     return <ICCDError />;
   }
@@ -38,18 +37,15 @@ function BrowseProjects() {
   return (
     <div className="px-4 sm:px-6 lg:px-10 w-full">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row justify-between gap-4 sm:items-center mt-10 p-4 sm:p-6 bg-[#F8F8F8] rounded-md">
-        <p className="text-lg sm:text-xl md:text-2xl font-semibold text-[#043A53]">
-          Manage Projects
-        </p>
-        {/* Search bar takes full available width */}
-        <div className="relative flex-grow">
-          <input
-            className="border border-gray-500 rounded-md bg-white w-full h-10 px-3 pr-10 text-sm sm:text-base"
-            placeholder="Search My History..."
-          />
-          <SearchIcon className="absolute top-2.5 right-3 text-gray-500" />
-        </div>
+      <div className=" mt-4 relative max-w-xl mx-auto">
+        <input
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          //   onKeyDown={handleKeyDown}
+          placeholder="What projects are you looking for today"
+          className="rounded  w-full h-10 p-3 border border-gray-400"
+        />
+      
       </div>
 
       {/* Tabs (Optional) */}
@@ -58,8 +54,10 @@ function BrowseProjects() {
       </div> */}
 
       {/* Projects Table */}
-      <div className="mt-6 overflow-x-auto">
-        <Suspense fallback={<ICCDLoader />}>
+      {isLoading ?
+        <ICCDLoader />
+        :
+        <div className="mt-6 overflow-x-auto">
           {!data || data.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-10 text-center text-gray-500">
               <svg
@@ -83,8 +81,8 @@ function BrowseProjects() {
           ) : (
             isSuccess && <Projects_table data={data} />
           )}
-        </Suspense>
-      </div>
+        </div>
+      }
     </div>
   );
 }

@@ -29,10 +29,14 @@ export function useAddproject() {
 }
 
 // get project by user
-export function useGetProjectsByClient() {
+export function useGetProjectsByClient(params = {}) {
+   const constructQueryString = (params) => {
+    const query = new URLSearchParams(params).toString();
+    return query ? `&${query}` : "";
+  };
   const { data, isSuccess, isPending, isError, isLoading } = useQuery({
-    queryKey: [API_ROUTE.project.getProjectByClient],
-    queryFn: async () => await api.get(`${API_ROUTE.project.getProjectByClient}`),
+    queryKey: [API_ROUTE.project.getProjectByClient, params],
+    queryFn: async () => await api.get(`${API_ROUTE.project.getProjectByClient}?${constructQueryString(params)}`),
   });
   return {
     data: data?.data?.data,
@@ -44,10 +48,14 @@ export function useGetProjectsByClient() {
 }
 
 // get project by user
-export function useGetAllProjects() {
+export function useGetAllProjects(params = {}) {
+  const constructQueryString = (params) => {
+    const query = new URLSearchParams(params).toString();
+    return query ? `&${query}` : "";
+  };
   const { data, isSuccess, isPending, isError, isLoading } = useQuery({
-    queryKey: [API_ROUTE.project.getAllProject],
-    queryFn: async () => await api.get(`${API_ROUTE.project.getAllProject}`),
+    queryKey: [API_ROUTE.project.getAllProject, params],
+    queryFn: async () => await api.get(`${API_ROUTE.project.getAllProject}?${constructQueryString(params)}`),
   });
   return {
     data: data?.data?.data,
