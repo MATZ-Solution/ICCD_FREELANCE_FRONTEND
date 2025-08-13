@@ -1,4 +1,4 @@
-import API_ROUTE from "../endPoints";
+import API_ROUTE from "../endpoints";
 import api from "../axios/index";
 import { useQuery } from "@tanstack/react-query";
 

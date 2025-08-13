@@ -72,6 +72,7 @@ import EditPricingForm from "../src/pages/freelancer_gigs/editPricing";
 import ManageUsers from "../src/pages/superadmin_dashboard/manage_users";
 import BrowseProjects from "../src/pages/browseProject";
 import NotFound from '../src/component/NotFound';
+import { ProjectDetail } from '../src/pages/projectDetail';
 
 const stripePromise = loadStripe("pk_test_51QCl1eCDh3RtIJ6XkYcN5vHd3KTO2f8enRSNv9Wx7Li0iCI7cr9khTDQx0vS5RmbazZoaECNW83FesOMwLeIgMLb00BJG4pPZR");
 
@@ -117,7 +118,7 @@ export const router = createBrowserRouter([
     path: "/browse-projects/:id",
     element: withSuspense(
         <MainTemplate isShowFooter={false}>
-          <ProjectDetailClient /> 
+          <ProjectDetail /> 
         </MainTemplate>
     ),
   },

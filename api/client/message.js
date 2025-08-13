@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 import api from "../axios";
-import API_ROUTE from "../endPoints";
+import API_ROUTE from "../endpoints";
 import { useMutation, useQuery, useQueryClient, useInfiniteQuery } from "@tanstack/react-query";
 
 

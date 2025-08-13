@@ -1,6 +1,6 @@
 import { useDispatch } from "react-redux";
 import api from "../axios";
-import API_ROUTE from "../endPoints";
+import API_ROUTE from "../endpoints";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { setFreelancerID } from "../../redux/slices/userSlice";
 import { useSelector } from "react-redux";

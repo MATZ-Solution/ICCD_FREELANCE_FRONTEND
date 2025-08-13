@@ -1,6 +1,7 @@
-import API_ROUTE from "../endPoints";
+import API_ROUTE from "../endpoints";
 import api from "../axios/index";
 import { useQuery } from "@tanstack/react-query";
+
 export function useGetAllUsers(params = {}) {
   const constructQueryString = (params) => {
     const query = new URLSearchParams(params).toString();
