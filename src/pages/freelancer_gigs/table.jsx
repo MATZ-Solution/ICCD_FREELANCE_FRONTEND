@@ -29,7 +29,7 @@ const Table = ({ title, tabs = [], data = [] }) => {
     : data.filter(item => item.type === activeTab);
 
   return (
-    <div className="bg-white rounded-xl p-4 hover:shadow-lg transition-shadow duration-300 ease-in-out">
+<div className="bg-white px-4 rounded-xl hover:shadow-lg transition-shadow duration-300 ease-in-out max-w-[600px] mx-auto">
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-base font-semibold text-gray-800">{title}</h3>
@@ -85,9 +85,11 @@ const Table = ({ title, tabs = [], data = [] }) => {
               {/* Title and Package */}
               <div className="flex-1">
                 <p className="text-xs font-medium text-gray-800 truncate">
-                  {item.gigsTitle}
-                </p>
-          <span className="text-[10px] text-gray-500">
+              {item.gigsTitle?.length > 50 
+                ? item.gigsTitle.slice(0, 50) + "..." 
+                : item.gigsTitle}
+                              </p>
+                  <span className="text-[10px] text-gray-500">
               {new Date(item.created_at).toLocaleString('en-US', {
                 year: 'numeric',
                 month: 'short',
