@@ -134,7 +134,8 @@ export const ProjectDetailClient = () => {
                     </tr>
                   </thead>
                   <tbody className="text-sm divide-y divide-gray-200">
-                    {propData?.map((item, index) => (
+                    {propData.length > 0 ? (
+                    propData?.map((item, index) => (
                       <tr key={index} className="hover:bg-gray-50">
                         <td className="px-6 py-4 whitespace-nowrap flex items-center gap-3">
                           <img src={item?.freelancerImg} className="w-9 h-9 rounded-full bg-gray-200"></img>
@@ -147,7 +148,12 @@ export const ProjectDetailClient = () => {
                           </button>
                         </td>
                       </tr>
-                    ))}
+                    )) ) : (
+                  <tr>
+                    <td colSpan="3" className="px-6 py-4 text-center text-gray-500">
+                    No CVs have been submitted for review yet.                    </td>
+                  </tr>
+                )}
                   </tbody>
                 </table>
               </div>
