@@ -3,7 +3,7 @@ export const navigation = [
   { name: "Find Talent", href: "/find-talent" },
   { name: "Find Jobs", href: "/browse-jobs" },
   { name: "About Us", href: "/aboutus" },
-  { name: "Contact Us", href: "/contactus" },
+  // { name: "Contact Us", href: "/contactus" },
   { name: "Login", href: "/login" },
 ];
 

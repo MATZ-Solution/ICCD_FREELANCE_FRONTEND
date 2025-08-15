@@ -4,6 +4,7 @@ import { useGetGigs } from "../../../api/client/gigs";
 import { useNavigate, useLocation } from "react-router-dom";
 import { SearchIcon } from "lucide-react";
 import ICCDLoader from "../../component/loader";
+import useDebounce from "../../../hooks/useDebounce";
 
 export default function FindTalent() {
 
@@ -14,7 +15,7 @@ export default function FindTalent() {
     const query = new URLSearchParams(location.search);
     const searchTermFromUrl = query.get("search") ?? "";
     const [search, setSearch] = useState(searchTermFromUrl);
-    const { gigs, error, isLoading, isError } = useGetGigs({ search: search });
+    const { gigs, error, isLoading, isError } = useGetGigs({ search: useDebounce(search) });
 
     useEffect(() => {
         const params = new URLSearchParams(location.search);

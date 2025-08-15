@@ -45,7 +45,13 @@ function BrowseProjects() {
           placeholder="What projects are you looking for today"
           className="rounded  w-full h-10 p-3 border border-gray-400"
         />
-      
+        <button
+          //   onClick={handleSearch}
+          className="absolute w-10 h-10 top-0 right-0 flex items-center justify-center bg-black rounded-r"
+          aria-label="Search"
+        >
+          <SearchIcon className="text-white" />
+        </button>
       </div>
 
       {/* Tabs (Optional) */}
