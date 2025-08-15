@@ -54,7 +54,7 @@ export default function ClientHomepage() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="What services are you looking for today"
+          placeholder="What services are you looking Today"
           className="rounded  w-full h-10 p-3 border border-gray-400"
         />
         <button

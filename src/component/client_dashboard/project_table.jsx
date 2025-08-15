@@ -4,89 +4,68 @@ import { formatDate } from '../../../functions/timeFormat';
 import { memo } from 'react';
 
 function Projects_table({ data }) {
-  const pathName = useLocation().pathname;
+  const { pathname } = useLocation();
   const navigate = useNavigate();
 
   const handleNavigate = (id) => {
-    if (pathName.includes('client')) {
+    if (pathname.includes('client')) {
       navigate(`/client/projects/${id}`);
-    } else if(pathName.includes('freelancer')) {
+    } else if (pathname.includes('freelancer')) {
       navigate(`/freelancer/projects/${id}`);
-    }else{
+    } else {
       navigate(`/browse-projects/${id}`);
-
     }
   };
 
   return (
     <div className="py-6 px-4">
-      <div className="overflow-x-auto w-full">
-        <div className="flex flex-col gap-4">
-          {data.map((item) => (
-            <div
-              key={item.id}
-              className="bg-[#F8F8F8] shadow-sm rounded-xl p-4 flex flex-col gap-4 md:flex-row md:items-center md:justify-between cursor-pointer"
-            >
-              {/* Image */}
-              <div className="flex justify-center md:justify-start w-full md:w-[20%]">
-                <img
-                  src={item?.projectFiles || order_logo}
-                  alt={item?.title}
-                  className="w-36 h-20 object-contain"
-                  onError={(e) => (e.target.src = order_logo)}
-                />
-              </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        {data.map((item) => (
+          <div
+            key={item.id}
+            className="bg-white shadow-md rounded-2xl overflow-hidden cursor-pointer hover:shadow-lg transition"
+          >
+            {/* Project Image */}
+            <div className="w-full h-48 bg-gray-100 flex justify-center items-center">
+              <img
+                src={item?.projectFiles || order_logo}
+                alt={item?.title}
+                className="object-contain w-full h-full"
+                onError={(e) => (e.target.src = order_logo)}
+              />
+            </div>
 
-              {/* Project Name */}
-              <div className="w-full md:w-[20%]">
-                <p className="text-[#737373] text-sm">Project Name:</p>
-                <p className="font-semibold text-base text-[#043A53] truncate">{item?.title}</p>
-              </div>
+            {/* Project Details */}
+            <div className="p-4 flex flex-col gap-2">
+              <h2 className="text-lg font-semibold text-[#043A53] truncate">{item?.title}</h2>
+              <p className="text-sm text-gray-500">{item?.category}</p>
+              <p className="text-sm text-gray-500">Budget: <span className="font-semibold">{item?.budget}</span></p>
+              <p className="text-sm text-gray-500">Deadline: <span className="font-semibold">{formatDate(item?.deadline)}</span></p>
 
-              {/* Budget */}
-              <div className="w-full md:w-[15%]">
-                <p className="text-[#737373] text-sm">Budget</p>
-                <p className="text-[#043A53] text-base font-semibold">{item?.budget}</p>
-              </div>
-
-              {/* Deadline */}
-              <div className="w-full md:w-[15%]">
-                <p className="text-[#737373] text-sm">Deadline</p>
-                <p className="text-[#043A53] text-base font-semibold">{formatDate(item?.deadline)}</p>
-              </div>
-
-              {/* Category */}
-              <div className="w-full md:w-[15%]">
-                <p className="text-[#737373] text-sm">Category</p>
-                <p className="text-[#043A53] text-base font-semibold">{item?.category}</p>
-              </div>
-
-              {/* Buttons */}
-              <div className="w-full md:w-[25%] flex flex-col md:flex-row gap-2">
-                {pathName.includes('client') && (
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      navigate(`/client/edit-project/${item?.id}`);
-                    }}
-                    className="w-full h-12 bg-[#EDEDED] rounded-2xl p-3 flex justify-center items-center"
-                  >
-                    <p className="text-[#043A53] font-semibold">Edit</p>
-                  </button>
-                )}
+              {pathname.includes('client') && (
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
-                    handleNavigate(item?.id);
+                    navigate(`/client/edit-project/${item?.id}`);
                   }}
-                  className="w-full h-12 bg-[#EDEDED] rounded-2xl p-3 flex justify-center items-center"
+                  className="mt-3 w-full py-2 bg-gray-200 rounded-xl text-[#043A53] font-semibold hover:bg-gray-300 transition"
                 >
-                  <p className="text-[#043A53] font-semibold">View</p>
+                  Edit
                 </button>
-              </div>
+              )}
+
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleNavigate(item?.id);
+                }}
+                className="mt-2 w-full py-2 bg-[#47AAB3] rounded-xl text-white font-semibold hover:bg-[#36959e] transition"
+              >
+                View Details
+              </button>
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
       </div>
     </div>
   );

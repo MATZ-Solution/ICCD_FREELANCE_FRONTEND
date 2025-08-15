@@ -22,11 +22,11 @@ const LoginController = ({ onClose }) => {
     }
   };
     return (
-        <div className="w-full flex fixed z-20 inset-0 sm:p-5 sm:items-center sm:justify-center lg:p-10 ">
-            <div className="absolute inset-0 bg-black/50 z-0"></div>
-            <div className={`z-10 flex w-full h-full flex-col bg-white sm:rounded-4xl sm:w-xl md:w-xl lg:flex-row lg:min-w-5xl shadow-lg `}>
+        <div className="w-full flex   fixed z-20 inset-0 sm:p-5 sm:items-center sm:justify-center lg:p-10 ">
+            <div className="absolute  inset-0 bg-black/50 z-0"></div>
+            <div className={`z-10 flex justify-center   w-full h-full flex-col bg-white sm:rounded-4xl sm:w-xl md:w-xl lg:flex-row lg:min-w-5xl shadow-lg `}>
                 <img src={login_banner} alt="Banner" className="hidden w-full h-full object-fit lg:flex" />
-                <div className='relative w-full flex flex-col'>
+                <div className='relative  w-full flex flex-col'>
                     <div
                         className="cursor-pointer absolute right-5 top-5 w-8 h-8 flex items-center justify-center bg-gray-300 rounded-full"
                         onClick={handleClose}  // navigate on click

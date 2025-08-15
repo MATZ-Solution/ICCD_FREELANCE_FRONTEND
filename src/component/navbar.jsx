@@ -252,94 +252,91 @@ export default function Navbar() {
       </div>
 
       {/* Mobile Menu */}
-      {isOpen && (
-        <div className="show_nav_links_mobile h-[80vh] px-4 pb-4 space-y-2 flex flex-col">
-          {/* General Navigation */}
-          {!pathname.includes("/client") &&
-            !pathname.includes("/freelancer") &&
-            navigation.map((item) => (
-              <div key={item.name} className="flex items-center justify-between">
-                <button
-                  onClick={() => {
-                    navigate(item.href);
-                    setIsOpen(false);
-                  }}
-                  className={`transition ${
-                    isActive(item.href) ? "text-cyan-500 font-semibold" : "text-black hover:text-blue-600"
-                  }`}
-                >
-                  {item.name}
-                </button>
-              </div>
-            ))}
+    {/* Mobile Menu */}
+{/* Mobile Menu */}
+{isOpen && (
+  <div className="show_nav_links_mobile h-[100vh] px-4 py-6 space-y-6 flex flex-col bg-white shadow-2xl z-50 overflow-y-auto">
+    
+    {/* General Navigation Section */}
+    {!pathname.includes("/client") && !pathname.includes("/freelancer") && (
+      <div className="space-y-2">
+        <h3 className="text-gray-500 uppercase text-xs font-semibold px-2">Menu</h3>
+        {navigation.map((item) => (
+          <button
+            key={item.name}
+            onClick={() => {
+              navigate(item.href);
+              setIsOpen(false);
+            }}
+            className={`w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all duration-200 ${
+              isActive(item.href)
+                ? "bg-cyan-50 text-cyan-600 font-semibold shadow-lg"
+                : "bg-gray-50 hover:bg-gray-100 text-gray-800"
+            } hover:scale-105`}
+          >
+            <span>{item.name}</span>
+            {/* Optional arrow icon */}
+            <EastIcon className="text-gray-400" style={{ fontSize: 18 }} />
+          </button>
+        ))}
+      </div>
+    )}
 
-          {/* Client Dashboard Nav */}
-          {pathname.includes("/client") &&
-            navTabsClientDashboard.map((item, idx) => (
-              <button
-                key={idx}
-                onClick={() => {
-                  navigate(item.path);
-                  setIsOpen(false);
-                }}
-                className={`text-left px-3 py-2 text-sm font-medium rounded-md ${
-                  isActive(item.path)
-                    ? "text-cyan-500 bg-cyan-50"
-                    : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
-                }`}
-              >
-                {item.name}
-              </button>
-            ))}
+    {/* Dashboard Section */}
+    {(pathname.includes("/client") || pathname.includes("/freelancer")) && (
+      <div className="space-y-2">
+        <h3 className="text-gray-500 uppercase text-xs font-semibold px-2">Dashboard</h3>
+        {(pathname.includes("/client") ? navTabsClientDashboard : navTabsFreelancerDashboard).map((item, idx) => (
+          <button
+            key={idx}
+            onClick={() => {
+              navigate(item.path);
+              setIsOpen(false);
+            }}
+            className={`w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all duration-200 ${
+              isActive(item.path)
+                ? "bg-cyan-50 text-cyan-600 font-semibold shadow-lg"
+                : "bg-gray-50 hover:bg-gray-100 text-gray-800"
+            } hover:scale-105`}
+          >
+            <span>{item.name}</span>
+            <EastIcon className="text-gray-400" style={{ fontSize: 18 }} />
+          </button>
+        ))}
+      </div>
+    )}
 
-          {/* Freelancer Dashboard Nav */}
-          {pathname.includes("/freelancer") &&
-            navTabsFreelancerDashboard.map((item, idx) => (
-              <button
-                key={idx}
-                onClick={() => {
-                  navigate(item.path);
-                  setIsOpen(false);
-                }}
-                className={`text-left px-3 py-2 text-sm font-medium rounded-md ${
-                  isActive(item.path)
-                    ? "text-cyan-500 bg-cyan-50"
-                    : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
-                }`}
-              >
-                {item.name}
-              </button>
-            ))}
+    {/* Go to General Site */}
+    {(pathname.includes("/client") || pathname.includes("/freelancer")) && (
+      <button
+        onClick={() => {
+          navigate("/");
+          setIsOpen(false);
+        }}
+        className="w-full mt-4 px-4 py-3 bg-gradient-to-r from-cyan-500 to-teal-500 text-white rounded-2xl shadow-xl hover:scale-105 transition-all font-semibold"
+      >
+        Go to General Site
+      </button>
+    )}
 
-          {/* Go to General Site */}
-          {(pathname.includes("/client") || pathname.includes("/freelancer")) && (
-            <button
-              onClick={() => {
-                navigate("/");
-                setIsOpen(false);
-              }}
-              className="w-full mt-4 px-4 py-2 bg-[#15A9B2] text-white rounded hover:bg-blue-700 transition"
-            >
-              Go to General Site
-            </button>
-          )}
-
-          {/* Sign Up */}
-          {!pathname.includes("/client") &&
-            !pathname.includes("/freelancer") &&
-            !userDetails && (
-              <button
-                onClick={() => {
-                  navigate("/signup");
-                  setIsOpen(false);
-                }}
-                className="w-full mt-2 px-4 py-2 bg-[#15A9B2] text-white rounded hover:bg-blue-700 transition"
-              >
-                Sign Up
-              </button>
-            )}
-        </div>
+    {/* Sign Up */}
+    {!pathname.includes("/client") &&
+      !pathname.includes("/freelancer") &&
+      !userDetails && (
+        <button
+          onClick={() => {
+            navigate("/signup");
+            setIsOpen(false);
+          }}
+          className="w-full mt-2 px-4 py-3 bg-gradient-to-r from-cyan-500 to-teal-500 text-white rounded-2xl shadow-xl hover:scale-105 transition-all font-semibold"
+        >
+          Sign Up
+        </button>
       )}
+  </div>
+)}
+
+
     </header>
   );
 }
