@@ -1,60 +1,80 @@
-import bannerImage from '../../src/assets/banner_img_3.png'
+import bannerImage from '../../src/assets/banner_img_3.png';
 import SearchIcon from '@mui/icons-material/Search';
 import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 
 const Banner1 = () => {
-    const navigate = useNavigate();
-    const [search, setSearch] = useState('')
+  const navigate = useNavigate();
+  const [search, setSearch] = useState('');
+
+  const handleSearch = () => {
+    if (search.trim()) {
+      navigate(`/find-talent?search=${encodeURIComponent(search)}`);
+    }
+  };
 
   return (
-    <div className='px-3 sm:px-10 mt-10'>
+    <div className="px-3 sm:px-10 mt-10">
       <section
         style={{ backgroundImage: `url(${bannerImage})` }}
-        className=" bg-cover bg-no-repeat flex flex-col  items-center justify-between p-4 md:p-12 rounded-2xl shadow-lg md:flex-row">
+        className="relative bg-cover bg-no-repeat flex flex-col items-center justify-between p-6 md:p-12 rounded-2xl shadow-lg md:flex-row"
+      >
+        {/* Dark overlay for text contrast */}
+        <div className="absolute inset-0 rounded-2xl"></div>
 
-
-        <div className="w-full text-center md:text-left mb-6 md:mb-0">
-          <h1 className="text-2xl font-semibold text-white mb-4 sm:text-4xl md:text-5xl md:w-[90%] md:font-semibold lg:text-7xl lg:w-[70%]">
+        <div className="relative w-full text-center md:text-left md:w-2/3">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-snug md:leading-tight mb-6">
             Connecting clients in need to freelancers who deliver
           </h1>
 
-          <div className=' w-full bg-[#343434] rounded-xl px-5 py-5 sm:w-full md:max-w-[80%] lg:w-[50%] lg:mt-20'>
-            <div className='bg-[#676162] rounded-full flex '>
+          <div className="w-full bg-[#343434] rounded-xl p-5 sm:max-w-full md:max-w-[90%] lg:max-w-[70%]">
+            {/* Tabs */}
+            <div className="bg-[#676162] rounded-full flex overflow-hidden mb-5">
               <button
-                className='h-10 text-white w-full rounded-full border-2 border-transparent hover:border-white'
+                className="h-10 text-white flex-1 rounded-full border-2 border-transparent hover:border-white transition"
                 onClick={() => navigate('/find-talent')}
               >
                 Find Talent
-              </button>     
-                      <button
-                className='h-10 text-white w-full rounded-full border-2 border-transparent hover:border-white'
+              </button>
+              <button
+                className="h-10 text-white flex-1 rounded-full border-2 border-transparent hover:border-white transition"
                 onClick={() => navigate('/browse-jobs')}
               >
                 Browse Job
               </button>
             </div>
-            <div className='relative mt-5'>
-              <input onChange={(e) => setSearch(e.target.value)} className=' w-full h-12 rounded-full p-5 bg-white' placeholder='Search by role, skills, or keywords' />
 
-              <button onClick={()=> search && navigate(`/find-talent?search=${search}`)} className='hidden absolute right-2 top-1 bg-black text-white h-10 rounded-full w-28 flex items-center justify-center gap-1 cursor-pointer sm:flex'>
-                <SearchIcon style={{ color: '#15A9B2', width: '30px', height: '25px' }} />
-                <p className=' text-white '>Search</p>
+            {/* Search bar */}
+            <div className="relative">
+              <input
+                onChange={(e) => setSearch(e.target.value)}
+                value={search}
+                className="w-full h-14 rounded-full px-5 text-base sm:text-lg bg-white placeholder-gray-400"
+                placeholder="Search by role, skills, or keywords"
+              />
+
+              {/* Desktop Search Button */}
+              <button
+                onClick={handleSearch}
+                className="hidden sm:flex absolute right-2 top-1  bg-black text-white h-12 rounded-full px-5 items-center justify-center gap-2 cursor-pointer transition"
+              >
+                <SearchIcon style={{ color: '#15A9B2', width: '25px', height: '25px' }} />
+                <span className="text-white text-sm sm:text-base">Search</span>
               </button>
 
-              <div className='mt-3 flex items-center justify-center sm:hidden'>
-                <button className='w-full bg-black text-white h-12 rounded-full w-28 flex items-center justify-center gap-1 cursor-pointer'>
-                  <SearchIcon style={{ color: '#15A9B2', width: '30px', height: '25px' }} />
-                  <p className=' text-white '>Search</p>
+              {/* Mobile Search Button */}
+              <div className="mt-3 flex items-center justify-center sm:hidden">
+                <button
+                  onClick={handleSearch}
+                  className="w-full bg-black text-white h-11 rounded-full flex items-center justify-center gap-2 cursor-pointer transition"
+                >
+                  <SearchIcon style={{ color: '#15A9B2', width: '25px', height: '25px' }} />
+                  <span className="text-white text-base">Search</span>
                 </button>
               </div>
-
             </div>
           </div>
-
         </div>
-
-        {/* Right Image */}
       </section>
     </div>
   );

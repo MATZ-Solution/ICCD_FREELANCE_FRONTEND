@@ -39,7 +39,7 @@ export default function FindTalent() {
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                     //   onKeyDown={handleKeyDown}
-                    placeholder="What services are you looking for today"
+                    placeholder="What services are you looking today"
                     className="rounded  w-full h-10 p-3 border border-gray-400"
                 />
                 <button
@@ -59,7 +59,7 @@ export default function FindTalent() {
                         Based on what you might be looking for
                     </h1>
                     {/* Gig Cards Section */}
-                    <div className="mt-6 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                    <div className="mt-6 mb-4 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
                         {gigs?.map((data, index) => (
                             <GigCard
                                 key={index}

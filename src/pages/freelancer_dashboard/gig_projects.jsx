@@ -21,7 +21,7 @@ function ManageGigsAndProjects() {
     <div className="px-4 sm:px-6 lg:px-10 w-full min-h-screen">
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between gap-4 items-start sm:items-center mt-6 sm:mt-10 p-4 sm:p-6 bg-[#F8F8F8] rounded-lg">
-        <p className="text-base sm:text-lg md:text-xl lg:text-2xl font-medium text-[#043A53] leading-tight">
+        <p className="text-base sm:text-lg md:text-xl lg:text-2xl font-md text-sm text-[#043A53] leading-tight">
           Manage Gigs and Projects{" "}
           <span className="font-normal text-black">({active} Gigs) - {data?.length || 0}</span>
         </p>
