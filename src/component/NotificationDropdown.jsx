@@ -34,7 +34,7 @@ export default function NotificationDropdown() {
           <ErrorMessage title='No Notification found' isShowSecondTitle={false} />
           :
           <>
-            <div className="p-4 bg-gradient-to-r from-gray-50 to-gray-100/50 border-b border-gray-200/60">
+            {/* <div className="p-4 bg-gradient-to-r from-gray-50 to-gray-100/50 border-b border-gray-200/60">
               <div className="flex items-center justify-between">
                 <h3 className="font-semibold text-gray-900 text-lg">Notifications</h3>
                 <div className="flex items-center gap-2">
@@ -43,7 +43,7 @@ export default function NotificationDropdown() {
                   </button>
                 </div>
               </div>
-            </div>
+            </div> */}
 
             {/* Notifications List */}
             <div className="max-h-[400px] overflow-y-auto">

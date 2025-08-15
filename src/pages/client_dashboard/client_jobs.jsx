@@ -6,14 +6,16 @@ import Jobs_table from "../../component/client_dashboard/job_table";
 import { useGetAllJobByClient } from "../../../api/client/job";
 import ICCDLoader from "../../component/loader";
 import ICCDError from "../../component/ICCDError";
+import useDebounce from "../../../hooks/useDebounce";
 
 function ClientJobs() {
 
+    let [search, setSearch] = useState("")
     const navigate = useNavigate()
     const [active, setActive] = useState('Active')
     const datas = ['Active', 'Pending Approval', 'Requires Modification', 'Draft', 'Denied', 'Paused']
-    const { data, isSuccess, isError, isLoading } = useGetAllJobByClient()
-    console.log("data: ", data)
+    const { data, isSuccess, isError, isLoading } = useGetAllJobByClient({search: useDebounce(search)})
+   
     if (isLoading) {
         return <ICCDLoader />
     }
@@ -28,7 +30,10 @@ function ClientJobs() {
             <div className="flex flex-wrap justify-between mt-10 p-5 bg-[#F8F8F8] rounded-md">
                 <p className="text-xl sm:text-2xl "><span className="text-[#043A53]  font-semibold">Manage Jobs</span></p>
                 <div className="relative mt-5 sm:mt-0">
-                    <input className="border-[1px] border-gray-500 rounded-md bg-white w-72 h-10 p-2" placeholder="Search My History..." />
+                    <input 
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    className="border-[1px] border-gray-500 rounded-md bg-white w-72 h-10 p-2" placeholder="Search Jobs..." />
                     <SearchIcon className="absolute top-2 right-2" />
                 </div>
             </div>
