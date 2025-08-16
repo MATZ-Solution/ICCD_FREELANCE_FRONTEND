@@ -127,8 +127,14 @@ export default function Navbar() {
   };
 
   return (
-    <header className="bg-white shadow fontFamily-montreal border-b border-b-[#c4c4c4]">
-      <div className="max-w-7xl mx-auto px-6 sm:px-12 flex justify-between items-center">
+<header className="
+  bg-black/5 
+  backdrop-blur-lg 
+  border border-white/20 
+  rounded-2xl 
+  shadow-lg 
+  
+">      <div className="max-w-7xl mx-auto px-6 sm:px-12 flex justify-between items-center">
         {/* Logo */}
         <div className="w-20 h-20 md:w-24 md:h-24 cursor-pointer">
           <img src={logo} alt="logo" className="w-full h-full object-contain" />
