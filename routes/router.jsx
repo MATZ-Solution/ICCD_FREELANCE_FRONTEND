@@ -154,10 +154,14 @@ export const router = createBrowserRouter([
     path: "/login",
     element: withSuspense(<LoginController />),
   },
-  {
-    path: "/signUp",
-    element: withSuspense(<SignUp />),
+   {
+    path: "/signup",
+    element: withSuspense(<LoginController linker ="signup" />),
   },
+  // {
+  //   path: "/signUp",
+  //   element: withSuspense(<SignUp />),
+  // },
   {
     path: "/forgot-password",
     element: withSuspense(<ForgotPassword />),

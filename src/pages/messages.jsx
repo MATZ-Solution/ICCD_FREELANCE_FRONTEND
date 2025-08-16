@@ -207,7 +207,7 @@ const WhatsAppClone = () => {
             {message?.map((message, index) => {
               const isOwnMessage = message.senderId == client.id;
               const introMsg =
-                message.messages === "You are now communication each other";
+                message.messages === "You can now communicate with each other";
               return (
                 <div
                   key={index}
