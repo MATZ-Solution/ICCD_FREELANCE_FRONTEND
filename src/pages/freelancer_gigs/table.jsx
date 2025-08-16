@@ -28,7 +28,7 @@ const Table = ({ title, tabs = [], data = [] }) => {
     activeTab === "All" ? data : data.filter((item) => item.type === activeTab);
 
   return (
-    <div className="bg-white px-4 rounded-xl hover:shadow-lg transition-shadow duration-300 ease-in-out w-[500px] mx-auto min-h-[300px]">
+    <div className="bg-white px-4 rounded-xl hover:shadow-lg transition-shadow duration-300 ease-in-out w-full mx-auto min-h-[300px]">
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-base font-semibold text-gray-800">{title}</h3>
