@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Bell, Mail, Menu, X } from "lucide-react";
+import { Bell, Mail, Menu, X, User  } from "lucide-react";
 import { Search as SearchIcon, East as EastIcon } from "@mui/icons-material";
 import logo from "../assets/ICCD-01.png";
 import "../../src/css/navbar.css";
@@ -214,17 +214,33 @@ export default function Navbar() {
             <div ref={profileMenuRef} className="relative">
               <button
                 onClick={() => setShowProfileMenu((prev) => !prev)}
-                className="w-10 h-10 rounded-full flex justify-center items-center overflow-hidden border border-gray-300"
+                className="w-10 h-10 rounded-full flex justify-center items-center overflow-hidden border border-black"
               >
-                <img
-                  src={
-                    pathname.includes("freelancer")
-                      ? freelancer?.fileUrl
-                      : userDetails?.userImg
-                  }
-                  alt="User Profile"
-                  className="w-full h-full object-cover"
-                />
+                {
+                  ((pathname.includes('freelancer') && freelancer?.fileUrl) 
+                  ||
+                  (pathname.includes('client') && userDetails?.userImg))
+                  ? 
+                  <img
+                    src={pathname.includes('freelancer') ? freelancer?.fileUrl: userDetails?.userImg}
+                    alt="User Profile"
+                    className="w-full h-full object-cover"
+                  />
+                  :
+                 <User  />
+                }
+
+                 {/* {
+                  (pathname.includes('client') && userDetails?.userImg) ? 
+                  <img
+                    src={userDetails?.userImg}
+                    alt="User Profile"
+                    className="w-full h-full object-cover"
+                  />
+                  :
+                 <CircleUserRound />
+                } */}
+
               </button>
               {showProfileMenu &&
                 renderProfileMenu(pathname.includes("freelancer") ? "freelancer" : "client")}

@@ -4,6 +4,7 @@ import { useSignUp } from '../../api/client/user';
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
+import { toast } from 'react-toastify';
 import { useNavigate } from "react-router-dom";
 import SignIn_modal1 from '../component/modal/signIn_Modal1';
 import { ArrowLeft } from 'lucide-react';
@@ -12,6 +13,7 @@ function SignUp({ handleSwitch }) {
   const { userSignUp, isSuccess, isPending, isError, error, } = useSignUp({
     onSuccess: (res) => {
       handleSwitch("login")
+      toast.success("Registered successfull")
     },
     onError: (err) => {
       console.error("Signup error:", err);

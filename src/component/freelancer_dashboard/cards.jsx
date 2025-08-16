@@ -49,15 +49,15 @@ function DCard({
           <p className="text-sm text-white/80 font-medium leading-tight">{title}</p>
           <p className="text-3xl font-bold leading-none">{value}</p>
 
-          {subtitle && month && (
+          {/* {subtitle && month && (
             <div className="text-xs text-white/70 mt-1">
               {subtitle} <span className="font-semibold text-white">{month}</span>
             </div>
-          )}
+          )} */}
 
-          {bottomText && (
+          {/* {bottomText && (
             <p className="text-xs text-white/70 mt-2">{bottomText}</p>
-          )}
+          )} */}
         </div>
       </div>
     </div>
