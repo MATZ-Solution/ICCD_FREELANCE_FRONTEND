@@ -7,6 +7,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from "yup";
 import { useChangePassword } from '../../../api/client/user';
 import SignIn_modal1 from '../modal/signIn_Modal1';
+import { toast } from 'react-toastify';
 
 function ChangePassword({ handleSwitch, email, setEmail }) {
     const [showNewPass, setShowNewPass] = useState(false);
@@ -35,6 +36,7 @@ function ChangePassword({ handleSwitch, email, setEmail }) {
         onSuccess: (response, data) => {
             handleSwitch('login')
             setEmail("")
+            toast.success("Password Changed Successfully")
         },
         onError: (err) => {
             console.error("Signup error:", err);
