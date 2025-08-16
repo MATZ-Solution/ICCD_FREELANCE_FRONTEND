@@ -48,7 +48,7 @@ function SuccessPage() {
       };
 
 
-      const orderResponse = await fetch("http://localhost:2300/stripe/process-order", {
+      const orderResponse = await fetch("https://iccd.freelanceserver.matzsolutions.com/stripe/process-order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(orderData),
