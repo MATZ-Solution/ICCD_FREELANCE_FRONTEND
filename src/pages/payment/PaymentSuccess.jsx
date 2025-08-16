@@ -19,7 +19,7 @@ function SuccessPage() {
   const fetchSessionAndProcessOrder = async (sessionId) => {
     try {
       // Fetch session data from Stripe
-      const sessionResponse = await fetch(`http://localhost:2300/stripe/session?session_id=${sessionId}`);
+      const sessionResponse = await fetch(`https://iccd.freelanceserver.matzsolutions.com/stripe/session?session_id=${sessionId}`);
 
       if (!sessionResponse.ok) {
         throw new Error(`Failed to fetch session: ${sessionResponse.status}`);
