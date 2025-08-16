@@ -8,10 +8,11 @@ import ChangePassword from "./signIn/ChangePassword";
 import login_banner from '../../src/assets/login_banner_img.png'
 import CloseIcon from '@mui/icons-material/Close';
 
-const LoginController = ({ onClose }) => {
+const LoginController = ({ onClose ,linker}) => {
     const navigate = useNavigate();  // initialize navigate
     let [email, setEmail] = useState('');
-    const [modalView, setModalView] = useState("login");
+
+    const [modalView, setModalView] = useState(linker|| "login");
     const handleSwitch = (view) => setModalView(view);
     
   const handleClose = () => {

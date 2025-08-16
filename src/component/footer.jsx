@@ -8,7 +8,7 @@ import AndroidIcon from '@mui/icons-material/Android';
 
 const Footer = () => {
     return (
-        <footer className=" rounded-xl bg-gray-900 text-white py-10 sm:mx-15 sm:my-5">
+        <footer className="rounded-t-xl  lg:rounded-xl bg-gray-900 text-white py-10 sm:mx-15 sm:my-5">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
                     {/* Column 1 */}

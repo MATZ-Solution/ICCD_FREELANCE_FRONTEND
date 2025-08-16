@@ -26,7 +26,7 @@ const Banner5 = () => {
   ];
 
   return (
-    <div className="px-3 sm:px-10 mt-10">
+    <div className="px-6 sm:px-10 mt-10">
       <section className="flex flex-col items-center md:flex-row md:justify-between md:p-12">
         <div className="w-full text-center md:text-left mb-8 md:mb-0">
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-black mb-4">

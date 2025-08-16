@@ -255,7 +255,7 @@ export default function Navbar() {
               Login
             </button>
             <button
-              onClick={() => navigate("/login")}
+              onClick={() => navigate("/signup")}
               className="shadow-xl hidden md:flex items-center gap-3 px-4 py-2 bg-[#15A9B2] text-white rounded-full hover:bg-[#05929c] transition font-semibold"
             >
               <p>Get Started Now</p>
