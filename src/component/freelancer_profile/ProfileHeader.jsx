@@ -53,14 +53,14 @@ const ProfileHeader = ({openSidebar}) => {
           </div>
         </div>
       </div>
-      <div className="flex items-center space-x-2">
+      {/* <div className="flex items-center space-x-2">
         <button className="p-2 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors" aria-label="Share profile">
           <Share2 className="w-4 h-4" />
         </button>
         <button className="p-2 border border-gray-300 rounded-md hover:bg-gray-50 transition-colors" aria-label="Report profile">
           <EyeIcon className="w-4 h-4" />
         </button>
-      </div>
+      </div> */}
     </div>
   )
 };
