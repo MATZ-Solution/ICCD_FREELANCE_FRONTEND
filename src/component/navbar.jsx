@@ -129,7 +129,6 @@ export default function Navbar() {
   return (
 <header className="
   bg-black/5 
-  backdrop-blur-lg 
   border border-white/20 
   rounded-2xl 
   shadow-lg 
