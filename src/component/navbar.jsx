@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Bell, Mail, Menu, X, User  } from "lucide-react";
+import { Bell, Mail, Menu, X, User } from "lucide-react";
 import { Search as SearchIcon, East as EastIcon } from "@mui/icons-material";
 import logo from "../assets/ICCD-01.png";
 import "../../src/css/navbar.css";
@@ -43,10 +43,16 @@ export default function Navbar() {
   // Close dropdowns on outside click
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (notificationRef.current && !notificationRef.current.contains(event.target)) {
+      if (
+        notificationRef.current &&
+        !notificationRef.current.contains(event.target)
+      ) {
         setIsShowNot(false);
       }
-      if (profileMenuRef.current && !profileMenuRef.current.contains(event.target)) {
+      if (
+        profileMenuRef.current &&
+        !profileMenuRef.current.contains(event.target)
+      ) {
         setShowProfileMenu(false);
       }
     };
@@ -100,7 +106,10 @@ export default function Navbar() {
       type === "freelancer"
         ? [
             { name: "Switch to Client", action: handleSwitchClient },
-            { name: "View Profile", action: () => navigate("/freelancer/edit-profile") },
+            {
+              name: "View Profile",
+              action: () => navigate("/freelancer/edit-profile"),
+            },
             { name: "Logout", action: logout },
           ]
         : [
@@ -112,7 +121,7 @@ export default function Navbar() {
           ];
 
     return (
-      <div className="px-3 border border-gray-300 absolute right-0 mt-2 w-52 bg-white rounded-md shadow-lg py-1 z-50">
+<div className="px-3 border border-gray-300 absolute  right-0 mt-2 w-52 bg-white rounded-md shadow-lg py-1 z-50">
         {options.map(({ name, action }, i) => (
           <button
             key={i}
@@ -127,14 +136,10 @@ export default function Navbar() {
   };
 
   return (
-<header className="
-  bg-black/5
-  backdrop-blur-lg 
-  border border-white/20 
-  rounded-2xl 
-  shadow-lg 
-  
-">      <div className="max-w-7xl mx-auto px-6 sm:px-12 flex justify-between items-center">
+<header className="relative bg-black/2 border border-white/20 rounded-2xl shadow-lg">
+
+      {" "}
+      <div className="max-w-7xl mx-auto px-6 sm:px-12 flex justify-between items-center">
         {/* Logo */}
         <div className="w-20 h-20 md:w-24 md:h-24 cursor-pointer">
           <img src={logo} alt="logo" className="w-full h-full object-contain" />
@@ -142,7 +147,10 @@ export default function Navbar() {
 
         {/* Mobile Menu Button */}
         <div className="show_nav_links_mobile">
-          <button onClick={() => setIsOpen(!isOpen)} className="text-black focus:outline-none">
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="text-black focus:outline-none"
+          >
             {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
         </div>
@@ -200,9 +208,12 @@ export default function Navbar() {
 
         {/* Right Side */}
         {userDetails ? (
-          <div className="flex items-center gap-2 relative">
-            <div ref={notificationRef} className="relative">
-              <NotificationBell isShowNot={isShowNot} setIsShowNot={setIsShowNot} />
+          <div className="flex  items-center gap-2 relative">
+            <div ref={notificationRef} >
+              <NotificationBell
+                isShowNot={isShowNot}
+                setIsShowNot={setIsShowNot}
+              />
               {isShowNot && <NotificationDropdown />}
             </div>
 
@@ -217,26 +228,27 @@ export default function Navbar() {
               <Mail className="h-5 w-5 text-gray-600" />
             </button>
 
-            <div ref={profileMenuRef} className="relative">
+            <div ref={profileMenuRef} >
               <button
                 onClick={() => setShowProfileMenu((prev) => !prev)}
-                className="w-10 h-10 rounded-full flex justify-center items-center overflow-hidden border border-black"
+                className="w-10 h-10  rounded-full flex justify-center items-center  overflow-hidden border border-black"
               >
-                {
-                  ((pathname.includes('freelancer') && freelancer?.fileUrl) 
-                  ||
-                  (pathname.includes('client') && userDetails?.userImg))
-                  ? 
+                {(pathname.includes("freelancer") && freelancer?.fileUrl) ||
+                (pathname.includes("client") && userDetails?.userImg) ? (
                   <img
-                    src={pathname.includes('freelancer') ? freelancer?.fileUrl: userDetails?.userImg}
+                    src={
+                      pathname.includes("freelancer")
+                        ? freelancer?.fileUrl
+                        : userDetails?.userImg
+                    }
                     alt="User Profile"
                     className="w-full h-full object-cover"
                   />
-                  :
-                 <User  />
-                }
+                ) : (
+                  <User />
+                )}
 
-                 {/* {
+                {/* {
                   (pathname.includes('client') && userDetails?.userImg) ? 
                   <img
                     src={userDetails?.userImg}
@@ -246,10 +258,11 @@ export default function Navbar() {
                   :
                  <CircleUserRound />
                 } */}
-
               </button>
               {showProfileMenu &&
-                renderProfileMenu(pathname.includes("freelancer") ? "freelancer" : "client")}
+                renderProfileMenu(
+                  pathname.includes("freelancer") ? "freelancer" : "client"
+                )}
             </div>
           </div>
         ) : (
@@ -272,93 +285,105 @@ export default function Navbar() {
           </div>
         )}
       </div>
-
       {/* Mobile Menu */}
-    {/* Mobile Menu */}
-{/* Mobile Menu */}
-{isOpen && (
-  <div className="show_nav_links_mobile h-[100vh] px-4 py-6 space-y-6 flex flex-col bg-white shadow-2xl z-50 overflow-y-auto">
-    
-    {/* General Navigation Section */}
-    {!pathname.includes("/client") && !pathname.includes("/freelancer") && (
-      <div className="space-y-2">
-        <h3 className="text-gray-500 uppercase text-xs font-semibold px-2">Menu</h3>
-        {navigation.map((item) => (
-          <button
-            key={item.name}
-            onClick={() => {
-              navigate(item.href);
-              setIsOpen(false);
-            }}
-            className={`w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all duration-200 ${
-              isActive(item.href)
-                ? "bg-cyan-50 text-cyan-600 font-semibold shadow-lg"
-                : "bg-gray-50 hover:bg-gray-100 text-gray-800"
-            } hover:scale-105`}
-          >
-            <span>{item.name}</span>
-            {/* Optional arrow icon */}
-            <EastIcon className="text-gray-400" style={{ fontSize: 18 }} />
-          </button>
-        ))}
-      </div>
-    )}
+      {/* Mobile Menu */}
+      {/* Mobile Menu */}
+      {isOpen && (
+        <div className="show_nav_links_mobile h-[100vh] px-4 py-6 space-y-6 flex flex-col bg-white shadow-2xl overflow-y-auto">
+          {/* General Navigation Section */}
+          {!pathname.includes("/client") &&
+            !pathname.includes("/freelancer") && (
+              <div className="space-y-2">
+                <h3 className="text-gray-500 uppercase text-xs font-semibold px-2">
+                  Menu
+                </h3>
+                {navigation.map((item) => (
+                  <button
+                    key={item.name}
+                    onClick={() => {
+                      navigate(item.href);
+                      setIsOpen(false);
+                    }}
+                    className={`w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all duration-200 ${
+                      isActive(item.href)
+                        ? "bg-cyan-50 text-cyan-600 font-semibold shadow-lg"
+                        : "bg-gray-50 hover:bg-gray-100 text-gray-800"
+                    } hover:scale-105`}
+                  >
+                    <span>{item.name}</span>
+                    {/* Optional arrow icon */}
+                    <EastIcon
+                      className="text-gray-400"
+                      style={{ fontSize: 18 }}
+                    />
+                  </button>
+                ))}
+              </div>
+            )}
 
-    {/* Dashboard Section */}
-    {(pathname.includes("/client") || pathname.includes("/freelancer")) && (
-      <div className="space-y-2">
-        <h3 className="text-gray-500 uppercase text-xs font-semibold px-2">Dashboard</h3>
-        {(pathname.includes("/client") ? navTabsClientDashboard : navTabsFreelancerDashboard).map((item, idx) => (
-          <button
-            key={idx}
-            onClick={() => {
-              navigate(item.path);
-              setIsOpen(false);
-            }}
-            className={`w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all duration-200 ${
-              isActive(item.path)
-                ? "bg-cyan-50 text-cyan-600 font-semibold shadow-lg"
-                : "bg-gray-50 hover:bg-gray-100 text-gray-800"
-            } hover:scale-105`}
-          >
-            <span>{item.name}</span>
-            <EastIcon className="text-gray-400" style={{ fontSize: 18 }} />
-          </button>
-        ))}
-      </div>
-    )}
+          {/* Dashboard Section */}
+          {(pathname.includes("/client") ||
+            pathname.includes("/freelancer")) && (
+            <div className="space-y-2">
+              <h3 className="text-gray-500 uppercase text-xs font-semibold px-2">
+                Dashboard
+              </h3>
+              {(pathname.includes("/client")
+                ? navTabsClientDashboard
+                : navTabsFreelancerDashboard
+              ).map((item, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => {
+                    navigate(item.path);
+                    setIsOpen(false);
+                  }}
+                  className={`w-full flex items-center justify-between px-4 py-3 rounded-xl transition-all duration-200 ${
+                    isActive(item.path)
+                      ? "bg-cyan-50 text-cyan-600 font-semibold shadow-lg"
+                      : "bg-gray-50 hover:bg-gray-100 text-gray-800"
+                  } hover:scale-105`}
+                >
+                  <span>{item.name}</span>
+                  <EastIcon
+                    className="text-gray-400"
+                    style={{ fontSize: 18 }}
+                  />
+                </button>
+              ))}
+            </div>
+          )}
 
-    {/* Go to General Site */}
-    {(pathname.includes("/client") || pathname.includes("/freelancer")) && (
-      <button
-        onClick={() => {
-          navigate("/");
-          setIsOpen(false);
-        }}
-        className="w-full mt-4 px-4 py-3 bg-gradient-to-r from-cyan-500 to-teal-500 text-white rounded-2xl shadow-xl hover:scale-105 transition-all font-semibold"
-      >
-        Go to General Site
-      </button>
-    )}
+          {/* Go to General Site */}
+          {(pathname.includes("/client") ||
+            pathname.includes("/freelancer")) && (
+            <button
+              onClick={() => {
+                navigate("/");
+                setIsOpen(false);
+              }}
+              className="w-full mt-4 px-4 py-3 bg-gradient-to-r from-cyan-500 to-teal-500 text-white rounded-2xl shadow-xl hover:scale-105 transition-all font-semibold"
+            >
+              Go to General Site
+            </button>
+          )}
 
-    {/* Sign Up */}
-    {!pathname.includes("/client") &&
-      !pathname.includes("/freelancer") &&
-      !userDetails && (
-        <button
-          onClick={() => {
-            navigate("/signup");
-            setIsOpen(false);
-          }}
-          className="w-full mt-2 px-4 py-3 bg-gradient-to-r from-cyan-500 to-teal-500 text-white rounded-2xl shadow-xl hover:scale-105 transition-all font-semibold"
-        >
-          Sign Up
-        </button>
+          {/* Sign Up */}
+          {!pathname.includes("/client") &&
+            !pathname.includes("/freelancer") &&
+            !userDetails && (
+              <button
+                onClick={() => {
+                  navigate("/signup");
+                  setIsOpen(false);
+                }}
+                className="w-full mt-2 px-4 py-3 bg-gradient-to-r from-cyan-500 to-teal-500 text-white rounded-2xl shadow-xl hover:scale-105 transition-all font-semibold"
+              >
+                Sign Up
+              </button>
+            )}
+        </div>
       )}
-  </div>
-)}
-
-
     </header>
   );
 }
