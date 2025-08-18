@@ -93,9 +93,9 @@ const Description = () => {
                 </div>
             </div>
             <div className="mt-5 flex sm:justify-end">
-                <Button className='px-5 py-2' onClick={handleSubmit(onSubmit)}>
+                <button className='px-5 py-2 bg-[#15A9B2] text-white rounded' onClick={handleSubmit(onSubmit)}>
                     Save & Continue
-                </Button>
+                </button>
             </div>
         </Profile>
     );

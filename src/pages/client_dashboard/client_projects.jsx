@@ -41,7 +41,7 @@ function ClientProjects() {
                 <Tabs datas={datas} active={active} setActive={setActive} />
             </div> */}
             <div className="mt-10 flex justify-end">
-                <Button className="px-5 py-2" onClick={() => navigate('/client/post-project')}>Add new projects</Button>
+                <button className="px-5 py-2 bg-[#15A9B2] text-white rounded" onClick={() => navigate('/client/post-project')}>Add new projects</button>
             </div>
 
             {/* table */}

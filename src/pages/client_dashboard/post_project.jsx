@@ -10,6 +10,7 @@ import { useParams } from "react-router-dom";
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import ICCDError from '../../component/ICCDError';
+import Button from "../../component/button";
 
 // Yup schema with Language as an array
 const schema = yup.object({
@@ -573,13 +574,9 @@ const ProjectForm = () => {
           )}
         </div>
 
-        <button
-          type="button"
-          onClick={handleSubmit(onSubmit)}
-          className="w-full bg-teal-600 hover:bg-teal-700 text-white py-3 rounded text-lg focus:outline-none focus:ring-2 focus:ring-teal-500"
-        >
-          Submit
-        </button>
+        <Button text="Submit" className="w-full px-5 py-2 rounded" isLoading={isPending} onClick={handleSubmit(onSubmit)} />
+          
+        
       </div>
     </div>
   );

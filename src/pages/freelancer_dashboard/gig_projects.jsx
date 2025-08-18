@@ -36,12 +36,12 @@ function ManageGigsAndProjects() {
 
       {/* Add Gig Button */}
       <div className="mt-4 sm:mt-6 flex justify-end">
-        <Button
+        <button
           className="px-4 sm:px-6 py-2 text-sm sm:text-base font-semibold rounded-lg bg-[#043A53] text-white hover:bg-[#052f47] transition-colors"
           onClick={() => navigate('/freelancer/manage-gigs/overview')}
         >
           Add New Gig
-        </Button>
+        </button>
       </div>
 
       {/* Gigs Table */}
