@@ -71,7 +71,7 @@ export default function JobDetailPage() {
                     </tr>
                   </thead>
                   <tbody className="text-sm divide-y divide-gray-200">
-                    { jobProposals.length > 0 ? ( jobProposals?.map((item, index) => (
+                    { jobProposals?.length > 0 ? ( jobProposals?.map((item, index) => (
                       <tr key={index} className="hover:bg-gray-50">
                         <td className="px-6 py-4 whitespace-nowrap flex items-center gap-3">
                           <img src={item?.candidateImg} className="w-9 h-9 rounded-full "></img>

@@ -10,6 +10,7 @@ import {
   Filter,
   X,
   Menu,
+  Briefcase, FolderKanban, HandCoins
 } from "lucide-react";
 import DCard from "../../component/freelancer_dashboard/cards";
 import logo from "../../assets/ICCD-01.png";
@@ -220,29 +221,23 @@ export default function ClientDashboard() {
             <DCard
               title="Total Posted Projects"
               value={dashboardData?.length > 0 ? dashboardData[0]?.totalPostedProject : 0}
-              subtitle="58% higher than "
-              month="Last Month"
-              percentChange="58%"
-              variant="purple"
-              icon={<TrendingUp className="w-6 h-6" />}
+            icon={<FolderKanban className="w-6 h-6" />}
+            border="border-l-6 border-amber-500"
+            gradient="from-amber-500 to-orange-500"
             />
             <DCard
               title="Total Posted Jobs"
               value={dashboardData?.length > 0 ? dashboardData[0]?.totalPostedJob : 0}
-              subtitle="58% higher than "
-              month="Last Month"
-              percentChange="58%"
-              variant="green"
-              icon={<FileText className="w-6 h-6" />}
+              icon={<Briefcase className="w-6 h-6" />}
+              border="border-l-6 border-green-500"
+              gradient="from-green-500 to-emerald-500"
             />
             <DCard
               title="Total Orders"
               value={dashboardData?.length > 0 ? dashboardData[0]?.totalOrder : 0}
-              subtitle="58% higher than "
-              month="Last Month"
-              percentChange="58%"
-              variant="blue"
-              icon={<span className="text-2xl">📋</span>}
+              icon={<HandCoins className="w-6 h-6" />}
+              border="border-l-6 border-indigo-500"
+              gradient="from-indigo-500 to-purple-500"
             />
           </div>
 

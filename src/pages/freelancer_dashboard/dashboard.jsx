@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { X, Users, FileText } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { ShoppingCart, DollarSign, Briefcase, FolderKanban, HandCoins } from "lucide-react";
 
 import { useGetOrderByFreelancer } from "../../../api/client/order";
 import { useGetFreelDashboardData } from "../../../api/client/freelancer";
@@ -101,27 +102,36 @@ export default function FreelancerDashboard() {
 
           {/* Stats Cards */}
           <div className="grid sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 my-6">
-            <DCard
+
+            {/* old card */}
+             {/* <DCard
               title="Total Gigs Added"
               value={dashData?.[0]?.totalGigsAdded}
               bottomText="48.7% You earned Last Month"
               variant="teal"
               icon={<span className="text-2xl">💼</span>}
-            />
-            <DCard
-              title="Applied Job"
-              value={dashData?.[0]?.totalAppliedJobs}
-              bottomText="You Offered Last Month"
-              variant="brown"
-              icon={<FileText className="w-6 h-6" />}
-            />
-            <DCard
-              title="Applied Projects"
-              value={dashData?.[0]?.totalAppliedProject}
-              bottomText="You earned Last Month"
-              variant="indigo"
-              icon={<Users className="w-6 h-6" />}
-            />
+            /> */}
+          <DCard
+            title="Total Gigs Added"
+            value={dashData?.[0]?.totalGigsAdded}
+            icon={<HandCoins className="w-6 h-6"/>}
+            border="border-l-6 border-indigo-500"
+            gradient="from-indigo-500 to-purple-500"
+          />
+          <DCard
+            title="Applied Job"
+            value={dashData?.[0]?.totalAppliedJobs}
+            icon={<Briefcase className="w-6 h-6"/>}
+            border="border-l-6 border-green-500"
+            gradient="from-green-500 to-emerald-500"
+          />
+          <DCard
+            title="Applied Projects"
+            value={dashData?.[0]?.totalAppliedProject}
+            icon={<FolderKanban className="w-6 h-6" />}
+            border="border-l-6 border-amber-500"
+            gradient="from-amber-500 to-orange-500"
+          />
           </div>
 
           {/* Chart and Orders */}
