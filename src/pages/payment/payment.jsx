@@ -198,7 +198,7 @@ const Payment = () => {
                   </div>
                   <div className="flex justify-between font-semibold text-lg">
                     <span>{packageType} Package</span>
-                    <span>PKR {totalPrice}</span>
+                    <span>$ {totalPrice}</span>
                   </div>
                   <div className="space-y-3 text-sm text-gray-700">
                     <div className="flex items-center gap-3">
@@ -217,7 +217,7 @@ const Payment = () => {
                   <div className="flex justify-between font-bold text-xl border-t pt-4">
                     <span>Total</span>
                     <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                      PKR {totalPrice}
+                      $ {totalPrice}
                     </span>
                   </div>
                   <button
@@ -227,7 +227,7 @@ const Payment = () => {
                     🔒 Confirm & Pay
                   </button>
                   <p className="text-xs text-gray-600 text-center">
-                    You will be charged PKR {totalPrice}. Includes any conversion fees.
+                    You will be charged $ {totalPrice}. Includes any conversion fees.
                     <br />
                     <span className="text-green-600 font-medium">✓ 256-bit SSL encrypted</span>
                   </p>

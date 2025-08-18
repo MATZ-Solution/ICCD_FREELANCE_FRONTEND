@@ -25,13 +25,13 @@ function ManageGigsAndProjects() {
           Manage Gigs and Projects{" "}
           <span className="font-normal text-black">({active} Gigs) - {data?.length || 0}</span>
         </p>
-        <div className="relative w-full sm:w-64 md:w-72">
+        {/* <div className="relative w-full sm:w-64 md:w-72">
           <input
             className="border border-gray-400 rounded-lg bg-white w-full h-10 sm:h-12 px-3 pr-10 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-[#043A53]"
             placeholder="Search My Gigs..."
           />
           <SearchIcon className="absolute top-1/2 right-3 transform -translate-y-1/2 text-gray-500" />
-        </div>
+        </div> */}
       </div>
 
       {/* Add Gig Button */}

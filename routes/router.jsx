@@ -627,62 +627,62 @@ export const router = createBrowserRouter([
   {
     path: "/superadmin/dashboard",
     element: withSuspense(
-      <AuthRoute>
+      // <AuthRoute>
         <MainTemplate isShowFooter={false}>
           <SuperAdminDashboard />
         </MainTemplate>
-      </AuthRoute>
+      // </AuthRoute>
     ),
   },
 
     {
     path: "/superadmin/orders",
     element: withSuspense(
-      <AuthRoute>
+      // <AuthRoute>
         <MainTemplate isShowFooter={false}>
         <SuperAdminAllOrders/>
         </MainTemplate>
-      </AuthRoute>
+      // </AuthRoute>
     ),
   },
   {
     path: "/superadmin/orders/:orderId",
     element: withSuspense(
-      <AuthRoute>
+      // <AuthRoute>
         <MainTemplate isShowFooter={false}>
         <OrderDetailPage/>
         </MainTemplate>
-      </AuthRoute>
+      // </AuthRoute>
     ),
   },
   {
     path: "/superadmin/manage-dispute",
     element: withSuspense(
-      <AuthRoute>
+      // <AuthRoute>
         <MainTemplate isShowFooter={false}>
           <ManageDispute />
         </MainTemplate>
-      </AuthRoute>
+      // </AuthRoute>
     ),
   },
     {
     path: "/superadmin/manage-users",
     element: withSuspense(
-      <AuthRoute>
+      // <AuthRoute>
         <MainTemplate isShowFooter={false}>
          <ManageUsers/>
         </MainTemplate>
-      </AuthRoute>
+      // </AuthRoute>
     ),
   },
   {
     path: "/superadmin/reviews",
     element: withSuspense(
-      <AuthRoute>
+      // <AuthRoute>
         <MainTemplate isShowFooter={false}>
           <ReviewPage />
         </MainTemplate>
-      </AuthRoute>
+      // </AuthRoute>
     ),
   },
   {

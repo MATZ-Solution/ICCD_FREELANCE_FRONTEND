@@ -48,7 +48,7 @@ export default function ServicePage() {
                 <h2 className="text-xl font-semibold">
                   {freelancer?.freelancerName}
                 </h2>
-                <p className="text-gray-500">UI Designers</p>
+                {/* <p className="text-gray-500">UI Designers</p> */}
               </div>
             </div>
           </div>
@@ -78,9 +78,9 @@ export default function ServicePage() {
                   {freelancer?.freelancerName}
                 </h4>
                 <div className="flex flex-wrap gap-2 my-2">
-                  <span className="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm">
+                  {/* <span className="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm">
                     UI Designer
-                  </span>
+                  </span> */}
                   <span className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">
                     {freelancer?.FreelancerLanguages}
                   </span>

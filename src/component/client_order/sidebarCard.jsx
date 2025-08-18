@@ -25,7 +25,7 @@ const SidebarCard = ({
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-4">
         <p className="text-lg capitalize font-semibold">{type}</p>
-        <h3 className="font-semibold text-xl text-gray-900">PKR {price}</h3>
+        <h3 className="font-semibold text-xl text-gray-900">$ {price}</h3>
       </div>
 
       {/* Title & Description */}

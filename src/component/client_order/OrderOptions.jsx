@@ -92,7 +92,7 @@ function OrderOptions({
                 <h3 className="font-semibold text-gray-900">{packageType}</h3>
               </div>
               <span className="text-xl font-bold text-blue-600">
-                PKR {basePrice?.toLocaleString()}
+                $ {basePrice?.toLocaleString()}
               </span>
             </div>
             <p className="text-sm text-gray-600">{packageDescription} || In tempore harum ma In tempore harum ma In tempore harum ma In tempore harum maIn tempore harum maIn tempore harum  </p>
@@ -118,7 +118,7 @@ function OrderOptions({
                   </div>
                   <span className="text-sm font-medium">Single order</span>
                 </div>
-                <span className="font-semibold text-gray-900">PKR {totalPrice.toLocaleString()}</span>
+                <span className="font-semibold text-gray-900">$ {totalPrice.toLocaleString()}</span>
               </div>
             </div>
           </div>
@@ -149,7 +149,7 @@ function OrderOptions({
             </div>
             {quantity > 1 && (
               <p className="text-xs text-gray-500">
-                PKR {basePrice.toLocaleString()} × {quantity} = PKR {subtotal.toLocaleString()}
+                $ {basePrice.toLocaleString()} × {quantity} = $ {subtotal.toLocaleString()}
               </p>
             )}
           </div>
@@ -159,13 +159,13 @@ function OrderOptions({
             <div className="space-y-2 mb-4">
               <div className="flex items-center justify-between">
                 <span className="text-sm text-gray-600">
-                  Subtotal ({quantity} × PKR {basePrice.toLocaleString()})
+                  Subtotal ({quantity} × $ {basePrice.toLocaleString()})
                 </span>
-                <span className="text-sm font-medium">PKR {subtotal.toLocaleString()}</span>
+                <span className="text-sm font-medium">$ {subtotal.toLocaleString()}</span>
               </div>
               <div className="flex items-center justify-between border-t border-gray-300 pt-2">
                 <span className="text-lg font-bold text-gray-900">Total</span>
-                <span className="text-xl font-bold text-teal-600">PKR {totalPrice.toLocaleString()}</span>
+                <span className="text-xl font-bold text-teal-600">$ {totalPrice.toLocaleString()}</span>
               </div>
             </div>
 
