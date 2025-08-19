@@ -100,6 +100,8 @@ function ClientOrders() {
     }
   };
 
+  
+
   const handleCompleteClick = (id) => {
     setSelectedOrderId(id);
     setShowCompleteModal(true);
@@ -158,6 +160,8 @@ function ClientOrders() {
   if (isLoading || isPending) return <ICCDLoader />;
   if (isError) return <div className="text-center text-red-500 mt-10">Error loading orders</div>;
 
+  console.log(data)
+
   return (
     <div className="w-full h-full bg-white p-4 sm:p-6">
       {/* Header */}
@@ -212,7 +216,7 @@ function ClientOrders() {
                 </div>
 
                 <div className="w-full md:w-[25%] flex flex-col md:flex-row gap-2">
-                  <button
+                  {/* <button
                     onClick={(e) => {
                       e.stopPropagation();
                       handleView(item.id);
@@ -220,14 +224,14 @@ function ClientOrders() {
                     className="w-full h-12 bg-[#EDEDED] rounded-2xl p-3 flex justify-center items-center"
                   >
                     <p className="text-[#043A53] font-semibold">View</p>
-                  </button>
+                  </button> */}
 
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
                       if (!isCompleted && !isDisputed) handleCompleteClick(item.id);
                     }}
-                    className={`w-full h-12 ${
+                    className={`w-60 h-12 ${
                       isCompleted
                         ? "bg-green-200 text-green-800"
                         : isDisputed

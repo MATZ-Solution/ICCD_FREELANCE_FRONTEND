@@ -11,30 +11,14 @@ import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import ICCDError from '../../component/ICCDError';
 
-// Yup schema with Language as an array
 const schema = yup.object({
-  title: yup
-    .string()
-    .required("Project title is required")
-    .max(80, "Maximum 80 characters allowed"),
+  title: yup.string().required("Project title is required").max(80),
   category: yup.string().required("Category is required"),
   subCategory: yup.string().required("Subcategory is required"),
-  skills: yup
-    .array()
-    .of(yup.string().required())
-    .min(1, "At least one skill is required"),
-  description: yup
-    .string()
-    .required("Project description is required")
-    .max(250, "Maximum 250 characters allowed"),
-  overview: yup
-    .string()
-    .required("Project overview is required")
-    .max(250, "Maximum 250 characters allowed"),
-  deliverable: yup
-    .string()
-    .required("Deliverable are required")
-    .max(250, "Maximum 250 characters allowed"),
+  skills: yup.array().of(yup.string()).min(1, "At least one skill is required"),
+  description: yup.string().required("Project description is required").max(1000),
+  overview: yup.string().required("Project overview is required").max(1000),
+  deliverable: yup.string().required("Deliverable are required").max(1000),
   budget: yup
     .string()
     .required("Budget is required")
@@ -42,28 +26,23 @@ const schema = yup.object({
       "is-valid-budget-range",
       "Enter a valid budget range like 5000 - 7000",
       (value) => {
-        const match = value?.match(/^\s*([\d,]+)\s*-\s*([\d,]+)\s*$/);
+        if (!value) return false;
+        const match = value.match(/^\s*([\d,]+)\s*-\s*([\d,]+)\s*$/);
         if (!match) return false;
-        const min = parseInt(match[1].replace(/,/g, ""));
-        const max = parseInt(match[2].replace(/,/g, ""));
+        const min = parseInt(match[1].replace(/,/g, ""), 10);
+        const max = parseInt(match[2].replace(/,/g, ""), 10);
         return !isNaN(min) && !isNaN(max) && min < max && max - min >= 1000;
       }
     ),
   type: yup.string().required("Price Type is required"),
-  language: yup
-    .array()
-    .of(yup.string().required())
-    .min(1, "At least one language is required")
-    .required("Language is required"),
+  language: yup.array().of(yup.string()).min(1, "At least one language is required"),
   freelancerType: yup.string().required("Freelancer Type is required"),
   deadline: yup.date().required("Deadline is required").nullable(),
   duration: yup.string().required("Hiring timeline is required"),
-  total_freelancer: yup
-    .number()
-    .min(1, "At least one freelancer is required")
-    .required("Number of freelancers is required"),
+  total_freelancer: yup.number().min(1, "At least one freelancer is required").integer(),
   mode: yup.string().required("Mode is required"),
 });
+
 
 const categoryOptions = [
   { value: "Digital Marketing", label: "Digital Marketing" },
@@ -73,6 +52,7 @@ const categoryOptions = [
 ];
 
 const subCategoryOptions = [
+  { value: "FullStack", label: "FullStack" },
   { value: "FrontEnd", label: "FrontEnd" },
   { value: "Backend", label: "Backend" },
   { value: "Design", label: "Design" },

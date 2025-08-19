@@ -29,6 +29,4 @@ export const navTabsSuperAdminDashboard = [
   { name: "Orders", path: "/superadmin/orders" },
   { name: "Dispute", path: "/superadmin/manage-dispute" },
   { name: "Jobs", path: "/superadmin/manage-jobs" },
-  { name: "Analytics", path: "/superadmin/reviews" },
-  // { name: "Analytics", path: '/freelancer/analytics',  },
 ];

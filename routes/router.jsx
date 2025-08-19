@@ -314,6 +314,7 @@ export const router = createBrowserRouter([
       </AuthRoute>
     ),
   },
+   
   {
     path: "/freelancer/dashboard",
     element: withSuspense(
@@ -564,6 +565,7 @@ export const router = createBrowserRouter([
       </AuthRoute>
     ),
   },
+ 
   {
     path: "/client/projects",
     element: withSuspense(

@@ -8,12 +8,11 @@ import { useCheckIsFreelancer } from "../../../api/client/user";
 import { useDispatch } from "react-redux";
 import { getUserProfile } from "../../../redux/slices/userProfileSlice";
 import useDebounce from "../../../hooks/useDebounce";
-export default function ClientHomepage() {
 
+export default function ClientHomepage() {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
-
 
   // Get search param from URL query string
   const query = new URLSearchParams(location.search);
@@ -21,8 +20,9 @@ export default function ClientHomepage() {
 
   const [search, setSearch] = useState(searchTermFromUrl);
 
-  const { gigs, error, isLoading, isError } = useGetGigs({ search: useDebounce(searchTermFromUrl) });
-
+  const { gigs, error, isLoading, isError } = useGetGigs({
+    search: useDebounce(searchTermFromUrl),
+  });
 
   function handleSearch() {
     if (search.trim() === searchTermFromUrl.trim()) return; // no change
@@ -30,32 +30,39 @@ export default function ClientHomepage() {
   }
 
   function handleKeyDown(e) {
-    if (e.key === "Enter") {
-      handleSearch();
-    }
+    if (e.key === "Enter") handleSearch();
   }
 
-// to set freelancer details in redux
-  const { data, isSuccess, isPending } = useCheckIsFreelancer()
+  // to set freelancer details in redux
+  const { data, isSuccess, isPending } = useCheckIsFreelancer();
   useEffect(() => {
-    if (data && data?.length > 0) {
+    if (data && data.length > 0) {
       dispatch(getUserProfile(data[0]));
     }
   }, [data]);
 
-  if (isLoading) {
-    return <ICCDLoader />
-  }
+  if (isLoading) return <ICCDLoader />;
+
+  // Helper function to format created_at date
+  const formatDate = (dateString) => {
+    if (!dateString) return "";
+    const date = new Date(dateString);
+    return date.toLocaleDateString(undefined, {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+  };
 
   return (
     <div className="min-h-screen px-4 bg-white">
-      <div className=" mt-4  lg:hidden  md:hidden relative max-w-xl mx-auto">
+      <div className="mt-4 lg:hidden md:hidden relative max-w-xl mx-auto">
         <input
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder="What services are you looking Today"
-          className="rounded  w-full h-10 p-3 border border-gray-400"
+          className="rounded w-full h-10 p-3 border border-gray-400"
         />
         <button
           onClick={handleSearch}
@@ -75,18 +82,19 @@ export default function ClientHomepage() {
           </h1>
           {/* Gig Cards Section */}
           <div className="mt-6 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {gigs?.map((data, index) => (
+            {gigs?.map((gig) => (
               <GigCard
-                key={index}
-                onClick={() => navigate(`/client/gigs/gigs_details/${data?.id}`)}
-                image={data?.fileUrls ? data?.fileUrls.split(",")[0] : ""}
-                title={data.title}
-                author={data.firstName + " " + data.lastName}
-                authorImg={data?.freelancerImg}
+                key={gig.id}
+                onClick={() => navigate(`/client/gigs/gigs_details/${gig.id}`)}
+                image={gig.fileUrls ? gig.fileUrls.split(",")[0] : ""}
+                title={gig.title}
+                author={`${gig.firstName} ${gig.lastName}`}
+                authorImg={gig.freelancerImg}
                 level="Level 2++"
-                rating={4.7}
-                reviews={187}
-                price={2977}
+                rating={4.7} // could be dynamic if you have rating
+                reviews={187} // could be dynamic
+                price={gig.price || 0} // dynamic price
+                created_at={formatDate(gig.created_at)}
                 offersVideoConsultation={true}
               />
             ))}
