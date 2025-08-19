@@ -1,17 +1,28 @@
-import React from 'react';
-import clsx from 'clsx'; // optional utility for combining classes
+import { Loader2 } from "lucide-react";
 
-// give padding to this button is compulsary
-function Button({ children, className = '', onClick, ...rest }) {
+export default function Button({
+  text = "Submit",
+  isLoading = false,
+  onClick,
+  type = "button",
+  className = "",
+}) {
   return (
     <button
+      type={type}
       onClick={onClick}
-      className={clsx('bg-[#01AEAD] rounded-md text-white cursor-pointer hover:bg-[#05929c] ', className)}
-      {...rest}
+      disabled={isLoading}
+      className={`flex gap-2 items-center justify-center font-semibold text-white bg-[#15A9B2] rounded-full transition
+        ${isLoading ? "opacity-70 cursor-not-allowed" : "hover:bg-[#05929c] cursor-pointer"} ${className}`}
     >
-      {children}
+      {isLoading ? (
+        <>
+          <Loader2 className="w-5 h-5 animate-spin" />
+          Processing...
+        </>
+      ) : (
+        text
+      )}
     </button>
   );
 }
-
-export default Button;
