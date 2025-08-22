@@ -41,16 +41,18 @@ function ClientJobs() {
         </div>
 
         {/* Search Section */}
-        <div className="relative flex flex-col justify-center mt-4 sm:mt-0">
-          <input
-            type="text"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search Jobs..."
-            className="w-72 h-10 p-2 pr-10 rounded-md border border-gray-500 bg-white focus:outline-none focus:ring-2 focus:ring-blue-300"
-          />
-          <SearchIcon className="absolute top-2.5 right-2.5 text-gray-400" />
-          
+        <div className="  flex flex-col justify-center mt-4 sm:mt-0">
+          <div className="relative">
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search Jobs..."
+              className="w-72 h-10 p-2 pr-10 rounded-md border border-gray-500 bg-white focus:outline-none focus:ring-2 focus:ring-blue-300"
+            />
+            <SearchIcon className="absolute top-2.5 right-2.5 text-gray-400" />
+
+          </div>
           <div className="mt-4  gap-4 font-bold text-sm text-blue-100">
             <span className="flex items-center gap-2">
               <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
@@ -62,12 +64,12 @@ function ClientJobs() {
 
       {/* Add New Job Button */}
       <div className="mt-10 flex justify-end">
-        <Button
-          className="px-5 py-2"
+        <button
+          className="px-5 py-2 bg-[#15A9B2] text-white rounded"
           onClick={() => navigate("/client/post-job")}
         >
           Add New Job
-        </Button>
+        </button>
       </div>
 
       {/* Empty State */}
