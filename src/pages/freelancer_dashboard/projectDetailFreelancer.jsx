@@ -30,13 +30,13 @@ const ProjectDetailFreelancer = () => {
     let [show, setShow] = useState(false)
     const pathName = useLocation().pathname
     const freelancerData = useSelector(state => state.userProfile.userProfile)
-    const { data, isSuccess, isPending, isError, isLoading } = useGetProjectsById(id)
-
+    const { data, isSuccess, isPending, isError,error, isLoading } = useGetProjectsById({projectId: id, freelancerId: freelancerData?.id || null})
     
-     if(isLoading || isPending){
+     if(isPending){
         return <ICCDLoader />
     }
     if(isError){
+        console.log("error: ", error)
         return <ICCDError />
     }
 

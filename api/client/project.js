@@ -30,7 +30,7 @@ export function useAddproject() {
 
 // get project by user
 export function useGetProjectsByClient(params = {}) {
-   const constructQueryString = (params) => {
+  const constructQueryString = (params) => {
     const query = new URLSearchParams(params).toString();
     return query ? `&${query}` : "";
   };
@@ -66,11 +66,16 @@ export function useGetAllProjects(params = {}) {
   };
 }
 
-export function useGetProjectsById(id) {
-  const { data, isSuccess, isPending, isError, isLoading } = useQuery({
-    queryKey: [API_ROUTE.project.getProjectById],
-    queryFn: async () => await api.get(`${API_ROUTE.project.getProjectById}/${id}`),
-    enabled: id !== undefined && id !== null
+export function useGetProjectsById(params = {}) {
+  const constructQueryString = (params) => {
+    const query = new URLSearchParams(params).toString();
+    return query ? `&${query}` : "";
+  };
+  const { data, isSuccess, isPending, isError, isLoading, error } = useQuery({
+    queryKey: [API_ROUTE.project.getProjectById, params],
+    queryFn: async () => await api.get(`${API_ROUTE.project.getProjectById}?${constructQueryString(params)}`),
+    // enabled: id !== undefined && id !== null
+
   });
   return {
     data: data?.data?.data,
@@ -78,6 +83,7 @@ export function useGetProjectsById(id) {
     isPending,
     isError,
     isLoading,
+    error
   };
 }
 
