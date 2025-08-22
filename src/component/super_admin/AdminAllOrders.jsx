@@ -13,8 +13,6 @@ function SuperAdminAllOrders() {
 
   const { data, isLoading, isError, error } = useGetAllOrderByAdmin({ search });
 
-  console.log("SuperAdminAllOrders data: ", data);
-
   const handleView = (id) => {
     if (pathName.includes("admin")) {
       navigate(`/superadmin/orders/${id}`);
@@ -23,17 +21,15 @@ function SuperAdminAllOrders() {
 
   const statusColors = {
     "IN PROGRESS": "bg-[#1467B0]",
-    pending: "bg-yellow-500",
-    paid: "bg-green-600",
+    PENDING: "bg-yellow-500",
+    PAID: "bg-green-600",
     "IN REVIEW": "bg-purple-500",
     "ON HOLD": "bg-red-500",
   };
 
   if (isLoading) return <ICCDLoader />;
   if (isError)
-    return (
-      <ICCDError message={error?.message || "Failed to fetch orders"} />
-    );
+    return <ICCDError message={error?.message || "Failed to fetch orders"} />;
 
   return (
     <div className="px-5 sm:px-5 lg:px-10">
@@ -44,6 +40,7 @@ function SuperAdminAllOrders() {
         </p>
         <div className="relative mt-5 sm:mt-0">
           <input
+            value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="border-[1px] border-gray-500 rounded-md bg-white w-72 h-10 p-2"
             placeholder="Search My History..."
@@ -54,12 +51,11 @@ function SuperAdminAllOrders() {
 
       {/* Table Cards */}
       <div className="py-6 px-4">
-        {data?.length > 0 ? (
+        {data.length > 0 ? (
           <div className="flex flex-col gap-4">
             {data.map((item) => {
-              const status = item?.status;
-              const colorClass =
-                statusColors[status] || "bg-gray-500";
+              const status = (item?.status || "").toUpperCase();
+              const colorClass = statusColors[status] || "bg-gray-500";
 
               return (
                 <div
@@ -69,10 +65,10 @@ function SuperAdminAllOrders() {
                   {/* Image */}
                   <div className="flex justify-center md:justify-start w-full md:w-[15%]">
                     <img
-                      src={item?.gigsImage?.split(',')[0] || order_logo}
+                      src={item?.gigsImage?.split(",")[0] || order_logo}
                       alt="Order"
                       className="w-36 h-20 object-contain"
-                      // onError={(e) => (e.target.src = order_logo)}
+                      onError={(e) => (e.target.src = order_logo)}
                     />
                   </div>
 
@@ -126,9 +122,7 @@ function SuperAdminAllOrders() {
             })}
           </div>
         ) : (
-          <p className="text-center text-sm text-gray-600">
-            No records found
-          </p>
+          <p className="text-center text-sm text-gray-600">No records found</p>
         )}
       </div>
     </div>

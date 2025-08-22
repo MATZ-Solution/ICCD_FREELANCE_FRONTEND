@@ -50,6 +50,9 @@ const API_ROUTE = {
 
   superadmin: {
     getAllUsers: '/superadmin/getAllUsers',
+    getAllOrders: '/superadmin/getAllOrder',
+
+    
   },
   order: {
     getAllOrderByFreelancer: '/order/getAllOrderByFreelancer',
