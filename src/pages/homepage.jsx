@@ -24,7 +24,7 @@ function Homepage() {
 
     return (
         <div>
-            <Navbar />
+            {/* <Navbar /> */}
             <Banner1 />
             <Banner5 />
             <Banner2 />
@@ -32,7 +32,7 @@ function Homepage() {
             <Banner3 />
             <Banner6 />
             {/* <Banner7 /> */}
-            <Footer />
+            {/* <Footer /> */}
         </div>
     )
 }

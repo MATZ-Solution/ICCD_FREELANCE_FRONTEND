@@ -80,7 +80,11 @@ const stripePromise = loadStripe("pk_test_51QCl1eCDh3RtIJ6XkYcN5vHd3KTO2f8enRSNv
 export const router = createBrowserRouter([
   {
     path: "/",
-    element: withSuspense(<Homepage />),
+    element: withSuspense(
+      <MainTemplate isShowFooter={true}>
+        <Homepage />
+      </MainTemplate >
+    ),
   },
 
   {
@@ -102,42 +106,42 @@ export const router = createBrowserRouter([
   {
     path: "/browse-jobs",
     element: withSuspense(
-        <MainTemplate isShowFooter={false}>
-          <Jobs />
-        </MainTemplate>
+      <MainTemplate isShowFooter={false}>
+        <Jobs />
+      </MainTemplate>
     ),
   },
   {
     path: "/browse-projects",
     element: withSuspense(
-        <MainTemplate isShowFooter={false}>
-          <BrowseProjects />
-        </MainTemplate>
+      <MainTemplate isShowFooter={false}>
+        <BrowseProjects />
+      </MainTemplate>
     ),
   },
-    {
+  {
     path: "/browse-projects/:id",
     element: withSuspense(
-        <MainTemplate isShowFooter={false}>
-          <ProjectDetail /> 
-        </MainTemplate>
+      <MainTemplate isShowFooter={false}>
+        <ProjectDetail />
+      </MainTemplate>
     ),
   },
   {
     path: "/find-talent",
     element: withSuspense(
-        <MainTemplate isShowFooter={true}>
-          <FindTalent />
-        </MainTemplate>
+      <MainTemplate isShowFooter={true}>
+        <FindTalent />
+      </MainTemplate>
     ),
   },
-   {
+  {
     path: "/find-talent/:id",
     element: withSuspense(
       // <AuthRoute>
-        <MainTemplate isShowFooter={false}>
-          <Gigs_details />
-        </MainTemplate>
+      <MainTemplate isShowFooter={false}>
+        <Gigs_details />
+      </MainTemplate>
       // </AuthRoute>
     ),
   },
@@ -155,9 +159,9 @@ export const router = createBrowserRouter([
     path: "/login",
     element: withSuspense(<LoginController />),
   },
-   {
+  {
     path: "/signup",
-    element: withSuspense(<LoginController linker ="signup" />),
+    element: withSuspense(<LoginController linker="signup" />),
   },
   // {
   //   path: "/signUp",
@@ -609,9 +613,9 @@ export const router = createBrowserRouter([
     path: "/client/gigs/gigs_details/:id",
     element: withSuspense(
       // <AuthRoute>
-        <MainTemplate isShowFooter={false}>
-          <Gigs_details />
-        </MainTemplate>
+      <MainTemplate isShowFooter={false}>
+        <Gigs_details />
+      </MainTemplate>
       // </AuthRoute>
     ),
   },
@@ -636,12 +640,12 @@ export const router = createBrowserRouter([
     ),
   },
 
-    {
+  {
     path: "/superadmin/orders",
     element: withSuspense(
       <AuthRoute>
         <MainTemplate isShowFooter={false}>
-        <SuperAdminAllOrders/>
+          <SuperAdminAllOrders />
         </MainTemplate>
       </AuthRoute>
     ),
@@ -651,7 +655,7 @@ export const router = createBrowserRouter([
     element: withSuspense(
       <AuthRoute>
         <MainTemplate isShowFooter={false}>
-        <OrderDetailPage/>
+          <OrderDetailPage />
         </MainTemplate>
       </AuthRoute>
     ),
@@ -666,12 +670,12 @@ export const router = createBrowserRouter([
       </AuthRoute>
     ),
   },
-    {
+  {
     path: "/superadmin/manage-users",
     element: withSuspense(
       <AuthRoute>
         <MainTemplate isShowFooter={false}>
-         <ManageUsers/>
+          <ManageUsers />
         </MainTemplate>
       </AuthRoute>
     ),
@@ -754,14 +758,14 @@ export const router = createBrowserRouter([
       </AuthRoute>
     ),
   }
-,
+  ,
   {
-  path: "*",
-  element: withSuspense(
-    <MainTemplate isShowFooter={true}>
-      <NotFound />
-    </MainTemplate>
-  ),
-}
+    path: "*",
+    element: withSuspense(
+      <MainTemplate isShowFooter={true}>
+        <NotFound />
+      </MainTemplate>
+    ),
+  }
 
 ]);

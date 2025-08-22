@@ -1,10 +1,10 @@
 export const navigation = [
-  { name: "Home", href: "/" },
-  { name: "Find Talent", href: "/find-talent" },
-  { name: "Find Jobs", href: "/browse-jobs" },
-  { name: "About Us", href: "/aboutus" },
+  { name: "Home", path: "/" },
+  { name: "Find Talent", path: "/find-talent" },
+  { name: "Find Jobs", path: "/browse-jobs" },
+  { name: "About Us", path: "/aboutus" },
   // { name: "Contact Us", href: "/contactus" },
-  { name: "Login", href: "/login" },
+  // { name: "Login", path: "/login" },
 ];
 
 export const navTabsClientDashboard = [
