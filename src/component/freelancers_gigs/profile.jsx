@@ -7,7 +7,7 @@ function Profile({ children }) {
     <div>
       <div className='flex flex-col gap-5 px-5 justify-between py-4 bg-white sm:flex-row sm:items-center sm:border-b-[1px] sm:border-b-[#c4c4c4] sm:px-10 md:px-20'>
         <BreadCrumbs />
-        <Button className='px-5 py-1'>Save</Button>
+        {/* <Button className='px-5 py-1'>Save</Button> */}
       </div>
       <div className='bg-[#F8F8F8] w-full pb-10 px-6 sm:px-6 md:px-10 '>
         <div className='lg:px-10'>

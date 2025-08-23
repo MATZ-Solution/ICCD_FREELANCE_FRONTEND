@@ -11,6 +11,7 @@ import { useParams } from "react-router-dom";
 import { useEffect } from "react";
 import { memo } from 'react';
 import ICCDLoader from "../loader";
+import Button from "../button";
 
 
 
@@ -423,12 +424,13 @@ if (getJobIsErr || editJobIsErr || isError) {
 
         {/* Submit Button */}
         <div className="flex justify-center">
-          <button
+          <Button
+            text="Submit"
             type="submit"
-            className="bg-[#01AEAD] w-full hover:bg-teal-700 text-white font-semibold px-12 py-3 rounded-md shadow-sm transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
-          >
-            Continue
-          </button>
+            className="w-full px-5 py-3"
+            isLoading={isPending}
+          />
+            
         </div>
       </form>
     </div>

@@ -33,7 +33,6 @@ const DetailRow = ({ label, icon: Icon, children, isFullWidth = false }) => (
 export default function OrderDetailPage() {
   const { orderId } = useParams();
   const navigate = useNavigate();
-
   const { data, isLoading, isError } = useSingleOrderByFreelancer(orderId);
 
   if (isLoading)
@@ -62,7 +61,6 @@ export default function OrderDetailPage() {
 
   const order = data;
 
-  // Format created date/time
   const createdDate = new Date(order.created_at);
   const formattedDate = createdDate.toLocaleDateString(undefined, {
     year: "numeric",
@@ -96,17 +94,17 @@ export default function OrderDetailPage() {
     }).format(value || 0);
   }
 
- return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex flex-col items-center py-6 px-2 sm:px-4 md:px-6 lg:px-8">
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-[#043A53] via-[#065f73] to-[#3C939D] flex flex-col items-center py-6 px-2 sm:px-4 md:px-6 lg:px-8">
       <div className="w-full max-w-5xl">
-        <h1 className="text-3xl sm:text-4xl font-extrabold mb-2 text-center text-gray-900">
+        <h1 className="text-3xl sm:text-4xl font-extrabold mb-2 text-center text-white">
           Order Details
         </h1>
-        <p className="text-base sm:text-lg text-gray-600 mb-6 sm:mb-8 text-center">
+        <p className="text-base sm:text-lg text-white/90 mb-6 sm:mb-8 text-center">
           Comprehensive overview of your project order.
         </p>
 
-        <div className="rounded-lg shadow-md bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-white overflow-hidden">
+        <div className="rounded-lg shadow-md bg-gradient-to-r from-[#043A53] via-[#065f73] to-[#3C939D] text-white overflow-hidden border border-white/20">
           {/* Card Header */}
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 sm:p-6 border-b border-white/30 gap-2">
             <h2 className="text-2xl sm:text-3xl font-bold">Order #{order.id}</h2>

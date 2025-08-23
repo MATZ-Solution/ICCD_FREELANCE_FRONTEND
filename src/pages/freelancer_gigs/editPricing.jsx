@@ -181,9 +181,9 @@ export default function EditPricingForm() {
                 ))}
             </div>
             <div className="flex justify-between mt-6">
-                <button type="button" className="px-4 py-2 border rounded">
+                {/* <button type="button" className="px-4 py-2 border rounded">
                     Back
-                </button>
+                </button> */}
                 <button
                     type="submit"
                     className="bg-teal-600 text-white px-6 py-2 rounded hover:bg-teal-700"

@@ -8,6 +8,8 @@ import EastIcon from '@mui/icons-material/East';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import SignIn_modal1 from '../../component/modal/signIn_Modal1';
+import { Loader2 } from "lucide-react";
+import Button from '../../component/button';
 
 function Login({ handleSwitch }) {
   const navigate = useNavigate();
@@ -90,17 +92,8 @@ function Login({ handleSwitch }) {
       {(!errors?.email && !errors?.password) && (
         <p className="text-red-600">{error}</p>
       )}
-      <button
-        type="submit"
-        className={`mt-3 w-full flex gap-2 items-center justify-center px-4 py-2 font-semibold text-white bg-[#15A9B2] rounded-full hover:bg-[#05929c] cursor-pointer transition`}
-        onClick={handleSubmit(onSubmit)}
-        disabled={isPending ? true : false}
-      >
-        <p>Continue</p>
-        <div className='rounded-full px-1 py- bg-[#60cfd6]'>
-          <EastIcon style={{ fontSize: 20 }} />
-        </div>
-      </button>
+    
+    <Button className='px-4 py-2 ' text='Login' isLoading={isPending} onClick={handleSubmit(onSubmit)}/>
 
       <div className="flex justify-between">
         <p className="underline cursor-pointer" onClick={() => handleSwitch('signup')}>Sign Up</p>

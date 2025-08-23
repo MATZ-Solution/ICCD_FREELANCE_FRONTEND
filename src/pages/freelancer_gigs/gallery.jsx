@@ -126,7 +126,7 @@ function Gallery() {
       </div>
       <div>
         <div className="mt-5 flex sm:justify-end">
-          <Button className='px-5 py-2' onClick={onSubmit}>Save & Continue</Button>
+          <Button isLoading={isPending} text='Save & Continue' className='px-5 py-2 ' onClick={onSubmit} />
         </div>
       </div>
     </Profile>

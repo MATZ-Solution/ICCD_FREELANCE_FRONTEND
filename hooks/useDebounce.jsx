@@ -1,7 +1,7 @@
 // useDebounce.js (✅ recommended)
 import { useState, useEffect } from 'react';
 
-function useDebounce(value, delay = 500) {
+function useDebounce(value, delay = 1000) {
   const [debounced, setDebounced] = useState(value);
 
   useEffect(() => {

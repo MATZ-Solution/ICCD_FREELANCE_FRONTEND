@@ -1,60 +1,77 @@
 import React, { useState } from "react";
-import FavoriteIcon from '@mui/icons-material/Favorite';
 import { memo } from 'react';
+import { ArrowRight } from 'lucide-react';
 
 const GigCard = ({
   image,
   title,
   author,
-  level,
-  rating,
-  reviews,
-  price,
-  offersVideoConsultation,
-  onClick,
-  authorImg
+  created_at, // added created_at
+  onClick = () => console.log('Card clicked'),
 }) => {
-  const [liked, setLiked] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
+
+  // Format date nicely
+  const formatDate = (dateString) => {
+    if (!dateString) return "";
+    const date = new Date(dateString);
+    return date.toLocaleDateString(undefined, {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+  };
 
   return (
-    <div onClick={onClick} className="cursor-pointer w-full h-full flex flex-col bg-white rounded-xl shadow-sm overflow-hidden  hover:shadow-lg transition relative">
-      {/* Image with heart overlay */}
-      <div className="relative">
-        <img src={image} alt="gigs_cards" className="w-full h-36 object-cover" />
-        {/* <button
-          onClick={() => setLiked(!liked)}
-          className="absolute top-2 right-2 p-1 rounded-ful  "
-        >
-          <FavoriteIcon
-            size={24}
-            className={liked ? "text-red-500 fill-red-500" : "text-white fill-gray-500  "}
-          />
-        </button> */}
+    <div 
+      onClick={onClick} 
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+      className="group cursor-pointer w-full h-full flex flex-col bg-white rounded-2xl shadow-sm hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100 hover:border-gray-200 hover:-translate-y-2"
+    >
+      {/* Image Section */}
+      <div className="relative overflow-hidden">
+        <img 
+          src={image} 
+          alt="gig preview" 
+          className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110" 
+        />
       </div>
 
-      <div className="p-4">
-
-
-        <div className="flex items-center gap-2">
-          <img src={authorImg} className="w-9 h-9 rounded-full"></img>
-          <p className="text-sm text-black mb-1">
-            <span className="font-bold">{author}</span>
-          </p>
+      {/* Content Section */}
+      <div className="p-5 flex-1 flex flex-col">
+        {/* Author Section */}
+        <div className="flex items-center gap-3 mb-3">
+          <div className="relative">
+            <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="font-semibold text-gray-900 text-sm truncate">{author}</p>
+            <p className="text-xs text-gray-500">Professional Seller</p>
+          </div>
         </div>
 
-        <h3 className="mt-2 font-semibold text-gray-700 mb-1">{title?.length > 20 ? title.slice(0,60) + '...' : title}</h3>
+        {/* Title */}
+        <h3 className="font-bold text-gray-800 text-base leading-tight mb-4 flex-1 group-hover:text-blue-600 transition-colors">
+          {title?.length > 60 ? title.slice(0, 60) + '...' : title}
+        </h3>
 
-        {/* <p className="text-xs text-yellow-500 font-medium mb-1">
-          ⭐ {rating} <span className="text-gray-400">({reviews})</span>
-        </p>
-        <p className="text-sm font-semibold mb-1">
-          From PKR {price.toLocaleString()}
-        </p> */}
-        {/* {offersVideoConsultation && (
-          <p className="text-[10px] text-green-600">
-            🎥 Offers video consultations
-          </p>
-        )} */}
+        {/* Created Date Section */}
+        <div className="flex items-center justify-between">
+          {/* <div className="text-left"> */}
+            {/* // <p className="text-xs text-gray-500 mb-1">Created at</p>
+            // <p className="font-bold text-gray-900">
+            //   {formatDate(created_at)}
+            // </p> */}
+          {/* </div> */}
+          
+          <button className={`flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl font-semibold text-sm transition-all duration-200 hover:from-blue-600 hover:to-blue-700 hover:shadow-lg ${
+            isHovered ? 'translate-x-1' : ''
+          }`}>
+            <span>View Details</span>
+            <ArrowRight size={14} />
+          </button>
+        </div>
       </div>
     </div>
   );

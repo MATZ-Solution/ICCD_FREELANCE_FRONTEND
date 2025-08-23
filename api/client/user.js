@@ -51,14 +51,18 @@ export function useLogin() {
   } = useMutation({
     mutationFn: (data) => api.post(API_ROUTE.user.login, data),
     onSuccess: (response) => {
-      setToken(response?.data?.token);
-      dispatch(setUserDetails(response?.data?.data));
-      dispatch(setUserType({ id: response?.data?.data.id, type: 'client' }))
-      navigate("/client");
-      // if (localStorage.get("verify-otp") || localStorage.get("change_pass")) {
-      //   localStorage.removeItem("verify-otp");
-      //   localStorage.removeItem("change_pass");
-      // }
+      if (response?.data?.data?.email === 'admin@gmail.com') {
+        navigate("/superadmin/dashboard");
+      } else {
+        setToken(response?.data?.token);
+        dispatch(setUserDetails(response?.data?.data));
+        dispatch(setUserType({ id: response?.data?.data.id, type: 'client' }))
+        navigate("/client");
+        // if (localStorage.get("verify-otp") || localStorage.get("change_pass")) {
+        //   localStorage.removeItem("verify-otp");
+        //   localStorage.removeItem("change_pass");
+        // }
+      }
     },
   });
 
