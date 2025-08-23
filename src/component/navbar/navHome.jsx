@@ -3,7 +3,7 @@ import { useState } from 'react';
 import logo from "../../assets/ICCD-01.png"
 import { Bell, Mail, Menu, X, User } from "lucide-react";
 import { useNavigate, useLocation } from 'react-router-dom';
-import { navigation, navTabsClientDashboard, navTabsFreelancerDashboard } from '../../../constants/navbar_navigation'
+import { navigation, navTabsClientDashboard, navTabsFreelancerDashboard, navTabsSuperAdminDashboard } from '../../../constants/navbar_navigation'
 import { Search as SearchIcon, East as EastIcon } from "@mui/icons-material";
 import "../../css/navbar.css";
 import MobileMenu from './mobileMenu';
@@ -21,7 +21,9 @@ function NavHome() {
         ? navTabsClientDashboard
         : pathName.startsWith('/freelancer')
             ? navTabsFreelancerDashboard
-            : navigation;
+            : pathName.startsWith('/superadmin') ?
+                navTabsSuperAdminDashboard
+                : navigation;
 
 
     return (
