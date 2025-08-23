@@ -1,106 +1,39 @@
 import { useState, memo } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
-import SearchIcon from "@mui/icons-material/Search";
+import {
+  Search,
+  DollarSign,
+  Clock,
+  CheckCircle,
+  AlertTriangle,
+  Eye,
+  FileText,
+  Upload,
+  X,
+  Package,
+  SearchIcon,
+} from "lucide-react";
 import { useGetOrderByClient } from "../../../api/client/order";
 import ICCDLoader from "../loader";
-import order_logo from "../../assets/freelancer_dashboard/order_logo.png";
-
-// Confirmation Modal
-const Modal = ({ title, onConfirm, onCancel }) => (
-  <div className="fixed inset-0 bg-white/30 backdrop-blur-sm flex items-center justify-center z-50">
-    <div className="bg-white rounded-lg shadow-md p-6 max-w-md w-full">
-      <p className="text-lg font-semibold text-gray-800 mb-4">{title}</p>
-      <div className="flex justify-end gap-4">
-        <button onClick={onCancel} className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">No</button>
-        <button onClick={onConfirm} className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Yes</button>
-      </div>
-    </div>
-  </div>
-);
-
-// Dispute Modal
-const DisputeModal = ({ onClose, onSubmit }) => {
-  const [subject, setSubject] = useState("");
-  const [reason, setReason] = useState("");
-  const [proof, setProof] = useState(null);
-
-  const handleSubmit = () => {
-    if (!subject || !reason) {
-      alert("Please fill in all required fields.");
-      return;
-    }
-    onSubmit({ subject, reason, proof });
-  };
-
-  return (
-    <div className="fixed inset-0 bg-white/30 backdrop-blur-sm flex items-center justify-center ">
-      <div className="bg-white rounded-lg shadow-md p-6 max-w-md w-full space-y-4">
-        <h2 className="text-xl font-semibold text-gray-800">Raise a Dispute</h2>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Subject</label>
-          <input
-            type="text"
-            value={subject}
-            onChange={(e) => setSubject(e.target.value)}
-            className="w-full border border-gray-300 rounded px-3 py-2 text-sm"
-            placeholder="Enter subject"
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Reason</label>
-          <textarea
-            value={reason}
-            onChange={(e) => setReason(e.target.value)}
-            rows={4}
-            className="w-full border border-gray-300 rounded px-3 py-2 text-sm"
-            placeholder="Explain your reason"
-          ></textarea>
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">Upload Proof (optional)</label>
-          <input
-            type="file"
-            onChange={(e) => setProof(e.target.files[0])}
-            className="text-sm"
-          />
-        </div>
-
-        <div className="flex justify-end gap-3 pt-2">
-          <button onClick={onClose} className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">Cancel</button>
-          <button onClick={handleSubmit} className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700">Submit Dispute</button>
-        </div>
-      </div>
-    </div>
-  );
-};
+import { Modal } from "./Modal";
+import { DisputeModal } from "./DisputeModal";
 
 function ClientOrders() {
-  const navigate = useNavigate();
-  const pathName = useLocation().pathname;
-  const [search, setSearch] = useState("");
   const [showCompleteModal, setShowCompleteModal] = useState(false);
   const [showTransferModal, setShowTransferModal] = useState(false);
   const [showDisputeModal, setShowDisputeModal] = useState(false);
   const [selectedOrderId, setSelectedOrderId] = useState(null);
-
-  // NEW STATES FOR TRACKING STATUS
   const [completedOrders, setCompletedOrders] = useState([]);
   const [disputedOrders, setDisputedOrders] = useState([]);
+  const [search, setSearch] = useState("");
 
-  const { data, isPending, isError, isLoading } = useGetOrderByClient({ search });
+  const { data, isError, isLoading } = useGetOrderByClient({
+    search,
+  });
 
-  console.log("Client Orders Data:", data);
-
-   const handleView = (id) => {
-    if (pathName.includes("client")) {
-      navigate(`/client/orders/${id}`);
-    }
+  const handleView = (id) => {
+    console.log("Viewing order:", id);
+    // navigate to order details
   };
-
-  
 
   const handleCompleteClick = (id) => {
     setSelectedOrderId(id);
@@ -120,7 +53,7 @@ function ClientOrders() {
   const handleTransferConfirm = () => {
     setShowTransferModal(false);
     setCompletedOrders((prev) => [...prev, selectedOrderId]);
-    alert("Order is completed");
+    alert("Order completed and payment transferred successfully!");
   };
 
   const handleDisputeSubmit = (disputeData) => {
@@ -130,161 +63,251 @@ function ClientOrders() {
       ...disputeData,
     });
     setDisputedOrders((prev) => [...prev, selectedOrderId]);
-    alert("Dispute is raised");
+    alert("Dispute has been raised successfully!");
   };
 
-  const statusColors = {
-    "IN PROGRESS": "bg-[#1467B0]",
-    pending: "bg-yellow-500",
-    paid: "bg-green-600",
-    "IN REVIEW": "bg-purple-500",
-    "ON HOLD": "bg-red-500",
-  };
-
-  const columns = [
-    { key: "gigsTitle", label: "Gig Name" },
-    { key: "package_type", label: "Package Type", format: (v) => v?.toLowerCase() },
-    { key: "base_price", label: "Price", format: (val) => `$${val}` },
-  ];
-
-  const renderStatus = (item) => {
-    const status = item.status;
-    const colorClass = statusColors[status] || "bg-gray-500";
+  const getStatusConfig = (status) => {
+    const configs = {
+      "IN PROGRESS": { color: "bg-blue-100 text-blue-800", icon: Clock },
+      pending: { color: "bg-yellow-100 text-yellow-800", icon: Clock },
+      paid: { color: "bg-green-100 text-green-800", icon: CheckCircle },
+      "IN REVIEW": { color: "bg-purple-100 text-purple-800", icon: Eye },
+      "ON HOLD": { color: "bg-red-100 text-red-800", icon: AlertTriangle },
+    };
     return (
-      <div className={`flex justify-center items-center ${colorClass} rounded-2xl py-1 px-3 inline-block max-w-max`}>
-        <span className="capitalize text-white text-xs font-semibold whitespace-nowrap">{status}</span>
+      configs[status] || { color: "bg-gray-100 text-gray-800", icon: Clock }
+    );
+  };
+
+  const renderStatus = (status) => {
+    const config = getStatusConfig(status);
+    const IconComponent = config.icon;
+
+    return (
+      <div
+        className={`inline-flex items-center gap-2 ${config.color} rounded-full py-2 px-4 text-sm font-semibold`}
+      >
+        <IconComponent className="w-4 h-4" />
+        <span className="capitalize">{status.toLowerCase()}</span>
       </div>
     );
   };
 
-  if (isLoading || isPending) return <ICCDLoader />;
-  if (isError) return <div className="text-center text-red-500 mt-10">Error loading orders</div>;
-
-  console.log(data)
+  if (isLoading) return <ICCDLoader />;
+  if (isError)
+    return (
+      <div className="text-center text-red-500 mt-10 p-8">
+        <AlertTriangle className="w-12 h-12 mx-auto mb-4" />
+        <h2 className="text-xl font-semibold">Error loading orders</h2>
+        <p className="text-gray-600">Please try again later</p>
+      </div>
+    );
 
   return (
-    <div className="w-full h-full bg-white p-4 sm:p-6">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
-        <h1 className="text-xl sm:text-2xl font-bold text-gray-800">Manage Orders</h1>
-        <div className="relative w-full sm:w-auto sm:min-w-[300px]">
-          <input
-            type="text"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="w-full h-10 pl-3 pr-10 rounded-md border border-gray-300 bg-white text-sm placeholder-gray-400"
-            placeholder="Search My History..."
-          />
-          <SearchIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+    <div className="min-h-screen  bg-gradient-to-br from-gray-50 to-white">
+      <div className="max-w-7xl mx-auto p-6">
+        {/* Header Section */}
+         <div className="flex flex-wrap mb-12 justify-between mt-10 p-6 bg-gradient-to-r from-[#043A53] via-[#065f73] to-[#3C939D] rounded-md">
+        <div className="px-4 py-6">
+          <div className="flex items-center gap-3 mb-2">
+            <div className="p-2 bg-white/20 rounded-lg backdrop-blur-sm">
+              <Package className="w-6 h-6 text-white" />
+            </div>
+            <h1 className="text-3xl font-bold text-white">Order Management</h1>
+          </div>
+          <p className="text-blue-100 text-lg">
+            Track And Manage Your Orders
+          </p>
+        </div>
+
+        {/* Search Section */}
+        <div className="  flex flex-col justify-center mt-4 sm:mt-0">
+          <div className="relative">
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search Orders..."
+              className="w-72 h-10 p-2 pr-10 rounded-md border border-gray-500 bg-white focus:outline-none focus:ring-2 focus:ring-blue-300"
+            />
+            <SearchIcon className="absolute top-2.5 right-2.5 text-gray-400" />
+
+          </div>
+        
         </div>
       </div>
 
-      {/* Orders */}
-      <div className="flex flex-col gap-4">
-        {data?.length > 0 ? (
-          data.map((item) => {
-            const isCompleted = completedOrders.includes(item.id);
-            const isDisputed = disputedOrders.includes(item.id);
+        {/* Orders List */}
+        <div className="space-y-4  ">
+          {data?.length > 0 ? (
+            data.map((item) => {
+              const isCompleted = completedOrders.includes(item.id);
+              const isDisputed = disputedOrders.includes(item.id);
 
-            return (
-              <div
-                key={item.id}
-                className="bg-[#F8F8F8] shadow-sm rounded-xl p-4 flex flex-col gap-4 md:flex-row md:items-center md:justify-between hover:bg-gray-100 transition cursor-pointer"
-                onClick={() => handleView(item.id)}
-              >
-                <div className="flex justify-center md:justify-start w-full md:w-[15%]">
-                  <img
-                    src={item?.gigsImage?.split(",")[0] || order_logo}
-                    alt="Order"
-                    className="w-36 h-20 object-contain"
-                    onError={(e) => (e.target.src = order_logo)}
-                  />
-                </div>
+              return (
+                <div
+                  key={item.id}
+                  className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-all duration-200 cursor-pointer group"
+                  onClick={() => handleView(item.id)}
+                >
+                  <div className="flex flex-col xl:flex-row gap-6">
+                    {/* Image Section */}
+                    <div className="flex-shrink-0">
+                      <div className="w-full xl:w-48 h-32 rounded-xl overflow-hidden bg-gray-100">
+                        <img
+                          src={item.gigsImage}
+                          alt="Order preview"
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
+                          onError={(e) => {
+                            e.target.src =
+                              "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400&h=300&fit=crop";
+                          }}
+                        />
+                      </div>
+                    </div>
 
-                {columns.map((col, idx) => (
-                  <div key={idx} className="w-full md:w-[15%]">
-                    <p className="text-[#737373] text-sm">{col.label}</p>
-                    <p className="text-[#043A53] font-semibold text-base truncate">
-                      {col.format ? col.format(item[col.key], item) : item[col.key]}
-                    </p>
+                    {/* Content Section */}
+                    <div className="flex-1 min-w-0">
+                      <div className="grid grid-cols-1 lg:grid-cols-5  h-full">
+                        {/* Project Details */}
+                        <div className="lg:col-span-2 mt-4 space-y-3">
+                          <h3 className="text-lg font-semibold text-gray-900 line-clamp-2 group-hover:text-blue-600 transition-colors">
+                            {item.gigsTitle}
+                          </h3>
+                          <div className="flex flex-wrap gap-4 text-sm">
+                            <div className="flex items-center gap-2">
+                              <Package className="w-4 h-4 text-gray-400" />
+                              <span className="text-gray-600">Package:</span>
+                              <span className="font-medium text-gray-900 capitalize">
+                                {item.package_type?.toLowerCase()}
+                              </span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <span className="text-gray-600">Price:</span>
+                              <span className="font-semibold text-gray-900">
+                                ${item.base_price}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Status */}
+                        <div className="flex w-32 mt-4 items-start">
+                          <div>
+                            <p className="text-sm text-gray-600 mb-2">Status</p>
+                            {renderStatus(item.status)}
+                          </div>
+                        </div>
+
+                        {/* Actions */}
+                        <div>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleView(item.id);
+                            }}
+                            className=" p-4 h-12 mt-8 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-xl font-medium transition-colors flex items-center justify-center gap-2"
+                          >
+                            <Eye className="w-4 h-4" />
+                            View Details
+                          </button>
+                        </div>
+                        <div>
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              if (!isCompleted && !isDisputed) {
+                                handleCompleteClick(item.id);
+                              }
+                            }}
+                            disabled={isCompleted || isDisputed}
+                            className={`flex-1 p-4 mt-8  h-12 rounded-xl font-medium transition-colors flex items-center justify-center gap-2 px-4
+                            ${
+                              isCompleted
+                                ? "bg-green-100 text-green-800 cursor-default"
+                                : isDisputed
+                                ? "bg-red-100 text-red-800 cursor-default"
+                                : "bg-blue-600 hover:bg-blue-700 text-white focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                            }`}
+                          >
+                            {isCompleted ? (
+                              <>
+                                <CheckCircle className="w-4 h-4" />
+                                <span>Completed</span>
+                              </>
+                            ) : isDisputed ? (
+                              <>
+                                <AlertTriangle className="w-4 h-4" />
+                                <span>Disputed</span>
+                              </>
+                            ) : (
+                              <>
+                                <CheckCircle className="w-4 h-4" />
+                                <span>Complete Order</span>
+                              </>
+                            )}
+                          </button>
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                ))}
-
-                <div className="w-full md:w-[15%]">
-                  <p className="text-[#737373] text-sm">Status</p>
-                  <div className="mt-2">{renderStatus(item)}</div>
                 </div>
-
-                <div className="w-full md:w-[25%] flex flex-col md:flex-row gap-2">
-                  {/* <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleView(item.id);
-                    }}
-                    className="w-full h-12 bg-[#EDEDED] rounded-2xl p-3 flex justify-center items-center"
-                  >
-                    <p className="text-[#043A53] font-semibold">View</p>
-                  </button> */}
-
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      if (!isCompleted && !isDisputed) handleCompleteClick(item.id);
-                    }}
-                    className={`w-60 h-12 ${
-                      isCompleted
-                        ? "bg-green-200 text-green-800"
-                        : isDisputed
-                        ? "bg-red-200 text-red-800"
-                        : "bg-[#EDEDED] text-[#043A53]"
-                    } rounded-2xl p-3 flex justify-center items-center font-semibold`}
-                  >
-                    <p>
-                      {isCompleted
-                        ? "Order Completed"
-                        : isDisputed
-                        ? "Dispute Raised"
-                        : "Complete Order"}
-                    </p>
-                  </button>
+              );
+            })
+          ) : (
+            <div className="text-center py-16 bg-white rounded-2xl shadow-sm border border-gray-100">
+              <div className="max-w-md mx-auto">
+                <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Search className="w-8 h-8 text-gray-400" />
                 </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                  No Orders Found
+                </h3>
+                <p className="text-gray-600">
+                  {search
+                    ? `No orders match your search "${search}"`
+                    : "You haven't placed any orders yet"}
+                </p>
               </div>
-            );
-          })
-        ) : (
-          <div className="w-full text-center text-gray-600 py-8">
-            <SearchIcon className="text-gray-400 mb-4" style={{ fontSize: 48 }} />
-            <h2 className="text-xl font-semibold text-gray-600 mb-2">No Orders found</h2>
-          </div>
+            </div>
+          )}
+        </div>
+
+        {/* Modals */}
+        {showCompleteModal && (
+          <Modal
+            title="Complete this order?"
+            description="Confirm if the work has been completed to your satisfaction"
+            onConfirm={handleCompleteConfirm}
+            onCancel={handleCompleteCancel}
+            confirmText="Yes, Complete"
+            cancelText="Raise Dispute"
+            type="success"
+          />
+        )}
+
+        {showTransferModal && (
+          <Modal
+            title="Transfer Payment"
+            description="This will release the payment to the freelancer. This action cannot be undone."
+            onConfirm={handleTransferConfirm}
+            onCancel={() => setShowTransferModal(false)}
+            confirmText="Transfer Payment"
+            cancelText="Cancel"
+            type="success"
+          />
+        )}
+
+        {showDisputeModal && (
+          <DisputeModal
+            onClose={() => setShowDisputeModal(false)}
+            onSubmit={handleDisputeSubmit}
+          />
         )}
       </div>
-
-      {/* Modals */}
-      {showCompleteModal && (
-        <Modal
-          title="Are you sure you want to complete this order?"
-          onConfirm={handleCompleteConfirm}
-          onCancel={handleCompleteCancel}
-        />
-      )}
-
-      {showTransferModal && (
-        <Modal
-          title="Are you sure you want to transfer the payment to the freelancer?"
-          onConfirm={handleTransferConfirm}
-          onCancel={() => setShowTransferModal(false)}
-        />
-      )}
-
-      {showDisputeModal && (
-        <DisputeModal
-          onClose={() => setShowDisputeModal(false)}
-          onSubmit={handleDisputeSubmit}
-        />
-      )}
     </div>
   );
 }
-
 
 export default memo(ClientOrders);
