@@ -155,7 +155,7 @@ function ClientOrders() {
                     <div className="flex-shrink-0">
                       <div className="w-full xl:w-48 h-32 rounded-xl overflow-hidden bg-gray-100">
                         <img
-                          src={item.gigsImage}
+                          src={item.gigsImage.split(',')[0]}
                           alt="Order preview"
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
                           onError={(e) => {
