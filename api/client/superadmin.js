@@ -25,3 +25,71 @@ export function useGetAllUsers(params = {}) {
     isError,
   };
 }
+
+
+export function useGetAllFreelancers(params = {}) {
+  const constructQueryString = (params) => {
+    const query = new URLSearchParams(params).toString();
+    return query ? `?${query}` : "";
+  };
+
+  const queryKey = [API_ROUTE.superadmin.getAllFreelancers, params];
+
+  const { data, error, isLoading, isError } = useQuery({
+    queryKey,
+    queryFn: () =>
+      api.get(`${API_ROUTE.superadmin.getAllFreelancers}${constructQueryString(params)}`),
+  });
+
+  return {
+    data: data?.data?.data, 
+    error,
+    isLoading,
+    isError,
+  };
+}
+
+export function useGetAllGigs(params = {}) {
+  const constructQueryString = (params) => {
+    const query = new URLSearchParams(params).toString();
+    return query ? `?${query}` : "";
+  };
+
+  const queryKey = [API_ROUTE.superadmin.getAllGigs, params];
+
+  const { data, error, isLoading, isError } = useQuery({
+    queryKey,
+    queryFn: () =>
+      api.get(`${API_ROUTE.superadmin.getAllGigs}${constructQueryString(params)}`),
+  });
+
+  return {
+    data: data?.data?.data, // backend response ke andar 'data' key mein gigs array hai
+    error,
+    isLoading,
+    isError,
+  };
+}
+
+
+export function useGetAllProjects(params = {}) {
+  const constructQueryString = (params) => {
+    const query = new URLSearchParams(params).toString();
+    return query ? `?${query}` : "";
+  };
+
+  const queryKey = [API_ROUTE.superadmin.getAllGigs, params];
+
+  const { data, error, isLoading, isError } = useQuery({
+    queryKey,
+    queryFn: () =>
+      api.get(`${API_ROUTE.superadmin.getAllProjects}${constructQueryString(params)}`),
+  });
+
+  return {
+    data: data?.data?.data, // backend response ke andar 'data' key mein gigs array hai
+    error,
+    isLoading,
+    isError,
+  };
+}

@@ -1,213 +1,475 @@
-import { useState, memo } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import { Search, Users, Eye, Calendar, Mail, User } from "lucide-react";
-
+import { useState, memo, useMemo, useCallback } from "react";
+import {
+  Search,
+  Users,
+  Eye,
+  Calendar,
+  Mail,
+  User,
+  Filter,
+  SortAsc,
+  SortDesc,
+  RefreshCw,
+  Download,
+  ChevronDown,
+  UserPlus,
+  Settings,
+  Activity,
+  Shield,
+  Clock,
+  MoreHorizontal,
+} from "lucide-react";
 import { useGetAllUsers } from "../../../api/client/superadmin";
+import DataError from "./DataError";
+
+const SORT_OPTIONS = [
+  { value: "name", label: "Name" },
+  { value: "email", label: "Email" },
+  { value: "created_at", label: "Registration Date" },
+  { value: "updated_at", label: "Last Update" },
+];
+
+const FILTER_OPTIONS = [
+  { value: "all", label: "All Users" },
+  { value: "recent", label: "Recent (Last 30 days)" },
+  { value: "active", label: "Active Users" },
+  { value: "inactive", label: "Inactive Users" },
+];
 
 function ManageUsers() {
   const [search, setSearch] = useState("");
-  const navigate = useNavigate();
-  const { data, isLoading, isError, } = useGetAllUsers({ search });
-  // Mock implementation - replace with your actual hook
+  const [sortBy, setSortBy] = useState("created_at");
+  const [sortOrder, setSortOrder] = useState("desc");
+  const [filterBy, setFilterBy] = useState("all");
+  const [showFilters, setShowFilters] = useState(false);
+  const [selectedUsers, setSelectedUsers] = useState(new Set());
 
+  const { data, isLoading, isError, refetch } = useGetAllUsers({ search });
 
-  const handleView = (id) => {
-    navigate(`/superadmin/user/${id}`);
-  };
+  // Memoized filtered and sorted data
+  const processedData = useMemo(() => {
+    if (!data) return [];
+
+    let filtered = [...data];
+
+    // Apply filters
+    const now = new Date();
+    const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+
+    switch (filterBy) {
+      case "recent":
+        filtered = filtered.filter(
+          (user) => new Date(user.created_at) >= thirtyDaysAgo
+        );
+        break;
+      case "active":
+        filtered = filtered.filter(
+          (user) => new Date(user.updated_at) >= thirtyDaysAgo
+        );
+        break;
+      case "inactive":
+        filtered = filtered.filter(
+          (user) => new Date(user.updated_at) < thirtyDaysAgo
+        );
+        break;
+    }
+
+    // Apply sorting
+    filtered.sort((a, b) => {
+      let aValue = a[sortBy];
+      let bValue = b[sortBy];
+
+      if (sortBy === "name" || sortBy === "email") {
+        aValue = aValue?.toLowerCase() || "";
+        bValue = bValue?.toLowerCase() || "";
+      } else if (sortBy === "created_at" || sortBy === "updated_at") {
+        aValue = new Date(aValue);
+        bValue = new Date(bValue);
+      }
+
+      if (aValue < bValue) return sortOrder === "asc" ? -1 : 1;
+      if (aValue > bValue) return sortOrder === "asc" ? 1 : -1;
+      return 0;
+    });
+
+    return filtered;
+  }, [data, search, sortBy, sortOrder, filterBy]);
+
+  // const handleView = useCallback((id) => {
+  //   console.log(`Navigating to user ${id}`);
+  //   // navigate(`/superadmin/user/${id}`);
+  // }, []);
+
+  const handleSort = useCallback(
+    (field) => {
+      if (sortBy === field) {
+        setSortOrder((prev) => (prev === "asc" ? "desc" : "asc"));
+      } else {
+        setSortBy(field);
+        setSortOrder("asc");
+      }
+    },
+    [sortBy]
+  );
+
+  const handleSelectAll = useCallback(() => {
+    if (selectedUsers.size === processedData.length) {
+      setSelectedUsers(new Set());
+    } else {
+      setSelectedUsers(new Set(processedData.map((user) => user.id)));
+    }
+  }, [selectedUsers.size, processedData]);
+
+  const handleRefresh = useCallback(() => {
+    refetch();
+  }, [refetch]);
 
   const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric'
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
     });
   };
 
+  const getRelativeTime = (dateString) => {
+    const now = new Date();
+    const date = new Date(dateString);
+    const diffInMs = now - date;
+    const diffInDays = Math.floor(diffInMs / (1000 * 60 * 60 * 24));
+
+    if (diffInDays === 0) return "Today";
+    if (diffInDays === 1) return "Yesterday";
+    if (diffInDays < 7) return `${diffInDays} days ago`;
+    if (diffInDays < 30) return `${Math.floor(diffInDays / 7)} weeks ago`;
+    if (diffInDays < 365) return `${Math.floor(diffInDays / 30)} months ago`;
+    return `${Math.floor(diffInDays / 365)} years ago`;
+  };
+
   if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-      </div>
-    );
+    return <DataError tag="Users" />;
   }
 
   if (isError) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="text-red-500 text-xl mb-2">⚠️</div>
-          <p className="text-gray-600">Failed to fetch users</p>
-        </div>
-      </div>
-    );
+    return <DataError onclickfunction={handleRefresh} tag="Users" />;
   }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
-      <div className="px-4 sm:px-6 lg:px-8 py-8">
+      <div className="px-4 sm:px-6 lg:px-8 py-8 max-w-7xl mx-auto">
         {/* Header Section */}
         <div className="mb-8">
-          <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
-              {/* Title with icon */}
-              <div className="flex items-center gap-3">
-                <div className="p-3 bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl">
-                  <Users className="w-6 h-6 text-white" />
+          <div className="bg-white rounded-3xl shadow-lg border border-slate-200 p-8">
+            {/* Title and Search */}
+            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-6">
+              <div className="flex items-center gap-4">
+                <div className="relative p-3 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl shadow-lg">
+                  <Users className="w-8 h-8 text-white" />
                 </div>
                 <div>
-                  <h1 className="text-2xl sm:text-3xl font-bold text-slate-800">
+                  <h1 className="text-3xl font-bold text-slate-800">
                     User Management
                   </h1>
-                  <p className="text-slate-600 mt-1">Manage and view all system users</p>
+                  <p className="text-slate-600 mt-1">
+                    Manage and monitor all system users
+                  </p>
                 </div>
               </div>
 
-              {/* Search Bar */}
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <Search className="h-5 w-5 text-slate-400" />
+              <div className="flex flex-col sm:flex-row gap-3">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
+                  <input
+                    type="text"
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    className="w-full sm:w-80 pl-10 pr-4 py-3 border border-slate-200 rounded-xl 
+                             bg-white placeholder-slate-400 focus:outline-none focus:ring-2 
+                             focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                    placeholder="Search users..."
+                  />
                 </div>
-                <input
-                  type="text"
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                  className="block w-full sm:w-80 pl-12 pr-4 py-3 border border-slate-300 rounded-xl 
-                           bg-white placeholder-slate-400 focus:outline-none focus:ring-2 
-                           focus:ring-blue-500 focus:border-transparent transition-all duration-200
-                           shadow-sm hover:shadow-md"
-                  placeholder="Search users by name or email..."
-                />
+
+                <button
+                  onClick={() => setShowFilters(!showFilters)}
+                  className={`px-4 py-3 rounded-xl font-medium transition-all duration-200 flex items-center gap-2 ${
+                    showFilters
+                      ? "bg-blue-500 text-white"
+                      : "bg-slate-100 text-slate-700 hover:bg-slate-200"
+                  }`}
+                >
+                  <Filter className="w-4 h-4" />
+                  Filters
+                </button>
+
+                <button
+                  onClick={handleRefresh}
+                  className="px-4 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl font-medium transition-colors duration-200 flex items-center gap-2"
+                >
+                  <RefreshCw className="w-4 h-4" />
+                  Refresh
+                </button>
               </div>
             </div>
 
-            {/* Stats Bar */}
+            {/* Filters Panel */}
+            {showFilters && (
+              <div className="border-t border-slate-200 pt-6 animate-in slide-in-from-top duration-300">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                      Sort By
+                    </label>
+                    <div className="flex flex-wrap gap-2">
+                      {SORT_OPTIONS.map((option) => (
+                        <button
+                          key={option.value}
+                          onClick={() => handleSort(option.value)}
+                          className={`px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-1 ${
+                            sortBy === option.value
+                              ? "bg-blue-500 text-white"
+                              : "bg-slate-100 text-slate-700 hover:bg-slate-200"
+                          }`}
+                        >
+                          {option.label}
+                          {sortBy === option.value &&
+                            (sortOrder === "asc" ? (
+                              <SortAsc className="w-3 h-3" />
+                            ) : (
+                              <SortDesc className="w-3 h-3" />
+                            ))}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                      Filter
+                    </label>
+                    <select
+                      value={filterBy}
+                      onChange={(e) => setFilterBy(e.target.value)}
+                      className="w-full px-3 py-2 border border-slate-200 rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    >
+                      {FILTER_OPTIONS.map((option) => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                      Selection
+                    </label>
+                    <div className="flex items-center gap-3">
+                      <button
+                        onClick={handleSelectAll}
+                        className="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-sm font-medium transition-colors duration-200"
+                      >
+                        {selectedUsers.size === processedData.length
+                          ? "Deselect All"
+                          : "Select All"}
+                      </button>
+                      {selectedUsers.size > 0 && (
+                        <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full text-xs font-medium">
+                          {selectedUsers.size} selected
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Stats */}
             <div className="mt-6 pt-6 border-t border-slate-200">
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-slate-600">
-                  {data?.length > 0 ? `${data.length} users found` : 'No users found'}
-                </span>
-                <span className="text-slate-500">
-                  Last updated: {new Date().toLocaleDateString()}
-                </span>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="bg-gradient-to-r from-blue-50 to-blue-100 p-4 rounded-xl">
+                  <div className="flex items-center gap-3">
+                    <Users className="w-6 h-6 text-blue-600" />
+                    <div>
+                      <p className="text-xl font-bold text-blue-800">
+                        {processedData.length}
+                      </p>
+                      <p className="text-blue-600 text-xs">Total Users</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-gradient-to-r from-green-50 to-green-100 p-4 rounded-xl">
+                  <div className="flex items-center gap-3">
+                    <Activity className="w-6 h-6 text-green-600" />
+                    <div>
+                      <p className="text-xl font-bold text-green-800">
+                        {
+                          processedData.filter(
+                            (user) =>
+                              Math.floor(
+                                (new Date() - new Date(user.updated_at)) /
+                                  (1000 * 60 * 60 * 24)
+                              ) <= 7
+                          ).length
+                        }
+                      </p>
+                      <p className="text-green-600 text-xs">Active This Week</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-gradient-to-r from-purple-50 to-purple-100 p-4 rounded-xl">
+                  <div className="flex items-center gap-3">
+                    <UserPlus className="w-6 h-6 text-purple-600" />
+                    <div>
+                      <p className="text-xl font-bold text-purple-800">
+                        {
+                          processedData.filter(
+                            (user) =>
+                              Math.floor(
+                                (new Date() - new Date(user.created_at)) /
+                                  (1000 * 60 * 60 * 24)
+                              ) <= 30
+                          ).length
+                        }
+                      </p>
+                      <p className="text-purple-600 text-xs">New This Month</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="bg-gradient-to-r from-orange-50 to-orange-100 p-4 rounded-xl">
+                  <div className="flex items-center gap-3">
+                    <Clock className="w-6 h-6 text-orange-600" />
+                    <div>
+                      <p className="text-sm font-medium text-orange-800">
+                        Last Updated
+                      </p>
+                      <p className="text-orange-600 text-xs">
+                        {new Date().toLocaleDateString()}
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
 
         {/* Users Grid */}
-        <div className="space-y-4">
-          {data?.length > 0 ? (
-            data.map((user) => (
+        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+          {processedData.length > 0 ? (
+            processedData.map((user, index) => (
               <div
                 key={user.id}
-                className="bg-white rounded-xl shadow-sm border border-slate-200 
-                         hover:shadow-md hover:border-blue-200 transition-all duration-300 
-                         transform hover:-translate-y-1 overflow-hidden"
+                className="bg-white rounded-2xl shadow-sm border border-slate-200 
+                           hover:shadow-lg hover:border-blue-200 transition-all duration-300 
+                           transform hover:-translate-y-1"
+                style={{ animationDelay: `${index * 50}ms` }}
               >
                 <div className="p-6">
-                  <div className="flex flex-col lg:flex-row lg:items-center gap-6">
-                    {/* Profile Section */}
-                    <div className="flex items-center gap-4 lg:w-1/4">
+                  {/* User Header */}
+                  <div className="flex items-start gap-4 mb-4">
+                    <div className="flex items-center gap-3 flex-1">
                       <div className="relative">
                         {user?.fileUrl ? (
                           <img
                             src={user.fileUrl}
                             alt={`${user.name}'s profile`}
-                            className="w-16 h-16 rounded-full object-cover ring-4 ring-blue-50"
-                            onError={(e) => {
-                              e.target.style.display = 'none';
-                              e.target.nextSibling.style.display = 'flex';
-                            }}
+                            className="w-12 h-12 rounded-xl object-cover"
                           />
-                        ) : null}
-                        <div 
-                          className={`w-16 h-16 rounded-full bg-gradient-to-r from-blue-100 to-blue-200 
-                                   flex items-center justify-center ${user?.fileUrl ? 'hidden' : 'flex'}`}
-                        >
-                          <User className="w-8 h-8 text-blue-600" />
-                        </div>
-                        <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-green-400 rounded-full border-2 border-white"></div>
+                        ) : (
+                          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-100 to-purple-100 flex items-center justify-center">
+                            <User className="w-6 h-6 text-blue-600" />
+                          </div>
+                        )}
                       </div>
-                      <div className="min-w-0 flex-1">
+
+                      <div className="flex-1 min-w-0">
                         <h3 className="text-lg font-semibold text-slate-800 truncate">
                           {user.name}
                         </h3>
-                        <p className="text-slate-600 text-sm flex items-center gap-1 mt-1">
-                          <Mail className="w-4 h-4" />
+                        <p className="text-slate-600 text-sm truncate flex items-center gap-1">
+                          <Mail className="w-3 h-3" />
                           {user.email}
                         </p>
                       </div>
-                    </div>
 
-                    {/* Info Grid */}
-                    <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-4 lg:gap-6">
-                      {/* Registration Date */}
-                      <div className="space-y-1">
-                        <div className="flex items-center gap-2 text-slate-500">
-                          <Calendar className="w-4 h-4" />
-                          <span className="text-sm font-medium">Registered</span>
-                        </div>
-                        <p className="text-slate-800 font-semibold">
-                          {formatDate(user.created_at)}
-                        </p>
-                      </div>
-
-                      {/* Last Update */}
-                      <div className="space-y-1">
-                        <div className="flex items-center gap-2 text-slate-500">
-                          <Calendar className="w-4 h-4" />
-                          <span className="text-sm font-medium">Last Update</span>
-                        </div>
-                        <p className="text-slate-800 font-semibold">
-                          {formatDate(user.updated_at)}
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Actions */}
-                    <div className="lg:w-auto">
-                      <button
-                        onClick={() => handleView(user.id)}
-                        className="w-full sm:w-auto bg-gradient-to-r from-blue-500 to-blue-600 
-                                 hover:from-blue-600 hover:to-blue-700 text-white px-6 py-3 
-                                 rounded-xl font-semibold transition-all duration-200 
-                                 transform hover:scale-105 shadow-sm hover:shadow-md
-                                 flex items-center justify-center gap-2 min-w-[120px]"
-                      >
-                        <Eye className="w-4 h-4" />
-                        View Details
+                      <button className="p-1 hover:bg-slate-100 rounded-lg transition-colors">
+                        <MoreHorizontal className="w-4 h-4 text-slate-400" />
                       </button>
                     </div>
                   </div>
-                </div>
 
-                {/* Progress bar at bottom */}
-                <div className="h-1 bg-gradient-to-r from-blue-500 to-blue-600 opacity-20"></div>
+                  {/* User Details */}
+                  <div className="space-y-3 mb-4">
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-slate-500 flex items-center gap-1">
+                        <Shield className="w-3 h-3" />
+                        User ID
+                      </span>
+                      <span className="font-medium text-slate-700">
+                        {user.id}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-slate-500 flex items-center gap-1">
+                        <Calendar className="w-3 h-3" />
+                        Joined
+                      </span>
+                      <span className="font-medium text-slate-700">
+                        {formatDate(user.created_at)}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-slate-500 flex items-center gap-1">
+                        <Clock className="w-3 h-3" />
+                        Last Active
+                      </span>
+                      <span className="font-medium text-slate-700">
+                        {getRelativeTime(user.updated_at)}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Actions
+                  <div className="flex gap-2">
+                    {/* <button
+                      onClick={() => handleView(user.id)}
+                      className="flex-1 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-xl 
+                                 font-medium transition-colors duration-200 flex items-center justify-center gap-2"
+                    >
+                      <Eye className="w-4 h-4" />
+                      View Details
+                    </button> */}
+                  {/* <button className="p-2 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors duration-200">
+                      <Settings className="w-4 h-4 text-slate-600" />
+                    </button>
+                  </div> */}
+                </div>
               </div>
             ))
           ) : (
-            // Empty State
-            <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-12">
-              <div className="text-center">
-                <div className="mx-auto w-24 h-24 bg-slate-100 rounded-full flex items-center justify-center mb-4">
-                  <Users className="w-12 h-12 text-slate-400" />
-                </div>
-                <h3 className="text-xl font-semibold text-slate-800 mb-2">No users found</h3>
-                <p className="text-slate-600 mb-6">
-                  {search 
-                    ? `No users match your search for "${search}"`
-                    : "There are no users in the system yet"
-                  }
+            <div className="col-span-full">
+              <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-12 text-center">
+                <Users className="w-16 h-16 text-slate-400 mx-auto mb-4" />
+                <h3 className="text-xl font-semibold text-slate-800 mb-2">
+                  No users found
+                </h3>
+                <p className="text-slate-600 mb-4">
+                  {search
+                    ? `No users match "${search}"`
+                    : "No users in the system yet"}
                 </p>
-                {search && (
-                  <button
-                    onClick={() => setSearch("")}
-                    className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg 
-                             font-medium transition-colors duration-200"
-                  >
-                    Clear Search
-                  </button>
-                )}
+                <button
+                  onClick={handleRefresh}
+                  className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-xl font-medium transition-colors duration-200"
+                >
+                  Refresh
+                </button>
               </div>
             </div>
           )}

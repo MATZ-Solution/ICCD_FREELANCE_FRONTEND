@@ -10,7 +10,8 @@ import IsFreelancerProfile from "../src/templates/IsfreelancerProfile";
 import OrderDetailPage from "../src/pages/freelancer_dashboard/OrderDetailPage";
 import { withSuspense } from "../utils/withSuspense";
 import ICCDLoader from "../src/component/loader";
-
+import ActiveProjects from "../src/pages/superadmin_dashboard/manage-projects"
+import UserDetailPage from "../src/pages/superadmin_dashboard/UserDetail"
 const Login = lazy(() => import("../src/pages/signIn/signIn"));
 const Dashboard = lazy(() => import("../src/pages/dashboard"));
 const Homepage = lazy(() => import("../src/pages/homepage"));
@@ -74,6 +75,8 @@ import BrowseProjects from "../src/pages/browseProject";
 import NotFound from '../src/component/NotFound';
 import { ProjectDetail } from '../src/pages/projectDetail';
 import TestingComponents from "../src/pages/testingComponent";
+import Manage_freelancers from "../src/pages/superadmin_dashboard/manage_freelancers";
+import Manage_gigs from "../src/pages/superadmin_dashboard/manage_gigs";
 
 const stripePromise = loadStripe("pk_test_51QCl1eCDh3RtIJ6XkYcN5vHd3KTO2f8enRSNv9Wx7Li0iCI7cr9khTDQx0vS5RmbazZoaECNW83FesOMwLeIgMLb00BJG4pPZR");
 
@@ -678,6 +681,48 @@ export const router = createBrowserRouter([
       // <AuthRoute>
         <MainTemplate isShowFooter={false}>
           <ManageUsers />
+        </MainTemplate>
+      // </AuthRoute>
+    ),
+  },
+
+    {
+    path: "superadmin/user/:id",
+    element: withSuspense(
+      // <AuthRoute>
+        <MainTemplate isShowFooter={false}>
+          <UserDetailPage />
+        </MainTemplate>
+      // </AuthRoute>
+    ),
+  },
+    {
+    path: "/superadmin/Active-freelancers",
+    element: withSuspense(
+      // <AuthRoute>
+        <MainTemplate isShowFooter={false}>
+          <Manage_freelancers />
+        </MainTemplate>
+      // </AuthRoute>
+    ),
+  },
+      {
+    path: "/superadmin/manage-gigs",
+    element: withSuspense(
+      // <AuthRoute>
+        <MainTemplate isShowFooter={false}>
+          <Manage_gigs />
+        </MainTemplate>
+      // </AuthRoute>
+    ),
+  },
+
+    {
+    path: "superadmin/manage-projects",
+    element: withSuspense(
+      // <AuthRoute>
+        <MainTemplate isShowFooter={false}>
+          <ActiveProjects />
         </MainTemplate>
       // </AuthRoute>
     ),

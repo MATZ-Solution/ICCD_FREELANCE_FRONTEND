@@ -7,65 +7,84 @@ import { useGetUnReadCountNot } from "../../api/client/notification";
 import { memo } from "react";
 
 const NotificationBell = ({ isShowNot, setIsShowNot }) => {
+  const [countClient, setCountClient] = useState(0);
+  const [countFreelancer, setCountFreelancer] = useState(0);
 
-    const [countClient, setCountClient] = useState(0);
-    const [countFreelancer, setCountFreelancer] = useState(0);
-    const pathName = useLocation().pathname
-    const user = useSelector((state) => state.userType.user);
-    const client = useSelector((state) => state.user.userDetails);
-    const socket = useMemo(() => { return getSocket(client.id) }, [client.id]);
-    console.log("user: ", user)
-    const { data, error, isLoading, isError } = useGetUnReadCountNot(user)
+  const pathName = useLocation().pathname;
 
-    useEffect(() => {
-        if (data && data?.length > 0 && data[0]?.type === 'client') {
-            setCountClient(data[0]?.count);
-        }
-        if (data && data?.length > 0 && data[0]?.type === 'freelancer') {
-            setCountFreelancer(data[0]?.count);
-        }
-    }, [data]);
+  // Redux selectors
+  const user = useSelector((state) => state.userType.user);
+  const client = useSelector((state) => state.user.userDetails);
 
-    useEffect(() => {
-        const handleCount = (data) => {
-            console.log("socket data: ", data)
-            if (data?.type === 'client') {
-                setCountClient(prev => prev + 1);
-            } else if (data?.type === 'freelancer') {
-                setCountFreelancer(prev => prev + 1);
-            }
-        }
-        socket.on("notification", handleCount);
-        return () => {
-            socket.off("notification", handleCount);
-        };
-    }, [socket]);
+  // ✅ Prevent crash: only create socket if client exists
+  const socket = useMemo(() => {
+    if (!client || !client.id) return null;
+    return getSocket(client.id);
+  }, [client?.id]);
 
-    const handleOnClick = () => {
-        if (pathName.includes('client')) {
-            setCountClient(0)
-        } else if (pathName.includes('freelancer')) {
-            setCountFreelancer(0)
-        }
-        setIsShowNot(!isShowNot)
+  console.log("user: ", user);
+
+  // API call for unread notifications
+  const { data, error, isLoading, isError } = useGetUnReadCountNot(user);
+
+  // Update unread counts from API
+  useEffect(() => {
+    if (!data || data.length === 0) return;
+
+    if (data[0]?.type === "client") {
+      setCountClient(data[0]?.count || 0);
     }
-    return (
-        <div className="relative cursor-pointer" onClick={handleOnClick}>
-            <Bell className="h-5 w-5 text-gray-600 group-hover:text-gray-800 transition-colors" />
+    if (data[0]?.type === "freelancer") {
+      setCountFreelancer(data[0]?.count || 0);
+    }
+  }, [data]);
 
-            {(countClient > 0 && pathName.includes('client')) && (
-                <span className="absolute top-[-5px] right-[-5px] bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
-                    {countClient}
-                </span>
-            )}
+  // Socket listener for new notifications
+  useEffect(() => {
+    if (!socket) return; // ✅ no socket if client not ready
 
-            {(countFreelancer > 0 && pathName.includes('freelancer')) && (
-                <span className="absolute top-[-5px] right-[-5px] bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
-                    {countFreelancer}
-                </span>
-            )}
-        </div>
-    );
+    const handleCount = (data) => {
+      console.log("socket data: ", data);
+      if (data?.type === "client") {
+        setCountClient((prev) => prev + 1);
+      } else if (data?.type === "freelancer") {
+        setCountFreelancer((prev) => prev + 1);
+      }
+    };
+
+    socket.on("notification", handleCount);
+    return () => {
+      socket.off("notification", handleCount);
+    };
+  }, [socket]);
+
+  // Handle bell click
+  const handleOnClick = () => {
+    if (pathName.includes("client")) {
+      setCountClient(0);
+    } else if (pathName.includes("freelancer")) {
+      setCountFreelancer(0);
+    }
+    setIsShowNot(!isShowNot);
+  };
+
+  return (
+    <div className="relative cursor-pointer" onClick={handleOnClick}>
+      <Bell className="h-5 w-5 text-gray-600 group-hover:text-gray-800 transition-colors" />
+
+      {countClient > 0 && pathName.includes("client") && (
+        <span className="absolute top-[-5px] right-[-5px] bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
+          {countClient}
+        </span>
+      )}
+
+      {countFreelancer > 0 && pathName.includes("freelancer") && (
+        <span className="absolute top-[-5px] right-[-5px] bg-red-500 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
+          {countFreelancer}
+        </span>
+      )}
+    </div>
+  );
 };
 
 export default memo(NotificationBell);

@@ -26,7 +26,10 @@ export const navTabsFreelancerDashboard = [
 export const navTabsSuperAdminDashboard = [
   // { name: "Dashboard", path: "/superadmin/dashboard" },
   { name: "Users", path: "/superadmin/manage-users" },
-  // { name: "Orders", path: "/superadmin/orders" },
+  { name: "Active Freelancers", path: "/superadmin/Active-freelancers" },
+  { name: "Active Gigs", path: "/superadmin/manage-gigs" },
+  { name: "Active Projects", path: "/superadmin/manage-projects" },
+
   // { name: "Dispute", path: "/superadmin/manage-dispute" },
   // { name: "Jobs", path: "/superadmin/manage-jobs" },
 ];
