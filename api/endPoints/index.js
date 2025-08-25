@@ -12,9 +12,9 @@ const API_ROUTE = {
     getProjectByClient: "/project/getProjectByClient",
     addProject: "/project/addProject",
     getProjectById: "/project/getProjectById",
-    submitProposals:"/project/submitProposals",
+    submitProposals: "/project/submitProposals",
     getProjectPropsalByClient: '/project/getProjectPropsalByClient',
-    editProject : '/project/editProject'
+    editProject: '/project/editProject'
   },
   job: {
     getAllJob: "/job/getAllJob",
@@ -41,18 +41,18 @@ const API_ROUTE = {
     getFreelancerProfile: '/freelancer/getFreelancerProfile',
     addProfile: '/freelancer/addProfile',
     editProfile: '/freelancer/editProfile',
-    getFreelancerDashboardData : '/freelancer/getFreelancerDashboardData'
+    getFreelancerDashboardData: '/freelancer/getFreelancerDashboardData'
   },
-  client : {
+  client: {
     getClientDashboardData: '/client/getClientDashboardData',
     clientEditProfile: '/client/clientEditProfile'
   },
 
   superadmin: {
-    getAllUsers: '/superadmin/getAllUsers',
     getAllOrders: '/superadmin/getAllOrder',
-
-    
+    addDispute: '/superadmin/addDispute',
+    getAllDispute: '/superadmin/getAllDispute',
+    getAllDisputeById: '/superadmin/getAllDisputeById'
   },
   order: {
     getAllOrderByFreelancer: '/order/getAllOrderByFreelancer',
@@ -61,7 +61,7 @@ const API_ROUTE = {
     getAllOrderByAdmin: '/order/getAllOrderByAdmin',
 
   },
-  
+
   messages: {
     addMessageByUser: '/messages/addMessageByUser',
     getAllMessageByUser: '/messages/getAllMessageByUser',
