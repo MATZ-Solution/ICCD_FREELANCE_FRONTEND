@@ -16,8 +16,11 @@ import { useGetOrderByClient } from "../../../api/client/order";
 import ICCDLoader from "../loader";
 import { Modal } from "./Modal";
 import { DisputeModal } from "./DisputeModal";
+import { useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 function ClientOrders() {
+
   const [showCompleteModal, setShowCompleteModal] = useState(false);
   const [showTransferModal, setShowTransferModal] = useState(false);
   const [showDisputeModal, setShowDisputeModal] = useState(false);
@@ -25,18 +28,31 @@ function ClientOrders() {
   const [completedOrders, setCompletedOrders] = useState([]);
   const [disputedOrders, setDisputedOrders] = useState([]);
   const [search, setSearch] = useState("");
+  const pathName = useLocation().pathname
 
+  const [orderDetails, setOrderDetails] = useState("")
   const { data, isError, isLoading } = useGetOrderByClient({
     search,
   });
+
+
 
   const handleView = (id) => {
     console.log("Viewing order:", id);
     // navigate to order details
   };
 
-  const handleCompleteClick = (id) => {
-    setSelectedOrderId(id);
+  
+  const client = useSelector((state) => state.user.userDetails);
+  const handleCompleteClick = (item) => {
+    const { id, gig_id, client_id, freelancer_id } = item
+    const userType = pathName.includes("client") ? 'client' : 'freelancer'
+    // setSelectedOrderId(id);
+    setOrderDetails({
+      orderId: id, gigId: gig_id,
+      client_id: client_id, freelancer_id:freelancer_id,
+      userType: userType, userId: client.id
+    });
     setShowCompleteModal(true);
   };
 
@@ -107,46 +123,46 @@ function ClientOrders() {
     <div className="min-h-screen  bg-gradient-to-br from-gray-50 to-white">
       <div className="max-w-7xl mx-auto p-6">
         {/* Header Section */}
-         <div className="flex flex-wrap mb-12 justify-between mt-10 p-6 bg-gradient-to-r from-[#043A53] via-[#065f73] to-[#3C939D] rounded-md">
-        <div className="px-4 py-6">
-          <div className="flex items-center gap-3 mb-2">
-            <div className="p-2 bg-white/20 rounded-lg backdrop-blur-sm">
-              <Package className="w-6 h-6 text-white" />
+        <div className="flex flex-wrap mb-12 justify-between mt-10 p-6 bg-gradient-to-r from-[#043A53] via-[#065f73] to-[#3C939D] rounded-md">
+          <div className="px-4 py-6">
+            <div className="flex items-center gap-3 mb-2">
+              <div className="p-2 bg-white/20 rounded-lg backdrop-blur-sm">
+                <Package className="w-6 h-6 text-white" />
+              </div>
+              <h1 className="text-3xl font-bold text-white">Order Management</h1>
             </div>
-            <h1 className="text-3xl font-bold text-white">Order Management</h1>
+            <p className="text-blue-100 text-lg">
+              Track And Manage Your Orders
+            </p>
           </div>
-          <p className="text-blue-100 text-lg">
-            Track And Manage Your Orders
-          </p>
-        </div>
 
-        {/* Search Section */}
-        <div className="  flex flex-col justify-center mt-4 sm:mt-0">
-          <div className="relative">
-            <input
-              type="text"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search Orders..."
-              className="w-72 h-10 p-2 pr-10 rounded-md border border-gray-500 bg-white focus:outline-none focus:ring-2 focus:ring-blue-300"
-            />
-            <SearchIcon className="absolute top-2.5 right-2.5 text-gray-400" />
+          {/* Search Section */}
+          <div className="  flex flex-col justify-center mt-4 sm:mt-0">
+            <div className="relative">
+              <input
+                type="text"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Search Orders..."
+                className="w-72 h-10 p-2 pr-10 rounded-md border border-gray-500 bg-white focus:outline-none focus:ring-2 focus:ring-blue-300"
+              />
+              <SearchIcon className="absolute top-2.5 right-2.5 text-gray-400" />
+
+            </div>
 
           </div>
-        
         </div>
-      </div>
 
         {/* Orders List */}
         <div className="space-y-4  ">
           {data?.length > 0 ? (
-            data.map((item) => {
+            data.map((item, index) => {
               const isCompleted = completedOrders.includes(item.id);
               const isDisputed = disputedOrders.includes(item.id);
 
               return (
                 <div
-                  key={item.id}
+                  key={index}
                   className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-all duration-200 cursor-pointer group"
                   onClick={() => handleView(item.id)}
                 >
@@ -217,6 +233,21 @@ function ClientOrders() {
                             type="button"
                             onClick={(e) => {
                               e.stopPropagation();
+                              handleCompleteClick(item);
+                            }}
+                            className={`flex-1 p-4 mt-8  h-12 rounded-xl font-medium transition-colors flex items-center justify-center gap-2 px-4
+                                 bg-blue-600 hover:bg-blue-700 text-white focus:ring-2 focus:ring-offset-2 focus:ring-blue-500
+                            }`}
+                          >
+                            <>
+                              <CheckCircle className="w-4 h-4" />
+                              <span>Complete Order</span>
+                            </>
+                          </button>
+                          {/* <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
                               if (!isCompleted && !isDisputed) {
                                 handleCompleteClick(item.id);
                               }
@@ -247,7 +278,7 @@ function ClientOrders() {
                                 <span>Complete Order</span>
                               </>
                             )}
-                          </button>
+                          </button> */}
                         </div>
                       </div>
                     </div>
@@ -303,6 +334,8 @@ function ClientOrders() {
           <DisputeModal
             onClose={() => setShowDisputeModal(false)}
             onSubmit={handleDisputeSubmit}
+            orderDetails={orderDetails}
+            setOrderDetails={setOrderDetails}
           />
         )}
       </div>
