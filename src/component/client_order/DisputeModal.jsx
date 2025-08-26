@@ -10,8 +10,10 @@ const schema = yup.object().shape({
   settlementOffer: yup.string().optional(), // optional
   proof: yup.mixed().optional(),            // optional
 });
+import { useAddDispute } from "../../../api/client/dispute";
 
-export const DisputeModal = ({ onClose, onSubmit }) => {
+
+export const DisputeModal = ({ onClose, onSubmit, orderDetails, setOrderDetails }) => {
   const {
     handleSubmit,
     control,
@@ -27,8 +29,22 @@ export const DisputeModal = ({ onClose, onSubmit }) => {
     },
   });
 
+  console.log("orderDetails: ", orderDetails)
+  const {addDispute, isSuccess, isPending, isError, error } = useAddDispute()
   const onFormSubmit = (data) => {
-    onSubmit(data);
+    const datas = { ...orderDetails, ...data }
+    const formData = new FormData();
+    {
+      (data.proof && data.proof.length > 0) && data.proof?.forEach((img) => {
+        if (img.file) formData.append("files", img.file);
+      });
+    }
+    for (const key in datas) {
+      if (typeof datas[key] !== "object") {
+        formData.append(key, datas[key])
+      }
+    }
+    addDispute(formData);
   };
 
   return (
@@ -62,11 +78,10 @@ export const DisputeModal = ({ onClose, onSubmit }) => {
             <input
               {...register("subject")}
               type="text"
-              className={`w-full border-2 rounded-xl px-4 py-3 text-sm focus:outline-none transition-colors ${
-                errors.subject
-                  ? "border-red-500"
-                  : "border-gray-200 focus:border-red-500"
-              }`}
+              className={`w-full border-2 rounded-xl px-4 py-3 text-sm focus:outline-none transition-colors ${errors.subject
+                ? "border-red-500"
+                : "border-gray-200 focus:border-red-500"
+                }`}
               placeholder="Brief description of the issue"
             />
             {errors.subject && (
@@ -88,11 +103,10 @@ export const DisputeModal = ({ onClose, onSubmit }) => {
                 <textarea
                   {...field}
                   rows={5}
-                  className={`w-full border-2 rounded-xl px-4 py-3 text-sm focus:outline-none transition-colors resize-none ${
-                    errors.reason
-                      ? "border-red-500"
-                      : "border-gray-200 focus:border-red-500"
-                  }`}
+                  className={`w-full border-2 rounded-xl px-4 py-3 text-sm focus:outline-none transition-colors resize-none ${errors.reason
+                    ? "border-red-500"
+                    : "border-gray-200 focus:border-red-500"
+                    }`}
                   placeholder="Please provide a detailed explanation of your concern..."
                 ></textarea>
               )}
