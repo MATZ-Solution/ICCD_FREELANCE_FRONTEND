@@ -77,6 +77,11 @@ import { ProjectDetail } from '../src/pages/projectDetail';
 import TestingComponents from "../src/pages/testingComponent";
 import Manage_freelancers from "../src/pages/superadmin_dashboard/manage_freelancers";
 import Manage_gigs from "../src/pages/superadmin_dashboard/manage_gigs";
+import DisputesList from "../src/component/client_order/DisputesList"
+
+import DisputeDetailPage from "../src/component/client_order/DisputeDetailPage"
+import AdminManageDisputes from "../src/pages/superadmin_dashboard/manage_disputes";
+import DisputeDetailView from "../src/component/super_admin/DisputeDetailView";
 
 const stripePromise = loadStripe("pk_test_51QCl1eCDh3RtIJ6XkYcN5vHd3KTO2f8enRSNv9Wx7Li0iCI7cr9khTDQx0vS5RmbazZoaECNW83FesOMwLeIgMLb00BJG4pPZR");
 
@@ -322,6 +327,28 @@ export const router = createBrowserRouter([
       </AuthRoute>
     ),
   },
+
+   {
+    path: "/freelancer/DisputesList",
+    element: withSuspense(
+      <AuthRoute>
+          <MainTemplate isShowFooter={true}>
+            <DisputesList />
+          </MainTemplate>
+      </AuthRoute>
+    ),
+  },
+    {
+    path: "/freelancer/Disputes/:id",
+    element: withSuspense(
+      <AuthRoute>
+          <MainTemplate isShowFooter={true}>
+            <DisputeDetailPage />
+          </MainTemplate>
+      </AuthRoute>
+    ),
+  },
+   
    
   {
     path: "/freelancer/dashboard",
@@ -634,12 +661,42 @@ export const router = createBrowserRouter([
       </AuthRoute>
     ),
   },
+    {
+    path: "/client/DisputesList",
+    element: withSuspense(
+      // <AuthRoute>
+        <MainTemplate isShowFooter={false}>
+          <DisputesList />
+        </MainTemplate>
+      // </AuthRoute>
+    ),
+  },
   {
     path: "/superadmin/dashboard",
     element: withSuspense(
       // <AuthRoute>
         <MainTemplate isShowFooter={false}>
           <SuperAdminDashboard />
+        </MainTemplate>
+      // </AuthRoute>
+    ),
+  },
+    {
+    path: "/superadmin/manage-disputes",
+    element: withSuspense(
+      // <AuthRoute>
+        <MainTemplate isShowFooter={false}>
+          <AdminManageDisputes />
+        </MainTemplate>
+      // </AuthRoute>
+    ),
+  },
+    {
+    path: "/superadmin/admindisputedetail/:id",
+    element: withSuspense(
+      // <AuthRoute>
+        <MainTemplate isShowFooter={false}>
+          <DisputeDetailView />
         </MainTemplate>
       // </AuthRoute>
     ),

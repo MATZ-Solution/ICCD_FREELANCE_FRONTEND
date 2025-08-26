@@ -53,8 +53,7 @@ const API_ROUTE = {
     getAllFreelancers: "/superadmin/getAllFreelancers",
     getAllGigs: "/superadmin/getAllGigs", 
     getAllProjects: "/superadmin/getAllProjects", 
-
-    
+    getAllUsers: '/superadmin/getAllUsers',
     addDispute: '/superadmin/addDispute',
     getAllDispute: '/superadmin/getAllDispute',
     getAllDisputeById: '/superadmin/getAllDisputeById'
