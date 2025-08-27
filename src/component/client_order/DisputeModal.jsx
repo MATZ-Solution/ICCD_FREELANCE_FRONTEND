@@ -2,7 +2,7 @@ import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { AlertTriangle, Upload, X } from "lucide-react";
-
+import { useAddDispute } from "../../../api/client/dispute";
 // ✅ Yup Schema
 const schema = yup.object().shape({
   subject: yup.string().required("Subject is required"),
@@ -10,7 +10,7 @@ const schema = yup.object().shape({
   settlementOffer: yup.string().optional(), // optional
   proof: yup.mixed().optional(),            // optional
 });
-import { useAddDispute } from "../../../api/client/dispute";
+
 
 
 export const DisputeModal = ({ onClose, onSubmit, orderDetails, setOrderDetails }) => {
@@ -25,18 +25,20 @@ export const DisputeModal = ({ onClose, onSubmit, orderDetails, setOrderDetails 
       subject: "",
       reason: "",
       settlementOffer: "",
-      proof: null,
+      proof: [],
     },
   });
 
   console.log("orderDetails: ", orderDetails)
-  const {addDispute, isSuccess, isPending, isError, error } = useAddDispute()
+  const { addDispute, isSuccess, isPending, isError, error } = useAddDispute()
   const onFormSubmit = (data) => {
+    console.log("data: ", data)
     const datas = { ...orderDetails, ...data }
     const formData = new FormData();
     {
       (data.proof && data.proof.length > 0) && data.proof?.forEach((img) => {
-        if (img.file) formData.append("files", img.file);
+        if (img) formData.append("files", img);
+        console.log("img.file: ", img)
       });
     }
     for (const key in datas) {
@@ -150,8 +152,9 @@ export const DisputeModal = ({ onClose, onSubmit, orderDetails, setOrderDetails 
                   </p>
                   <input
                     type="file"
+                    multiple
                     accept=".jpg,.jpeg,.png,.pdf,.doc,.docx"
-                    onChange={(e) => field.onChange(e.target.files[0])}
+                    onChange={(e) => field.onChange(Array.from(e.target.files))}
                     className="text-sm text-gray-600"
                   />
                   {field.value && (

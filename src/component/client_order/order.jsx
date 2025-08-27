@@ -34,6 +34,7 @@ function ClientOrders() {
   const { data, isError, isLoading } = useGetOrderByClient({
     search,
   });
+  console.log("data order:", data);
 
 
 
@@ -42,16 +43,20 @@ function ClientOrders() {
     // navigate to order details
   };
 
-  
+
   const client = useSelector((state) => state.user.userDetails);
+  const freelancer = useSelector(state => state.userProfile.userProfile)
+
   const handleCompleteClick = (item) => {
-    const { id, gig_id, client_id, freelancer_id } = item
+    const { id, gig_id, client_id, freelancer_id, orderId } = item
     const userType = pathName.includes("client") ? 'client' : 'freelancer'
+    const userId = pathName.includes("client") ? client?.id : freelancer?.id
+
     // setSelectedOrderId(id);
     setOrderDetails({
-      orderId: id, gigId: gig_id,
-      client_id: client_id, freelancer_id:freelancer_id,
-      userType: userType, userId: client.id
+      orderId: orderId, gigId: gig_id, user_id: userId,
+      client_id: client_id, freelancer_id: freelancer_id,
+      raised_by: userType
     });
     setShowCompleteModal(true);
   };

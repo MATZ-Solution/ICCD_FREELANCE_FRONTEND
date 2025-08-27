@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import { User, FileText, DollarSign, Clock } from "lucide-react";
+import { useGetDisputeAdminById } from "../../../api/client/dispute";
+import { useParams } from "react-router-dom";
 
 const fakeDispute = {
+
   disputeRaised: {
     id: 1,
     role: 'client',
@@ -32,6 +35,11 @@ const fakeDispute = {
 };
 
 export default function ViewDisputeDetail() {
+
+  const { id } = useParams()
+  const { data, isSuccess, isPending, isError, isLoading } = useGetDisputeAdminById(id)
+  console.log("data: ", data)
+
   const { disputeRaised, disputeResponse } = fakeDispute;
   const [partialAmount, setPartialAmount] = useState("");
 
@@ -55,6 +63,7 @@ export default function ViewDisputeDetail() {
     }
   };
 
+  if (isLoading) return "Loading..."
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
       <div className="max-w-4xl w-full bg-white rounded-2xl shadow-xl p-8 transform transition-all duration-300 hover:shadow-2xl">
@@ -65,16 +74,22 @@ export default function ViewDisputeDetail() {
 
         {/* Client Info */}
         <div className="flex items-center gap-4 mb-8 p-4 bg-gray-50 rounded-lg border border-gray-200">
-          <img
-            src={disputeRaised.avatar}
-            alt={disputeRaised.name}
-            className="w-16 h-16 rounded-full border-2 border-blue-500"
-          />
+          {
+            (data[0]?.freelancerImg || data[0]?.clientImg) ?
+              <img
+                src={data[0]?.raised_by === 'client' ? data[0]?.clientImg : data[0]?.freelancerImg}
+                alt={disputeRaised.name}
+                className="w-16 h-16 rounded-full border-2 border-blue-500"
+              />
+              :
+           <User className="w-4 h-4 text-gray-500" />
+          }
+
           <div>
-            <p className="font-semibold text-lg text-gray-800">{disputeRaised.name} <span className="text-sm text-gray-500">(Client)</span></p>
+            <p className="font-semibold text-lg text-gray-800">{data[0]?.raised_by === 'client' ? data[0]?.client : data[0]?.freelancer} <span className="text-sm text-gray-500">({data[0]?.raised_by})</span></p>
             <p className="text-sm text-gray-600 flex items-center gap-1">
               <User className="w-4 h-4 text-gray-500" />
-              {disputeRaised.email}
+              {data[0]?.raised_by === 'client' ? data[0]?.clientEmail : data[0]?.freelancerEmail}
             </p>
           </div>
         </div>
@@ -86,17 +101,17 @@ export default function ViewDisputeDetail() {
             Order Information
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <p className="text-gray-700"><strong>Order ID:</strong> {disputeRaised.orderId}</p>
-            <p className="text-gray-700"><strong>Gig Title:</strong> {disputeRaised.gigTitle}</p>
+            <p className="text-gray-700"><strong>Order ID:</strong> {data[0]?.orderId}</p>
+            <p className="text-gray-700"><strong>Gig Title:</strong> {data[0]?.title}</p>
             <p className="text-gray-700 flex items-center gap-1">
               <DollarSign className="w-4 h-4 text-green-600" />
-              <strong>Total Amount:</strong> ${disputeRaised.totalAmount}
+              <strong>Total Amount:</strong> ${data[0]?.total_price}
             </p>
-            <p className="text-gray-700"><strong>Payment Status:</strong> <span className={`capitalize ${disputeRaised.paymentStatus === 'paid' ? 'text-green-600' : 'text-red-600'}`}>{disputeRaised.paymentStatus}</span></p>
-            <p className="text-gray-700 flex items-center gap-1">
+            <p className="text-gray-700"><strong>Payment Status:</strong> <span className={`capitalize ${data[0]?.paymentStatus === 'paid' ? 'text-green-600' : 'text-red-600'}`}>{disputeRaised.paymentStatus}</span></p>
+            {/* <p className="text-gray-700 flex items-center gap-1">
               <Clock className="w-4 h-4 text-gray-500" />
               <strong>Delivery Date:</strong> {new Date(disputeRaised.deliveryDate).toLocaleString()}
-            </p>
+            </p> */}
           </div>
         </div>
 
@@ -106,16 +121,21 @@ export default function ViewDisputeDetail() {
             <FileText className="w-5 h-5 text-blue-600" />
             Client Dispute
           </h3>
-          <p className="text-gray-700 mb-2"><strong>Subject:</strong> {disputeRaised.subject}</p>
-          <p className="text-gray-700 mb-4"><strong>Message:</strong> {disputeRaised.message}</p>
-          {disputeRaised.proof && (
-            <img
-              src={disputeRaised.proof}
-              alt="Client Proof"
-              className="mt-2 w-full max-w-md h-auto rounded-lg border border-gray-300 transform transition-all duration-300 hover:scale-105"
-            />
+          <p className="text-gray-700 mb-2"><strong>Subject:</strong> {data[0]?.subject}</p>
+          <p className="text-gray-700 mb-4"><strong>Message:</strong> {data[0]?.reason}</p>
+          {(data[0]?.disputeFilesClient && data[0]?.disputeFilesClient.split(",").length > 0) && (
+            <>
+              {data[0]?.disputeFilesClient.split(",").map((item, index) => (
+                <img
+                  key={index}
+                  src={item}
+                  alt="Client Proof"
+                  className="mt-2 w-full max-w-md h-auto rounded-lg border border-gray-300 transform transition-all duration-300 hover:scale-105"
+                />
+              ))}
+            </>
           )}
-          <p className="mt-4 text-gray-700"><strong>Settlement Requested:</strong> {disputeRaised.settlement}</p>
+          {/* <p className="mt-4 text-gray-700"><strong>Settlement Requested:</strong> {disputeRaised.settlement}</p> */}
         </div>
 
         {/* Freelancer Response */}

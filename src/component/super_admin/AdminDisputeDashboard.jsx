@@ -15,8 +15,13 @@ import {
   TicketPlus,
 } from "lucide-react";
 import { Navigate, useNavigate } from "react-router-dom";
+import { useGetAllDisputeByAdmin } from "../../../api/client/dispute";
 
 const AdminDisputeDashboard = () => {
+
+   const { data, error, isLoading, isError } = useGetAllDisputeByAdmin()
+   console.log("data: ", data)
+
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [priorityFilter, setPriorityFilter] = useState("all");
@@ -95,7 +100,7 @@ const AdminDisputeDashboard = () => {
 
   const navigate = useNavigate();
   const handleviewdetail = () => {
-    navigate(`/superadmin/admindisputedetail/${disputes[0]?.id}`);
+    navigate(`/superadmin/admindisputedetail/${data[0]?.id}`);
   };
   const getStatusBadge = (status) => {
     const statusConfig = {
@@ -155,6 +160,8 @@ const AdminDisputeDashboard = () => {
     underReview: disputes.filter((d) => d.status === "under_review").length,
     suspicious: disputes.filter((d) => d.suspicious).length,
   };
+
+  if(isLoading) return 'Loading...'
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -330,23 +337,23 @@ const AdminDisputeDashboard = () => {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {filteredDisputes.map((dispute) => (
-                  <tr key={dispute.id} className="hover:bg-gray-50">
+                {data?.map((dispute, index) => (
+                  <tr key={index} className="hover:bg-gray-50">
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div>
                         <div className="flex items-center gap-2">
                           <p className="text-sm font-medium text-gray-900">
-                            {dispute.id}
+                            Dispute ID: {dispute.id}
                           </p>
-                          {dispute.suspicious && (
+                          {/* {dispute.suspicious && (
                             <Flag
                               className="w-4 h-4 text-orange-500"
                               title="Suspicious Activity"
                             />
-                          )}
+                          )} */}
                         </div>
                         <p className="text-sm text-gray-500">
-                          Order: {dispute.orderId}
+                          Order ID: {dispute.orderId}
                         </p>
                         <p className="text-xs text-gray-400 mt-1">
                           {dispute.subject}
@@ -358,7 +365,7 @@ const AdminDisputeDashboard = () => {
                         <div className="flex items-center gap-2">
                           <User className="w-4 h-4 text-blue-500" />
                           <span className="text-sm text-gray-900">
-                            {dispute.clientName}
+                            {dispute.client}
                           </span>
                           <span className="text-xs bg-blue-100 text-blue-700 px-1 rounded">
                             Client
@@ -367,7 +374,7 @@ const AdminDisputeDashboard = () => {
                         <div className="flex items-center gap-2">
                           <User className="w-4 h-4 text-purple-500" />
                           <span className="text-sm text-gray-900">
-                            {dispute.freelancerName}
+                            {dispute.freelancer}
                           </span>
                           <span className="text-xs bg-purple-100 text-purple-700 px-1 rounded">
                             Freelancer
@@ -377,14 +384,15 @@ const AdminDisputeDashboard = () => {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="space-y-2">
-                        {getStatusBadge(dispute.status)}
+                        {dispute.status}
+                        {/* {getStatusBadge(dispute.status)} */}
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center gap-1">
                         <DollarSign className="w-4 h-4 text-gray-400" />
                         <span className="text-sm font-medium text-gray-900">
-                          {dispute.amount.toLocaleString()}
+                          {dispute.total_price}
                         </span>
                       </div>
                     </td>
@@ -393,15 +401,15 @@ const AdminDisputeDashboard = () => {
                         <div className="flex items-center gap-1">
                           <Calendar className="w-3 h-3 text-gray-400" />
                           <span className="text-xs text-gray-500">
-                            {dispute.createdAt}
+                            Created at: {dispute.created_at}
                           </span>
                         </div>
-                        <p className="text-xs text-gray-400">
+                        {/* <p className="text-xs text-gray-400">
                           Age: {dispute.age}
-                        </p>
-                        <p className="text-xs text-gray-400">
+                        </p> */}
+                        {/* <p className="text-xs text-gray-400">
                           Last: {dispute.lastActivity}
-                        </p>
+                        </p> */}
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right">

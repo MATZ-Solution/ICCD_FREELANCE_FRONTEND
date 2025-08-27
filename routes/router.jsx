@@ -77,11 +77,12 @@ import { ProjectDetail } from '../src/pages/projectDetail';
 import TestingComponents from "../src/pages/testingComponent";
 import Manage_freelancers from "../src/pages/superadmin_dashboard/manage_freelancers";
 import Manage_gigs from "../src/pages/superadmin_dashboard/manage_gigs";
-import DisputesList from "../src/component/client_order/DisputesList"
-
-import DisputeDetailPage from "../src/component/client_order/DisputeDetailPage"
+import DisputeDetailPageClient from "../src/component/client_order/DisputeDetailPageClient";
 import AdminManageDisputes from "../src/pages/superadmin_dashboard/manage_disputes";
 import DisputeDetailView from "../src/component/super_admin/DisputeDetailView";
+import ClientDisputeLists from "../src/component/client_order/ClientDisputesList";
+import FreelancerDisputeLists from "../src/pages/freelancer_dashboard/FreelancerDisputeLists";
+import DisputeDetailPageFreelancer from "../src/pages/freelancer_dashboard/DisputeDetailPageFreelancer";
 
 const stripePromise = loadStripe("pk_test_51QCl1eCDh3RtIJ6XkYcN5vHd3KTO2f8enRSNv9Wx7Li0iCI7cr9khTDQx0vS5RmbazZoaECNW83FesOMwLeIgMLb00BJG4pPZR");
 
@@ -333,7 +334,7 @@ export const router = createBrowserRouter([
     element: withSuspense(
       <AuthRoute>
           <MainTemplate isShowFooter={true}>
-            <DisputesList />
+            <FreelancerDisputeLists />
           </MainTemplate>
       </AuthRoute>
     ),
@@ -343,7 +344,7 @@ export const router = createBrowserRouter([
     element: withSuspense(
       <AuthRoute>
           <MainTemplate isShowFooter={true}>
-            <DisputeDetailPage />
+            <DisputeDetailPageFreelancer />
           </MainTemplate>
       </AuthRoute>
     ),
@@ -666,9 +667,19 @@ export const router = createBrowserRouter([
     element: withSuspense(
       // <AuthRoute>
         <MainTemplate isShowFooter={false}>
-          <DisputesList />
+          <ClientDisputeLists />
         </MainTemplate>
       // </AuthRoute>
+    ),
+  },
+      {
+    path: "/client/Disputes/:id",
+    element: withSuspense(
+      <AuthRoute>
+          <MainTemplate isShowFooter={true}>
+            <DisputeDetailPageClient />
+          </MainTemplate>
+      </AuthRoute>
     ),
   },
   {
@@ -684,21 +695,21 @@ export const router = createBrowserRouter([
     {
     path: "/superadmin/manage-disputes",
     element: withSuspense(
-      // <AuthRoute>
+      <AuthRoute>
         <MainTemplate isShowFooter={false}>
           <AdminManageDisputes />
         </MainTemplate>
-      // </AuthRoute>
+      </AuthRoute>
     ),
   },
     {
     path: "/superadmin/admindisputedetail/:id",
     element: withSuspense(
-      // <AuthRoute>
+      <AuthRoute>
         <MainTemplate isShowFooter={false}>
           <DisputeDetailView />
         </MainTemplate>
-      // </AuthRoute>
+      </AuthRoute>
     ),
   },
 

@@ -13,8 +13,19 @@ import {
   X,
   Upload,
 } from "lucide-react";
+import { useGetDisputeById } from "../../../api/client/dispute";
+import { useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
-const DisputeDetailPage = () => {
+const DisputeDetailPageClient = () => {
+
+  const { id } = useParams()
+  const pathName = useLocation().pathname
+  const { data, isSuccess, isPending, isError, isLoading } = useGetDisputeById(id)
+  const userType = pathName.includes("client") ? 'client' : 'freelancer'
+
+  console.log("dispute detail data: ", data)
+
   const [quickReply, setQuickReply] = useState("");
   const [settlementAmount, setSettlementAmount] = useState("");
   const [settlementMessage, setSettlementMessage] = useState("");
@@ -203,6 +214,8 @@ const DisputeDetailPage = () => {
   const canProposeSettlement =
     dispute.status === "Open" || dispute.status === "In Review";
 
+  if (isPending) return 'Loading'
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -219,14 +232,14 @@ const DisputeDetailPage = () => {
               <div>
                 <div className="flex items-center gap-3 mb-1">
                   <h1 className="text-xl sm:text-2xl font-bold text-gray-900">
-                    Dispute {dispute.id}
+                    Dispute ID : {data[0]?.id}
                   </h1>
-                  {getStatusBadge(dispute.status)}
+                  {getStatusBadge(data[0]?.status)}
                 </div>
                 <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6 text-sm text-gray-500">
-                  <span>Order: {dispute.orderRef}</span>
-                  <span>Created: {dispute.createdAt}</span>
-                  <span>Last Activity: {dispute.lastActivity}</span>
+                  <span>Order: {data[0]?.orderId}</span>
+                  <span>Created at : {data[0]?.created_at}</span>
+                  {/* <span>Last Activity: {dispute.lastActivity}</span> */}
                 </div>
               </div>
             </div>
@@ -246,42 +259,42 @@ const DisputeDetailPage = () => {
               <div className="space-y-4">
                 <div>
                   <h3 className="font-medium text-gray-900 mb-2">
-                    {dispute.order.title}
+                    {data[0]?.title}
                   </h3>
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm">
                     <div>
                       <span className="text-gray-500">Total Amount</span>
                       <p className="font-semibold text-gray-900">
-                        ${dispute.order.totalAmount}
+                        ${data[0]?.total_price}
                       </p>
                     </div>
                     <div>
                       <span className="text-gray-500">Paid Amount</span>
                       <p className="font-semibold text-green-600">
-                        ${dispute.order.paidAmount}
+                        ${data[0]?.total_price}
                       </p>
                     </div>
                     <div>
                       <span className="text-gray-500">Escrow Amount</span>
                       <p className="font-semibold text-blue-600">
-                        ${dispute.order.escrowAmount}
+                        ${data[0]?.total_price}
                       </p>
                     </div>
                     <div>
                       <span className="text-gray-500">Order ID</span>
                       <p className="font-semibold text-gray-900">
-                        {dispute.orderRef}
+                        {data[0]?.orderId}
                       </p>
                     </div>
                     <div>
                       <span className="text-gray-500">Gig ID</span>
                       <p className="font-semibold text-gray-900">
-                        GIG-2024-001
+                        {data[0]?.gigId}
                       </p>
                     </div>
                   </div>
                 </div>
-             
+
               </div>
             </div>
 
@@ -294,16 +307,16 @@ const DisputeDetailPage = () => {
                 <div>
                   <h4 className="font-medium text-gray-900 mb-2">Subject</h4>
                   <p className="text-sm text-gray-600">
-                    {dispute.messages[0]?.message.substring(0, 50) + "..." ||
+                    {data[0]?.subject.substring(0, 50) + "..." ||
                       "Dispute regarding project deliverables"}
                   </p>
                 </div>
                 <div>
                   <h4 className="font-medium text-gray-900 mb-2">
-                    Initial Message
+                    Reason
                   </h4>
                   <p className="text-sm text-gray-600">
-                    {dispute.messages[0]?.message ||
+                    {data[0]?.reason ||
                       "No initial message available"}
                   </p>
                 </div>
@@ -323,23 +336,28 @@ const DisputeDetailPage = () => {
               <h2 className="text-lg font-semibold text-gray-900 mb-4">
                 Evidence
               </h2>
-              {dispute.evidence.length > 0 ? (
+              {data[0]?.disputeFiles?.split(",").length > 0 ? (
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                  {dispute.evidence.map((evidence) => (
+                  {data[0]?.disputeFiles.split(",").map((evidence, index) => (
                     <div
-                      key={evidence.id}
+                      key={index}
                       className="border border-gray-200 rounded-lg p-3 hover:border-gray-300 transition-colors"
                     >
                       <div className="aspect-square bg-gray-100 rounded-lg mb-3 flex items-center justify-center overflow-hidden">
-                        {evidence.type === "image" ? (
+                        <img
+                          src={evidence}
+                          // alt={evidence.name}
+                          className="w-full h-full object-cover"
+                        />
+                        {/* {evidence.type === "image" ? (
                           <img
-                            src={evidence.thumbnail}
-                            alt={evidence.name}
+                            src={evidence}
+                            // alt={evidence.name}
                             className="w-full h-full object-cover"
                           />
                         ) : (
                           <Paperclip className="w-8 h-8 text-gray-400" />
-                        )}
+                        )} */}
                       </div>
                       <div className="text-sm">
                         <p className="font-medium text-gray-900 truncate">
@@ -366,28 +384,31 @@ const DisputeDetailPage = () => {
           </div>
 
           {/* Right Column - Chat & Actions */}
+
           <div className="space-y-6">
             {/* Actions */}
-            <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-              <h2 className="text-sm p-2 font-semibold text-red-600 bg-red-50 mb-4">
-                You have only 7 days left to respond to this dispute. If no
-                response is submitted, the decision will be made based on the
-                available information, which may weaken your case.
-              </h2>
+            {(data[0]?.raised_by !== userType) && (
+              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                <h2 className="text-sm p-2 font-semibold text-red-600 bg-red-50 mb-4">
+                  You have only 7 days left to respond to this dispute. If no
+                  response is submitted, the decision will be made based on the
+                  available information, which may weaken your case.
+                </h2>
 
-              <div className="space-y-3">
-                {canProposeSettlement && (
-                  <button
-                    onClick={() => setShowSettlementModal(true)}
-                    className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-                    aria-label="Propose a settlement"
-                  >
-                    <Scale className="w-4 h-4" />
-                    Response To The Dispute
-                  </button>
-                )}
+                <div className="space-y-3">
+                  {canProposeSettlement && (
+                    <button
+                      onClick={() => setShowSettlementModal(true)}
+                      className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                      aria-label="Propose a settlement"
+                    >
+                      <Scale className="w-4 h-4" />
+                      Response To The Dispute
+                    </button>
+                  )}
+                </div>
               </div>
-            </div>
+            )}
             {/* Chat Thread */}
             <div className="bg-white rounded-lg shadow-sm border border-gray-200">
               <div className="p-4 border-b border-gray-200">
@@ -399,40 +420,36 @@ const DisputeDetailPage = () => {
                 {dispute.messages.map((message) => (
                   <div
                     key={message.id}
-                    className={`flex gap-3 ${
-                      message.sender === dispute.userRole
-                        ? "flex-row-reverse"
-                        : ""
-                    }`}
+                    className={`flex gap-3 ${message.sender === dispute.userRole
+                      ? "flex-row-reverse"
+                      : ""
+                      }`}
                   >
                     <div
-                      className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
-                        message.isAdmin
-                          ? "bg-red-100 text-red-700"
-                          : message.sender === "client"
+                      className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${message.isAdmin
+                        ? "bg-red-100 text-red-700"
+                        : message.sender === "client"
                           ? "bg-blue-100 text-blue-700"
                           : "bg-purple-100 text-purple-700"
-                      }`}
+                        }`}
                     >
                       {message.isAdmin
                         ? "A"
                         : message.sender === "client"
-                        ? "C"
-                        : "F"}
+                          ? "C"
+                          : "F"}
                     </div>
                     <div
-                      className={`flex-1 max-w-xs ${
-                        message.sender === dispute.userRole
-                          ? "items-end"
-                          : "items-start"
-                      } flex flex-col`}
+                      className={`flex-1 max-w-xs ${message.sender === dispute.userRole
+                        ? "items-end"
+                        : "items-start"
+                        } flex flex-col`}
                     >
                       <div
-                        className={`p-3 rounded-lg ${
-                          message.sender === dispute.userRole
-                            ? "bg-blue-600 text-white"
-                            : "bg-gray-100 text-gray-900"
-                        }`}
+                        className={`p-3 rounded-lg ${message.sender === dispute.userRole
+                          ? "bg-blue-600 text-white"
+                          : "bg-gray-100 text-gray-900"
+                          }`}
                       >
                         <p className="text-sm">{message.message}</p>
                       </div>
@@ -549,4 +566,4 @@ const DisputeDetailPage = () => {
   );
 };
 
-export default DisputeDetailPage;
+export default DisputeDetailPageClient;
