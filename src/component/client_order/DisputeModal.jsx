@@ -3,6 +3,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { AlertTriangle, Upload, X } from "lucide-react";
 import { useAddDispute } from "../../../api/client/dispute";
+
 const schema = yup.object().shape({
   subject: yup.string().required("Subject is required"),
   reason: yup.string().required("Reason is required"),
@@ -26,7 +27,6 @@ export const DisputeModal = ({ onClose, orderDetails }) => {
     },
   });
 
-  console.log("orderDetails: ", orderDetails)
   const { addDispute, isSuccess, isPending, isError, error } = useAddDispute()
   
   const onFormSubmit = (data) => {
