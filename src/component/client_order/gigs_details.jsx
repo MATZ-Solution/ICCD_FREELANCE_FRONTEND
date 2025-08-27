@@ -6,24 +6,40 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import ICCDLoader from "../loader";
 import GigCarousel from "./GigCarousel"; // Make sure the path is correct
-import { useGetGigsPackages } from "../../../api/client/gigs";
 
 export default function ServicePage() {
   const [activeNavTab, setActiveNavTab] = useState("Basic");
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const userDetails = useSelector((state) => state.user.userDetails);
 
   const { id } = useParams();
   const { data, isLoading } = useGetSingleGigs(id);
-  console.log("id", id);
 
   const gig = data?.[0];
   const gigInfo = gig?.gigsDescription;
   const freelancer = gig?.freelancerDetails;
 
-  const selectedPackage = data?.[0]?.packagesDetails?.find(
+  // ✅ Dummy reviews (replace with API later if needed)
+  const reviews = [
+    {
+      clientName: "Ali Khan",
+      clientPic: "https://i.pravatar.cc/50?u=1",
+      rating: 5,
+      comment: "Amazing work! Delivered on time.",
+      date: "2025-08-10",
+    },
+    {
+      clientName: "Sara Ahmed",
+      clientPic: "https://i.pravatar.cc/50?u=2",
+      rating: 4,
+      comment: "Good quality, but communication can improve.",
+      date: "2025-08-15",
+    },
+  ];
+
+  const selectedPackage = gig?.packagesDetails?.find(
     (pkg) => pkg?.packageType?.toLowerCase() === activeNavTab.toLowerCase()
   );
 
@@ -34,6 +50,7 @@ export default function ServicePage() {
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Main Content */}
         <div className="lg:col-span-2 space-y-8">
+          {/* Gig Title & Freelancer */}
           <div>
             <h1 className="text-2xl font-bold text-gray-900 mb-4">
               {gigInfo?.gigsTitle}
@@ -48,13 +65,14 @@ export default function ServicePage() {
                 <h2 className="text-xl font-semibold">
                   {freelancer?.freelancerName}
                 </h2>
-                {/* <p className="text-gray-500">UI Designers</p> */}
               </div>
             </div>
           </div>
 
+          {/* Gig Images */}
           <GigCarousel images={gigInfo?.gigsFiles?.split(",")} />
 
+          {/* About Gig */}
           <div className="bg-white border border-gray-200 rounded-xl shadow-sm p-6">
             <h3 className="text-2xl font-bold mb-4">About this Gig</h3>
             <h4 className="text-xl font-semibold mb-2">{gigInfo?.gigsTitle}</h4>
@@ -63,6 +81,7 @@ export default function ServicePage() {
             </p>
           </div>
 
+          {/* Freelancer Info */}
           <div className="bg-white border border-gray-200 rounded-xl shadow-sm p-6">
             <h3 className="text-2xl font-bold mb-4">
               Get To Know {freelancer?.freelancerName}
@@ -78,9 +97,6 @@ export default function ServicePage() {
                   {freelancer?.freelancerName}
                 </h4>
                 <div className="flex flex-wrap gap-2 my-2">
-                  {/* <span className="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm">
-                    UI Designer
-                  </span> */}
                   <span className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">
                     {freelancer?.FreelancerLanguages}
                   </span>
@@ -90,6 +106,49 @@ export default function ServicePage() {
                 </p>
               </div>
             </div>
+          </div>
+
+          {/* ✅ Reviews Section */}
+          <div className="bg-white border border-gray-200 rounded-xl shadow-sm p-6">
+            <h3 className="text-2xl font-bold mb-4">Reviews</h3>
+
+            {reviews.length > 0 ? (
+              <div className="space-y-6">
+                {reviews.map((review, index) => (
+                  <div key={index} className="border-b pb-4">
+                    <div className="flex items-center gap-3 mb-2">
+                      <img
+                        src={review.clientPic || "/placeholder.svg"}
+                        alt={review.clientName}
+                        className="w-10 h-10 rounded-full object-cover"
+                      />
+                      <div>
+                        <p className="font-semibold">{review.clientName}</p>
+                        <div className="flex">
+                          {[1, 2, 3, 4, 5].map((star) => (
+                            <svg
+                              key={star}
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 20 20"
+                              fill={star <= review.rating ? "gold" : "lightgray"}
+                              className="w-4 h-4"
+                            >
+                              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.2 3.674a1 1 0 00.95.69h3.862c.969 0 1.371 1.24.588 1.81l-3.125 2.27a1 1 0 00-.364 1.118l1.2 3.674c.3.921-.755 1.688-1.54 1.118L10 13.347l-3.125 2.27c-.785.57-1.84-.197-1.54-1.118l1.2-3.674a1 1 0 00-.364-1.118L3.046 9.101c-.783-.57-.38-1.81.588-1.81h3.862a1 1 0 00.95-.69l1.2-3.674z" />
+                            </svg>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                    <p className="text-gray-700">{review.comment}</p>
+                    <p className="text-xs text-gray-400 mt-1">
+                      {new Date(review.date).toLocaleDateString()}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-gray-500">No reviews yet.</p>
+            )}
           </div>
         </div>
 
@@ -122,10 +181,15 @@ export default function ServicePage() {
                       description={selectedPackage.packageDescription}
                       deliverytime={selectedPackage.deliveryTime}
                       Revisions={selectedPackage.revisions}
-                      packagesJson={selectedPackage.packages} />
+                      packagesJson={selectedPackage.packages}
+                    />
 
                     <button
-                      onClick={() => userDetails === null ? navigate("/login") : setIsModalOpen(true)}
+                      onClick={() =>
+                        userDetails === null
+                          ? navigate("/login")
+                          : setIsModalOpen(true)
+                      }
                       className="mt-4 w-full bg-black text-white py-2 rounded-lg hover:bg-gray-800 transition duration-200"
                     >
                       Continue
@@ -142,6 +206,7 @@ export default function ServicePage() {
           </div>
         </div>
       </div>
+
       {/* Order Options Modal */}
       {selectedPackage && (
         <OrderOptions

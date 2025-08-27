@@ -2,18 +2,16 @@ import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { AlertTriangle, Upload, X } from "lucide-react";
+import { useAddDispute } from "../../../api/client/dispute";
 
-// ✅ Yup Schema
 const schema = yup.object().shape({
   subject: yup.string().required("Subject is required"),
   reason: yup.string().required("Reason is required"),
-  settlementOffer: yup.string().optional(), // optional
-  proof: yup.mixed().optional(),            // optional
+  settlementOffer: yup.string().optional(),
+  proof: yup.array().optional(), // array of files
 });
-import { useAddDispute } from "../../../api/client/dispute";
 
-
-export const DisputeModal = ({ onClose, onSubmit, orderDetails, setOrderDetails }) => {
+export const DisputeModal = ({ onClose, orderDetails }) => {
   const {
     handleSubmit,
     control,
@@ -25,25 +23,30 @@ export const DisputeModal = ({ onClose, onSubmit, orderDetails, setOrderDetails 
       subject: "",
       reason: "",
       settlementOffer: "",
-      proof: null,
+      proof: [],
     },
   });
 
-  console.log("orderDetails: ", orderDetails)
-  const {addDispute, isSuccess, isPending, isError, error } = useAddDispute()
+  const { addDispute, isSuccess, isPending, isError, error } = useAddDispute();
+
   const onFormSubmit = (data) => {
-    const datas = { ...orderDetails, ...data }
+    const datas = { ...orderDetails, ...data };
     const formData = new FormData();
-    {
-      (data.proof && data.proof.length > 0) && data.proof?.forEach((img) => {
-        if (img.file) formData.append("files", img.file);
+
+    // Append multiple files
+    if (data.proof && data.proof.length > 0) {
+      data.proof.forEach((file) => {
+        if (file) formData.append("files", file);
       });
     }
+
+    // Append other data
     for (const key in datas) {
       if (typeof datas[key] !== "object") {
-        formData.append(key, datas[key])
+        formData.append(key, datas[key]);
       }
     }
+
     addDispute(formData);
   };
 
@@ -56,9 +59,7 @@ export const DisputeModal = ({ onClose, onSubmit, orderDetails, setOrderDetails 
             <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
               <AlertTriangle className="w-5 h-5 text-red-600" />
             </div>
-            <h2 className="text-2xl font-semibold text-gray-900">
-              Raise a Dispute
-            </h2>
+            <h2 className="text-2xl font-semibold text-gray-900">Raise a Dispute</h2>
           </div>
           <button
             onClick={onClose}
@@ -78,16 +79,13 @@ export const DisputeModal = ({ onClose, onSubmit, orderDetails, setOrderDetails 
             <input
               {...register("subject")}
               type="text"
-              className={`w-full border-2 rounded-xl px-4 py-3 text-sm focus:outline-none transition-colors ${errors.subject
-                ? "border-red-500"
-                : "border-gray-200 focus:border-red-500"
-                }`}
+              className={`w-full border-2 rounded-xl px-4 py-3 text-sm focus:outline-none transition-colors ${
+                errors.subject ? "border-red-500" : "border-gray-200 focus:border-red-500"
+              }`}
               placeholder="Brief description of the issue"
             />
             {errors.subject && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.subject.message}
-              </p>
+              <p className="text-red-500 text-sm mt-1">{errors.subject.message}</p>
             )}
           </div>
 
@@ -103,18 +101,15 @@ export const DisputeModal = ({ onClose, onSubmit, orderDetails, setOrderDetails 
                 <textarea
                   {...field}
                   rows={5}
-                  className={`w-full border-2 rounded-xl px-4 py-3 text-sm focus:outline-none transition-colors resize-none ${errors.reason
-                    ? "border-red-500"
-                    : "border-gray-200 focus:border-red-500"
-                    }`}
+                  className={`w-full border-2 rounded-xl px-4 py-3 text-sm focus:outline-none transition-colors resize-none ${
+                    errors.reason ? "border-red-500" : "border-gray-200 focus:border-red-500"
+                  }`}
                   placeholder="Please provide a detailed explanation of your concern..."
                 ></textarea>
               )}
             />
             {errors.reason && (
-              <p className="text-red-500 text-sm mt-1">
-                {errors.reason.message}
-              </p>
+              <p className="text-red-500 text-sm mt-1">{errors.reason.message}</p>
             )}
           </div>
 
@@ -134,7 +129,7 @@ export const DisputeModal = ({ onClose, onSubmit, orderDetails, setOrderDetails 
             </p>
           </div>
 
-          {/* Supporting Evidence (Optional) */}
+          {/* Supporting Evidence (Dynamic Upload) */}
           <div>
             <label className="block text-sm font-semibold text-gray-900 mb-2">
               Supporting Evidence (Optional)
@@ -142,25 +137,65 @@ export const DisputeModal = ({ onClose, onSubmit, orderDetails, setOrderDetails 
             <Controller
               name="proof"
               control={control}
-              render={({ field }) => (
-                <div className="border-2 border-dashed border-gray-200 rounded-xl p-6 text-center hover:border-red-300 transition-colors">
-                  <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-                  <p className="text-sm text-gray-600 mb-2">
-                    Upload screenshots, documents, or other proof
-                  </p>
-                  <input
-                    type="file"
-                    accept=".jpg,.jpeg,.png,.pdf,.doc,.docx"
-                    onChange={(e) => field.onChange(e.target.files[0])}
-                    className="text-sm text-gray-600"
-                  />
-                  {field.value && (
-                    <p className="mt-2 text-sm text-gray-700">
-                      {field.value.name}
-                    </p>
-                  )}
-                </div>
-              )}
+              render={({ field }) => {
+                const maxFiles = 5;
+
+                const handleFileChange = (e, index) => {
+                  const file = e.target.files[0];
+                  if (!file) return;
+                  const updatedFiles = field.value ? [...field.value] : [];
+                  updatedFiles[index] = file;
+                  field.onChange(updatedFiles);
+                };
+
+                const handleRemove = (index) => {
+                  const updatedFiles = [...(field.value || [])];
+                  updatedFiles.splice(index, 1);
+                  field.onChange(updatedFiles);
+                };
+
+                // Add an empty slot if less than max
+                const filesToShow = field.value ? [...field.value] : [];
+                if (filesToShow.length < maxFiles) filesToShow.push(null);
+
+                return (
+                  <div className="flex gap-2 flex-wrap">
+                    {filesToShow.map((file, idx) => (
+                      <div key={idx} className="relative w-24 h-24">
+                        <label className="w-full h-full border-2 border-dashed border-gray-200 rounded-xl flex items-center justify-center cursor-pointer overflow-hidden hover:border-red-300 transition-colors">
+                          {file ? (
+                            <>
+                              <img
+                                src={URL.createObjectURL(file)}
+                                alt="preview"
+                                className="w-full h-full object-cover"
+                              />
+                              <button
+                                type="button"
+                                onClick={() => handleRemove(idx)}
+                                className="absolute top-1 right-1 bg-white rounded-full p-1 shadow"
+                              >
+                                <X className="w-4 h-4 text-red-600" />
+                              </button>
+                            </>
+                          ) : (
+                            <div className="flex flex-col items-center justify-center text-gray-400">
+                              <Upload className="w-6 h-6 mb-1" />
+                              <span className="text-xs">Upload</span>
+                            </div>
+                          )}
+                          <input
+                            type="file"
+                            accept=".jpg,.jpeg,.png,.pdf,.doc,.docx"
+                            className="hidden"
+                            onChange={(e) => handleFileChange(e, idx)}
+                          />
+                        </label>
+                      </div>
+                    ))}
+                  </div>
+                );
+              }}
             />
           </div>
 

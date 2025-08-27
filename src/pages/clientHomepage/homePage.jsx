@@ -34,12 +34,12 @@ export default function ClientHomepage() {
   }
 
   // to set freelancer details in redux
-  const { data, isSuccess, isPending } = useCheckIsFreelancer();
+  const { data } = useCheckIsFreelancer();
   useEffect(() => {
     if (data && data.length > 0) {
       dispatch(getUserProfile(data[0]));
     }
-  }, [data]);
+  }, [data, dispatch]);
 
   if (isLoading) return <ICCDLoader />;
 
@@ -52,6 +52,13 @@ export default function ClientHomepage() {
       month: "short",
       day: "numeric",
     });
+  };
+
+  // Helper to calculate average rating
+  const getAverageRating = (reviews = []) => {
+    if (!reviews.length) return 0;
+    const total = reviews.reduce((acc, r) => acc + (r.rating || 0), 0);
+    return (total / reviews.length).toFixed(1); // e.g. 4.5
   };
 
   return (
@@ -82,22 +89,27 @@ export default function ClientHomepage() {
           </h1>
           {/* Gig Cards Section */}
           <div className="mt-6 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {gigs?.map((gig) => (
-              <GigCard
-                key={gig.id}
-                onClick={() => navigate(`/client/gigs/gigs_details/${gig.id}`)}
-                image={gig.fileUrls ? gig.fileUrls.split(",")[0] : ""}
-                title={gig.title}
-                author={`${gig.firstName} ${gig.lastName}`}
-                authorImg={gig.freelancerImg}
-                level="Level 2++"
-                rating={4.7} // could be dynamic if you have rating
-                reviews={187} // could be dynamic
-                price={gig.price || 0} // dynamic price
-                created_at={formatDate(gig.created_at)}
-                offersVideoConsultation={true}
-              />
-            ))}
+            {gigs?.map((gig) => {
+              const avgRating = getAverageRating(gig.reviews || []);
+              const totalReviews = gig.reviews ? gig.reviews.length : 0;
+
+              return (
+                <GigCard
+                  key={gig.id}
+                  onClick={() => navigate(`/client/gigs/gigs_details/${gig.id}`)}
+                  image={gig.fileUrls ? gig.fileUrls.split(",")[0] : ""}
+                  title={gig.title}
+                  author={`${gig.firstName} ${gig.lastName}`}
+                  authorImg={gig.freelancerImg}
+                  level="Level 2++"
+                  rating={avgRating} // ✅ Dynamic rating
+                  reviews={totalReviews} // ✅ Dynamic total reviews
+                  price={gig.price || 0} // dynamic price
+                  created_at={formatDate(gig.created_at)}
+                  offersVideoConsultation={true}
+                />
+              );
+            })}
           </div>
         </main>
       </div>
