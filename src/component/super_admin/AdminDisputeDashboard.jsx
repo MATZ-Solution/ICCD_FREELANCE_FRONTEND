@@ -99,8 +99,8 @@ const AdminDisputeDashboard = () => {
   ]);
 
   const navigate = useNavigate();
-  const handleviewdetail = () => {
-    navigate(`/superadmin/admindisputedetail/${data[0]?.id}`);
+  const handleviewdetail = (id) => {
+    navigate(`/superadmin/admindisputedetail/${id}`);
   };
   const getStatusBadge = (status) => {
     const statusConfig = {
@@ -414,7 +414,7 @@ const AdminDisputeDashboard = () => {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-right">
                       <button
-                        onClick={handleviewdetail}
+                        onClick={() => handleviewdetail(dispute?.id)}
                         className="inline-flex items-center gap-1 px-3 py-1 bg-blue-100 text-blue-700 text-sm rounded-lg hover:bg-blue-200 transition-colors"
                       >
                         <Eye className="w-3 h-3" />

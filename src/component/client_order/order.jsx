@@ -18,30 +18,36 @@ import { Modal } from "./Modal";
 import { DisputeModal } from "./DisputeModal";
 import { useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
+import ReviewModal from "../ReviewModal";
 
 function ClientOrders() {
-
   const [showCompleteModal, setShowCompleteModal] = useState(false);
   const [showTransferModal, setShowTransferModal] = useState(false);
   const [showDisputeModal, setShowDisputeModal] = useState(false);
+  const [showReviewModal, setshowReviewModal] = useState(false);
+
   const [selectedOrderId, setSelectedOrderId] = useState(null);
   const [completedOrders, setCompletedOrders] = useState([]);
+  const [review, setReview] = useState();
   const [disputedOrders, setDisputedOrders] = useState([]);
   const [search, setSearch] = useState("");
-  const pathName = useLocation().pathname
+  const pathName = useLocation().pathname;
 
-  const [orderDetails, setOrderDetails] = useState("")
+  const [orderDetails, setOrderDetails] = useState("");
   const { data, isError, isLoading } = useGetOrderByClient({
     search,
   });
   console.log("data order:", data);
 
-
-
   const handleView = (id) => {
     console.log("Viewing order:", id);
     // navigate to order details
   };
+
+const handleReviewSubmit = (data) => {
+  console.log("✅ Review Submitted:", data);
+  alert("Thank you for your feedback!");
+};
 
 
   const client = useSelector((state) => state.user.userDetails);
@@ -74,6 +80,7 @@ function ClientOrders() {
   const handleTransferConfirm = () => {
     setShowTransferModal(false);
     setCompletedOrders((prev) => [...prev, selectedOrderId]);
+    setshowReviewModal(true);
     alert("Order completed and payment transferred successfully!");
   };
 
@@ -134,7 +141,9 @@ function ClientOrders() {
               <div className="p-2 bg-white/20 rounded-lg backdrop-blur-sm">
                 <Package className="w-6 h-6 text-white" />
               </div>
-              <h1 className="text-3xl font-bold text-white">Order Management</h1>
+              <h1 className="text-3xl font-bold text-white">
+                Order Management
+              </h1>
             </div>
             <p className="text-blue-100 text-lg">
               Track And Manage Your Orders
@@ -152,9 +161,7 @@ function ClientOrders() {
                 className="w-72 h-10 p-2 pr-10 rounded-md border border-gray-500 bg-white focus:outline-none focus:ring-2 focus:ring-blue-300"
               />
               <SearchIcon className="absolute top-2.5 right-2.5 text-gray-400" />
-
             </div>
-
           </div>
         </div>
 
@@ -176,7 +183,7 @@ function ClientOrders() {
                     <div className="flex-shrink-0">
                       <div className="w-full xl:w-48 h-32 rounded-xl overflow-hidden bg-gray-100">
                         <img
-                          src={item.gigsImage.split(',')[0]}
+                          src={item.gigsImage.split(",")[0]}
                           alt="Order preview"
                           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
                           onError={(e) => {
@@ -249,6 +256,7 @@ function ClientOrders() {
                               <span>Complete Order</span>
                             </>
                           </button>
+
                           {/* <button
                             type="button"
                             onClick={(e) => {
@@ -343,6 +351,15 @@ function ClientOrders() {
             setOrderDetails={setOrderDetails}
           />
         )}
+
+       {showReviewModal && (
+  <ReviewModal
+    isOpen={showReviewModal}
+    onClose={() => setshowReviewModal(false)}
+    onSubmit={handleReviewSubmit}
+  />
+)}
+
       </div>
     </div>
   );

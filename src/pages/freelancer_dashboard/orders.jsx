@@ -8,6 +8,7 @@ import OrderModal from "../../component/OrderModal";
 import { Search, MoreVertical, Eye, Package, DollarSign } from "lucide-react";
 import { CheckCircle, AlertTriangle, Clock, Star } from "lucide-react";
 import { DisputeModal } from "../../component/client_order/DisputeModal";
+import ReviewModal from "../../component/ReviewModal";
 
 function Orders() {
   const [search, setSearch] = useState("");
@@ -41,7 +42,17 @@ function Orders() {
     });
     alert("Dispute has been raised successfully!");
   };
+  const [showReviewModal, setShowReviewModal] = useState(false);
 
+
+  const handleReviewSubmit = (reviewData) => {
+    setShowReviewModal(false);
+    console.log("✅ Review submitted:", {
+      orderId: selectedOrderId,
+      ...reviewData,
+    });
+    alert("Thank you for your review!");
+  };
   const handleAction = (order, type) => {
     setSelectedOrder(order);
     setModalType(type);
@@ -58,6 +69,8 @@ function Orders() {
   const handleConfirmAction = () => {
     if (modalType === "deliver") {
       setDeliveredOrders((prev) => [...prev, selectedOrder?.id]);
+      setShowReviewModal(true);
+
     } else if (modalType === "dispute") {
       setSelectedOrderId(selectedOrder?.id);
       setShowDisputeModal(true);
@@ -372,6 +385,13 @@ function Orders() {
         <DisputeModal
           onClose={() => setShowDisputeModal(false)}
           onSubmit={handleDisputeSubmit}
+        />
+      )}
+        {showReviewModal && (
+        <ReviewModal
+          isOpen={showReviewModal}
+          onClose={() => setShowReviewModal(false)}
+          onSubmit={handleReviewSubmit}
         />
       )}
     </div>

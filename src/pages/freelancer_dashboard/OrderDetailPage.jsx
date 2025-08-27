@@ -95,12 +95,12 @@ export default function OrderDetailPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#043A53] via-[#065f73] to-[#3C939D] flex flex-col items-center py-6 px-2 sm:px-4 md:px-6 lg:px-8">
+    <div className="min-h-screen bg-white flex flex-col items-center py-6 px-2 sm:px-4 md:px-6 lg:px-8">
       <div className="w-full max-w-5xl">
-        <h1 className="text-3xl sm:text-4xl font-extrabold mb-2 text-center text-white">
+        <h1 className="text-3xl sm:text-4xl font-extrabold mb-2 text-center text-black">
           Order Details
         </h1>
-        <p className="text-base sm:text-lg text-white/90 mb-6 sm:mb-8 text-center">
+        <p className="text-base sm:text-lg text-black/90 mb-6 sm:mb-8 text-center">
           Comprehensive overview of your project order.
         </p>
 
