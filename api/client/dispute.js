@@ -7,23 +7,51 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 export function useAddDispute() {
-    const { mutate: addDispute, isSuccess, isPending, isError, error } = useMutation({
-        mutationFn: async (data) =>
-            await api.post(`${API_ROUTE.dispute.addDispute}`, data, {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                    Authorization: api.defaults.headers.common["Authorization"],
-                },
-                timeout: 30000,
-            }),
-        onSuccess: (data) => {
-            toast.success("Dispute Added successfully!")
+  const queryClient = useQueryClient();
+  const { mutate: addDispute, isSuccess, isPending, isError, error } = useMutation({
+    mutationFn: async (data) =>
+      await api.post(`${API_ROUTE.dispute.addDispute}`, data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: api.defaults.headers.common["Authorization"],
         },
-        onError: (error) => {
-            toast.error("Error In Addding Dispute!")
+        timeout: 30000,
+      }),
+    onSuccess: (data) => {
+      toast.success("Dispute Added successfully!")
+      queryClient.invalidateQueries({
+        queryKey: [API_ROUTE.order.getAllOrderByClient],
+      });
+    },
+    onError: (error) => {
+      toast.error("Error In Addding Dispute!")
+    },
+  });
+  return { addDispute, isSuccess, isPending, isError, error };
+}
+
+export function useAddDisputeResponse() {
+  const queryClient = useQueryClient();
+  const { mutate: addDisputeResponse, isSuccess, isPending, isError, error } = useMutation({
+    mutationFn: async (data) =>
+      await api.post(`${API_ROUTE.dispute.addResponseDispute}`, data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: api.defaults.headers.common["Authorization"],
         },
-    });
-    return { addDispute, isSuccess, isPending, isError, error };
+        timeout: 30000,
+      }),
+    onSuccess: (data) => {
+      toast.success("Responeded successfully!")
+      // queryClient.invalidateQueries({
+      //   queryKey: [API_ROUTE.order.getAllOrderByClient],
+      // });
+    },
+    onError: (error) => {
+      toast.error("Failed to respond Dispute!")
+    },
+  });
+  return { addDisputeResponse, isSuccess, isPending, isError, error };
 }
 
 export function useGetAllDisputeByClient(id) {
@@ -105,6 +133,7 @@ export function useGetDisputeAdminById(id) {
   });
   return {
     data: data?.data?.data,
+    responseData: data?.data?.responseData,
     isSuccess,
     isPending,
     isError,

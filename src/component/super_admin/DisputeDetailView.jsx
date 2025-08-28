@@ -37,7 +37,7 @@ const fakeDispute = {
 export default function ViewDisputeDetail() {
 
   const { id } = useParams()
-  const { data, isSuccess, isPending, isError, isLoading } = useGetDisputeAdminById(id)
+  const { data, responseData, isSuccess, isPending, isError, isLoading } = useGetDisputeAdminById(id)
   console.log("data: ", data)
 
   const { disputeRaised, disputeResponse } = fakeDispute;
@@ -139,24 +139,29 @@ export default function ViewDisputeDetail() {
         </div>
 
         {/* Freelancer Response */}
-        {disputeResponse && (
+        {(responseData && responseData?.length > 0) ? (
           <div className="mb-8 p-6 bg-gray-50 rounded-lg shadow-sm border border-gray-200">
             <h3 className="font-semibold text-xl text-gray-800 mb-4 flex items-center gap-2">
               <FileText className="w-5 h-5 text-blue-600" />
               Freelancer Response
             </h3>
-            <p className="text-gray-700 mb-2"><strong>Role:</strong> <span className="capitalize">{disputeResponse.role}</span></p>
-            <p className="text-gray-700 mb-4"><strong>Message:</strong> {disputeResponse.reply.message}</p>
-            {disputeResponse.reply.proof && (
-              <img
-                src={disputeResponse.reply.proof}
-                alt="Freelancer Proof"
-                className="mt-2 w-full max-w-md h-auto rounded-lg border border-gray-300 transform transition-all duration-300 hover:scale-105"
-              />
+            <p className="text-gray-700 mb-2"><strong>Role:</strong> <span className="capitalize">{responseData[0]?.userType}</span></p>
+            <p className="text-gray-700 mb-4"><strong>Message:</strong> {responseData[0]?.message}</p>
+            {(data[0]?.disputeFilesFreelancer && data[0]?.disputeFilesFreelancer.split(",").length > 0) && (
+             data[0]?.disputeFilesFreelancer.split(",").map((item, index)=> (
+               <img
+                  src={item}
+                  alt="Freelancer Proof"
+                  className="mt-2 w-full max-w-md h-auto rounded-lg border border-gray-300 transform transition-all duration-300 hover:scale-105"
+                />
+             ))
             )}
             <p className="mt-4 text-gray-700"><strong>Settlement Proposed:</strong> {disputeResponse.reply.settlement}</p>
           </div>
-        )}
+        )
+          :
+          <p>Client Not responded</p>
+        }
 
         {/* Admin Action Panel */}
         <div className="p-6 bg-white rounded-lg shadow-sm border border-gray-200">

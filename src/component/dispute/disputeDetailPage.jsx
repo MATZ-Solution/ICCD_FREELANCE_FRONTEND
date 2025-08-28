@@ -1,12 +1,18 @@
 import React, { useState } from 'react'
 import { useLocation } from 'react-router-dom';
 import { ArrowLeft, Clock, AlertTriangle, CheckCircle, XCircle, Download, Send, Scale, X } from "lucide-react";
+import ResponseDispute from '../client_order/ResponseDispute';
 
 function DisputeDetailPage({ data }) {
 
     const pathName = useLocation().pathname
     const userType = pathName.includes("client") ? 'client' : 'freelancer'
     const [showSettlementModal, setShowSettlementModal] = useState(false)
+    const responseData = data[0]?.raised_by !== userType ? {
+        disputeId: data[0]?.id, userId: data[0]?.freelancerId,
+        client_id: data[0]?.client_id, freelancer_id: data[0]?.freelancer_id,
+        userType: userType,
+    } : null
 
     const getStatusBadge = (status) => {
         const statusConfig = {
@@ -228,14 +234,14 @@ function DisputeDetailPage({ data }) {
 
                                 <div className="space-y-3">
                                     {/* {canProposeSettlement && ( */}
-                                        <button
-                                            onClick={() => setShowSettlementModal(true)}
-                                            className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-                                            aria-label="Propose a settlement"
-                                        >
-                                            <Scale className="w-4 h-4" />
-                                            Response To The Dispute
-                                        </button>
+                                    <button
+                                        onClick={() => setShowSettlementModal(true)}
+                                        className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                                        aria-label="Propose a settlement"
+                                    >
+                                        <Scale className="w-4 h-4" />
+                                        Response To The Dispute
+                                    </button>
                                     {/* )} */}
                                 </div>
                             </div>
@@ -321,77 +327,78 @@ function DisputeDetailPage({ data }) {
 
             {/* Settlement Modal */}
             {showSettlementModal && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                    <div className="bg-white rounded-lg p-6 w-full max-w-md">
-                        <div className="flex items-center justify-between mb-4">
-                            <h3 className="text-lg font-semibold text-gray-900">
-                                Address This Dispute
-                            </h3>
-                            <button
-                                onClick={() => setShowSettlementModal(false)}
-                                className="text-gray-400 hover:text-gray-600"
-                                aria-label="Close modal"
-                            >
-                                <X className="w-5 h-5" />
-                            </button>
-                        </div>
-                        <div className="space-y-4">
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">
-                                    Response
-                                </label>
-                                <textarea
-                                    // value={settlementMessage}
-                                    // onChange={(e) => setSettlementMessage(e.target.value)}
-                                    placeholder="Explain your settlement proposal..."
-                                    rows={4}
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                                    aria-label="Settlement message"
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">
-                                    Settlement Message
-                                </label>
-                                <textarea
-                                    // value={settlementMessage}
-                                    // onChange={(e) => setSettlementMessage(e.target.value)}
-                                    placeholder="Explain your settlement proposal..."
-                                    rows={4}
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                                    aria-label="Settlement message"
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">
-                                    Upload Evidence (Optional)
-                                </label>
-                                <input
-                                    type="file"
-                                    className="w-full px-3 py-2 border border-gray-300 rounded-lg"
-                                    // onChange={handleFileUpload}
-                                    aria-label="Upload settlement evidence"
-                                />
-                            </div>
-                            <div className="flex gap-3 pt-4">
-                                <button
-                                    // onClick={() => setShowSettlementModal(false)}
-                                    className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
-                                    aria-label="Cancel settlement proposal"
-                                >
-                                    Cancel
-                                </button>
-                                <button
-                                    // onClick={handleProposeSettlement}
-                                    className="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-                                    aria-label="Propose settlement"
-                                >
-                                    Propose
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <ResponseDispute responseData={responseData} setShowSettlementModal={setShowSettlementModal}/>
+                // <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                //     <div className="bg-white rounded-lg p-6 w-full max-w-md">
+                //         <div className="flex items-center justify-between mb-4">
+                //             <h3 className="text-lg font-semibold text-gray-900">
+                //                 Address This Dispute
+                //             </h3>
+                //             <button
+                //                 onClick={() => setShowSettlementModal(false)}
+                //                 className="text-gray-400 hover:text-gray-600"
+                //                 aria-label="Close modal"
+                //             >
+                //                 <X className="w-5 h-5" />
+                //             </button>
+                //         </div>
+                //         <div className="space-y-4">
+                //             <div>
+                //                 <label className="block text-sm font-medium text-gray-700 mb-1">
+                //                     Response
+                //                 </label>
+                //                 <textarea
+                //                     // value={settlementMessage}
+                //                     // onChange={(e) => setSettlementMessage(e.target.value)}
+                //                     placeholder="Explain your settlement proposal..."
+                //                     rows={4}
+                //                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                //                     aria-label="Settlement message"
+                //                 />
+                //             </div>
+                //             <div>
+                //                 <label className="block text-sm font-medium text-gray-700 mb-1">
+                //                     Settlement Message
+                //                 </label>
+                //                 <textarea
+                //                     // value={settlementMessage}
+                //                     // onChange={(e) => setSettlementMessage(e.target.value)}
+                //                     placeholder="Explain your settlement proposal..."
+                //                     rows={4}
+                //                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                //                     aria-label="Settlement message"
+                //                 />
+                //             </div>
+                //             <div>
+                //                 <label className="block text-sm font-medium text-gray-700 mb-1">
+                //                     Upload Evidence (Optional)
+                //                 </label>
+                //                 <input
+                //                     type="file"
+                //                     className="w-full px-3 py-2 border border-gray-300 rounded-lg"
+                //                     // onChange={handleFileUpload}
+                //                     aria-label="Upload settlement evidence"
+                //                 />
+                //             </div>
+                //             <div className="flex gap-3 pt-4">
+                //                 <button
+                //                     // onClick={() => setShowSettlementModal(false)}
+                //                     className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
+                //                     aria-label="Cancel settlement proposal"
+                //                 >
+                //                     Cancel
+                //                 </button>
+                //                 <button
+                //                     // onClick={handleProposeSettlement}
+                //                     className="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                //                     aria-label="Propose settlement"
+                //                 >
+                //                     Propose
+                //                 </button>
+                //             </div>
+                //         </div>
+                //     </div>
+                // </div>
             )}
         </div>
     )
@@ -406,106 +413,106 @@ const dispute = {
     userRole: "client",
     adminInvolved: false,
     order: {
-      title: "E-commerce Website Development",
-      totalAmount: 2500,
-      paidAmount: 1250,
-      escrowAmount: 1250,
-      milestones: [
-        {
-          id: 1,
-          name: "Homepage Design",
-          amount: 750,
-          status: "Completed",
-          dueDate: "2024-01-10",
-        },
-        {
-          id: 2,
-          name: "Product Pages",
-          amount: 1000,
-          status: "In Progress",
-          dueDate: "2024-01-20",
-        },
-        {
-          id: 3,
-          name: "Payment Integration",
-          amount: 750,
-          status: "Pending",
-          dueDate: "2024-01-30",
-        },
-      ],
-      attachments: [
-        { id: 1, name: "project-brief.pdf", size: "2.4 MB", type: "pdf" },
-        { id: 2, name: "wireframes.sketch", size: "5.1 MB", type: "sketch" },
-      ],
+        title: "E-commerce Website Development",
+        totalAmount: 2500,
+        paidAmount: 1250,
+        escrowAmount: 1250,
+        milestones: [
+            {
+                id: 1,
+                name: "Homepage Design",
+                amount: 750,
+                status: "Completed",
+                dueDate: "2024-01-10",
+            },
+            {
+                id: 2,
+                name: "Product Pages",
+                amount: 1000,
+                status: "In Progress",
+                dueDate: "2024-01-20",
+            },
+            {
+                id: 3,
+                name: "Payment Integration",
+                amount: 750,
+                status: "Pending",
+                dueDate: "2024-01-30",
+            },
+        ],
+        attachments: [
+            { id: 1, name: "project-brief.pdf", size: "2.4 MB", type: "pdf" },
+            { id: 2, name: "wireframes.sketch", size: "5.1 MB", type: "sketch" },
+        ],
     },
     evidence: [
-      {
-        id: 1,
-        name: "screenshot-1.png",
-        type: "image",
-        size: "1.2 MB",
-        uploadedBy: "client",
-        uploadedAt: "2024-01-15 11:00 AM",
-        thumbnail:
-          "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0yNSAyNUw3NSA3NU0yNSA3NUw3NSAyNSIgc3Ryb2tlPSIjOUI5Q0EwIiBzdHJva2Utd2lkdGg9IjIiLz4KPC9zdmc+",
-      },
-      {
-        id: 2,
-        name: "communication-log.pdf",
-        type: "document",
-        size: "0.8 MB",
-        uploadedBy: "freelancer",
-        uploadedAt: "2024-01-15 3:30 PM",
-      },
-      {
-        id: 3,
-        name: "work-progress.png",
-        type: "image",
-        size: "2.1 MB",
-        uploadedBy: "freelancer",
-        uploadedAt: "2024-01-16 9:15 AM",
-        thumbnail:
-          "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjRUZGNkZGIi8+CjxjaXJjbGUgY3g9IjUwIiBjeT0iNDAiIHI9IjE1IiBmaWxsPSIjOTMzM0VBIi8+CjxyZWN0IHg9IjMwIiB5PSI2MCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjIwIiBmaWxsPSIjOTMzM0VBIi8+Cjwvc3ZnPg==",
-      },
+        {
+            id: 1,
+            name: "screenshot-1.png",
+            type: "image",
+            size: "1.2 MB",
+            uploadedBy: "client",
+            uploadedAt: "2024-01-15 11:00 AM",
+            thumbnail:
+                "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik0yNSAyNUw3NSA3NU0yNSA3NUw3NSAyNSIgc3Ryb2tlPSIjOUI5Q0EwIiBzdHJva2Utd2lkdGg9IjIiLz4KPC9zdmc+",
+        },
+        {
+            id: 2,
+            name: "communication-log.pdf",
+            type: "document",
+            size: "0.8 MB",
+            uploadedBy: "freelancer",
+            uploadedAt: "2024-01-15 3:30 PM",
+        },
+        {
+            id: 3,
+            name: "work-progress.png",
+            type: "image",
+            size: "2.1 MB",
+            uploadedBy: "freelancer",
+            uploadedAt: "2024-01-16 9:15 AM",
+            thumbnail:
+                "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIiBmaWxsPSIjRUZGNkZGIi8+CjxjaXJjbGUgY3g9IjUwIiBjeT0iNDAiIHI9IjE1IiBmaWxsPSIjOTMzM0VBIi8+CjxyZWN0IHg9IjMwIiB5PSI2MCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjIwIiBmaWxsPSIjOTMzM0VBIi8+Cjwvc3ZnPg==",
+        },
     ],
     messages: [
-      {
-        id: 1,
-        sender: "client",
-        senderName: "Tech Solutions Inc.",
-        message:
-          "The freelancer has not delivered the work as per specifications. The homepage design does not match the approved wireframes.",
-        timestamp: "2024-01-15 10:30 AM",
-        isAdmin: false,
-      },
-      {
-        id: 2,
-        sender: "freelancer",
-        senderName: "Sarah Johnson",
-        message:
-          "I have followed the wireframes exactly. The client requested multiple changes that were not part of the original scope. I have documentation of all communications.",
-        timestamp: "2024-01-15 3:30 PM",
-        isAdmin: false,
-      },
-      {
-        id: 3,
-        sender: "client",
-        senderName: "Tech Solutions Inc.",
-        message:
-          "The changes I requested were clarifications, not scope changes. Please review the attached screenshots.",
-        timestamp: "2024-01-16 9:00 AM",
-        isAdmin: false,
-      },
-      {
-        id: 4,
-        sender: "freelancer",
-        senderName: "Sarah Johnson",
-        message:
-          "I have uploaded the current progress. As you can see, the work matches the specifications. I am willing to make minor adjustments if needed.",
-        timestamp: "2024-01-16 2:45 PM",
-        isAdmin: false,
-      },
+        {
+            id: 1,
+            sender: "client",
+            senderName: "Tech Solutions Inc.",
+            message:
+                "The freelancer has not delivered the work as per specifications. The homepage design does not match the approved wireframes.",
+            timestamp: "2024-01-15 10:30 AM",
+            isAdmin: false,
+        },
+        {
+            id: 2,
+            sender: "freelancer",
+            senderName: "Sarah Johnson",
+            message:
+                "I have followed the wireframes exactly. The client requested multiple changes that were not part of the original scope. I have documentation of all communications.",
+            timestamp: "2024-01-15 3:30 PM",
+            isAdmin: false,
+        },
+        {
+            id: 3,
+            sender: "client",
+            senderName: "Tech Solutions Inc.",
+            message:
+                "The changes I requested were clarifications, not scope changes. Please review the attached screenshots.",
+            timestamp: "2024-01-16 9:00 AM",
+            isAdmin: false,
+        },
+        {
+            id: 4,
+            sender: "freelancer",
+            senderName: "Sarah Johnson",
+            message:
+                "I have uploaded the current progress. As you can see, the work matches the specifications. I am willing to make minor adjustments if needed.",
+            timestamp: "2024-01-16 2:45 PM",
+            isAdmin: false,
+        },
     ],
-  };
+};
 
 export default DisputeDetailPage

@@ -3,6 +3,7 @@ import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { X, Upload, MessageSquare } from "lucide-react";
+import { useAddDisputeResponse } from "../../../api/client/dispute";
 
 const schema = yup.object().shape({
   responseMessage: yup
@@ -23,8 +24,7 @@ const schema = yup.object().shape({
     .max(5, "You can upload up to 5 files only"),
 });
 
-const ResponseDispute = ({ isOpen, onClose, handleProposeSettlement }) => {
-  if (!isOpen) return null;
+const ResponseDispute = ({ setShowSettlementModal, responseData }) => {
 
   const {
     control,
@@ -61,10 +61,22 @@ const ResponseDispute = ({ isOpen, onClose, handleProposeSettlement }) => {
   const filesToShow = [...files];
   if (filesToShow.length < maxFiles) filesToShow.push(null);
 
+  const { addDisputeResponse, isSuccess, isPending, isError, error } = useAddDisputeResponse()
+
   const onSubmit = (data) => {
-    console.log("Submitted data:", data);
-    handleProposeSettlement(data);
-    onClose();
+    const datas = { ...responseData, ...data }
+    const formData = new FormData();
+    {
+      (data.files && data.files.length > 0) && data.files?.forEach((img) => {
+        if (img) formData.append("files", img);
+      });
+    }
+    for (const key in datas) {
+      if (typeof datas[key] !== "object") {
+        formData.append(key, datas[key]);
+      }
+    }
+    addDisputeResponse(formData)
   };
 
   return (
@@ -80,7 +92,7 @@ const ResponseDispute = ({ isOpen, onClose, handleProposeSettlement }) => {
             </h2>
           </div>
           <button
-            onClick={onClose}
+            onClick={() => setShowSettlementModal(false)}
             className="p-2 hover:bg-gray-100 rounded-full transition-colors"
           >
             <X className="w-5 h-5 text-gray-400" />
@@ -99,11 +111,10 @@ const ResponseDispute = ({ isOpen, onClose, handleProposeSettlement }) => {
                 <textarea
                   {...field}
                   rows={4}
-                  className={`w-full border-2 rounded-xl px-4 py-3 text-sm resize-none focus:outline-none transition-colors ${
-                    errors.responseMessage
-                      ? "border-red-500 focus:border-red-500"
-                      : "border-gray-200 focus:border-green-500"
-                  }`}
+                  className={`w-full border-2 rounded-xl px-4 py-3 text-sm resize-none focus:outline-none transition-colors ${errors.responseMessage
+                    ? "border-red-500 focus:border-red-500"
+                    : "border-gray-200 focus:border-green-500"
+                    }`}
                   placeholder="Write your reply to the dispute..."
                 />
               )}
@@ -182,7 +193,7 @@ const ResponseDispute = ({ isOpen, onClose, handleProposeSettlement }) => {
           <div className="flex gap-3 pt-8">
             <button
               type="button"
-              onClick={onClose}
+              onClick={() => setShowSettlementModal(false)}
               className="flex-1 px-6 py-3 bg-gray-100 text-gray-700 rounded-xl font-medium hover:bg-gray-200 transition-colors"
             >
               Cancel

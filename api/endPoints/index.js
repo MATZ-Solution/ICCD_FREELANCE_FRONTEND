@@ -61,6 +61,7 @@ const API_ROUTE = {
     getAllDisputeByFreelancer: '/dispute/getAllDisputeByFreelancer',
     getDisputeById: '/dispute/getDisputeById',
     addDispute: '/dispute/addDispute',
+    addResponseDispute: '/dispute/addResponseDispute',
     getAllDisputeById: '/dispute/getAllDisputeById',
     getAllDisputeByAdmin: '/dispute/getAllDisputeByAdmin',
     getDisputeAdminById : '/dispute/getDisputeAdminById'
