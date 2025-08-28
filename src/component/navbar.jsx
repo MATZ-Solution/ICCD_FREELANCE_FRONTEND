@@ -24,7 +24,7 @@ const Logo = ({ navigate }) => (
     onClick={() => navigate("/")}
     role="button"
     tabIndex={0}
-    onKeyPress={(e) => e.key === 'Enter' && navigate("/")}
+    onKeyPress={(e) => e.key === "Enter" && navigate("/")}
     aria-label="Go to homepage"
   >
     <img src={logo} alt="ICCD Logo" className="w-full h-full object-contain" />
@@ -78,27 +78,40 @@ const NavTabs = ({ tabs, isActive, navigate }) =>
 const ProfileImage = ({ src, alt }) => (
   <div className="w-10 h-10 rounded-full flex justify-center items-center overflow-hidden border border-black">
     {src ? (
-      <img
-        src={src}
-        alt={alt}
-        className="w-full h-full object-cover"
-      />
+      <img src={src} alt={alt} className="w-full h-full object-cover" />
     ) : (
       <User aria-hidden="true" />
     )}
   </div>
 );
 
-const ProfileMenu = ({ type, options }) => (
-  <div 
-    className="px-3 border border-gray-300 absolute right-0 mt-2 w-52 bg-white rounded-md shadow-lg py-1 z-50"
+const ProfileMenu = ({ type, options, onClose, menuRef }) => (
+  <div
+    ref={menuRef}
+    className="px-3 border border-gray-300 absolute right-0 mt-2 w-52 bg-red-800 rounded-md shadow-lg py-1 z-50"
     role="menu"
     aria-label="Profile menu"
   >
     {options.map(({ name, action }, i) => (
       <button
         key={i}
-        onClick={action}
+        onClick={async (e) => {
+          try {
+            // Prevent event bubbling
+            e.stopPropagation();
+            
+            // Close menu immediately to provide instant feedback
+            onClose();
+            
+            // Execute the action after a small delay to ensure menu closes
+            // await new Promise(resolve => setTimeout(resolve, 50));
+            action();
+          } catch (error) {
+            console.error('Profile menu action error:', error);
+            // Ensure menu stays closed even if action fails
+            onClose();
+          }
+        }}
         className="text-black block w-full text-left px-4 py-2 text-sm hover:bg-gray-50 transition-colors duration-200"
         role="menuitem"
       >
@@ -172,11 +185,28 @@ export default function Navbar() {
     }
   };
 
+  // Enhanced function to close profile menu
+  const closeProfileMenu = () => {
+    setShowProfileMenu(false);
+  };
+
+  const handleSwitchClient = () => {
+    const isFreelancerPath = pathname.includes("/freelancer");
+    const destination = isFreelancerPath ? "/client" : "/freelancer/dashboard";
+    const userType = isFreelancerPath ? "client" : "freelancer";
+    const id = isFreelancerPath ? client?.id : freelancer?.id;
+    dispatch(setUserType({ id, type: userType }));
+    navigate(destination);
+  };
+
   const getProfileMenuOptions = (type) => {
     const baseOptions = {
       freelancer: [
         { name: "Switch to Client", action: handleSwitchClient },
-        { name: "View Profile", action: () => navigate("/freelancer/edit-profile") },
+        {
+          name: "View Profile",
+          action: () => navigate("/freelancer/edit-profile"),
+        },
         { name: "Logout", action: logout },
       ],
       client: [
@@ -200,12 +230,15 @@ export default function Navbar() {
   // Close dropdowns on outside click
   useEffect(() => {
     const handleClickOutside = (event) => {
+      // Close notification dropdown if clicked outside
       if (
         notificationRef.current &&
         !notificationRef.current.contains(event.target)
       ) {
         setIsShowNot(false);
       }
+      
+      // Close profile menu if clicked outside
       if (
         profileMenuRef.current &&
         !profileMenuRef.current.contains(event.target)
@@ -213,9 +246,19 @@ export default function Navbar() {
         setShowProfileMenu(false);
       }
     };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+
+    // Add event listener when any dropdown is open
+    if (isShowNot || showProfileMenu) {
+      document.addEventListener("mousedown", handleClickOutside);
+      document.addEventListener("touchstart", handleClickOutside); // For mobile devices
+    }
+
+    // Cleanup function to remove event listeners
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("touchstart", handleClickOutside);
+    };
+  }, [isShowNot, showProfileMenu]);
 
   // Prevent scroll when mobile menu is open
   useEffect(() => {
@@ -246,15 +289,10 @@ export default function Navbar() {
     return () => document.removeEventListener("keydown", handleEscape);
   }, []);
 
-  const handleSwitchClient = () => {
-    const isFreelancerPath = pathname.includes("/freelancer");
-    const destination = isFreelancerPath ? "/client" : "/freelancer/dashboard";
-    const userType = isFreelancerPath ? "client" : "freelancer";
-    const id = isFreelancerPath ? client?.id : freelancer?.id;
-    dispatch(setUserType({ id, type: userType }));
-    navigate(destination);
+  // Close profile menu when route changes
+  useEffect(() => {
     setShowProfileMenu(false);
-  };
+  }, [pathname]);
 
   const userType = getCurrentUserType();
   const navigationTabs = getNavigationTabs();
@@ -283,11 +321,22 @@ export default function Navbar() {
         <MobileMenuButton isOpen={isOpen} setIsOpen={setIsOpen} />
 
         {/* Desktop Navigation */}
-        <nav className="ml-10 sm:flex space-x-1 hidden md:flex" role="navigation">
+        <nav
+          className="ml-10 sm:flex space-x-1 hidden md:flex"
+          role="navigation"
+        >
           {userType === "freelancer" || userType === "super-admin" ? (
-            <NavTabs tabs={navigationTabs} isActive={isActive} navigate={navigate} />
+            <NavTabs
+              tabs={navigationTabs}
+              isActive={isActive}
+              navigate={navigate}
+            />
           ) : userType === "client" && pathname !== "/client" ? (
-            <NavTabs tabs={navigationTabs} isActive={isActive} navigate={navigate} />
+            <NavTabs
+              tabs={navigationTabs}
+              isActive={isActive}
+              navigate={navigate}
+            />
           ) : pathname === "/client" ? (
             <div className="flex space-x-1 gap-4 items-center">
               <SearchBar search={search} setSearch={setSearch} />
@@ -346,19 +395,24 @@ export default function Navbar() {
             {/* Profile Menu */}
             <div ref={profileMenuRef} className="relative">
               <button
-                onClick={() => setShowProfileMenu((prev) => !prev)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShowProfileMenu((prev) => !prev);
+                }}
                 className="focus:outline-none focus:ring-2 focus:ring-cyan-500 rounded-full"
                 aria-label="Open profile menu"
                 aria-expanded={showProfileMenu}
                 aria-haspopup="menu"
               >
-                <ProfileImage
-                  src={getProfileImageSrc()}
-                  alt="User profile"
-                />
+                <ProfileImage src={getProfileImageSrc()} alt="User profile" />
               </button>
               {showProfileMenu && (
-                <ProfileMenu type={userType} options={profileMenuOptions} />
+                <ProfileMenu
+                  type={userType}
+                  options={profileMenuOptions}
+                  onClose={closeProfileMenu}
+                  menuRef={profileMenuRef}
+                />
               )}
             </div>
           </div>
@@ -392,7 +446,7 @@ export default function Navbar() {
       </div>
       {/* Mobile Menu */}
       {isOpen && (
-        <div 
+        <div
           className="show_nav_links_mobile h-[100vh] px-4 py-6 space-y-6 flex flex-col bg-white shadow-2xl z-50 overflow-y-auto"
           role="dialog"
           aria-label="Mobile navigation menu"
