@@ -13,6 +13,7 @@ import {
   X,
   Upload,
 } from "lucide-react";
+import ResponseDispute from "./ResponseDispute";
 
 const DisputeDetailPage = () => {
   const [quickReply, setQuickReply] = useState("");
@@ -20,7 +21,6 @@ const DisputeDetailPage = () => {
   const [settlementMessage, setSettlementMessage] = useState("");
   const [showSettlementModal, setShowSettlementModal] = useState(false);
 
-  // Mock data for the dispute
   const dispute = {
     id: "DSP-2024-001",
     orderRef: "ORD-2024-001",
@@ -281,7 +281,6 @@ const DisputeDetailPage = () => {
                     </div>
                   </div>
                 </div>
-             
               </div>
             </div>
 
@@ -473,77 +472,14 @@ const DisputeDetailPage = () => {
 
       {/* Settlement Modal */}
       {showSettlementModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 w-full max-w-md">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-gray-900">
-                Address This Dispute
-              </h3>
-              <button
-                onClick={() => setShowSettlementModal(false)}
-                className="text-gray-400 hover:text-gray-600"
-                aria-label="Close modal"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Response
-                </label>
-                <textarea
-                  value={settlementMessage}
-                  onChange={(e) => setSettlementMessage(e.target.value)}
-                  placeholder="Explain your settlement proposal..."
-                  rows={4}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  aria-label="Settlement message"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Settlement Message
-                </label>
-                <textarea
-                  value={settlementMessage}
-                  onChange={(e) => setSettlementMessage(e.target.value)}
-                  placeholder="Explain your settlement proposal..."
-                  rows={4}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  aria-label="Settlement message"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Upload Evidence (Optional)
-                </label>
-                <input
-                  type="file"
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg"
-                  onChange={handleFileUpload}
-                  aria-label="Upload settlement evidence"
-                />
-              </div>
-              <div className="flex gap-3 pt-4">
-                <button
-                  onClick={() => setShowSettlementModal(false)}
-                  className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
-                  aria-label="Cancel settlement proposal"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={handleProposeSettlement}
-                  className="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-                  aria-label="Propose settlement"
-                >
-                  Propose
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+        <ResponseDispute
+          isOpen={showSettlementModal}
+          onClose={() => setShowSettlementModal(false)}
+          settlementMessage={settlementMessage}
+          setSettlementMessage={setSettlementMessage}
+          handleFileUpload={handleFileUpload}
+          handleProposeSettlement={handleProposeSettlement}
+        />
       )}
     </div>
   );
