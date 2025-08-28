@@ -82,7 +82,7 @@ export default function ViewDisputeDetail() {
                 className="w-16 h-16 rounded-full border-2 border-blue-500"
               />
               :
-           <User className="w-4 h-4 text-gray-500" />
+              <User className="w-4 h-4 text-gray-500" />
           }
 
           <div>
@@ -148,13 +148,14 @@ export default function ViewDisputeDetail() {
             <p className="text-gray-700 mb-2"><strong>Role:</strong> <span className="capitalize">{responseData[0]?.userType}</span></p>
             <p className="text-gray-700 mb-4"><strong>Message:</strong> {responseData[0]?.message}</p>
             {(data[0]?.disputeFilesFreelancer && data[0]?.disputeFilesFreelancer.split(",").length > 0) && (
-             data[0]?.disputeFilesFreelancer.split(",").map((item, index)=> (
-               <img
+              data[0]?.disputeFilesFreelancer.split(",").map((item, index) => (
+                <img
+                  key={index}
                   src={item}
                   alt="Freelancer Proof"
                   className="mt-2 w-full max-w-md h-auto rounded-lg border border-gray-300 transform transition-all duration-300 hover:scale-105"
                 />
-             ))
+              ))
             )}
             <p className="mt-4 text-gray-700"><strong>Settlement Proposed:</strong> {disputeResponse.reply.settlement}</p>
           </div>

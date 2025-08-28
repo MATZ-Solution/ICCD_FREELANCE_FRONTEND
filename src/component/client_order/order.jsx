@@ -52,6 +52,7 @@ const handleReviewSubmit = (data) => {
 
   const client = useSelector((state) => state.user.userDetails);
   const freelancer = useSelector(state => state.userProfile.userProfile)
+  
 
   const handleCompleteClick = (item) => {
     const { id, gig_id, client_id, freelancer_id, orderId } = item
@@ -62,7 +63,8 @@ const handleReviewSubmit = (data) => {
     setOrderDetails({
       orderId: orderId, gigId: gig_id, user_id: userId,
       client_id: client_id, freelancer_id: freelancer_id,
-      raised_by: userType
+      raised_by: userType, freelancerUserId: data[0]?.freelancerUserId
+      
     });
     setShowCompleteModal(true);
   };

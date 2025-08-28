@@ -50,9 +50,11 @@ export default function ClientDashboard() {
     setProjectIsAvailable((prev) => !prev);
   const toggleJobAvailability = () => setJobIsAvailable((prev) => !prev);
 
+  const freelancer = useSelector(state => state.userProfile.userProfile)
+
 
   const navigate = useNavigate()
-  const { gigs, error, isLoading, isError } = useGetGigs()
+  const { gigs, error, isLoading, isError } = useGetGigs({ freelancer_id: freelancer?.id })
   const userDetails = useSelector(state => state.user.userDetails)
 
   const { data: dashboardData, isSuccess: clientIsSucc, isPending: clientIsPend, isError: clientIsErr, isLoading: clientIsLoad } = useGetClientDashboardData()
@@ -221,9 +223,9 @@ export default function ClientDashboard() {
             <DCard
               title="Total Posted Projects"
               value={dashboardData?.length > 0 ? dashboardData[0]?.totalPostedProject : 0}
-            icon={<FolderKanban className="w-6 h-6" />}
-            border="border-l-6 border-amber-500"
-            gradient="from-amber-500 to-orange-500"
+              icon={<FolderKanban className="w-6 h-6" />}
+              border="border-l-6 border-amber-500"
+              gradient="from-amber-500 to-orange-500"
             />
             <DCard
               title="Total Posted Jobs"

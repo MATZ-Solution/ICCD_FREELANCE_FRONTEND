@@ -9,6 +9,8 @@ import ErrorMessage from "./ErrorMessage"
 export default function NotificationDropdown() {
 
   const user = useSelector((state) => state.userType.user);
+  const freelancer = useSelector(state => state.userProfile.userProfile)
+
   const [showDropdown, setShowDropdown] = useState(false)
   const dropdownRef = useRef(null)
 
@@ -22,7 +24,7 @@ export default function NotificationDropdown() {
     return () => document.removeEventListener("mousedown", handleClickOutside)
   }, [])
 
-  const { data, error, isLoading, isError } = useGetNotification(user)
+  const { data, error, isLoading, isError } = useGetNotification(user?.type === 'client' ? user : {id: freelancer?.userID, type: user.type})
   const { error: isUpdateErr, isLoading: isUpdateLoad, isError: isUpdateLoadIsErr } = useUpdateReadNot(user)
 
   return (

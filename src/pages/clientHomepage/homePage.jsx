@@ -8,6 +8,7 @@ import { useCheckIsFreelancer } from "../../../api/client/user";
 import { useDispatch } from "react-redux";
 import { getUserProfile } from "../../../redux/slices/userProfileSlice";
 import useDebounce from "../../../hooks/useDebounce";
+import { useSelector } from "react-redux";
 
 export default function ClientHomepage() {
   const navigate = useNavigate();
@@ -20,8 +21,10 @@ export default function ClientHomepage() {
 
   const [search, setSearch] = useState(searchTermFromUrl);
 
+  const freelancer = useSelector(state => state.userProfile.userProfile)
   const { gigs, error, isLoading, isError } = useGetGigs({
     search: useDebounce(searchTermFromUrl),
+    freelancer_id: freelancer?.id
   });
 
   function handleSearch() {
