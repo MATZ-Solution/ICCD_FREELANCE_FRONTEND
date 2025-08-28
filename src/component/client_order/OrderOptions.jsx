@@ -50,7 +50,7 @@ function OrderOptions({
       gig_id
     }));
 
-    navigate("/payment"); // redirect to payment page
+    navigate("/client/payment"); // redirect to payment page
   };
 
   useEffect(() => {

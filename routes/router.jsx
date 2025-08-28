@@ -806,7 +806,7 @@ export const router = createBrowserRouter([
     ),
   },
   {
-    path: "/payment",
+    path: "/client/payment",
     element: withSuspense(
       <AuthRoute>
         <MainTemplate isShowFooter={false}>
@@ -824,7 +824,7 @@ export const router = createBrowserRouter([
     ),
   },
   {
-    path: "/success",
+    path: "/client/payment/success",
     element: withSuspense(
       <AuthRoute>
         <MainTemplate isShowFooter={false}>
@@ -844,7 +844,7 @@ export const router = createBrowserRouter([
     ),
   },
   {
-    path: "/cancel",
+    path: "/client/payment/cancel",
     element: withSuspense(
       <AuthRoute>
         <MainTemplate isShowFooter={false}>

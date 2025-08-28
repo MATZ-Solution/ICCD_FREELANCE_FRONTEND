@@ -19,7 +19,7 @@ function SuccessPage() {
   const fetchSessionAndProcessOrder = async (sessionId) => {
     try {
       // Fetch session data from Stripe
-      const sessionResponse = await fetch(`https://iccd.freelanceserver.matzsolutions.com/stripe/session?session_id=${sessionId}`);
+      const sessionResponse = await fetch(`http://localhost:22306/stripe/session?session_id=${sessionId}`);
 
       if (!sessionResponse.ok) {
         throw new Error(`Failed to fetch session: ${sessionResponse.status}`);
@@ -48,7 +48,7 @@ function SuccessPage() {
       };
 
 
-      const orderResponse = await fetch("https://iccd.freelanceserver.matzsolutions.com/stripe/process-order", {
+      const orderResponse = await fetch("http://localhost:22306/stripe/process-order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(orderData),
