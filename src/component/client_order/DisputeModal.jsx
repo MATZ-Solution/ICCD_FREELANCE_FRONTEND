@@ -27,17 +27,19 @@ export const DisputeModal = ({ onClose, orderDetails }) => {
     },
   });
 
-  const { addDispute, isSuccess, isPending, isError, error } = useAddDispute()
-  
+  const { addDispute, isSuccess, isPending, isError, error } = useAddDispute();
+
   const onFormSubmit = (data) => {
-    console.log("data: ", data)
-    const datas = { ...orderDetails, ...data }
+    console.log("data: ", data);
+    const datas = { ...orderDetails, ...data };
     const formData = new FormData();
     {
-      (data.proof && data.proof.length > 0) && data.proof?.forEach((img) => {
-        if (img) formData.append("files", img);
-        console.log("img.file: ", img)
-      });
+      data.proof &&
+        data.proof.length > 0 &&
+        data.proof?.forEach((img) => {
+          if (img) formData.append("files", img);
+          console.log("img.file: ", img);
+        });
     }
     // Append other data
     for (const key in datas) {
@@ -57,7 +59,9 @@ export const DisputeModal = ({ onClose, orderDetails }) => {
             <div className="w-10 h-10 bg-red-100 rounded-full flex items-center justify-center">
               <AlertTriangle className="w-5 h-5 text-red-600" />
             </div>
-            <h2 className="text-2xl font-semibold text-gray-900">Raise a Dispute</h2>
+            <h2 className="text-2xl font-semibold text-gray-900">
+              Raise a Dispute
+            </h2>
           </div>
           <button
             onClick={onClose}
@@ -78,12 +82,16 @@ export const DisputeModal = ({ onClose, orderDetails }) => {
               {...register("subject")}
               type="text"
               className={`w-full border-2 rounded-xl px-4 py-3 text-sm focus:outline-none transition-colors ${
-                errors.subject ? "border-red-500" : "border-gray-200 focus:border-red-500"
+                errors.subject
+                  ? "border-red-500"
+                  : "border-gray-200 focus:border-red-500"
               }`}
               placeholder="Brief description of the issue"
             />
             {errors.subject && (
-              <p className="text-red-500 text-sm mt-1">{errors.subject.message}</p>
+              <p className="text-red-500 text-sm mt-1">
+                {errors.subject.message}
+              </p>
             )}
           </div>
 
@@ -100,14 +108,18 @@ export const DisputeModal = ({ onClose, orderDetails }) => {
                   {...field}
                   rows={5}
                   className={`w-full border-2 rounded-xl px-4 py-3 text-sm focus:outline-none transition-colors resize-none ${
-                    errors.reason ? "border-red-500" : "border-gray-200 focus:border-red-500"
+                    errors.reason
+                      ? "border-red-500"
+                      : "border-gray-200 focus:border-red-500"
                   }`}
                   placeholder="Please provide a detailed explanation of your concern..."
                 ></textarea>
               )}
             />
             {errors.reason && (
-              <p className="text-red-500 text-sm mt-1">{errors.reason.message}</p>
+              <p className="text-red-500 text-sm mt-1">
+                {errors.reason.message}
+              </p>
             )}
           </div>
 
@@ -123,7 +135,8 @@ export const DisputeModal = ({ onClose, orderDetails }) => {
               placeholder="e.g. I propose a refund of 50% or revised delivery"
             />
             <p className="text-xs text-gray-500 mt-1">
-              Suggest a fair resolution (refund, revision, partial payment, etc.)
+              Suggest a fair resolution (refund, revision, partial payment,
+              etc.)
             </p>
           </div>
 
@@ -146,13 +159,13 @@ export const DisputeModal = ({ onClose, orderDetails }) => {
                   field.onChange(updatedFiles);
                 };
 
-                const handleRemove = (index) => {
+                const handleRemove = (index, e) => {
+                  e.stopPropagation(); // Stop click from bubbling
                   const updatedFiles = [...(field.value || [])];
                   updatedFiles.splice(index, 1);
                   field.onChange(updatedFiles);
                 };
 
-                // Add an empty slot if less than max
                 const filesToShow = field.value ? [...field.value] : [];
                 if (filesToShow.length < maxFiles) filesToShow.push(null);
 
@@ -160,35 +173,41 @@ export const DisputeModal = ({ onClose, orderDetails }) => {
                   <div className="flex gap-2 flex-wrap">
                     {filesToShow.map((file, idx) => (
                       <div key={idx} className="relative w-24 h-24">
-                        <label className="w-full h-full border-2 border-dashed border-gray-200 rounded-xl flex items-center justify-center cursor-pointer overflow-hidden hover:border-red-300 transition-colors">
+                        <div
+                          className="w-full h-full border-2 border-dashed border-gray-200 rounded-xl flex items-center justify-center cursor-pointer overflow-hidden hover:border-red-300 transition-colors bg-red-50"
+                          onClick={(e) => e.stopPropagation()} // Prevent bubbling to modal
+                        >
                           {file ? (
                             <>
                               <img
                                 src={URL.createObjectURL(file)}
                                 alt="preview"
                                 className="w-full h-full object-cover"
+                                onClick={(e) => e.stopPropagation()} // Stop remove/modal close
                               />
                               <button
                                 type="button"
-                                onClick={() => handleRemove(idx)}
+                                onClick={(e) => handleRemove(idx, e)}
                                 className="absolute top-1 right-1 bg-white rounded-full p-1 shadow"
                               >
                                 <X className="w-4 h-4 text-red-600" />
                               </button>
                             </>
                           ) : (
-                            <div className="flex flex-col items-center justify-center text-gray-400">
-                              <Upload className="w-6 h-6 mb-1" />
-                              <span className="text-xs">Upload</span>
-                            </div>
+                            <>
+                              <label className="flex flex-col items-center justify-center w-full h-full text-gray-400 cursor-pointer">
+                                <Upload className="w-6 h-6 mb-1" />
+                                <span className="text-xs">Upload</span>
+                                <input
+                                  type="file"
+                                  accept=".jpg,.jpeg,.png,.pdf,.doc,.docx"
+                                  className="hidden"
+                                  onChange={(e) => handleFileChange(e, idx)}
+                                />
+                              </label>
+                            </>
                           )}
-                          <input
-                            type="file"
-                            accept=".jpg,.jpeg,.png,.pdf,.doc,.docx"
-                            className="hidden"
-                            onChange={(e) => handleFileChange(e, idx)}
-                          />
-                        </label>
+                        </div>
                       </div>
                     ))}
                   </div>

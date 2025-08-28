@@ -44,25 +44,27 @@ function ClientOrders() {
     // navigate to order details
   };
 
-const handleReviewSubmit = (data) => {
-  console.log("✅ Review Submitted:", data);
-  alert("Thank you for your feedback!");
-};
-
+  const handleReviewSubmit = (data) => {
+    console.log("✅ Review Submitted:", data);
+    alert("Thank you for your feedback!");
+  };
 
   const client = useSelector((state) => state.user.userDetails);
-  const freelancer = useSelector(state => state.userProfile.userProfile)
+  const freelancer = useSelector((state) => state.userProfile.userProfile);
 
   const handleCompleteClick = (item) => {
-    const { id, gig_id, client_id, freelancer_id, orderId } = item
-    const userType = pathName.includes("client") ? 'client' : 'freelancer'
-    const userId = pathName.includes("client") ? client?.id : freelancer?.id
+    const { id, gig_id, client_id, freelancer_id, orderId } = item;
+    const userType = pathName.includes("client") ? "client" : "freelancer";
+    const userId = pathName.includes("client") ? client?.id : freelancer?.id;
 
     // setSelectedOrderId(id);
     setOrderDetails({
-      orderId: orderId, gigId: gig_id, user_id: userId,
-      client_id: client_id, freelancer_id: freelancer_id,
-      raised_by: userType
+      orderId: orderId,
+      gigId: gig_id,
+      user_id: userId,
+      client_id: client_id,
+      freelancer_id: freelancer_id,
+      raised_by: userType,
     });
     setShowCompleteModal(true);
   };
@@ -352,14 +354,13 @@ const handleReviewSubmit = (data) => {
           />
         )}
 
-       {showReviewModal && (
-  <ReviewModal
-    isOpen={showReviewModal}
-    onClose={() => setshowReviewModal(false)}
-    onSubmit={handleReviewSubmit}
-  />
-)}
-
+        {showReviewModal && (
+          <ReviewModal
+            isOpen={showReviewModal}
+            onClose={() => setshowReviewModal(false)}
+            onSubmit={handleReviewSubmit}
+          />
+        )}
       </div>
     </div>
   );
