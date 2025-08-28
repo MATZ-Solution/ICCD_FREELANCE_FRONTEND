@@ -27,26 +27,24 @@ export const DisputeModal = ({ onClose, orderDetails }) => {
     },
   });
 
-  const { addDispute, isSuccess, isPending, isError, error } = useAddDispute();
-
+  const { addDispute, isSuccess, isPending, isError, error } = useAddDispute()
+  
   const onFormSubmit = (data) => {
-    const datas = { ...orderDetails, ...data };
+    console.log("data: ", data)
+    const datas = { ...orderDetails, ...data }
     const formData = new FormData();
-
-    // Append multiple files
-    if (data.proof && data.proof.length > 0) {
-      data.proof.forEach((file) => {
-        if (file) formData.append("files", file);
+    {
+      (data.proof && data.proof.length > 0) && data.proof?.forEach((img) => {
+        if (img) formData.append("files", img);
+        console.log("img.file: ", img)
       });
     }
-
     // Append other data
     for (const key in datas) {
       if (typeof datas[key] !== "object") {
         formData.append(key, datas[key]);
       }
     }
-
     addDispute(formData);
   };
 

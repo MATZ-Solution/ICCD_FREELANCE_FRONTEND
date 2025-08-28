@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 export function useAddDispute() {
     const { mutate: addDispute, isSuccess, isPending, isError, error } = useMutation({
         mutationFn: async (data) =>
-            await api.post(`${API_ROUTE.superadmin.addDispute}`, data, {
+            await api.post(`${API_ROUTE.dispute.addDispute}`, data, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                     Authorization: api.defaults.headers.common["Authorization"],
@@ -26,24 +26,10 @@ export function useAddDispute() {
     return { addDispute, isSuccess, isPending, isError, error };
 }
 
-export function useGetAllDispute(params = {}) {
-  const constructQueryString = (params) => {
-    const query = new URLSearchParams(params).toString();
-    return query ? `&${query}` : "";
-  };
-  const queryKey = [API_ROUTE.superadmin.getAllDispute, params];
-  const { data, error, isLoading, isError } = useQuery({
-    queryKey,
-    queryFn: () =>
-      api.get(`${API_ROUTE.superadmin.getAllDispute}?${constructQueryString(params)}`),
-  });
-  return { data: data?.data?.data, error, isLoading, isError };
-}
-
-export function useGetAllDisputeById(id) {
+export function useGetAllDisputeByClient(id) {
   const { data, isSuccess, isPending, isError, isLoading } = useQuery({
-    queryKey: [API_ROUTE.superadmin.getAllDisputeById, id],
-    queryFn: async () => await api.get(`${API_ROUTE.superadmin.getAllDisputeById}/${id}`),
+    queryKey: [API_ROUTE.dispute.getAllDisputeByClient, id],
+    queryFn: async () => await api.get(`${API_ROUTE.dispute.getAllDisputeByClient}/${id}`),
     // enabled: id !== undefined && id !== null,
     // refetchOnWindowFocus: true,
     // staleTime: 0,
@@ -57,3 +43,74 @@ export function useGetAllDisputeById(id) {
     isLoading,
   };
 }
+
+export function useGetAllDisputeByFreelancer(id) {
+  const { data, isSuccess, isPending, isError, isLoading } = useQuery({
+    queryKey: [API_ROUTE.dispute.getAllDisputeByFreelancer, id],
+    queryFn: async () => await api.get(`${API_ROUTE.dispute.getAllDisputeByFreelancer}/${id}`),
+    // enabled: id !== undefined && id !== null,
+    // refetchOnWindowFocus: true,
+    // staleTime: 0,
+    // refetchOnMount: true,
+  });
+  return {
+    data: data?.data?.data,
+    isSuccess,
+    isPending,
+    isError,
+    isLoading,
+  };
+}
+
+export function useGetDisputeById(id) {
+  const { data, isSuccess, isPending, isError, isLoading } = useQuery({
+    queryKey: [API_ROUTE.dispute.getDisputeById, id],
+    queryFn: async () => await api.get(`${API_ROUTE.dispute.getDisputeById}/${id}`),
+    // enabled: id !== undefined && id !== null,
+    // refetchOnWindowFocus: true,
+    // staleTime: 0,
+    // refetchOnMount: true,
+  });
+  return {
+    data: data?.data?.data,
+    isSuccess,
+    isPending,
+    isError,
+    isLoading,
+  };
+}
+
+export function useGetAllDisputeByAdmin(params = {}) {
+  const constructQueryString = (params) => {
+    const query = new URLSearchParams(params).toString();
+    return query ? `&${query}` : "";
+  };
+  const queryKey = [API_ROUTE.dispute.getAllDisputeByAdmin, params];
+  const { data, error, isLoading, isError } = useQuery({
+    queryKey,
+    queryFn: () =>
+      api.get(`${API_ROUTE.dispute.getAllDisputeByAdmin}?${constructQueryString(params)}`),
+  });
+  return { data: data?.data?.data, error, isLoading, isError };
+}
+
+export function useGetDisputeAdminById(id) {
+  const { data, isSuccess, isPending, isError, isLoading } = useQuery({
+    queryKey: [API_ROUTE.dispute.getDisputeAdminById, id],
+    queryFn: async () => await api.get(`${API_ROUTE.dispute.getDisputeAdminById}/${id}`),
+    // enabled: id !== undefined && id !== null,
+    // refetchOnWindowFocus: true,
+    // staleTime: 0,
+    // refetchOnMount: true,
+  });
+  return {
+    data: data?.data?.data,
+    isSuccess,
+    isPending,
+    isError,
+    isLoading,
+  };
+}
+
+
+

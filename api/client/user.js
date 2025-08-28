@@ -53,6 +53,7 @@ export function useLogin() {
     onSuccess: (response) => {
       if (response?.data?.data?.email === 'admin@gmail.com') {
         navigate("/superadmin/dashboard");
+        setToken(response?.data?.token);
       } else {
         setToken(response?.data?.token);
         dispatch(setUserDetails(response?.data?.data));

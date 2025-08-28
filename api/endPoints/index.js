@@ -51,12 +51,19 @@ const API_ROUTE = {
   superadmin: {
     getAllOrders: '/superadmin/getAllOrder',
     getAllFreelancers: "/superadmin/getAllFreelancers",
-    getAllGigs: "/superadmin/getAllGigs", 
-    getAllProjects: "/superadmin/getAllProjects", 
+    getAllGigs: "/superadmin/getAllGigs",
+    getAllProjects: "/superadmin/getAllProjects",
     getAllUsers: '/superadmin/getAllUsers',
-    addDispute: '/superadmin/addDispute',
-    getAllDispute: '/superadmin/getAllDispute',
-    getAllDisputeById: '/superadmin/getAllDisputeById'
+
+  },
+  dispute: {
+    getAllDisputeByClient: '/dispute/getAllDisputeByClient',
+    getAllDisputeByFreelancer: '/dispute/getAllDisputeByFreelancer',
+    getDisputeById: '/dispute/getDisputeById',
+    addDispute: '/dispute/addDispute',
+    getAllDisputeById: '/dispute/getAllDisputeById',
+    getAllDisputeByAdmin: '/dispute/getAllDisputeByAdmin',
+    getDisputeAdminById : '/dispute/getDisputeAdminById'
   },
   order: {
     getAllOrderByFreelancer: '/order/getAllOrderByFreelancer',
