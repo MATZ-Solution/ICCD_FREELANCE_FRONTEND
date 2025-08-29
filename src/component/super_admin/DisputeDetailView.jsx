@@ -14,7 +14,7 @@ import { useGetDisputeAdminById } from "../../../api/client/dispute";
 
 export default function ViewDisputeDetail() {
   const { id } = useParams();
-  const { data,responseData, isSuccess, isLoading, isError } = useGetDisputeAdminById(id);
+  const { data, responseData, isSuccess, isLoading, isError } = useGetDisputeAdminById(id);
 
   const [partialAmount, setPartialAmount] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);

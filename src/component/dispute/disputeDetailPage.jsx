@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useLocation } from 'react-router-dom';
 import { ArrowLeft, Clock, AlertTriangle, CheckCircle, XCircle, Download, Send, Scale, X } from "lucide-react";
 import ResponseDispute from '../client_order/ResponseDispute';
@@ -10,8 +10,8 @@ function DisputeDetailPage({ data }) {
     const [showSettlementModal, setShowSettlementModal] = useState(false)
     const responseData = data[0]?.raised_by !== userType ? {
         disputeId: data[0]?.id, userId: data[0]?.freelancerId,
-        client_id: data[0]?.client_id, freelancer_id: data[0]?.freelancer_id,
-        userType: userType,
+        client_id: data[0]?.clientId, 
+        userType: userType, freelancerUserID: data[0]?.freelancerUserID
     } : null
 
     const getStatusBadge = (status) => {
@@ -173,9 +173,9 @@ function DisputeDetailPage({ data }) {
                             <h2 className="text-lg font-semibold text-gray-900 mb-4">
                                 Evidence
                             </h2>
-                            {data[0]?.disputeFiles?.split(",").length > 0 ? (
+                            {data[0]?.disputeFilesClient?.split(",").length > 0 ? (
                                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                                    {data[0]?.disputeFiles.split(",").map((evidence, index) => (
+                                    {data[0]?.disputeFilesClient.split(",").map((evidence, index) => (
                                         <div
                                             key={index}
                                             className="border border-gray-200 rounded-lg p-3 hover:border-gray-300 transition-colors"
