@@ -9,12 +9,18 @@ import {
   CheckCircle,
   XCircle,
   Eye,
+  Clock,
+  MessageSquare,
+  Image as ImageIcon,
 } from "lucide-react";
 import { useGetDisputeAdminById } from "../../../api/client/dispute";
 
 export default function ViewDisputeDetail() {
   const { id } = useParams();
-  const { data, isSuccess, isLoading, isError } = useGetDisputeAdminById(id);
+  const { data, responseData, isSuccess, isLoading, isError } =
+    useGetDisputeAdminById(id);
+
+  console.log(data);
 
   const [partialAmount, setPartialAmount] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
@@ -131,56 +137,91 @@ export default function ViewDisputeDetail() {
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
           {/* Main Content */}
           <div className="xl:col-span-2 space-y-8">
-            {/* Disputant Information */}
+            {/* Client Who Raised the Dispute */}
             <div className="bg-white rounded-2xl shadow-sm border border-slate-200/60 overflow-hidden">
-              <div className="bg-gradient-to-br from-[#47AAB3] via-[#2F7B86] to-[#1F5059] p-6">
+              <div className="bg-gradient-to-br from-red-500 via-red-600 to-red-700 p-6">
                 <h2 className="text-xl font-semibold text-white flex items-center gap-2">
-                  <User className="w-5 h-5" />
-                  Dispute Raised By
+                  <AlertTriangle className="w-5 h-5" />
+                  Dispute Raised By Client
                 </h2>
+                <p className="text-red-100 text-sm mt-1">
+                  Initial complaint filed
+                </p>
               </div>
               <div className="p-6">
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-4 mb-6">
                   <div className="relative">
                     <img
-                      src={
-                        dispute.raised_by === "client"
-                          ? dispute.clientImg
-                          : dispute.freelancerImg
-                      }
-                      alt="User avatar"
+                      src={dispute.clientImg}
+                      alt="Client avatar"
                       className="w-16 h-16 rounded-full border-4 border-white shadow-lg"
                     />
-                    <div
-                      className={`absolute -bottom-1 -right-1 w-6 h-6 rounded-full border-2 border-white shadow-sm ${
-                        dispute.raised_by === "client"
-                          ? "bg-blue-500"
-                          : "bg-green-500"
-                      } flex items-center justify-center`}
-                    >
-                      <User className="w-3 h-3 text-white" />
+                    <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full border-2 border-white shadow-sm bg-red-500 flex items-center justify-center">
+                      <AlertTriangle className="w-3 h-3 text-white" />
                     </div>
                   </div>
                   <div className="flex-1">
                     <h3 className="text-lg font-semibold text-slate-800">
-                      {dispute.raised_by === "client"
-                        ? dispute.client
-                        : dispute.freelancer}
+                      {dispute.client}
                     </h3>
                     <p className="text-slate-600 text-sm">
-                      {dispute.raised_by === "client"
-                        ? dispute.clientEmail
-                        : dispute.freelancerEmail}
+                      {dispute.clientEmail}
                     </p>
-                    <StatusBadge status={dispute.raised_by} />
+                    <StatusBadge status="client" />
                   </div>
+                </div>
+
+                {/* Dispute Subject and Reason */}
+                <div className="space-y-4">
+                  <div className="bg-red-50 border border-red-200 rounded-xl p-4">
+                    <h4 className="font-semibold text-red-800 mb-2 flex items-center gap-2">
+                      <FileText className="w-4 h-4" />
+                      Dispute Subject
+                    </h4>
+                    <p className="text-red-700">{dispute.subject}</p>
+                  </div>
+                  
+                  <div className="bg-red-50 border border-red-200 rounded-xl p-4">
+                    <h4 className="font-semibold text-red-800 mb-2 flex items-center gap-2">
+                      <MessageSquare className="w-4 h-4" />
+                      Client's Complaint
+                    </h4>
+                    <p className="text-red-700 leading-relaxed">{dispute.reason}</p>
+                  </div>
+
+                  {/* Client Evidence */}
+                  {dispute.disputeFilesClient && (
+                    <div className="bg-red-50 border border-red-200 rounded-xl p-4">
+                      <h4 className="font-semibold text-red-800 mb-3 flex items-center gap-2">
+                        <ImageIcon className="w-4 h-4" />
+                        Evidence Submitted by Client
+                      </h4>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        {dispute.disputeFilesClient
+                          .split(",")
+                          .map((item, index) => (
+                            <div key={index} className="relative group">
+                              <img
+                                src={item.trim()}
+                                alt={`Client Evidence ${index + 1}`}
+                                className="w-full h-32 object-cover rounded-lg border-2 border-red-300 cursor-pointer transition-transform duration-200 group-hover:scale-105 shadow-sm"
+                                onClick={() => setSelectedImage(item.trim())}
+                              />
+                              <div className="absolute top-2 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full">
+                                Client
+                              </div>
+                            </div>
+                          ))}
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
 
             {/* Project Information */}
             <div className="bg-white rounded-2xl shadow-sm border border-slate-200/60 overflow-hidden">
-              <div className=" bg-gradient-to-br from-[#47AAB3] via-[#2F7B86] to-[#1F5059] p-6">
+              <div className="bg-gradient-to-br from-[#47AAB3] via-[#2F7B86] to-[#1F5059] p-6">
                 <h2 className="text-xl font-semibold text-white flex items-center gap-2">
                   <FileText className="w-5 h-5" />
                   Project Details
@@ -221,49 +262,138 @@ export default function ViewDisputeDetail() {
               </div>
             </div>
 
-            {/* Dispute Details */}
-            <div className="bg-white rounded-2xl shadow-sm border border-slate-200/60 overflow-hidden">
-              <div className="bg-gradient-to-r from-red-500 to-pink-600 p-6">
-                <h2 className="text-xl font-semibold text-white flex items-center gap-2">
-                  <AlertTriangle className="w-5 h-5" />
-                  Dispute Information
-                </h2>
-              </div>
-              <div className="p-6">
-                <div className="space-y-6">
-                  <div>
-                    <h3 className="font-semibold text-slate-800 mb-2">
-                      Subject
-                    </h3>
-                    <p className="text-slate-600 bg-slate-50 p-4 rounded-xl">
-                      {dispute.subject}
-                    </p>
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-slate-800 mb-3">
-                      Description
-                    </h3>
-                    <p className="text-slate-700 leading-relaxed bg-slate-50 p-4 rounded-xl">
-                      {dispute.reason}
-                    </p>
-                  </div>
-                  {dispute.disputeFilesClient && (
-                    <div>
-                      <h3 className="font-semibold text-slate-800 mb-3 flex items-center gap-2">
-                        <Eye className="w-4 h-4" />
-                        Evidence Provided
-                      </h3>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {dispute.disputeFilesClient
-                          .split(",")
-                          .map((item, index) => (
-                            <div key={index} className="relative group">
+            {/* Freelancer Responses */}
+            {responseData && responseData.length > 0 ? (
+              <div className="bg-white rounded-2xl shadow-sm border border-slate-200/60 overflow-hidden">
+                <div className="bg-gradient-to-r from-green-500 to-emerald-600 p-6">
+                  <h2 className="text-xl font-semibold text-white flex items-center gap-2">
+                    <MessageSquare className="w-5 h-5" />
+                    Freelancer Responses
+                  </h2>
+                  <p className="text-green-100 text-sm mt-1">
+                    Freelancer's replies to the dispute
+                  </p>
+                </div>
+                <div className="p-6 space-y-6">
+                  {responseData
+                    .filter((resp) => resp.userType === "freelancer")
+                    .map((resp, index) => (
+                      <div
+                        key={index}
+                        className="border-l-4 border-green-500 bg-green-50 rounded-xl overflow-hidden"
+                      >
+                        <div className="p-6">
+                          <div className="flex items-center justify-between mb-4">
+                            <div className="flex items-center gap-3">
                               <img
-                                src={item.trim()}
-                                alt={`Evidence ${index + 1}`}
-                                className="w-full h-48 object-cover rounded-xl border border-slate-200 cursor-pointer transition-transform duration-200 group-hover:scale-105 shadow-sm"
-                                onClick={() => setSelectedImage(item.trim())}
+                                src={dispute.freelancerImg}
+                                alt="Freelancer avatar"
+                                className="w-12 h-12 rounded-full border-2 border-green-300 shadow-sm"
                               />
+                              <div>
+                                <h4 className="font-semibold text-slate-800">
+                                  {dispute.freelancer}
+                                </h4>
+                                <p className="text-slate-600 text-sm">
+                                  {dispute.freelancerEmail}
+                                </p>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <Clock className="w-4 h-4 text-slate-400" />
+                              <span className="text-sm text-slate-500">
+                                Response #{index + 1}
+                              </span>
+                            </div>
+                          </div>
+
+                          <div className="bg-white rounded-lg p-4 mb-4">
+                            <h5 className="font-medium text-slate-800 mb-2">
+                              Freelancer's Response:
+                            </h5>
+                            <p className="text-slate-700 leading-relaxed">
+                              {resp.message}
+                            </p>
+                          </div>
+
+                          {/* Freelancer Evidence */}
+                          {resp.disputeFilesFreelancer && (
+                            <div className="bg-white rounded-lg p-4">
+                              <h5 className="font-medium text-slate-800 mb-3 flex items-center gap-2">
+                                <ImageIcon className="w-4 h-4" />
+                                Supporting Evidence from Freelancer
+                              </h5>
+                              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                {resp.disputeFilesFreelancer
+                                  .split(",")
+                                  .map((file, i) => (
+                                    <div key={i} className="relative group">
+                                      <img
+                                        src={file.trim()}
+                                        alt={`Freelancer Evidence ${i + 1}`}
+                                        className="w-full h-32 object-cover rounded-lg border-2 border-green-300 cursor-pointer hover:scale-105 transition-transform duration-200 shadow-sm"
+                                        onClick={() => setSelectedImage(file.trim())}
+                                      />
+                                      <div className="absolute top-2 left-2 bg-green-500 text-white text-xs px-2 py-1 rounded-full">
+                                        Freelancer
+                                      </div>
+                                    </div>
+                                  ))}
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+
+                  {/* No Freelancer Response Message */}
+                  {!responseData.some((resp) => resp.userType === "freelancer") && (
+                    <div className="text-center py-12">
+                      <div className="inline-flex items-center justify-center w-16 h-16 bg-amber-100 rounded-full mb-4">
+                        <Clock className="w-8 h-8 text-amber-600" />
+                      </div>
+                      <h3 className="text-lg font-medium text-slate-800 mb-2">
+                        Awaiting Freelancer Response
+                      </h3>
+                      <p className="text-slate-600">
+                        The freelancer has not yet responded to this dispute.
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Show Client Responses in Conversation if Any */}
+                  {responseData.some((resp) => resp.userType === "client") && (
+                    <div className="mt-8 pt-6 border-t border-slate-200">
+                      <h3 className="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
+                        <MessageSquare className="w-5 h-5 text-blue-500" />
+                        Additional Client Messages
+                      </h3>
+                      <div className="space-y-4">
+                        {responseData
+                          .filter((resp) => resp.userType === "client")
+                          .map((resp, index) => (
+                            <div
+                              key={index}
+                              className="border-l-4 border-blue-500 bg-blue-50 rounded-xl p-4"
+                            >
+                              <div className="flex items-center gap-3 mb-3">
+                                <img
+                                  src={dispute.clientImg}
+                                  alt="Client avatar"
+                                  className="w-10 h-10 rounded-full border-2 border-blue-300"
+                                />
+                                <div>
+                                  <span className="font-medium text-slate-800">
+                                    {dispute.client}
+                                  </span>
+                                  <span className="text-sm text-slate-500 ml-2">
+                                    Follow-up #{index + 1}
+                                  </span>
+                                </div>
+                              </div>
+                              <p className="text-slate-700 bg-white rounded-lg p-3">
+                                {resp.message}
+                              </p>
                             </div>
                           ))}
                       </div>
@@ -271,53 +401,24 @@ export default function ViewDisputeDetail() {
                   )}
                 </div>
               </div>
-            </div>
-
-            {/* Freelancer Response (if exists) */}
-            {dispute.disputeResponse && (
+            ) : (
               <div className="bg-white rounded-2xl shadow-sm border border-slate-200/60 overflow-hidden">
-                <div className="bg-gradient-to-r from-blue-500 to-cyan-600 p-6">
+                <div className="bg-gradient-to-r from-amber-500 to-orange-600 p-6">
                   <h2 className="text-xl font-semibold text-white flex items-center gap-2">
-                    <FileText className="w-5 h-5" />
-                    Freelancer Response
+                    <Clock className="w-5 h-5" />
+                    Pending Freelancer Response
                   </h2>
                 </div>
-                <div className="p-6">
-                  <div className="space-y-4">
-                    <div>
-                      <h3 className="font-semibold text-slate-800 mb-2">
-                        Response
-                      </h3>
-                      <p className="text-slate-700 bg-blue-50 p-4 rounded-xl">
-                        {dispute.disputeResponse.reply.message}
-                      </p>
-                    </div>
-                    {dispute.disputeResponse.reply.proof && (
-                      <div>
-                        <h3 className="font-semibold text-slate-800 mb-3">
-                          Supporting Evidence
-                        </h3>
-                        <img
-                          src={dispute.disputeResponse.reply.proof}
-                          alt="Freelancer Evidence"
-                          className="w-full max-w-md h-auto rounded-xl border border-slate-200 cursor-pointer hover:scale-105 transition-transform duration-200 shadow-sm"
-                          onClick={() =>
-                            setSelectedImage(
-                              dispute.disputeResponse.reply.proof
-                            )
-                          }
-                        />
-                      </div>
-                    )}
-                    <div className="bg-blue-50 p-4 rounded-xl">
-                      <h4 className="font-medium text-blue-800 mb-1">
-                        Proposed Settlement
-                      </h4>
-                      <p className="text-blue-700">
-                        {dispute.disputeResponse.reply.settlement}
-                      </p>
-                    </div>
+                <div className="p-8 text-center">
+                  <div className="inline-flex items-center justify-center w-20 h-20 bg-amber-100 rounded-full mb-4">
+                    <MessageSquare className="w-10 h-10 text-amber-600" />
                   </div>
+                  <h3 className="text-lg font-medium text-slate-800 mb-2">
+                    No Responses Yet
+                  </h3>
+                  <p className="text-slate-600">
+                    The freelancer has not yet responded to this dispute. They will be notified to provide their side of the story.
+                  </p>
                 </div>
               </div>
             )}
@@ -384,24 +485,28 @@ export default function ViewDisputeDetail() {
                 </div>
 
                 <div className="mt-6 p-4 bg-slate-50 rounded-xl">
-                  <h4 className="font-medium text-slate-800 mb-2">
-                    Quick Stats
+                  <h4 className="font-medium text-slate-800 mb-3">
+                    Dispute Summary
                   </h4>
                   <div className="space-y-2 text-sm">
+                    <div className="flex justify-between">
+                      <span className="text-slate-600">Raised By:</span>
+                      <span className="font-medium text-red-600">
+                        {dispute.client}
+                      </span>
+                    </div>
                     <div className="flex justify-between">
                       <span className="text-slate-600">Total Value:</span>
                       <span className="font-medium text-slate-800">
                         ${dispute.total_price}
                       </span>
                     </div>
-                    {/* <div className="flex justify-between">
-                      <span className="text-slate-600">Dispute Age:</span>
-                      <span className="font-medium text-slate-800">3 days</span>
-                    </div>
                     <div className="flex justify-between">
-                      <span className="text-slate-600">Priority:</span>
-                      <span className="font-medium text-red-600">High</span>
-                    </div> */}
+                      <span className="text-slate-600">Status:</span>
+                      <span className="font-medium text-amber-600">
+                        Under Review
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>

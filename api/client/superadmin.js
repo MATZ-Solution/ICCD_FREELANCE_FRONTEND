@@ -64,7 +64,7 @@ export function useGetAllGigs(params = {}) {
   });
 
   return {
-    data: data?.data?.data, // backend response ke andar 'data' key mein gigs array hai
+    data: data?.data?.data, 
     error,
     isLoading,
     isError,
@@ -87,7 +87,7 @@ export function useGetAllProjects(params = {}) {
   });
 
   return {
-    data: data?.data?.data, // backend response ke andar 'data' key mein gigs array hai
+    data: data?.data?.data, 
     error,
     isLoading,
     isError,
