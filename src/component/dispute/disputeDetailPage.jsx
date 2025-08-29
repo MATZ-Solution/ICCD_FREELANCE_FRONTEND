@@ -3,7 +3,9 @@ import { useLocation } from 'react-router-dom';
 import { ArrowLeft, Clock, AlertTriangle, CheckCircle, XCircle, Download, Send, Scale, X } from "lucide-react";
 import ResponseDispute from '../client_order/ResponseDispute';
 
-function DisputeDetailPage({ data }) {
+function DisputeDetailPage({ userResponseData, data }) {
+
+    console.log("userResponseData: ", userResponseData)
 
     const pathName = useLocation().pathname
     const userType = pathName.includes("client") ? 'client' : 'freelancer'
