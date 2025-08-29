@@ -101,6 +101,7 @@ export function useGetDisputeById(id) {
   });
   return {
     data: data?.data?.data,
+    userResponseData: data?.data?.responseData,
     isSuccess,
     isPending,
     isError,

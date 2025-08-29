@@ -17,13 +17,12 @@ import { useGetDisputeAdminById } from "../../../api/client/dispute";
 
 export default function ViewDisputeDetail() {
   const { id } = useParams();
-  const { data, responseData, isSuccess, isLoading, isError } =
-    useGetDisputeAdminById(id);
-
-  console.log(data);
+  const { data, responseData, isSuccess, isLoading, isError } = useGetDisputeAdminById(id);
 
   const [partialAmount, setPartialAmount] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
+
+  console.log("responseData: ", responseData)
 
   if (isLoading) return <div className="p-6 text-center">Loading...</div>;
   if (isError)

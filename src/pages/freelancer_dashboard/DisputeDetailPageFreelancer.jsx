@@ -7,13 +7,13 @@ import DisputeDetailPage from "../../component/dispute/disputeDetailPage";
 const DisputeDetailPageFreelancer = () => {
 
   const { id } = useParams()
-  const { data, isPending, isError } = useGetDisputeById(id)
+  const { data, userResponseData, isPending, isError } = useGetDisputeById(id)
 
   if (isPending) return <ICCDLoader />
   if (isError) return <ICCDError />
 
   return (
-    <DisputeDetailPage data={data} />
+    <DisputeDetailPage userResponseData={userResponseData} data={data} />
   );
 };
 
