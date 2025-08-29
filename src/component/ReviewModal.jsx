@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { X, Star } from "lucide-react";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -7,12 +7,13 @@ import * as yup from "yup";
 // ✅ Validation Schema
 const schema = yup.object().shape({
   rating: yup.number().min(1, "Please select a rating").required(),
-  review: yup.string().required("Review is required").min(10, "At least 10 characters"),
+  review: yup
+    .string()
+    .required("Review is required")
+    .min(10, "At least 10 characters"),
 });
 
 const ReviewModal = ({ isOpen, onClose, onSubmit }) => {
-  const [hover, setHover] = useState(0);
-
   const {
     handleSubmit,
     control,
@@ -24,7 +25,12 @@ const ReviewModal = ({ isOpen, onClose, onSubmit }) => {
   });
 
   const handleFormSubmit = (data) => {
-    onSubmit(data);
+    // ✅ Log values to console
+    console.log("⭐ Full Review Data:", data);
+    console.log("Rating:", data.rating);
+    console.log("Review:", data.review);
+
+    onSubmit(data); // parent callback
     reset();
     onClose();
   };
@@ -34,7 +40,7 @@ const ReviewModal = ({ isOpen, onClose, onSubmit }) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/40 z-50">
       <div className="bg-white rounded-2xl shadow-lg w-full max-w-md p-6 relative">
-        {/* Close */}
+        {/* Close Button */}
         <button
           onClick={onClose}
           className="absolute top-3 right-3 text-gray-500 hover:text-gray-800"
@@ -57,15 +63,13 @@ const ReviewModal = ({ isOpen, onClose, onSubmit }) => {
                   <button
                     key={star}
                     type="button"
-                    onClick={() => field.onChange(star)}
-                    onMouseEnter={() => setHover(star)}
-                    onMouseLeave={() => setHover(0)}
+                    onClick={() => field.onChange(star)} // ✅ Click se rating set
                     className="focus:outline-none"
                   >
                     <Star
                       size={28}
                       className={`${
-                        star <= (hover || field.value)
+                        star <= field.value
                           ? "text-yellow-400 fill-yellow-400"
                           : "text-gray-300"
                       }`}
