@@ -5,8 +5,6 @@ import ResponseDispute from '../client_order/ResponseDispute';
 
 function DisputeDetailPage({ userResponseData, data }) {
 
-    console.log("userResponseData: ", userResponseData)
-
     const pathName = useLocation().pathname
     const userType = pathName.includes("client") ? 'client' : 'freelancer'
     const [showSettlementModal, setShowSettlementModal] = useState(false)
