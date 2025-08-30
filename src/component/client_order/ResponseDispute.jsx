@@ -24,7 +24,7 @@ const schema = yup.object().shape({
     .max(5, "You can upload up to 5 files only"),
 });
 
-const ResponseDispute = ({ setShowSettlementModal, responseData }) => {
+const ResponseDispute = ({ setShowSettlementModal, userApplyResData }) => {
 
   const {
     control,
@@ -64,7 +64,7 @@ const ResponseDispute = ({ setShowSettlementModal, responseData }) => {
   const { addDisputeResponse, isSuccess, isPending, isError, error } = useAddDisputeResponse()
 
   const onSubmit = (data) => {
-    const datas = { ...responseData, ...data }
+    const datas = { ...userApplyResData, ...data }
     const formData = new FormData();
     {
       (data.files && data.files.length > 0) && data.files?.forEach((img) => {

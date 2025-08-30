@@ -23,16 +23,16 @@ function DisputeDetailPage({ userResponseData = [], data = [] }) {
 
   console.log("useruserResponseData", userResponseData);
 
-  // const userResponseData =
-  //   disputeData && disputeData.raised_by !== userType
-  //     ? {
-  //         disputeId: disputeData.id,
-  //         userId: disputeData.freelancerId,
-  //         client_id: disputeData.clientId,
-  //         userType: userType,
-  //         freelancerUserID: disputeData.freelancerUserID,
-  //       }
-  //     : null;
+  const userApplyResData =
+    disputeData && disputeData.raised_by !== userType
+      ? {
+          disputeId: disputeData.id,
+          userId: disputeData.freelancerId,
+          client_id: disputeData.clientId,
+          userType: userType,
+          freelancerUserID: disputeData.freelancerUserID,
+        }
+      : null;
 
   const getStatusBadge = (status) => {
     const statusConfig = {
@@ -355,7 +355,7 @@ function DisputeDetailPage({ userResponseData = [], data = [] }) {
       {/* Settlement Modal */}
       {showSettlementModal && userResponseData && (
         <ResponseDispute
-          userResponseData={userResponseData}
+          userApplyResData={userApplyResData}
           setShowSettlementModal={setShowSettlementModal}
         />
       )}
