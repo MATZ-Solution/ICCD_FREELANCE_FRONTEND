@@ -25,6 +25,8 @@ const ManageFreelancers = () => {
     refetch,
   } = useGetAllFreelancers();
 
+
+  console.log(freelancers)
   const formatDate = useCallback((dateString) => {
     if (!dateString) return "N/A";
     return new Date(dateString).toLocaleDateString("en-US", {
@@ -78,6 +80,8 @@ const ManageFreelancers = () => {
 
     return filtered;
   }, [freelancers, search, statusFilter, sortBy, sortOrder]);
+
+  console.log(filteredAndSortedFreelancers)
 
   if (isLoading) return <DataLoader tag="Freelancer" />;
 
@@ -165,8 +169,8 @@ const ManageFreelancers = () => {
 
         {/* Freelancers Grid */}
         <div className="space-y-6">
-          {filteredAndSortedFreelancers.length > 0 ? (
-            filteredAndSortedFreelancers.map((freelancer) => (
+          {freelancers.length > 0 ? (
+            freelancers.map((freelancer) => (
               <div
                 key={freelancer.id}
                 className="bg-white/70 backdrop-blur-sm rounded-3xl shadow-xl border border-white/20 hover:shadow-2xl hover:border-blue-200/50 transition-all duration-500 transform hover:-translate-y-2 overflow-hidden group"

@@ -111,6 +111,8 @@ export default function FreelancerDashboard() {
               variant="teal"
               icon={<span className="text-2xl">💼</span>}
             /> */}
+
+            {console.log(dashData)}
           <DCard
             title="Total Gigs Added"
             value={dashData?.[0]?.totalGigsAdded}
