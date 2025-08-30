@@ -14,12 +14,14 @@ import ResponseDispute from "../client_order/ResponseDispute";
 
 function DisputeDetailPage({ userResponseData = [], data = [] }) {
 
-
-    console.log("mohiddin ",userResponseData)
-
-  const pathName = useLocation().pathname;
-  const userType = pathName.includes("client") ? "client" : "freelancer";
-  const [showSettlementModal, setShowSettlementModal] = useState(false);
+    const pathName = useLocation().pathname
+    const userType = pathName.includes("client") ? 'client' : 'freelancer'
+    const [showSettlementModal, setShowSettlementModal] = useState(false)
+    const responseData = data[0]?.raised_by !== userType ? {
+        disputeId: data[0]?.id, userId: data[0]?.freelancerId,
+        client_id: data[0]?.clientId, 
+        userType: userType, freelancerUserID: data[0]?.freelancerUserID
+    } : null
 
 
   const disputeData = data[0]; // shorthand

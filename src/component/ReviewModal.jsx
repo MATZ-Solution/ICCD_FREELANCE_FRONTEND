@@ -3,6 +3,7 @@ import { X, Star } from "lucide-react";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { useAddRating } from "../../api/client/review";
 
 // ✅ Validation Schema
 const schema = yup.object().shape({
@@ -13,7 +14,7 @@ const schema = yup.object().shape({
     .min(10, "At least 10 characters"),
 });
 
-const ReviewModal = ({ isOpen, onClose, onSubmit }) => {
+const ReviewModal = ({ orderData, isOpen, onClose, onSubmit }) => {
   const {
     handleSubmit,
     control,
@@ -24,11 +25,12 @@ const ReviewModal = ({ isOpen, onClose, onSubmit }) => {
     defaultValues: { rating: 0, review: "" },
   });
 
+  const { addRating, isSuccess, isPending, isError, error } = useAddRating()
+
   const handleFormSubmit = (data) => {
-    // ✅ Log values to console
-    console.log("⭐ Full Review Data:", data);
-    console.log("Rating:", data.rating);
-    console.log("Review:", data.review);
+    const { orderId, client_id, freelancer_id } = orderData
+    const datas = { ...data, orderId, client_id, freelancer_id }
+    addRating(datas)
 
     onSubmit(data); // parent callback
     reset();
@@ -68,11 +70,10 @@ const ReviewModal = ({ isOpen, onClose, onSubmit }) => {
                   >
                     <Star
                       size={28}
-                      className={`${
-                        star <= field.value
+                      className={`${star <= field.value
                           ? "text-yellow-400 fill-yellow-400"
                           : "text-gray-300"
-                      }`}
+                        }`}
                     />
                   </button>
                 ))}

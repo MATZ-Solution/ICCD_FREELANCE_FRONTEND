@@ -83,6 +83,10 @@ const API_ROUTE = {
     getNofication: '/notifications/getNotification',
     unread_count: '/notifications/unread-count',
     mark_read: '/notifications/mark-read'
+  },
+  rating: {
+    addFreelancerRating: '/rating/addFreelancerRating'
+
   }
 };
 

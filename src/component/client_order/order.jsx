@@ -37,7 +37,7 @@ function ClientOrders() {
   const { data, isError, isLoading } = useGetOrderByClient({
     search,
   });
-  console.log("data order:", data);
+  
 
   const handleView = (id) => {
     console.log("Viewing order:", id);
@@ -355,6 +355,7 @@ function ClientOrders() {
 
         {showReviewModal && (
           <ReviewModal
+            orderData={orderDetails}
             isOpen={showReviewModal}
             onClose={() => setshowReviewModal(false)}
             onSubmit={handleReviewSubmit}

@@ -8,7 +8,7 @@ const DisputeDetailPageFreelancer = () => {
 
   const { id } = useParams()
   const { data, userResponseData, isPending, isError } = useGetDisputeById(id)
-
+  
   if (isPending) return <ICCDLoader />
   if (isError) return <ICCDError />
 
