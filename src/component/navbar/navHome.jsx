@@ -17,6 +17,7 @@ function NavHome() {
     const pathName = useLocation().pathname
     const [isOpen, setIsOpen] = useState(false);
     const isActive = (path) => pathName === path;
+
     const navTabs = pathName.startsWith('/client')
         ? navTabsClientDashboard
         : pathName.startsWith('/freelancer')
@@ -24,7 +25,6 @@ function NavHome() {
             : pathName.startsWith('/superadmin') ?
                 navTabsSuperAdminDashboard
                 : navigation;
-
 
     return (
 
@@ -83,7 +83,7 @@ function NavHome() {
                             </div>
                     }
                 </nav>
-                {pathName.includes('client') || pathName.includes('freelancer') ?
+                {pathName.startsWith('/client') || pathName.startsWith('/freelancer') ?
                     <RightSideClient />
                     :
                     <RightSideHome />
