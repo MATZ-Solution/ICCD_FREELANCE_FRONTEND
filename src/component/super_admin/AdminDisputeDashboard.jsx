@@ -35,7 +35,7 @@ const AdminDisputeDashboard = () => {
         text: "text-green-800",
         label: "Ressolved",
       },
-      pending: {
+      pending_info: {
         bg: "bg-red-100",
         text: "text-red-800",
         label: "Pending",
@@ -86,7 +86,7 @@ const AdminDisputeDashboard = () => {
   const stats = {
     total: data.length,
     Ressolved: data.filter((d) => d.status === "Ressolved").length,
-    pendingInfo: data.filter((d) => d.status === "pending").length,
+    pendingInfo: data.filter((d) => d.status === "pending_info").length,
     underReview: data.filter((d) => d.status === "under_review").length,
   };
 
@@ -145,7 +145,7 @@ const AdminDisputeDashboard = () => {
                 onChange={setStatusFilter}
                 options={[
                   { value: "all", label: "All" },
-                  { value: "pending", label: "Pending" },
+                  { value: "pending_info", label: "Pending" },
                   { value: "under_review", label: "Under Review" },
                   { value: "Ressolved", label: "Ressolved" },
                 ]}
@@ -192,7 +192,7 @@ const AdminDisputeDashboard = () => {
                       <Party label="Freelancer" name={dispute.freelancerName} color="purple" />
                     </td>
                     <td className="px-6 py-4">{getStatusBadge(dispute.status)}</td>
-                    <td className="px-6 py-4 flex items-center gap-1">
+                    <td className="px-6 py-4 mt-4 flex items-center gap-1">
                       <DollarSign className="w-4 h-4 text-gray-400" />
                       <span>{dispute.total_price}</span>
                     </td>
