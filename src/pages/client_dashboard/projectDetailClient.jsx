@@ -1,12 +1,21 @@
 import {
+  MapPin,
   Clock,
   Users,
+  Heart,
+  Facebook,
+  Twitter,
+  Linkedin,
+  Instagram,
+  CheckCircle,
+  Star,
   Briefcase,
   Calendar,
   Globe,
 } from "lucide-react"
 import { useParams } from "react-router-dom";
-import { useGetProjectProposalByClient, useGetProjectsByClient, useGetProjectsById } from "../../../api/client/project";
+import profilepic from "../../assets/freelancer_dashboard/client_img.png"
+import { useGetProjectProposalByClient, useGetProjectsById } from "../../../api/client/project";
 import { formatSingleDate } from "../../../functions/timeFormat";
 import ProposalModal from "../../component/ProposalModal";
 import { useState } from "react";
@@ -20,7 +29,7 @@ export const ProjectDetailClient = () => {
   const { id } = useParams()
   let [show, setShow] = useState(false)
   const pathName = useLocation().pathname
-  const { data, isSuccess, isPending, isError, isLoading } = useGetProjectsByClient(id)
+  const { data, isSuccess, isPending, isError, isLoading } = useGetProjectsById(id)
   const { data: propData, isSuccess: propSucc, isPending: propIsPend, isError: propIsErr, isLoading: propIsLoad } = useGetProjectProposalByClient(id)
 
   
