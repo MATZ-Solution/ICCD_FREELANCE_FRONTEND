@@ -104,7 +104,12 @@ function RightSideClient() {
                     { name: "Switch to Freelancer", action: handleSwitchClient },
                     { name: "Dashboard", action: () => navigate("/client/dashboard") },
                     { name: "View Profile", action: () => navigate("/client/profile") },
+                    
                     { name: "Order", action: () => navigate("/client/orders") },
+                    { name: "Posted Projects", action: () => navigate("/client/projects") },
+                    { name: "Posted Jobs", action: () => navigate("/client/jobs") },
+                    { name: "DisputesList", action: () => navigate("/client/DisputesList") },
+
                     { name: "Logout", action: logout },
                 ];
 

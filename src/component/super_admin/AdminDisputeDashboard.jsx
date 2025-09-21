@@ -35,7 +35,7 @@ const AdminDisputeDashboard = () => {
         text: "text-green-800",
         label: "Ressolved",
       },
-      pending_info: {
+      pending: {
         bg: "bg-red-100",
         text: "text-red-800",
         label: "Pending",
@@ -66,8 +66,8 @@ const AdminDisputeDashboard = () => {
       !searchTerm ||
       dispute.id?.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
       dispute.orderId?.toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
-      dispute.clientName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      dispute.freelancerName?.toLowerCase().includes(searchTerm.toLowerCase());
+      dispute.client?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      dispute.freelancer?.toLowerCase().includes(searchTerm.toLowerCase());
 
     const matchesStatus =
       statusFilter === "all" || dispute.status === statusFilter;
@@ -86,7 +86,7 @@ const AdminDisputeDashboard = () => {
   const stats = {
     total: data.length,
     Ressolved: data.filter((d) => d.status === "Ressolved").length,
-    pendingInfo: data.filter((d) => d.status === "pending_info").length,
+    pendingInfo: data.filter((d) => d.status === "pending").length,
     underReview: data.filter((d) => d.status === "under_review").length,
   };
 
@@ -145,7 +145,7 @@ const AdminDisputeDashboard = () => {
                 onChange={setStatusFilter}
                 options={[
                   { value: "all", label: "All" },
-                  { value: "pending_info", label: "Pending" },
+                  { value: "pending", label: "Pending" },
                   { value: "under_review", label: "Under Review" },
                   { value: "Ressolved", label: "Ressolved" },
                 ]}
@@ -188,8 +188,8 @@ const AdminDisputeDashboard = () => {
                       <p className="text-xs text-gray-400">{dispute.subject}</p>
                     </td>
                     <td className="px-6 py-4">
-                      <Party label="Client" name={dispute.clientName} color="blue" />
-                      <Party label="Freelancer" name={dispute.freelancerName} color="purple" />
+                      <Party label="Client" name={dispute.client} color="blue" />
+                      <Party label="Freelancer" name={dispute.freelancer} color="purple" />
                     </td>
                     <td className="px-6 py-4">{getStatusBadge(dispute.status)}</td>
                     <td className="px-6 py-4 mt-4 flex items-center gap-1">

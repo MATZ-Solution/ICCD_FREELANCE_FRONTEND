@@ -54,7 +54,7 @@ const ManageFreelancers = () => {
       const matchesSearch =
         fullName.includes(search.toLowerCase()) ||
         (f.email || "").toLowerCase().includes(search.toLowerCase()) ||
-        (f.skill || "").toLowerCase().includes(search.toLowerCase()) ||
+        (f.skills || "").toLowerCase().includes(search.toLowerCase()) ||
         (f.location || "").toLowerCase().includes(search.toLowerCase());
       const matchesStatus = statusFilter === "all" || f.status === statusFilter;
       return matchesSearch && matchesStatus;
@@ -131,7 +131,7 @@ const ManageFreelancers = () => {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className="block w-full pl-14 pr-6 py-4 border border-slate-200 rounded-2xl bg-white/80 backdrop-blur-sm placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-300 shadow-lg hover:shadow-xl text-lg"
-                placeholder="Search by name, email, skills, or location..."
+                placeholder="Search by name, email, skillss, or location..."
               />
             </div>
 
@@ -170,87 +170,88 @@ const ManageFreelancers = () => {
         {/* Freelancers Grid */}
         <div className="space-y-6">
           {freelancers.length > 0 ? (
-            freelancers.map((freelancer) => (
-              <div
-                key={freelancer.id}
-                className="bg-white/70 backdrop-blur-sm rounded-3xl shadow-xl border border-white/20 hover:shadow-2xl hover:border-blue-200/50 transition-all duration-500 transform hover:-translate-y-2 overflow-hidden group"
-              >
-                <div className="p-8 flex flex-col xl:flex-row xl:items-center gap-8">
-                  {/* Profile */}
-                  <div className="flex items-center gap-6 xl:w-1/3">
-                    <div className="relative">
-                      {freelancer?.fileUrl ? (
-                        <img
-                          src={freelancer.fileUrl}
-                          alt={`${freelancer.firstName} ${freelancer.lastName}`}
-                          className="w-20 h-20 rounded-2xl object-cover ring-4 ring-white shadow-lg"
-                        />
-                      ) : (
-                        <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-blue-100 via-blue-200 to-indigo-200 flex items-center justify-center shadow-lg">
-                          <User className="w-10 h-10 text-blue-600" />
+            freelancers.map((freelancer) => {
+              return (
+                <div
+                  key={freelancer.id}
+                  className="bg-white/70 backdrop-blur-sm rounded-3xl shadow-xl border border-white/20 hover:shadow-2xl hover:border-blue-200/50 transition-all duration-500 transform hover:-translate-y-2 overflow-hidden group"
+                >
+                  <div className="p-8 flex flex-col xl:flex-row xl:items-center gap-8">
+                    {/* Profile */}
+                    <div className="flex items-center gap-6 xl:w-1/3">
+                      <div className="relative">
+                        {freelancer?.fileUrl ? (
+                          <img
+                            src={freelancer.fileUrl}
+                            alt={`${freelancer.firstName} ${freelancer.lastName}`}
+                            className="w-20 h-20 rounded-2xl object-cover ring-4 ring-white shadow-lg" />
+                        ) : (
+                          <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-blue-100 via-blue-200 to-indigo-200 flex items-center justify-center shadow-lg">
+                            <User className="w-10 h-10 text-blue-600" />
+                          </div>
+                        )}
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-3 mb-2">
+                          <h3 className="text-xl font-bold text-slate-800 truncate">
+                            {freelancer.firstName} {freelancer.lastName}
+                          </h3>
                         </div>
-                      )}
-                    </div>
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-center gap-3 mb-2">
-                        <h3 className="text-xl font-bold text-slate-800 truncate">
-                          {freelancer.firstName} {freelancer.lastName}
-                        </h3>
-                      </div>
-                      <p className="text-slate-600 font-medium flex items-center gap-2 mb-2">
-                        <Mail className="w-4 h-4" />
-                        {freelancer.email || "N/A"}
-                      </p>
-                      {freelancer.location && (
-                        <p className="text-slate-600 font-medium flex items-center gap-2 mb-3">
-                          <MapPin className="w-4 h-4" />
-                          {freelancer.location}
+                        <p className="text-slate-600 font-medium flex items-center gap-2 mb-2">
+                          <Mail className="w-4 h-4" />
+                          {freelancer.email || "N/A"}
                         </p>
-                      )}
+                        {freelancer.location && (
+                          <p className="text-slate-600 font-medium flex items-center gap-2 mb-3">
+                            <MapPin className="w-4 h-4" />
+                            {freelancer.location}
+                          </p>
+                        )}
+                      </div>
                     </div>
-                  </div>
 
-                  {/* Info Grid */}
-                  <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <div className="space-y-3">
-                      <div className="text-xs font-bold text-slate-500 uppercase tracking-wider">
-                        Skills
+                    {/* Info Grid */}
+                    <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                      <div className="space-y-3">
+                        <div className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+                          skills
+                        </div>
+                        <p className="text-slate-800 font-semibold text-sm leading-relaxed">
+                          {freelancer.skills || "N/A"}
+                        </p>
                       </div>
-                      <p className="text-slate-800 font-semibold text-sm leading-relaxed">
-                        {freelancer.skill || "N/A"}
-                      </p>
-                    </div>
-                    <div className="space-y-3">
-                      <div className="text-xs font-bold text-slate-500 uppercase tracking-wider">
-                        Level
+                      <div className="space-y-3">
+              <div className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+                Level
+              </div>
+              <p className="text-slate-800 font-bold text-lg">
+                {freelancer.about_tagline || "No Tagline Provided"}
+              </p>
+            </div>
+                      <div className="space-y-3">
+                        <div className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+                          Member Since
+                        </div>
+                        <p className="text-slate-800 font-bold">
+                          {formatDate(freelancer.created_at)}
+                        </p>
+                        <p className="text-xs text-slate-500 flex items-center gap-1 font-medium">
+                          <Clock className="w-3 h-3" />
+                          {getRelativeTime(freelancer.created_at)}
+                        </p>
                       </div>
-                      <p className="text-slate-800 font-bold text-lg">
-                        {freelancer.level || "N/A"}
-                      </p>
                     </div>
-                    <div className="space-y-3">
-                      <div className="text-xs font-bold text-slate-500 uppercase tracking-wider">
-                        Member Since
-                      </div>
-                      <p className="text-slate-800 font-bold">
-                        {formatDate(freelancer.created_at)}
-                      </p>
-                      <p className="text-xs text-slate-500 flex items-center gap-1 font-medium">
-                        <Clock className="w-3 h-3" />
-                        {getRelativeTime(freelancer.created_at)}
-                      </p>
-                    </div>
-                  </div>
 
-                  {/* Actions */}
-                  <div className="xl:w-auto flex flex-col gap-2">
-                    <div className="text-xs text-slate-500 text-center font-mono bg-slate-50 px-3 py-2 rounded-lg">
-                      User ID: {freelancer.userID}
+                    {/* Actions */}
+                    <div className="xl:w-auto flex flex-col gap-2">
+                      <div className="text-xs text-slate-500 text-center font-mono bg-slate-50 px-3 py-2 rounded-lg">
+                        User ID: {freelancer.userID}
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))
+              );
+            })
           ) : (
             <div className="bg-white/70 backdrop-blur-sm rounded-3xl shadow-xl border border-white/20 p-16 text-center">
               <div className="mx-auto w-32 h-32 bg-gradient-to-br from-blue-50 via-blue-100 to-indigo-100 rounded-3xl flex items-center justify-center mb-8 shadow-lg">

@@ -21,6 +21,8 @@ const FreelancerEditProfile = () => {
   const { editProfile, isSuccess: isSuccProfile, isPending: isPendProfile, isError: isErrProfile, error } = useEditProfile(profileDetails.id)
 
 
+
+  console.log(editProfile)
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarType, setSidebarType] = useState(null);
 

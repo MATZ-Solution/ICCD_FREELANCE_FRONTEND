@@ -21,19 +21,43 @@ export default function ClientHomepage() {
 
   const [search, setSearch] = useState(searchTermFromUrl);
 
-  const freelancer = useSelector(state => state.userProfile.userProfile)
-  const { gigs, error, isLoading, isError } = useGetGigs({
-    search: useDebounce(searchTermFromUrl),
-    freelancer_id: freelancer?.id
+  const debouncedSearch = useDebounce(search, 300);
+
+  const freelancer = useSelector((state) => state.userProfile.userProfile);
+
+  const { gigs, isLoading } = useGetGigs({
+    search: debouncedSearch,
+    freelancer_id: freelancer?.id,
   });
 
+  console.log(gigs)
+
+  // Sync search state with URL changes
+  useEffect(() => {
+    const currentSearchTerm =
+      new URLSearchParams(location.search).get("query") ?? "";
+    setSearch(currentSearchTerm);
+  }, [location.search]);
+
   function handleSearch() {
-    if (search.trim() === searchTermFromUrl.trim()) return; // no change
-    navigate(`?query=${encodeURIComponent(search.trim())}`, { replace: true });
+    const trimmedSearch = search.trim();
+    const trimmedUrlSearch = searchTermFromUrl.trim();
+
+    if (trimmedSearch === trimmedUrlSearch) return; // no change
+
+    // Update URL with new search term
+    const newUrl = trimmedSearch
+      ? `?query=${encodeURIComponent(trimmedSearch)}`
+      : window.location.pathname; // Remove query param if search is empty
+
+    navigate(newUrl, { replace: true });
   }
 
   function handleKeyDown(e) {
-    if (e.key === "Enter") handleSearch();
+    if (e.key === "Enter") {
+      e.preventDefault();
+      handleSearch();
+    }
   }
 
   // to set freelancer details in redux
@@ -44,7 +68,15 @@ export default function ClientHomepage() {
     }
   }, [data, dispatch]);
 
-  if (isLoading) return <ICCDLoader />;
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <h2 className="text-2xl font-bold text-gray-700 animate-pulse tracking-wide">
+          Loading Gigs...
+        </h2>
+      </div>
+    );
+  }
 
   // Helper function to format created_at date
   const formatDate = (dateString) => {
@@ -57,21 +89,14 @@ export default function ClientHomepage() {
     });
   };
 
-  // Helper to calculate average rating
-  const getAverageRating = (reviews = []) => {
-    if (!reviews.length) return 0;
-    const total = reviews.reduce((acc, r) => acc + (r.rating || 0), 0);
-    return (total / reviews.length).toFixed(1); // e.g. 4.5
-  };
-
   return (
     <div className="min-h-screen px-4 bg-white">
-      <div className="mt-4 lg:hidden md:hidden relative max-w-xl mx-auto">
+      <div className="mt-4  lg:hidden md:hidden relative max-w-xl mx-auto">
         <input
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="What services are you looking Today"
+          placeholder="What services are you looking for today?"
           className="rounded w-full h-10 p-3 border border-gray-400"
         />
         <button
@@ -90,29 +115,48 @@ export default function ClientHomepage() {
           <h1 className="font-semibold mb-3 text-xl">
             Based on what you might be looking for
           </h1>
+
+          {/* Show search results info */}
+          {debouncedSearch && (
+            <p className="text-gray-600 mb-4">
+              Showing results for: "{debouncedSearch}"
+            </p>
+          )}
+
           {/* Gig Cards Section */}
           <div className="mt-6 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {gigs?.map((gig) => {
-              const avgRating = getAverageRating(gig.reviews || []);
-              const totalReviews = gig.reviews ? gig.reviews.length : 0;
+            {gigs?.length > 0 ? (
+              gigs.map((gig) => {
+                const totalReviews = gig.reviews ? gig.reviews.length : 0;
 
-              return (
-                <GigCard
-                  key={gig.id}
-                  onClick={() => navigate(`/client/gigs/gigs_details/${gig.id}`)}
-                  image={gig.fileUrls ? gig.fileUrls.split(",")[0] : ""}
-                  title={gig.title}
-                  author={`${gig.firstName} ${gig.lastName}`}
-                  authorImg={gig.freelancerImg}
-                  level="Level 2++"
-                  rating={avgRating} // ✅ Dynamic rating
-                  reviews={totalReviews} // ✅ Dynamic total reviews
-                  price={gig.price || 0} // dynamic price
-                  created_at={formatDate(gig.created_at)}
-                  offersVideoConsultation={true}
-                />
-              );
-            })}
+                return (
+                  <GigCard
+                    key={gig.id}
+                    onClick={() =>
+                      navigate(`/client/gigs/gigs_details/${gig.id}`)
+                    }
+                    image={gig.fileUrls ? gig.fileUrls.split(",")[0] : ""}
+                    title={gig.title}
+                    author={`${gig.firstName} ${gig.lastName}`}
+                    authorImg={gig.freelancerImg}
+                    level="Level 2++"
+                    rating={gig.id}
+                    reviews={totalReviews}
+                    price={gig.price || 0}
+                    created_at={formatDate(gig.created_at)}
+                    offersVideoConsultation={true}
+                  />
+                );
+              })
+            ) : (
+              <div className="col-span-full text-center py-8">
+                <p className="text-gray-500">
+                  {debouncedSearch
+                    ? "No gigs found for your search."
+                    : "No gigs available."}
+                </p>
+              </div>
+            )}
           </div>
         </main>
       </div>

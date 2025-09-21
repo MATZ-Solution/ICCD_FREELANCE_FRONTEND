@@ -12,6 +12,8 @@ import ICCDLoader from "../../component/loader";
 import DCard from "../../component/freelancer_dashboard/cards";
 import Table from "../freelancer_gigs/table";
 import LineChartComponent from "./LineChartComponent";
+import { useFreelancerAverageRating } from '../../../api/client/review';
+import StarRating from '../../component/StarRating';
 
 export default function FreelancerDashboard() {
   const [showVerificationAlert, setShowVerificationAlert] = useState(true);
@@ -24,6 +26,7 @@ export default function FreelancerDashboard() {
 
   const { data: ordersData, isLoading: ordersLoading } = useGetOrderByFreelancer();
   const { data: dashData, isLoading: dashDataLoading } = useGetFreelDashboardData();
+const { averageRating, totalReviews, isLoading } = useFreelancerAverageRating(freelancer?.id);
 
   useEffect(() => {
     if (freelancer?.id) {
@@ -31,7 +34,10 @@ export default function FreelancerDashboard() {
     }
   }, [freelancer]);
 
+
   if (dashDataLoading || ordersLoading) return <ICCDLoader />;
+
+  // console.log(averageRating)
 
   return (
     <div className="min-h-screen px-4 sm:px-6 bg-white">
@@ -46,6 +52,7 @@ export default function FreelancerDashboard() {
                   {freelancer?.firstName} {freelancer?.lastName}
                 </h3>
                 <p className="text-xs text-gray-500">{userDetails?.email}</p>
+                <StarRating freelancerId={freelancer.id} />
               </div>
             </div>
             <button
@@ -112,7 +119,6 @@ export default function FreelancerDashboard() {
               icon={<span className="text-2xl">💼</span>}
             /> */}
 
-            {console.log(dashData)}
           <DCard
             title="Total Gigs Added"
             value={dashData?.[0]?.totalGigsAdded}

@@ -16,7 +16,7 @@ import { useGetOrderByClient } from "../../../api/client/order";
 import ICCDLoader from "../loader";
 import { Modal } from "./Modal";
 import { DisputeModal } from "./DisputeModal";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import ReviewModal from "../ReviewModal";
 
@@ -33,14 +33,21 @@ function ClientOrders() {
   const [search, setSearch] = useState("");
   const pathName = useLocation().pathname;
 
+  const navigate = useNavigate();
+
   const [orderDetails, setOrderDetails] = useState("");
   const { data, isError, isLoading } = useGetOrderByClient({
     search,
   });
+
+  console.log(data)
   
 
-  const handleView = (id) => {
-    console.log("Viewing order:", id);
+  const handleView = () => {
+    // console.log("Viewing order:", id);
+    // navigate(`/client/orderDetail/${id}`)
+      navigate(`/client/orderDetail/${data[0].orderId}`);
+
     // navigate to order details
   };
 
@@ -203,7 +210,7 @@ function ClientOrders() {
                           <h3 className="text-lg font-semibold text-gray-900 line-clamp-2 group-hover:text-blue-600 transition-colors">
                             {item.gigsTitle}
                           </h3>
-                          <div className="flex flex-wrap gap-4 text-sm">
+                          <div className="flex flex-col gap-4 text-sm">
                             <div className="flex items-center gap-2">
                               <Package className="w-4 h-4 text-gray-400" />
                               <span className="text-gray-600">Package:</span>
@@ -235,7 +242,7 @@ function ClientOrders() {
                               e.stopPropagation();
                               handleView(item.id);
                             }}
-                            className=" p-4 h-12 mt-8 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-xl font-medium transition-colors flex items-center justify-center gap-2"
+                            className="p-4 h-12 mt-8 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-xl font-medium transition-colors flex items-center justify-center gap-2"
                           >
                             <Eye className="w-4 h-4" />
                             View Details

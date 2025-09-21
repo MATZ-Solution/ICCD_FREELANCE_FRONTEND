@@ -130,6 +130,7 @@ const ProjectForm = () => {
   const {id} = useParams()
   const { addProject, isSuccess, isPending, isError, error } = useAddproject();
   const { editProject} = useEditProjects(id)
+  console.log("id: ", id)
   const {data: getProData} = useGetProjectsById(id)
   
   const onSubmit = (data) => {
@@ -153,7 +154,7 @@ const ProjectForm = () => {
         budget: getProData[0]?.budget || "",
         deadline: getProData[0]?.deadline || null,
         duration: getProData[0]?.duration || "",
-        skills: getProData[0]?.skills.split(',') || [],
+        // skills: getProData[0]?.skills.split(',') || [],
         language: getProData[0]?.languages.split(',') || [],
         total_freelancer: getProData[0]?.total_freelancer || 1,
         mode: getProData[0]?.mode || "",

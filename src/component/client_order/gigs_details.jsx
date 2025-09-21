@@ -5,7 +5,11 @@ import { useGetSingleGigs } from "../../../api/client/gigs";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import ICCDLoader from "../loader";
-import GigCarousel from "./GigCarousel"; // Make sure the path is correct
+import GigCarousel from "./GigCarousel";
+import { useFreelancerGigRatings } from "../../../api/client/review";
+import { User2 } from "lucide-react";
+import { Language } from "@mui/icons-material";
+import StarRating from "../StarRating";
 
 export default function ServicePage() {
   const [activeNavTab, setActiveNavTab] = useState("Basic");
@@ -13,37 +17,42 @@ export default function ServicePage() {
 
   const navigate = useNavigate();
   const userDetails = useSelector((state) => state.user.userDetails);
-
   const { id } = useParams();
+
   const { data, isLoading } = useGetSingleGigs(id);
 
   const gig = data?.[0];
   const gigInfo = gig?.gigsDescription;
   const freelancer = gig?.freelancerDetails;
+  // const freelancerId = freelancer?.freelancerId;
+  console.log(freelancer)
 
-  // ✅ Dummy reviews (replace with API later if needed)
-  const reviews = [
-    {
-      clientName: "Ali Khan",
-      clientPic: "https://i.pravatar.cc/50?u=1",
-      rating: 5,
-      comment: "Amazing work! Delivered on time.",
-      date: "2025-08-10",
-    },
-    {
-      clientName: "Sara Ahmed",
-      clientPic: "https://i.pravatar.cc/50?u=2",
-      rating: 4,
-      comment: "Good quality, but communication can improve.",
-      date: "2025-08-15",
-    },
-  ];
+  const {
+    data: ratings,
+    isLoading: isRatingsLoading,
+    isError: isRatingsError,
+    error: ratingsError,
+  } = useFreelancerGigRatings(id);
+
+ 
+
+  // const {
+  //   data: ratings = [],
+  //   isLoading: isRatingsLoading,
+  //   isError: isRatingsError,
+  //   error: ratingsError
+  // } = useGetFreelancerRatings({
+  //   freelancerId: freelancerId,
+  // });
+
+  // console.log("mohis",ratings.data)
+
+  // Show loader while gig data is loading
+  if (isLoading) return <ICCDLoader />;
 
   const selectedPackage = gig?.packagesDetails?.find(
     (pkg) => pkg?.packageType?.toLowerCase() === activeNavTab.toLowerCase()
   );
-
-  if (isLoading) return <ICCDLoader />;
 
   return (
     <div className="min-h-screen bg-white px-4 py-6 md:px-8 lg:px-12">
@@ -52,19 +61,20 @@ export default function ServicePage() {
         <div className="lg:col-span-2 space-y-8">
           {/* Gig Title & Freelancer */}
           <div>
-            <h1 className="text-2xl font-bold text-gray-900 mb-4">
+            <h1 className="text-2xl capitalize font-bold text-gray-900 mb-4">
               {gigInfo?.gigsTitle}
             </h1>
             <div className="flex flex-col md:flex-row items-center gap-4">
               <img
-                className="w-14 h-14 rounded-full object-cover"
-                src={freelancer?.freelancerPic}
+                className="w-14 h-14 border border-amber-300 rounded-full object-cover"
+                src={freelancer?.freelancerPic || "/placeholder.svg"}
                 alt="freelancer"
               />
               <div>
                 <h2 className="text-xl font-semibold">
-                  {freelancer?.freelancerName}
+                  {freelancer?.freelancerName || "Freelancer"}
                 </h2>
+                <StarRating freelancerId={freelancer.freelancerId}/>
               </div>
             </div>
           </div>
@@ -74,9 +84,9 @@ export default function ServicePage() {
 
           {/* About Gig */}
           <div className="bg-white border border-gray-200 rounded-xl shadow-sm p-6">
-            <h3 className="text-2xl font-bold mb-4">About this Gig</h3>
-            <h4 className="text-xl font-semibold mb-2">{gigInfo?.gigsTitle}</h4>
-            <p className="text-gray-700 leading-relaxed">
+            <h3 className="text-2xl font-bold mb-4">About This Gig</h3>
+            <h4 className="text-xl capitalize font-semibold mb-2">{gigInfo?.gigsTitle}</h4>
+            <p className="text-gray-700 capitalize leading-relaxed">
               {gigInfo?.gigsDescription}
             </p>
           </div>
@@ -94,43 +104,57 @@ export default function ServicePage() {
               />
               <div>
                 <h4 className="text-xl font-bold">
-                  {freelancer?.freelancerName}
+                  {freelancer?.freelancerName || "Freelancer"}
                 </h4>
                 <div className="flex flex-wrap gap-2 my-2">
-                  <span className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">
-                    {freelancer?.FreelancerLanguages}
-                  </span>
+                  {freelancer?.FreelancerLanguages && (
+                    <span className="bg-gray-100 capitalize text-gray-700 px-3 py-1 rounded-full text-sm">
+                     <Language/>  {freelancer?.FreelancerLanguages}
+                    </span>
+                  )}
                 </div>
-                <p className="text-gray-700">
-                  {freelancer?.freelancer_about_description}
+                <p className="text-gray-700 capitalize ">
+                  {freelancer?.freelancer_about_description || ""}
                 </p>
               </div>
             </div>
           </div>
 
-          {/* ✅ Reviews Section */}
+          {/* Reviews Section */}
           <div className="bg-white border border-gray-200 rounded-xl shadow-sm p-6">
             <h3 className="text-2xl font-bold mb-4">Reviews</h3>
 
-            {reviews.length > 0 ? (
+            {isRatingsLoading ? (
+              <div> Loading Reviews... </div>
+            ) : ratings?.data && ratings.data.length > 0 ? (
               <div className="space-y-6">
-                {reviews.map((review, index) => (
+                {ratings.data.map((review, index) => (
                   <div key={index} className="border-b pb-4">
                     <div className="flex items-center gap-3 mb-2">
-                      <img
-                        src={review.clientPic || "/placeholder.svg"}
-                        alt={review.clientName}
-                        className="w-10 h-10 rounded-full object-cover"
-                      />
+                      {review.clientPic ? (
+                        <img
+                          src={review.clientPic}
+                          alt={review.clientName || "Client"}
+                          className="w-10 h-10 rounded-full object-cover"
+                        />
+                      ) : (
+                        <User2 />
+                      )}
                       <div>
-                        <p className="font-semibold">{review.clientName}</p>
+                        <p className="font-semibold">
+                          {review.clientName || "Anonymous"}
+                        </p>
                         <div className="flex">
-                          {[1, 2, 3, 4, 5].map((star) => (
+                          {Array.from({ length: 5 }).map((_, starIndex) => (
                             <svg
-                              key={star}
+                              key={starIndex}
                               xmlns="http://www.w3.org/2000/svg"
                               viewBox="0 0 20 20"
-                              fill={star <= review.rating ? "gold" : "lightgray"}
+                              fill={
+                                starIndex < review.ratings
+                                  ? "gold"
+                                  : "lightgray"
+                              }
                               className="w-4 h-4"
                             >
                               <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.2 3.674a1 1 0 00.95.69h3.862c.969 0 1.371 1.24.588 1.81l-3.125 2.27a1 1 0 00-.364 1.118l1.2 3.674c.3.921-.755 1.688-1.54 1.118L10 13.347l-3.125 2.27c-.785.57-1.84-.197-1.54-1.118l1.2-3.674a1 1 0 00-.364-1.118L3.046 9.101c-.783-.57-.38-1.81.588-1.81h3.862a1 1 0 00.95-.69l1.2-3.674z" />
@@ -139,9 +163,9 @@ export default function ServicePage() {
                         </div>
                       </div>
                     </div>
-                    <p className="text-gray-700">{review.comment}</p>
+                    <p className="text-gray-700">{review.review}</p>
                     <p className="text-xs text-gray-400 mt-1">
-                      {new Date(review.date).toLocaleDateString()}
+                      {new Date(review.createdAt).toLocaleDateString()}
                     </p>
                   </div>
                 ))}
@@ -208,7 +232,7 @@ export default function ServicePage() {
       </div>
 
       {/* Order Options Modal */}
-      {selectedPackage && (
+      {selectedPackage && freelancer && (
         <OrderOptions
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}

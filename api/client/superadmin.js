@@ -16,10 +16,8 @@ export function useGetAllUsers(params = {}) {
       api.get(`${API_ROUTE.superadmin.getAllUsers}${constructQueryString(params)}`),
   });
 
-  // yahan pe hum 'data?.data' use kar rahe hain 
-  // kyunke 'data' React Query response ka part hai, aur 'data.data' backend se aaya hua JSON hai
   return {
-    data: data?.data?.data,  // backend response ke andar 'data' key mein users array hai
+    data: data?.data?.data,
     error,
     isLoading,
     isError,

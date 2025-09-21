@@ -70,6 +70,7 @@ const API_ROUTE = {
     getAllOrderByFreelancer: '/order/getAllOrderByFreelancer',
     getSingleOrderByFreelancer: '/order/getSingleOrderByFreelancer',
     getAllOrderByClient: '/order/getAllOrderByClient',
+    getSingleOrderByClient: '/order/getSingleOrderByClient',
     getAllOrderByAdmin: '/order/getAllOrderByAdmin',
 
   },
@@ -85,7 +86,9 @@ const API_ROUTE = {
     mark_read: '/notifications/mark-read'
   },
   rating: {
-    addFreelancerRating: '/rating/addFreelancerRating'
+    addFreelancerRating: '/rating/addFreelancerRating',
+    getFreelancerGigRatings: '/rating/getFreelancerGigRatings',
+    useFreelancerAverageRating : '/rating/getFreelancerAverageRating'
 
   }
 };

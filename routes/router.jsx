@@ -83,6 +83,7 @@ import DisputeDetailView from "../src/component/super_admin/DisputeDetailView";
 import ClientDisputeLists from "../src/component/client_order/ClientDisputesList";
 import FreelancerDisputeLists from "../src/pages/freelancer_dashboard/FreelancerDisputeLists";
 import DisputeDetailPageFreelancer from "../src/pages/freelancer_dashboard/DisputeDetailPageFreelancer";
+import ClientOrderDetail from "../src/component/client_order/ClientOrderDetail";
 
 const stripePromise = loadStripe("pk_test_51QCl1eCDh3RtIJ6XkYcN5vHd3KTO2f8enRSNv9Wx7Li0iCI7cr9khTDQx0vS5RmbazZoaECNW83FesOMwLeIgMLb00BJG4pPZR");
 
@@ -597,6 +598,16 @@ export const router = createBrowserRouter([
       <AuthRoute>
         <MainTemplate isShowFooter={false}>
           <ClientOrders />
+        </MainTemplate>
+      </AuthRoute>
+    ),
+  },
+    {
+    path: "/client/orderDetail/:id",
+    element: withSuspense(
+      <AuthRoute>
+        <MainTemplate isShowFooter={false}>
+          <ClientOrderDetail />
         </MainTemplate>
       </AuthRoute>
     ),

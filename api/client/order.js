@@ -30,6 +30,19 @@ export function useSingleOrderByFreelancer(id) {
   });
 }
 
+export function useSingleOrderByClient(id) {
+  return useQuery({
+    queryKey: [API_ROUTE.order.getSingleOrderByClient, id],
+    queryFn: async () => {
+      const response = await api.get(`${API_ROUTE.order.getSingleOrderByClient}/${id}`);
+      return response.data.data;
+    },
+    enabled: Boolean(id),
+  });
+}
+
+
+
 export function useGetOrderByClient(params = {}) {
   const clientDetails = useSelector(state => state.user.userDetails)
   const { id } = clientDetails

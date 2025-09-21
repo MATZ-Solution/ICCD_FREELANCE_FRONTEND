@@ -23,7 +23,6 @@ export function useGetClientDashboardData() {
 }
 
 export function useEditClientProfile() {
-  const queryClient = useQueryClient();
   const dispatch = useDispatch()
   const {
     mutate: editClientProfile,
