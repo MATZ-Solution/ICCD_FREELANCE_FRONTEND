@@ -7,7 +7,7 @@ const ManageGigs = () => {
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
 
-  const { data: gigs, isLoading, isError } = useGetAllGigs();
+  const { data: gigs, isLoading, isError } = useGetAllGigs({search});
 
   const handleView = (id) => {
     navigate(`/superadmin/gig/${id}`);
