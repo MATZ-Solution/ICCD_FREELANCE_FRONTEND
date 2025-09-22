@@ -8,6 +8,7 @@ import { setUserDetails } from "../../redux/slices/userSlice";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-toastify";
 
+
 export function useGetClientDashboardData() {
   const { data, isSuccess, isPending, isError, isLoading } = useQuery({
     queryKey: [API_ROUTE.client.getClientDashboardData],
