@@ -5,6 +5,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { SearchIcon } from "lucide-react";
 import ICCDLoader from "../../component/loader";
 import useDebounce from "../../../hooks/useDebounce";
+import DataLoader from "../superadmin_dashboard/DataLoader";
 
 export default function FindTalent() {
 
@@ -27,10 +28,9 @@ export default function FindTalent() {
         navigate({ search: params.toString() }, { replace: true });
     }, [search]);
 
-    console.log("gigs: ", gigs)
-    // if (isLoading) {
-    //     return <ICCDLoader />
-    // }
+    if (isLoading) {
+        return <DataLoader />
+    }
 
     return (
         <div className="min-h-screen px-4 bg-white">
