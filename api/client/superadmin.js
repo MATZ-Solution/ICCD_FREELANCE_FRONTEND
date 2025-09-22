@@ -40,7 +40,7 @@ export function useGetAllFreelancers(params = {}) {
   });
 
   return {
-    data: data?.data?.data, 
+    data: data?.data?.data,
     error,
     isLoading,
     isError,
