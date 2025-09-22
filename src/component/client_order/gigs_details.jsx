@@ -126,9 +126,9 @@ export default function ServicePage() {
 
             {isRatingsLoading ? (
               <div> Loading Reviews... </div>
-            ) : ratings?.data && ratings.data.length > 0 ? (
+            ) : ratings?.data && ratings?.data?.length > 0 ? (
               <div className="space-y-6">
-                {ratings.data.map((review, index) => (
+                {ratings?.data?.map((review, index) => (
                   <div key={index} className="border-b pb-4">
                     <div className="flex items-center gap-3 mb-2">
                       {review.clientPic ? (
