@@ -28,7 +28,7 @@ export const ProjectDetail = () => {
   const { id } = useParams()
   let [show, setShow] = useState(false)
   const pathName = useLocation().pathname
-  const { data, isSuccess, isPending, isError, isLoading } = useGetProjectsById({projectId: id})
+  const { data, isSuccess, isPending, isError, isLoading } = useGetProjectsById(id)
 
   
   if (isLoading) {

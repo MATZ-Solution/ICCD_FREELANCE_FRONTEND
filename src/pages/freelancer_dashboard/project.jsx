@@ -7,6 +7,7 @@ import ICCDLoader from "../../component/loader";
 import ICCDError from "../../component/ICCDError";
 import useDebounce from "../../../hooks/useDebounce";
 import { Briefcase, Package, Search } from "lucide-react";
+import DataLoader from "../superadmin_dashboard/DataLoader";
 // Lazy load Projects_table
 const Projects_table = lazy(() =>
   import("../../component/client_dashboard/project_table")
@@ -58,7 +59,7 @@ function FreelancerProjects() {
           </div>
 
           <div className="relative w-full lg:w-auto lg:min-w-[350px]">
-            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+            <div className="absolute inset-y-0 right-3 pl-4 flex items-center pointer-events-none">
               <Search className="h-5 w-5 text-slate-400" />
             </div>
             <input
@@ -79,7 +80,7 @@ function FreelancerProjects() {
 
       {/* Projects Table */}
       {isLoading ? (
-        <ICCDLoader />
+        <DataLoader />
       ) : (
         <div className="mt-6 overflow-x-auto">
           {!data || data.length === 0 ? (

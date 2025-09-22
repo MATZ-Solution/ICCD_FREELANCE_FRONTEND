@@ -154,8 +154,8 @@ const ProjectForm = () => {
         budget: getProData[0]?.budget || "",
         deadline: getProData[0]?.deadline || null,
         duration: getProData[0]?.duration || "",
-        // skills: getProData[0]?.skills.split(',') || [],
-        language: getProData[0]?.languages.split(',') || [],
+        skills: getProData[0]?.skills?.split(',') || [],
+        language: getProData[0]?.languages?.split(',') || [],
         total_freelancer: getProData[0]?.total_freelancer || 1,
         mode: getProData[0]?.mode || "",
         type: getProData[0]?.type || "",
@@ -163,6 +163,7 @@ const ProjectForm = () => {
       });
     }
   }, [getProData, reset]);
+
 
   //  if (isError || error) {
   //     return  <ICCDError message={isError} />

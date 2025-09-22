@@ -77,7 +77,7 @@ function ClientProjects() {
                                 </p>
                             </div>
                         ) : null}
-                        {data && (<Projects_table data={data} />)}
+                        {(data && data.length > 0) && (<Projects_table data={data} />)}
                     </div>
             }
 

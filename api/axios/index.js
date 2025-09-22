@@ -1,10 +1,14 @@
 import axios from "axios";
 import { deleteToken } from "../../utils/auth";
+import { resetUserProfile } from "../../redux/slices/userProfileSlice";
+import { removeUserDetails } from "../../redux/slices/userSlice";
+import { store } from "../../redux/store";
+
 
 const api = axios.create({
   // live database
-  // baseURL: 'https://iccd.freelanceserver.matzsolutions.com/',
-  baseURL: "http://localhost:22306/",
+  baseURL: 'https://iccd.freelanceserver.matzsolutions.com/',
+  // baseURL: "http://localhost:22306/",
   headers: {
     "Content-Type": "application/json",
   },
@@ -30,11 +34,12 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     // console.log("error: ", error.response?.status)
-
     if (error.response?.status === 401) {
       const message = error.response?.data?.message;
       if (message === "Token expired") {
         deleteToken();
+        store.dispatch(resetUserProfile())
+        store.dispatch(removeUserDetails());
         window.location.href = "/";
       }
     }
