@@ -5,11 +5,13 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { SearchIcon } from "lucide-react";
 import ICCDLoader from "../../component/loader";
 import useDebounce from "../../../hooks/useDebounce";
+import Pagination from "../../component/pagination";
 
 export default function FindTalent() {
 
     const navigate = useNavigate();
     const location = useLocation();
+    const [page, setPage] = useState(2);
 
     // Get search param from URL query string
     const query = new URLSearchParams(location.search);
@@ -78,6 +80,12 @@ export default function FindTalent() {
                     </div>
                 </main>
             </div>
+
+            <Pagination
+                currentPage={page}
+                totalPages={11}
+                onPageChange={(newPage) => setPage(newPage)}
+            />
         </div>
     );
 }
