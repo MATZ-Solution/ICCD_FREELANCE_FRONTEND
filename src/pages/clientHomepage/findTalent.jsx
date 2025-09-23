@@ -6,18 +6,19 @@ import { SearchIcon } from "lucide-react";
 import ICCDLoader from "../../component/loader";
 import useDebounce from "../../../hooks/useDebounce";
 import Pagination from "../../component/pagination";
+import DataLoader from "../superadmin_dashboard/DataLoader";
 
 export default function FindTalent() {
 
     const navigate = useNavigate();
     const location = useLocation();
-    const [page, setPage] = useState(2);
+    const [page, setPage] = useState(1);
 
-    // Get search param from URL query string
     const query = new URLSearchParams(location.search);
     const searchTermFromUrl = query.get("search") ?? "";
     const [search, setSearch] = useState(searchTermFromUrl);
-    const { gigs, error, isLoading, isError } = useGetGigs({ search: useDebounce(search) });
+
+    const { gigs, totalPages, error, isLoading, isError } = useGetGigs({ search: useDebounce(search), page: page });
 
     useEffect(() => {
         const params = new URLSearchParams(location.search);
@@ -29,10 +30,9 @@ export default function FindTalent() {
         navigate({ search: params.toString() }, { replace: true });
     }, [search]);
 
-    console.log("gigs: ", gigs)
-    // if (isLoading) {
-    //     return <ICCDLoader />
-    // }
+    if (isLoading) {
+        return <DataLoader />
+    }
 
     return (
         <div className="min-h-screen px-4 bg-white">
@@ -83,7 +83,7 @@ export default function FindTalent() {
 
             <Pagination
                 currentPage={page}
-                totalPages={11}
+                totalPages={totalPages}
                 onPageChange={(newPage) => setPage(newPage)}
             />
         </div>

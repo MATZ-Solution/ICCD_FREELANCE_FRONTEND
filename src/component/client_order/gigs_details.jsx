@@ -27,12 +27,12 @@ export default function ServicePage() {
   // const freelancerId = freelancer?.freelancerId;
   console.log(freelancer)
 
-  const {
-    data: ratings,
-    isLoading: isRatingsLoading,
-    isError: isRatingsError,
-    error: ratingsError,
-  } = useFreelancerGigRatings(id);
+  // const {
+  //   data: ratings,
+  //   isLoading: isRatingsLoading,
+  //   isError: isRatingsError,
+  //   error: ratingsError,
+  // } = useFreelancerGigRatings(id);
 
  
 
@@ -74,7 +74,7 @@ export default function ServicePage() {
                 <h2 className="text-xl font-semibold">
                   {freelancer?.freelancerName || "Freelancer"}
                 </h2>
-                <StarRating freelancerId={freelancer.freelancerId}/>
+                {/* <StarRating freelancerId={freelancer.freelancerId}/> */}
               </div>
             </div>
           </div>
@@ -121,14 +121,14 @@ export default function ServicePage() {
           </div>
 
           {/* Reviews Section */}
-          <div className="bg-white border border-gray-200 rounded-xl shadow-sm p-6">
+          {/* <div className="bg-white border border-gray-200 rounded-xl shadow-sm p-6">
             <h3 className="text-2xl font-bold mb-4">Reviews</h3>
 
             {isRatingsLoading ? (
               <div> Loading Reviews... </div>
-            ) : ratings?.data && ratings.data.length > 0 ? (
+            ) : ratings?.data && ratings?.data?.length > 0 ? (
               <div className="space-y-6">
-                {ratings.data.map((review, index) => (
+                {ratings?.data?.map((review, index) => (
                   <div key={index} className="border-b pb-4">
                     <div className="flex items-center gap-3 mb-2">
                       {review.clientPic ? (
@@ -173,7 +173,7 @@ export default function ServicePage() {
             ) : (
               <p className="text-gray-500">No reviews yet.</p>
             )}
-          </div>
+          </div> */}
         </div>
 
         {/* Sidebar */}

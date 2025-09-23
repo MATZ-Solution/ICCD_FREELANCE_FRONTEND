@@ -40,7 +40,7 @@ export function useGetAllFreelancers(params = {}) {
   });
 
   return {
-    data: data?.data?.data, 
+    data: data?.data?.data,
     error,
     isLoading,
     isError,
@@ -76,7 +76,7 @@ export function useGetAllProjects(params = {}) {
     return query ? `?${query}` : "";
   };
 
-  const queryKey = [API_ROUTE.superadmin.getAllGigs, params];
+  const queryKey = [API_ROUTE.superadmin.getAllProjects, params];
 
   const { data, error, isLoading, isError } = useQuery({
     queryKey,

@@ -55,7 +55,7 @@ export function useGetGigs(params = {}) {
     queryFn: () =>
       api.get(`${API_ROUTE.gigs.getGigs}?${constructQueryString(params)}`),
   });
-  return { gigs: data?.data?.data, error, isLoading, isError };
+  return { gigs: data?.data?.data,totalPages: data?.data?.totalPages, error, isLoading, isError };
 }
 
 export function useGetSingleGigs(id) {

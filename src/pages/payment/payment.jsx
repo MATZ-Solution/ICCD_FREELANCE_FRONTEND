@@ -31,7 +31,7 @@ const Payment = () => {
       ]
 
       const res = await fetch(
-        "http://localhost:22306/stripe/create-checkout-session",
+        "https://iccd.freelanceserver.matzsolutions.com/stripe/create-checkout-session",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
