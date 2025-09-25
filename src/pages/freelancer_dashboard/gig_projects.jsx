@@ -8,12 +8,14 @@ import { useSelector } from "react-redux";
 import ICCDLoader from "../../component/loader";
 import ICCDError from "../../component/ICCDError";
 import { Folder, Package } from "lucide-react";
+import Pagination from "../../component/pagination";
 
 function ManageGigsAndProjects() {
   const navigate = useNavigate();
   const [active] = useState("Active");
+  const [page, setPage] = useState(1);
   const profileDetails = useSelector((state) => state.userProfile.userProfile);
-  const { data, isLoading, isError } = useGetGigsByUser(profileDetails.id);
+  const { data, totalPages, isLoading, isError } = useGetGigsByUser({page: page});
 
   if (isLoading) return <ICCDLoader />;
   if (isError) return <ICCDError />;
@@ -89,6 +91,11 @@ function ManageGigsAndProjects() {
         ) : (
           <Gigs_table data={data} />
         )}
+        <Pagination
+          currentPage={page}
+          totalPages={totalPages}
+          onPageChange={(newPage) => setPage(newPage)}
+        />
       </div>
     </div>
   );

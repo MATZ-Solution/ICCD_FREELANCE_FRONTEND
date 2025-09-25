@@ -16,7 +16,7 @@ export function useGetOrderByFreelancer(params = {}) {
     queryFn: () =>
       api.get(`${API_ROUTE.order.getAllOrderByFreelancer}/${id}?${constructQueryString(params)}`),
   });
-  return { data: data?.data?.data, error, isLoading, isError };
+  return { data: data?.data?.data, totalPages: data?.data?.totalPages, error, isLoading, isError };
 }
 
 export function useSingleOrderByFreelancer(id) {
@@ -56,7 +56,7 @@ export function useGetOrderByClient(params = {}) {
     queryFn: () =>
       api.get(`${API_ROUTE.order.getAllOrderByClient}/${id}?${constructQueryString(params)}`),
   });
-  return { data: data?.data?.data, error, isLoading, isError };
+  return { data: data?.data?.data, totalPages: data?.data?.totalPages, error, isLoading, isError };
 }
 
 // Admin orders

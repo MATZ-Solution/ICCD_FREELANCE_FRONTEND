@@ -10,15 +10,17 @@ import { useGetProjectsByClient } from "../../../api/client/project";
 import ICCDLoader from "../../component/loader";
 import ICCDError from "../../component/ICCDError";
 import useDebounce from "../../../hooks/useDebounce";
+import Pagination from "../../component/pagination";
 
 function ClientProjects() {
 
     const navigate = useNavigate()
+    const [page, setPage] = useState(1);
     const [search, setSearch] = useState("")
     const [active, setActive] = useState('Active')
     const datas = ['Active', 'Pending Approval', 'Requires Modification', 'Draft', 'Denied', 'Paused']
 
-    const { data, isSuccess, isPending, isError, isLoading } = useGetProjectsByClient({ search: useDebounce(search) })
+    const { data, totalPages, isSuccess, isPending, isError, isLoading } = useGetProjectsByClient({ search: useDebounce(search), page: page })
 
     if (isError) {
         return <ICCDError />
@@ -26,21 +28,21 @@ function ClientProjects() {
 
     return (
         <div className="px-5 sm:px-5 lg:px-10">
-                <div className="flex flex-wrap justify-between mt-10 p-5 bg-gradient-to-r from-[#043A53] to-[#47AAB3]  rounded-md">
-        <p className="text-xl sm:text-2xl ">
+            <div className="flex flex-wrap justify-between mt-10 p-5 bg-gradient-to-r from-[#043A53] to-[#47AAB3]  rounded-md">
+                <p className="text-xl sm:text-2xl ">
 
-            <h2 className="text-2xl font-bold text-white">Projects Overview</h2>
-            <p className="text-white/80 text-sm mt-1">Manage and track your project portfolio</p>
-        </p>
-        <div className="relative mt-5 sm:mt-0">
-          <input
-            onChange={(e) => setSearch(e.target.value)}
-            className="border-[1px] border-gray-500 rounded-md bg-white w-72 h-10 p-2"
-            placeholder="Search My History..."
-          />
-          <SearchIcon className="absolute top-2 right-2" />
-        </div>
-      </div>
+                    <h2 className="text-2xl font-bold text-white">Projects Overview</h2>
+                    <p className="text-white/80 text-sm mt-1">Manage and track your project portfolio</p>
+                </p>
+                <div className="relative mt-5 sm:mt-0">
+                    <input
+                        onChange={(e) => setSearch(e.target.value)}
+                        className="border-[1px] border-gray-500 rounded-md bg-white w-72 h-10 p-2"
+                        placeholder="Search My History..."
+                    />
+                    <SearchIcon className="absolute top-2 right-2" />
+                </div>
+            </div>
 
             {/* tabs */}
             {/* <div className="mt-8 flex gap-10">
@@ -78,9 +80,17 @@ function ClientProjects() {
                             </div>
                         ) : null}
                         {(data && data.length > 0) && (<Projects_table data={data} />)}
+                        {
+                            (data && data.length > 0) && (
+                                <Pagination
+                                    currentPage={page}
+                                    totalPages={totalPages}
+                                    onPageChange={(newPage) => setPage(newPage)}
+                                />
+                            )
+                        }
                     </div>
             }
-
         </div>
     )
 }

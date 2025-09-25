@@ -129,6 +129,7 @@ export function useGetAllJobByClient(params = {}) {
   });
   return {
     data: data?.data?.data,
+    totalPages: data?.data?.totalPages,
     isSuccess,
     isPending,
     isError,

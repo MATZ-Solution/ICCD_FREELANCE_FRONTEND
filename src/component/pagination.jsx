@@ -30,7 +30,7 @@ export default function Pagination({
         <button
           disabled={currentPage === totalPages}
           onClick={() => onPageChange(currentPage + 1)}
-          className={`flex items-center justify-center w-8 h-8 rounded-full transition-all duration-300
+          className={`flex items-center justify-center w-8 h-8 rounded-full transition-all duration-300 
             ${currentPage === totalPages
               ? "bg-gray-200 text-gray-400 cursor-not-allowed"
               : "bg-[#15A9B2] text-white hover:bg-[#129199]"

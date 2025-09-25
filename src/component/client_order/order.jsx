@@ -19,6 +19,7 @@ import { DisputeModal } from "./DisputeModal";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import ReviewModal from "../ReviewModal";
+import Pagination from "../pagination";
 
 function ClientOrders() {
   const [showCompleteModal, setShowCompleteModal] = useState(false);
@@ -32,21 +33,23 @@ function ClientOrders() {
   const [disputedOrders, setDisputedOrders] = useState([]);
   const [search, setSearch] = useState("");
   const pathName = useLocation().pathname;
+  const [page, setPage] = useState(1);
 
   const navigate = useNavigate();
 
   const [orderDetails, setOrderDetails] = useState("");
-  const { data, isError, isLoading } = useGetOrderByClient({
+  const { data, totalPages, isError, isLoading } = useGetOrderByClient({
     search,
+    page: page
   });
 
   console.log(data)
-  
+
 
   const handleView = () => {
     // console.log("Viewing order:", id);
     // navigate(`/client/orderDetail/${id}`)
-      navigate(`/client/orderDetail/${data[0].orderId}`);
+    navigate(`/client/orderDetail/${data[0].orderId}`);
 
     // navigate to order details
   };
@@ -58,7 +61,7 @@ function ClientOrders() {
 
   const client = useSelector((state) => state.user.userDetails);
   const freelancer = useSelector(state => state.userProfile.userProfile)
-  
+
 
   const handleCompleteClick = (item) => {
     const { id, gig_id, client_id, freelancer_id, orderId } = item;
@@ -70,7 +73,7 @@ function ClientOrders() {
       orderId: orderId, gigId: gig_id, user_id: userId,
       client_id: client_id, freelancer_id: freelancer_id,
       raised_by: userType, freelancerUserId: data[0]?.freelancerUserId
-      
+
     });
     setShowCompleteModal(true);
   };
@@ -325,6 +328,12 @@ function ClientOrders() {
             </div>
           )}
         </div>
+
+        <Pagination
+          currentPage={page}
+          totalPages={totalPages}
+          onPageChange={(newPage) => setPage(newPage)}
+        />
 
         {/* Modals */}
         {showCompleteModal && (
