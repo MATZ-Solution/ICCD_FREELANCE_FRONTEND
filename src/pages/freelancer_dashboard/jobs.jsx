@@ -16,6 +16,8 @@ const ProposalModal = lazy(() => import("../../component/ProposalModal"));
 function Jobs() {
   const [obj, setObj] = useState({});
   const [show, setShow] = useState(false);
+  const [page, setPage] = useState(1);
+  
 
   const [mobileJobModal, setMobileJobModal] = useState(false); // mobile job details modal
   const navigate = useNavigate();
