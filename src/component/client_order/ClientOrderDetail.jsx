@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { useSingleOrderByClient } from "../../../api/client/order";
 import { useNavigate, useParams } from "react-router-dom";
+import GigCarousel from "./GigCarousel";
 
 const ClientOrderDetail = () => {
   const { id } = useParams();
@@ -131,16 +132,17 @@ const ClientOrderDetail = () => {
         {/* Left Column: Order Hero */}
         <div className="bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
           <div className="aspect-video relative overflow-hidden">
-            <img
+            <GigCarousel images={order?.gigsImage?.split(",")}/>
+            {/* <img
               src={order.gigsImage}
               alt={order.title}
               className="w-full h-full object-cover"
-            />
+            /> */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
             <div className="absolute bottom-6 left-6 right-6">
-              <h2 className="text-2xl font-bold text-white mb-2 drop-shadow-lg">
+              {/* <h2 className="text-2xl font-bold text-white mb-2 drop-shadow-lg">
                 {order.title}
-              </h2>
+              </h2> */}
               <div className="flex items-center gap-2">
                 <span
                   className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-medium border ${getStatusColor(
