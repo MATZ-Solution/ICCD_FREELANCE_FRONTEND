@@ -1,5 +1,4 @@
-import React from 'react';
-
+import logo from '../assets/ICCD-01.png';
 export default function Footer() {
   const currentYear = new Date().getFullYear();
 
@@ -62,11 +61,11 @@ export default function Footer() {
           <div className="md:w-1/3">
             <a href="/" className="inline-flex items-center gap-3 mb-4">
               {/* simple logo placeholder */}
-              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-emerald-400 to-sky-500 flex items-center justify-center font-bold text-slate-900">IC</div>
+              <img src={logo} alt="ICCD Talent Gate Logo" className="h-10 w-10 rounded-md object-cover" />
               <span className="text-xl font-semibold">ICCD Talent Gate</span>
             </a>
             <p className="text-slate-300 leading-relaxed">
-              Empowering professionals across the OIC region with global freelancing opportunities — connecting talent,
+              Empowering professionals across the OIC region with global freelancing opportunities , connecting talent,
               institutions and projects through a trusted digital marketplace.
             </p>
 

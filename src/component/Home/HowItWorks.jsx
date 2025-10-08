@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { UserPlus, Search, MessageSquare, CreditCard, Star, Users, CheckCircle, Globe, Shield, Briefcase, TrendingUp, Award } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 export default function HowItWorks() {
   const [activeStep, setActiveStep] = useState(null);
@@ -102,6 +103,7 @@ export default function HowItWorks() {
     { icon: Users, text: 'Support ethical and value-driven hiring' }
   ];
 
+  const navigate = useNavigate();
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       {/* Hero Section */}
@@ -274,12 +276,12 @@ export default function HowItWorks() {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-6 justify-center">
-              <button className="group bg-white text-blue-900 hover:bg-blue-50 font-bold py-5 px-12 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-2xl flex items-center justify-center">
+              <button onClick={() => navigate('/freelancer-profile')}   className="group bg-white text-blue-900 hover:bg-blue-50 font-bold py-5 px-12 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-2xl flex items-center justify-center">
                 <UserPlus className="w-6 h-6 mr-2 group-hover:rotate-12 transition-transform" />
                 Join as Freelancer
               </button>
               <button className="group bg-amber-500 hover:bg-amber-600 text-white font-bold py-5 px-12 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-2xl flex items-center justify-center">
-                <Briefcase className="w-6 h-6 mr-2 group-hover:scale-110 transition-transform" />
+                <Briefcase onClick={() => navigate('/freelancer-profile')} className="w-6 h-6 mr-2 group-hover:scale-110 transition-transform" />
                 Hire a Professional
               </button>
             </div>

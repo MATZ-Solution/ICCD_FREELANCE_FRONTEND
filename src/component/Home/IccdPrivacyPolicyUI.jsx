@@ -107,16 +107,11 @@ export default function IccdPrivacyPolicyUI() {
     ],
   };
 
-  const bgClass = dark 
-    ? 'bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950' 
-    : 'bg-gradient-to-br from-slate-50 via-white to-slate-100';
-  
-  const textClass = dark ? 'text-slate-100' : 'text-slate-900';
   const cardBg = dark ? 'bg-slate-800/50 backdrop-blur-xl border-slate-700/50' : 'bg-white/80 backdrop-blur-xl border-slate-200/50';
-  const accentGradient = 'bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600';
+  const accentGradient = 'bg-gradient-to-r from-[#043A53] via-[#065f73] to-[#3C939D]';
 
   return (
-    <div className={`min-h-screen ${bgClass} ${textClass} transition-all duration-500`}>
+    <div className={`min-h-screen bg-gradient-to-r from-[#043A53] via-[#065f73] to-[#3C939D] transition-all duration-500`}>
       {/* Animated background elements */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className={`absolute top-0 right-0 w-96 h-96 ${dark ? 'bg-indigo-500/10' : 'bg-indigo-500/5'} rounded-full blur-3xl`}></div>
@@ -132,7 +127,7 @@ export default function IccdPrivacyPolicyUI() {
                 <Shield size={32} className="text-white" strokeWidth={1.5} />
               </div>
               <div>
-                <h1 className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-clip-text text-transparent mb-1">
+                <h1 className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-[#043A53] via-[#065f73] to-[#3C939D] bg-clip-text text-transparent mb-1">
                   {policy.title}
                 </h1>
                 <p className="text-lg font-medium opacity-70">{policy.subtitle}</p>
@@ -144,20 +139,8 @@ export default function IccdPrivacyPolicyUI() {
             </div>
 
             <div className="flex items-center gap-2 flex-wrap">
-              <button 
-                onClick={() => setDark(!dark)} 
-                className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border ${cardBg} hover:scale-105 transition-all duration-200 shadow-lg`}
-              >
-                <SunMoon size={16} />
-                <span className="text-sm font-medium">{dark ? 'Light' : 'Dark'}</span>
-              </button>
-              <button 
-                onClick={() => window.print()} 
-                className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border ${cardBg} hover:scale-105 transition-all duration-200 shadow-lg`}
-              >
-                <FileText size={16} />
-                <span className="text-sm font-medium">Print</span>
-              </button>
+           
+             
               <a 
                 href="mailto:privacy@iccdtalentgate.com" 
                 className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl ${accentGradient} text-white hover:scale-105 transition-all duration-200 shadow-lg shadow-indigo-500/30`}
@@ -189,7 +172,7 @@ export default function IccdPrivacyPolicyUI() {
                       onClick={() => toggle(i)} 
                       className={`w-full text-left px-3 py-2.5 rounded-xl transition-all duration-200 flex items-center gap-3 group ${
                         openSection === i 
-                          ? `${dark ? 'bg-indigo-500/20 text-indigo-300' : 'bg-indigo-50 text-indigo-600'}` 
+                          ? `${dark ? 'bg-gradient-to-r from-[#043A53] via-[#065f73] to-[#3C939D]' : 'bg-gradient-to-r from-[#043A53] via-[#065f73] to-[#3C939D]'}` 
                           : 'hover:bg-slate-100/50 dark:hover:bg-slate-700/50'
                       }`}
                     >

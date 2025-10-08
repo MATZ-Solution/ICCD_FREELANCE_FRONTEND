@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Globe, Briefcase, Users, Shield, GraduationCap, Lightbulb, TrendingUp, Heart } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 export default function ICCDAboutPage() {
   const [scrollY, setScrollY] = useState(0);
@@ -32,6 +33,8 @@ export default function ICCDAboutPage() {
 
   const isVisible = (id) => visibleSections.has(id);
 
+  const navigate = useNavigate();
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       {/* Hero Section */}
@@ -53,7 +56,7 @@ export default function ICCDAboutPage() {
             <p className="text-xl md:text-2xl text-blue-100 mb-12 max-w-4xl mx-auto leading-relaxed">
               ICCD Talent Gate is a community-driven freelancing platform connecting skilled professionals from across the Muslim world with global organizations and employers — creating digital opportunities, fostering innovation, and empowering self-reliance through technology.
             </p>
-            <button className="bg-amber-500 hover:bg-amber-600 text-white font-bold py-4 px-10 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-2xl">
+            <button onClick={() => navigate('/signup')} className="bg-amber-500 hover:bg-amber-600 text-white font-bold py-4 px-10 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-2xl">
               Join the Talent Network
             </button>
           </div>
@@ -144,7 +147,7 @@ export default function ICCDAboutPage() {
               ].map((feature, idx) => (
                 <div key={idx} className="bg-white bg-opacity-10 backdrop-blur-sm p-6 rounded-xl border border-white border-opacity-20 hover:bg-opacity-20 transition-all duration-300">
                   <h3 className="text-xl font-bold mb-2 text-amber-400">{feature.title}</h3>
-                  <p className="text-blue-100">{feature.desc}</p>
+                  <p className="text-gray-800">{feature.desc}</p>
                 </div>
               ))}
             </div>
@@ -245,13 +248,13 @@ export default function ICCDAboutPage() {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="bg-white text-amber-600 hover:bg-amber-50 font-bold py-4 px-10 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-xl">
+              <button onClick={() => navigate('/freelancer-profile')}  className="bg-white text-amber-600 hover:bg-amber-50 font-bold py-4 px-10 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-xl">
                 Start Freelancing
               </button>
-              <button className="bg-blue-900 text-white hover:bg-blue-800 font-bold py-4 px-10 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-xl">
+              <button onClick={() => navigate('/find-talent')}  className="bg-blue-900 text-white hover:bg-blue-800 font-bold py-4 px-10 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-xl">
                 Hire a Professional
               </button>
-              <button className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-amber-600 font-bold py-4 px-10 rounded-full text-lg transition-all duration-300 transform hover:scale-105">
+              <button onClick={() => navigate('/how-it-works')} className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-amber-600 font-bold py-4 px-10 rounded-full text-lg transition-all duration-300 transform hover:scale-105">
                 Learn About ICCD
               </button>
             </div>
