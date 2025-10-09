@@ -23,9 +23,10 @@ export default function Footer() {
     {
       title: 'Support & Help',
       links: [
-        // { label: 'Community Guidelines', href: '/community-guidelines' },
+        { label: 'Community Guidelines', href: '/CommunityGuidelines' },
         { label: 'Report an Issue', href: '/report' },
-        // { label: 'Feedback', href: '/feedback' },
+        { label: 'Feedback', href: '/feedback' },
+
       ],
     },
     {
@@ -38,7 +39,7 @@ export default function Footer() {
       title: 'ICCD & Partnerships',
       links: [
         { label: 'About ICCD', href: '/aboutus' },
-        { label: 'Community Guidelines', href: '/CommunityGuidelines' },
+        // { label: 'Community Guidelines', href: '/CommunityGuidelines' },
         { label: 'OIC Digital Transformation Agenda', href: '/oic-digital' },
       ],
     },

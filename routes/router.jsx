@@ -94,6 +94,7 @@ import ICCDAboutPage from '../src/component/Home/ICCDAboutPage';
 import HowItWorks from '../src/component/Home/HowItWorks';
 import FAQPage from '../src/component/Home/FAQPage';
 import ContactForm from '../src/component/Home/ContactForm';
+import FeedbackSection from '../src/component/Home/FeedbackSection';
 
 const stripePromise = loadStripe("pk_test_51QCl1eCDh3RtIJ6XkYcN5vHd3KTO2f8enRSNv9Wx7Li0iCI7cr9khTDQx0vS5RmbazZoaECNW83FesOMwLeIgMLb00BJG4pPZR");
 
@@ -929,6 +930,7 @@ export const router = createBrowserRouter([
         </MainTemplate>
     ),
   },
+
     {
     path: "/blog",
     element: withSuspense(
@@ -942,6 +944,15 @@ export const router = createBrowserRouter([
     element: withSuspense(
         <MainTemplate isShowFooter={false}>
           <ReportIssueForm />
+        </MainTemplate>
+    ),
+  },
+  
+    {
+    path: "/feedback",
+    element: withSuspense(
+        <MainTemplate isShowFooter={false}>
+          <FeedbackSection />
         </MainTemplate>
     ),
   },
