@@ -95,6 +95,7 @@ import HowItWorks from '../src/component/Home/HowItWorks';
 import FAQPage from '../src/component/Home/FAQPage';
 import ContactForm from '../src/component/Home/ContactForm';
 import FeedbackSection from '../src/component/Home/FeedbackSection';
+import GoogleCallback from '../src/component/GoogleCallback';
 
 const stripePromise = loadStripe("pk_test_51QCl1eCDh3RtIJ6XkYcN5vHd3KTO2f8enRSNv9Wx7Li0iCI7cr9khTDQx0vS5RmbazZoaECNW83FesOMwLeIgMLb00BJG4pPZR");
 
@@ -107,6 +108,15 @@ export const router = createBrowserRouter([
       </MainTemplate >
     ),
   },
+    {
+    path: "/google-callback",
+    element: withSuspense(
+      <MainTemplate isShowFooter={true}>
+        <GoogleCallback />
+      </MainTemplate >
+    ),
+  },
+
 
   {
     path: "/contactus",
