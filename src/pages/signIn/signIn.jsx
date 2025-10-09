@@ -34,7 +34,7 @@ function Login({ handleSwitch }) {
   const onSubmit = (data) => userLogin(data);
 
   const handleGoogleLogin = () => {
-    window.open("http://localhost:22306/auth/google", "_self");
+    window.open("https://iccd.freelanceserver.matzsolutions.com/auth/google", "_self");
   };
 
   return (
