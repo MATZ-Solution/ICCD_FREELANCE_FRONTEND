@@ -23,7 +23,7 @@ export default function ICCDLoader({ isLoading = true, onComplete }) {
 
   return (
     <>
-      <style jsx>{`
+      <style jsx="true">{`
         @keyframes spin {
           from {
             transform: rotate(0deg);

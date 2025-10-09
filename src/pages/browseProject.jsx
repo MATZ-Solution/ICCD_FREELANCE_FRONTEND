@@ -5,6 +5,8 @@ import { useGetAllProjects } from "../../api/client/project";
 import ICCDLoader from "../component/loader";
 import ICCDError from "../component/ICCDError";
 import useDebounce from "../../hooks/useDebounce";
+import Pagination from "../component/pagination";
+import DataLoader from "./superadmin_dashboard/DataLoader";
 
 // Lazy load Projects_table
 const Projects_table = lazy(() =>
@@ -13,6 +15,7 @@ const Projects_table = lazy(() =>
 
 function BrowseProjects() {
   const navigate = useNavigate();
+  const [page, setPage] = useState(1);
   const [search, setSearch] = useState('')
 
   const [active, setActive] = useState("Active");
@@ -26,8 +29,8 @@ function BrowseProjects() {
   ];
   // const debounce = useDebounce(searchVal, 500)
 
-  const { data, isSuccess, isPending, isError, isLoading } =
-    useGetAllProjects({ search: useDebounce(search) });
+  const { data, totalPages, isSuccess, isPending, isError, isLoading } =
+    useGetAllProjects({ search: useDebounce(search), page: page });
 
 
   if (isError) {
@@ -53,7 +56,6 @@ function BrowseProjects() {
           <SearchIcon className="text-white" />
         </button>
       </div>
-
       {/* Tabs (Optional) */}
       {/* <div className="mt-8 overflow-x-auto">
         <Tabs datas={datas} active={active} setActive={setActive} />
@@ -61,7 +63,7 @@ function BrowseProjects() {
 
       {/* Projects Table */}
       {isLoading ?
-        <ICCDLoader />
+        <DataLoader />
         :
         <div className="mt-6 overflow-x-auto">
           {!data || data.length === 0 ? (
@@ -89,6 +91,16 @@ function BrowseProjects() {
           )}
         </div>
       }
+      {(data && data.length > 0) && (
+        <div className="py-2">
+          <Pagination
+            currentPage={page}
+            totalPages={totalPages}
+            onPageChange={(newPage) => setPage(newPage)}
+          />
+        </div>
+      )}
+
     </div>
   );
 }

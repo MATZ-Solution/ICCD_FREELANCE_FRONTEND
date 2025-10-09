@@ -55,7 +55,7 @@ export function useGetGigs(params = {}) {
     queryFn: () =>
       api.get(`${API_ROUTE.gigs.getGigs}?${constructQueryString(params)}`),
   });
-  return { gigs: data?.data?.data, error, isLoading, isError };
+  return { gigs: data?.data?.data, totalPages: data?.data?.totalPages, error, isLoading, isError };
 }
 
 export function useGetSingleGigs(id) {
@@ -104,19 +104,24 @@ export function useGetGigsOverview(id) {
   };
 }
 
-export function useGetGigsByUser() {
+export function useGetGigsByUser(params = {}) {
+  const constructQueryString = (params) => {
+    const query = new URLSearchParams(params).toString();
+    return query ? `&${query}` : "";
+  };
   const freelancerDetails = useSelector(
     (state) => state.userProfile.userProfile
   );
   const { data, isSuccess, isPending, isError, isLoading } = useQuery({
-    queryKey: [API_ROUTE.gigs.getGigsByUserId, freelancerDetails.id],
+    queryKey: [API_ROUTE.gigs.getGigsByUserId, params],
     queryFn: async () =>
       await api.get(
-        `${API_ROUTE.gigs.getGigsByUserId}/${freelancerDetails.id}`
+        `${API_ROUTE.gigs.getGigsByUserId}/${freelancerDetails.id}?${constructQueryString(params)}`
       ),
   });
   return {
     data: data?.data?.data,
+    totalPages: data?.data?.totalPages,
     isSuccess,
     isPending,
     isError,

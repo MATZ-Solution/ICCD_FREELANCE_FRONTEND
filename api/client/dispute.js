@@ -54,10 +54,16 @@ export function useAddDisputeResponse() {
   return { addDisputeResponse, isSuccess, isPending, isError, error };
 }
 
-export function useGetAllDisputeByClient(id) {
+export function useGetAllDisputeByClient(params = {}) {
+  const constructQueryString = (params) => {
+    const query = new URLSearchParams(params).toString();
+    return query ? `&${query}` : "";
+  };
+  const client = useSelector((state) => state.user.userDetails);
+  const { id } = client
   const { data, isSuccess, isPending, isError, isLoading } = useQuery({
-    queryKey: [API_ROUTE.dispute.getAllDisputeByClient, id],
-    queryFn: async () => await api.get(`${API_ROUTE.dispute.getAllDisputeByClient}/${id}`),
+    queryKey: [API_ROUTE.dispute.getAllDisputeByClient, params],
+    queryFn: async () => await api.get(`${API_ROUTE.dispute.getAllDisputeByClient}/${id}?${constructQueryString(params)}`),
     // enabled: id !== undefined && id !== null,
     // refetchOnWindowFocus: true,
     // staleTime: 0,
@@ -65,6 +71,7 @@ export function useGetAllDisputeByClient(id) {
   });
   return {
     data: data?.data?.data,
+    totalPages: data?.data?.totalPages,
     isSuccess,
     isPending,
     isError,
@@ -72,10 +79,16 @@ export function useGetAllDisputeByClient(id) {
   };
 }
 
-export function useGetAllDisputeByFreelancer(id) {
+export function useGetAllDisputeByFreelancer(params = {}) {
+  const freelancer = useSelector(state => state.userProfile.userProfile)
+  const { id } = freelancer
+  const constructQueryString = (params) => {
+    const query = new URLSearchParams(params).toString();
+    return query ? `&${query}` : "";
+  };
   const { data, isSuccess, isPending, isError, isLoading } = useQuery({
-    queryKey: [API_ROUTE.dispute.getAllDisputeByFreelancer, id],
-    queryFn: async () => await api.get(`${API_ROUTE.dispute.getAllDisputeByFreelancer}/${id}`),
+    queryKey: [API_ROUTE.dispute.getAllDisputeByFreelancer, params],
+    queryFn: async () => await api.get(`${API_ROUTE.dispute.getAllDisputeByFreelancer}/${id}?${constructQueryString(params)}`),
     // enabled: id !== undefined && id !== null,
     // refetchOnWindowFocus: true,
     // staleTime: 0,
@@ -83,6 +96,7 @@ export function useGetAllDisputeByFreelancer(id) {
   });
   return {
     data: data?.data?.data,
+    totalPages: data?.data?.totalPages,
     isSuccess,
     isPending,
     isError,

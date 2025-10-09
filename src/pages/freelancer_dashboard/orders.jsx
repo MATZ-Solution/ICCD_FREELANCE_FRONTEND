@@ -9,8 +9,10 @@ import { Search, MoreVertical, Eye, Package, DollarSign } from "lucide-react";
 import { CheckCircle, AlertTriangle, Clock, Star } from "lucide-react";
 import { DisputeModal } from "../../component/client_order/DisputeModal";
 import ReviewModal from "../../component/ReviewModal";
+import Pagination from "../../component/pagination";
 
 function Orders() {
+  const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
@@ -21,8 +23,9 @@ function Orders() {
   const [showDisputeModal, setShowDisputeModal] = useState(false);
   const [selectedOrderId, setSelectedOrderId] = useState(null);
 
-  const { data, error, isLoading, isError } = useGetOrderByFreelancer({
+  const { data, totalPages, error, isLoading, isError } = useGetOrderByFreelancer({
     search,
+    page: page
   });
   const pathName = useLocation().pathname;
   const navigate = useNavigate();
@@ -117,11 +120,9 @@ function Orders() {
 
     return (
       <div
-        className={`flex items-center gap-2 ${
-          config.bg
-        } rounded-full py-2 px-4 max-w-max shadow-sm ${
-          config.pulse ? "animate-pulse" : ""
-        }`}
+        className={`flex items-center gap-2 ${config.bg
+          } rounded-full py-2 px-4 max-w-max shadow-sm ${config.pulse ? "animate-pulse" : ""
+          }`}
       >
         <IconComponent className={`w-3 h-3 ${config.text}`} />
         <span
@@ -143,7 +144,7 @@ function Orders() {
             <div className="absolute top-4 right-4 w-32 h-32 bg-white rounded-full blur-2xl"></div>
             <div className="absolute bottom-4 left-4 w-24 h-24 bg-white rounded-full blur-xl"></div>
           </div>
-          
+
           <div className="relative z-10 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
             <div className="flex items-center gap-4">
               <div className="bg-white/20 backdrop-blur-sm rounded-xl p-3 shadow-lg">
@@ -313,6 +314,11 @@ function Orders() {
                 </div>
               );
             })}
+            <Pagination
+              currentPage={page}
+              totalPages={totalPages}
+              onPageChange={(newPage) => setPage(newPage)}
+            />
           </div>
         )}
       </div>
@@ -322,9 +328,8 @@ function Orders() {
         <OrderModal onClose={handleCloseModal}>
           <div className="text-center">
             <div
-              className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 ${
-                modalType === "deliver" ? "bg-emerald-100" : "bg-red-100"
-              }`}
+              className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 ${modalType === "deliver" ? "bg-emerald-100" : "bg-red-100"
+                }`}
             >
               {modalType === "deliver" ? (
                 <CheckCircle className="w-8 h-8 text-emerald-600" />
@@ -365,11 +370,10 @@ function Orders() {
               </button>
               <button
                 onClick={handleConfirmAction}
-                className={`px-6 py-3 rounded-xl text-white font-medium transition-all duration-200 transform hover:scale-105 ${
-                  modalType === "deliver"
+                className={`px-6 py-3 rounded-xl text-white font-medium transition-all duration-200 transform hover:scale-105 ${modalType === "deliver"
                     ? "bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 shadow-emerald-200"
                     : "bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 shadow-red-200"
-                } shadow-lg hover:shadow-xl`}
+                  } shadow-lg hover:shadow-xl`}
               >
                 {modalType === "deliver"
                   ? "Yes, Mark Delivered"
@@ -387,7 +391,7 @@ function Orders() {
           onSubmit={handleDisputeSubmit}
         />
       )}
-        {showReviewModal && (
+      {showReviewModal && (
         <ReviewModal
           isOpen={showReviewModal}
           onClose={() => setShowReviewModal(false)}

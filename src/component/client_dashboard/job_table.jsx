@@ -54,11 +54,11 @@ function Jobs_table({ data }) {
     );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 px-6 py-8">
+    <div className=" bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 px-6 py-8">
 
 
       {/* Jobs Grid */}
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <div className="grid gap-6 rounded-xl  md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {data.map((item) => (
           <div
             key={item.id}

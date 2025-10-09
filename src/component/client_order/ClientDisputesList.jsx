@@ -3,17 +3,26 @@ import { useSelector } from "react-redux";
 import ICCDLoader from "../loader";
 import ICCDError from "../ICCDError";
 import DisputeLists from "../dispute/disputeLists";
+import Pagination from "../pagination";
+import { useState } from "react";
 
 const ClientDisputeLists = () => {
 
-  const client = useSelector((state) => state.user.userDetails);
-  const { data, isSuccess, isPending, isError } = useGetAllDisputeByClient(client?.id)
+  const [page, setPage] = useState(1);
+  const { data, totalPages, isSuccess, isPending, isError } = useGetAllDisputeByClient({ page: page })
 
-  if(isPending) return <ICCDLoader />
-  if(isError) return <ICCDError />
+  if (isPending) return <ICCDLoader />
+  if (isError) return <ICCDError />
 
   return (
-    <DisputeLists data={data}/>
+    <div>
+      <DisputeLists data={data} />
+      <Pagination
+        currentPage={page}
+        totalPages={totalPages}
+        onPageChange={(newPage) => setPage(newPage)}
+      />
+    </div>
   );
 };
 

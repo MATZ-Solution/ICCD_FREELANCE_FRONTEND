@@ -9,14 +9,17 @@ import ICCDLoader from "../../component/loader";
 import ICCDError from "../../component/ICCDError";
 import { useGetAllJobByClient } from "../../../api/client/job";
 import useDebounce from "../../../hooks/useDebounce";
+import Pagination from "../../component/pagination";
 
 function ClientJobs() {
+  const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
   const [active, setActive] = useState("Active");
 
-  const { data, isLoading, isError } = useGetAllJobByClient({
+  const { data, totalPages, isLoading, isError } = useGetAllJobByClient({
     search: useDebounce(search),
+    page: page
   });
 
   if (isLoading) return <ICCDLoader />;
@@ -97,6 +100,12 @@ function ClientJobs() {
 
       {/* Jobs Table */}
       {activeCount > 0 && <Jobs_table data={data} />}
+      <Pagination
+        currentPage={page}
+        totalPages={totalPages}
+        onPageChange={(newPage) => setPage(newPage)}
+      />
+
     </div>
   );
 }

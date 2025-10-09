@@ -88,7 +88,7 @@ function NavHome() {
                 <button
                   key={index}
                   onClick={() => navigate(item.path)}
-                  className={`text-black font-semibold transition ${isActive(item.path)
+                  className={`text-black font-semibold transition cursor-pointer ${isActive(item.path)
                     ? "text-cyan-500 border-b-2 border-cyan-500"
                     : "hover:text-[#15A9B2]"
                     }`}

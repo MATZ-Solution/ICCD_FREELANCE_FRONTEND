@@ -84,6 +84,18 @@ import ClientDisputeLists from "../src/component/client_order/ClientDisputesList
 import FreelancerDisputeLists from "../src/pages/freelancer_dashboard/FreelancerDisputeLists";
 import DisputeDetailPageFreelancer from "../src/pages/freelancer_dashboard/DisputeDetailPageFreelancer";
 import ClientOrderDetail from "../src/component/client_order/ClientOrderDetail";
+import IccdPrivacyPolicyUI from "../src/component/Home/IccdPrivacyPolicyUI";
+import TermsOfService from '../src/component/Home/TermsOfService';
+import CookiePolicy from '../src/component/Home/CookiePolicy';
+import CommunityGuidelines from '../src/component/Home/CommunityGuidelines';
+import BlogPage from '../src/component/Home/BlogPage';
+import ReportIssueForm from '../src/component/Home/ReportIssueForm';
+import ICCDAboutPage from '../src/component/Home/ICCDAboutPage';
+import HowItWorks from '../src/component/Home/HowItWorks';
+import FAQPage from '../src/component/Home/FAQPage';
+import ContactForm from '../src/component/Home/ContactForm';
+import FeedbackSection from '../src/component/Home/FeedbackSection';
+import GoogleCallback from '../src/component/GoogleCallback';
 
 const stripePromise = loadStripe("pk_test_51QCl1eCDh3RtIJ6XkYcN5vHd3KTO2f8enRSNv9Wx7Li0iCI7cr9khTDQx0vS5RmbazZoaECNW83FesOMwLeIgMLb00BJG4pPZR");
 
@@ -96,6 +108,15 @@ export const router = createBrowserRouter([
       </MainTemplate >
     ),
   },
+    {
+    path: "/google-callback",
+    element: withSuspense(
+      <MainTemplate isShowFooter={true}>
+        <GoogleCallback />
+      </MainTemplate >
+    ),
+  },
+
 
   {
     path: "/contactus",
@@ -109,7 +130,7 @@ export const router = createBrowserRouter([
     path: "/aboutus",
     element: withSuspense(
       <MainTemplate isShowFooter={true}>
-        <AboutUsPage />
+        <ICCDAboutPage />
       </MainTemplate>
     ),
   },
@@ -215,6 +236,7 @@ export const router = createBrowserRouter([
       </AuthRoute>
     ),
   },
+  
   {
     path: "/freelancer/manage-gigs/overview/edit/:id",
     element: withSuspense(
@@ -883,8 +905,85 @@ export const router = createBrowserRouter([
         </MainTemplate>
       </AuthRoute>
     ),
+  },
+  {
+    path: "/privacy-policy",
+    element: withSuspense(
+        <MainTemplate isShowFooter={true}>
+          <IccdPrivacyPolicyUI />
+        </MainTemplate>
+    ),
+  },
+    {
+    path: "/terms-of-service",
+    element: withSuspense(
+        <MainTemplate isShowFooter={true}>
+          <TermsOfService />
+        </MainTemplate>
+    ),
+  },
+
+   {
+    path: "/cookies",
+    element: withSuspense(
+        <MainTemplate isShowFooter={true}>
+          <CookiePolicy />
+        </MainTemplate>
+    ),
   }
   ,
+   {
+    path: "/CommunityGuidelines",
+    element: withSuspense(
+        <MainTemplate isShowFooter={true}>
+          <CommunityGuidelines />
+        </MainTemplate>
+    ),
+  },
+
+    {
+    path: "/blog",
+    element: withSuspense(
+        <MainTemplate isShowFooter={true}>
+          <BlogPage />
+        </MainTemplate>
+    ),
+  },
+  {
+    path: "/report",
+    element: withSuspense(
+        <MainTemplate isShowFooter={false}>
+          <ReportIssueForm />
+        </MainTemplate>
+    ),
+  },
+  
+    {
+    path: "/feedback",
+    element: withSuspense(
+        <MainTemplate isShowFooter={false}>
+          <FeedbackSection />
+        </MainTemplate>
+    ),
+  },
+  {
+    path: "/how-it-works",
+    element: withSuspense(
+        <MainTemplate isShowFooter={true}>
+          <HowItWorks />
+        </MainTemplate>
+    ),
+  },
+  {
+    path: "/faqs",
+    element: withSuspense(
+        <MainTemplate isShowFooter={true}>
+          <FAQPage />
+        </MainTemplate>
+    ),
+  },
+  
+  
   {
     path: "*",
     element: withSuspense(

@@ -9,11 +9,13 @@ import { useDispatch } from "react-redux";
 import { getUserProfile } from "../../../redux/slices/userProfileSlice";
 import useDebounce from "../../../hooks/useDebounce";
 import { useSelector } from "react-redux";
+import Pagination from "../../component/pagination";
 
 export default function ClientHomepage() {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
+  const [page, setPage] = useState(1);
 
   // Get search param from URL query string
   const query = new URLSearchParams(location.search);
@@ -25,9 +27,10 @@ export default function ClientHomepage() {
 
   const freelancer = useSelector((state) => state.userProfile.userProfile);
 
-  const { gigs, isLoading } = useGetGigs({
+  const { gigs, isLoading, totalPages } = useGetGigs({
     search: debouncedSearch,
     freelancer_id: freelancer?.id,
+    page: page
   });
 
   console.log(gigs)
@@ -158,6 +161,11 @@ export default function ClientHomepage() {
               </div>
             )}
           </div>
+            <Pagination
+              currentPage={page}
+              totalPages={totalPages}
+              onPageChange={(newPage) => setPage(newPage)}
+            />
         </main>
       </div>
     </div>

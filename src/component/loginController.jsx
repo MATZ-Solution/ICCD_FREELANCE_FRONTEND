@@ -57,9 +57,9 @@ const LoginController = ({ onClose ,linker}) => {
                             <ChangePassword handleSwitch={handleSwitch} email={email} setEmail={setEmail} />
                         )}
                     </div>
-                    <p className="px-10 pb-6 text-xs text-center">
+                    {/* <p className="px-10 pb-6 text-xs text-center">
                         By joining, you agree to the ICCD Freelance Terms of Service and to occasionally receive emails from us. Please read our Privacy Policy to learn how we use your personal data.
-                    </p>
+                    </p> */}
                 </div>
             </div>
         </div>

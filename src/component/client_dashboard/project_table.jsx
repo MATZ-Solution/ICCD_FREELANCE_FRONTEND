@@ -35,7 +35,7 @@ function Projects_table({ data }) {
   };
 
   return (
-    <div className="py-8 px-6 bg-gradient-to-br from-slate-50 to-gray-100 min-h-screen">
+    <div className=" px-6 bg-gradient-to-br from-slate-50 to-gray-100">
       {/* Desktop Table View (lg and above) */}
       <div className="hidden lg:block">
         <div className="bg-white/70 backdrop-blur-sm shadow-xl border border-white/20 rounded-3xl overflow-hidden">

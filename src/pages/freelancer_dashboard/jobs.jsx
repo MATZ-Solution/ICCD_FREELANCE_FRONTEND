@@ -10,25 +10,29 @@ import { useSelector } from "react-redux";
 import { useGetAllJobs, useGetJobById } from "../../../api/client/job";
 import Select from "../../component/buttonSelect.jsx";
 import { useLocation, useNavigate } from "react-router-dom";
+import Pagination from "../../component/pagination"; 
 
 const ProposalModal = lazy(() => import("../../component/ProposalModal"));
 
 function Jobs() {
   const [obj, setObj] = useState({});
   const [show, setShow] = useState(false);
-
-  const [mobileJobModal, setMobileJobModal] = useState(false); // mobile job details modal
+  const [page, setPage] = useState(1);
+  const [mobileJobModal, setMobileJobModal] = useState(false);
   const navigate = useNavigate();
   const [selectedJobId, setSelectedJobId] = useState(null);
 
   const freelancerData = useSelector((state) => state.userProfile.userProfile);
 
-  const { data: allJobs, isSuccess: allJobsSuccess } = useGetAllJobs(obj);
+  const {
+    data: allJobs,
+    totalPages,
+    isSuccess: allJobsSuccess,
+  } = useGetAllJobs({ ...obj, page });
+
   const { data: jobDetails, isSuccess: jobDetailsSuccess } = useGetJobById(
     selectedJobId,
-    {
-      enabled: !!selectedJobId,
-    }
+    { enabled: !!selectedJobId }
   );
 
   const filterNames = ["jobType", "joblocation"];
@@ -90,10 +94,6 @@ function Jobs() {
             >
               Apply Now
             </button>
-            {/* 
-            <button className="bg-gray-300 p-1 rounded-md">
-              <BookmarkBorderIcon className="text-black" />
-            </button> */}
             <button className="bg-gray-300 p-1 rounded-md">
               <LinkIcon className="text-black" />
             </button>
@@ -143,11 +143,12 @@ function Jobs() {
           />
         </Suspense>
       )}
+
       <div className="px-6 sm:px-10">
         {/* Mobile Job Details Modal */}
         {mobileJobModal && (
-          <div className="fixed   inset-0 z-50 flex items-center justify-center bg-black/50 p-2 ">
-            <div className="bg-white  rounded-lg w-full max-w-lg max-h-[90vh] overflow-y-auto relative">
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-2">
+            <div className="bg-white rounded-lg w-full max-w-lg max-h-[90vh] overflow-y-auto relative">
               <button
                 className="absolute top-2 right-2 text-black font-bold"
                 onClick={() => setMobileJobModal(false)}
@@ -158,9 +159,10 @@ function Jobs() {
             </div>
           </div>
         )}
-        <div className="mt-10  lg:px-2">
+
+        {/* Banner Section */}
+        <div className="mt-10 lg:px-2">
           <section className="flex flex-col md:flex-row items-center justify-between bg-gray-100 p-6 rounded-2xl shadow-lg">
-            {/* Text Content */}
             <div className="w-full md:w-1/2 text-center md:text-left mb-6 md:mb-0">
               <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-[#043A53] mb-4">
                 Jobs Opportunities
@@ -174,12 +176,10 @@ function Jobs() {
                 <EastIcon />
               </button>
               <p className="mt-5 text-[#767676]">
-                <span className="text-[#05929c] font-medium">Post your CV</span> -
-                It only takes a few seconds
+                <span className="text-[#05929c] font-medium">Post your CV</span> - It only takes a few seconds
               </p>
             </div>
 
-            {/* Image */}
             <div className="w-full md:w-1/2 flex justify-center">
               <img
                 src={job_opp_pic}
@@ -189,6 +189,7 @@ function Jobs() {
             </div>
           </section>
         </div>
+
         {/* Search & Filters */}
         <div className="w-full shadow-lg mt-5 rounded-2xl bg-gray-100">
           <div className="w-full flex flex-col items-center mb-5 mt-5 rounded-2xl bg-gray-100 shadow-md p-4 lg:flex-row lg:items-start lg:gap-4">
@@ -208,12 +209,12 @@ function Jobs() {
                 <div key={filterName} className="w-full sm:w-40 relative">
                   <Select
                     option={filterOptions[filterName]}
-                    placeholder={filterName}
+                    placeholder={filterName === 'jobType' ? 'Type' : 'Location'}
                     value={
                       obj[filterName]
                         ? filterOptions[filterName]?.find(
-                          (opt) => opt.value === obj[filterName]
-                        )
+                            (opt) => opt.value === obj[filterName]
+                          )
                         : null
                     }
                     onChange={(selectedOption) =>
@@ -251,8 +252,8 @@ function Jobs() {
           <div className="flex flex-col md:flex-col lg:flex-row">
             {/* Left: Job List */}
             <div className="w-full lg:w-1/2 flex flex-col">
-              {allJobsSuccess &&
-                allJobs?.map((job, index) => (
+              {allJobsSuccess && allJobs?.length > 0 ? (
+                allJobs.map((job, index) => (
                   <div
                     key={job.id || index}
                     onClick={() => {
@@ -286,10 +287,21 @@ function Jobs() {
                       </p>
                     </div>
                   </div>
-                ))}
+                ))
+              ) : (
+                <div className="text-center text-gray-500 mt-10">
+                  No jobs found.
+                </div>
+              )}
+
+              <Pagination
+                currentPage={page}
+                totalPages={totalPages}
+                onPageChange={(newPage) => setPage(newPage)}
+              />
             </div>
 
-            {/* Right: Job Details (desktop only) */}
+            {/* Right: Job Details */}
             <div className="hidden px-5 lg:flex lg:w-1/2 lg:h-screen sticky top-0">
               <div className="w-full mt-5 border-[1px] border-gray-400 rounded-lg hover:border-[#15A9B2] overflow-y-auto">
                 {renderJobDetails()}

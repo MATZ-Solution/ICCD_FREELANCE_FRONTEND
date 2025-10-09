@@ -8,6 +8,7 @@ import ICCDError from "../../component/ICCDError";
 import useDebounce from "../../../hooks/useDebounce";
 import { Briefcase, Package, Search } from "lucide-react";
 import DataLoader from "../superadmin_dashboard/DataLoader";
+import Pagination from "../../component/pagination";
 // Lazy load Projects_table
 const Projects_table = lazy(() =>
   import("../../component/client_dashboard/project_table")
@@ -15,6 +16,7 @@ const Projects_table = lazy(() =>
 
 function FreelancerProjects() {
   const navigate = useNavigate();
+  const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
 
   const [active, setActive] = useState("Active");
@@ -27,8 +29,8 @@ function FreelancerProjects() {
     "Paused",
   ];
 
-  const { data, isSuccess, isPending, isError, isLoading } = useGetAllProjects({
-    search: useDebounce(search),
+  const { data, totalPages, isSuccess, isPending, isError, isLoading } = useGetAllProjects({
+    search: useDebounce(search), page: page
   });
 
   // Show error if fetching fails
@@ -106,6 +108,11 @@ function FreelancerProjects() {
           ) : (
             isSuccess && <Projects_table data={data} />
           )}
+          <Pagination
+            currentPage={page}
+            totalPages={totalPages}
+            onPageChange={(newPage) => setPage(newPage)}
+          />
         </div>
       )}
     </div>
