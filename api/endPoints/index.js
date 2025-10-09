@@ -98,7 +98,7 @@ const API_ROUTE = {
   },
    contact: {
     addContacts: '/contact/addContacts'
-  }
+  } 
 };
 
 export default API_ROUTE;
