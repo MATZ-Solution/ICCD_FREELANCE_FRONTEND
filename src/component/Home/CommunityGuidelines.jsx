@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Users, Shield, Heart, Scale, Lock, Star, CreditCard, TrendingUp, AlertTriangle, Flag, Award, FileText } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 export default function CommunityGuidelines() {
-  const [activeSection, setActiveSection] = useState(null);
+  const navigate = useNavigate();
 
   const guidelines = [
     {
@@ -192,7 +193,7 @@ export default function CommunityGuidelines() {
               <p className="text-gray-300 leading-relaxed mb-4">
                 Users can report misconduct or policy violations via the "Report an Issue" form on the platform or by emailing support@iccdtalentgate.org. Reports are confidential and will be reviewed promptly.
               </p>
-              <button className="px-6 py-3 bg-gradient-to-r from-red-500 to-orange-500 text-white rounded-lg font-semibold hover:shadow-lg transition-all duration-300 hover:scale-105">
+              <button onClick={() => navigate('/report')} className="px-6 py-3 bg-gradient-to-r from-red-500 to-orange-500 text-white rounded-lg font-semibold hover:shadow-lg transition-all duration-300 hover:scale-105">
                 Report an Issue
               </button>
             </div>

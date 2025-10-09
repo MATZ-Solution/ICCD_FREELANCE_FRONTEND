@@ -35,14 +35,7 @@ export default function Footer() {
         { label: 'Blog / Insights', href: '/blog' },
       ],
     },
-    {
-      title: 'ICCD & Partnerships',
-      links: [
-        { label: 'About ICCD', href: '/aboutus' },
-        // { label: 'Community Guidelines', href: '/CommunityGuidelines' },
-        { label: 'OIC Digital Transformation Agenda', href: '/oic-digital' },
-      ],
-    },
+   
     {
       title: 'Quick Access',
       links: [
