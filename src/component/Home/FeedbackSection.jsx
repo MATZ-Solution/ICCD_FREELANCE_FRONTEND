@@ -1,8 +1,9 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { useAddFeedback } from "../../../api/client/feedback";
 
 const schema = yup.object().shape({
   name: yup.string().required("Name is required"),
@@ -20,15 +21,14 @@ export default function FeedbackSection() {
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = async (data) => {
-    try {
-      console.log("Feedback Data:", data);
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      reset();
-    } catch (error) {
-      console.error("Error submitting feedback:", error);
-    }
+  const { addFeedback, isSuccess, isPending, isError, error } = useAddFeedback()
+  const onSubmit = (data) => {
+    addFeedback(data)
   };
+
+  useEffect(()=>{
+    reset()
+  },[isSuccess])
 
   return (
     <section
@@ -135,10 +135,10 @@ export default function FeedbackSection() {
 
             <button
               type="submit"
-              disabled={isSubmitting}
+              disabled={isPending}
               className="w-full bg-gradient-to-r from-[#44A4AD] via-[#2E7A81] to-[#1C4C50] text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-[1.02] hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex items-center justify-center gap-2"
             >
-              {isSubmitting ? (
+              {isPending ? (
                 <>
                   <div className="w-5 h-5 border-3 border-white border-t-transparent rounded-full animate-spin"></div>
                   <span>Sending...</span>
@@ -151,7 +151,7 @@ export default function FeedbackSection() {
               )}
             </button>
 
-            {isSubmitSuccessful && (
+            {isSuccess && (
               <div className="bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-200 text-green-700 px-6 py-4 rounded-xl text-center animate-pulse">
                 <p className="flex items-center justify-center gap-2 font-semibold">
                   ✅ Thank you! Your feedback has been received.

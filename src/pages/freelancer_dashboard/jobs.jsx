@@ -209,7 +209,7 @@ function Jobs() {
                 <div key={filterName} className="w-full sm:w-40 relative">
                   <Select
                     option={filterOptions[filterName]}
-                    placeholder={filterName}
+                    placeholder={filterName === 'jobType' ? 'Type' : 'Location'}
                     value={
                       obj[filterName]
                         ? filterOptions[filterName]?.find(

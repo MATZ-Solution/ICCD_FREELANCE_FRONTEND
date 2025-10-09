@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
+import { useAddIssue } from '../../../api/client/issue';
 
 // Validation Schema
 const schema = yup.object().shape({
@@ -13,38 +14,38 @@ const schema = yup.object().shape({
     .string()
     .required('Email is required')
     .email('Please enter a valid email address'),
-  userRole: yup
-    .string()
-    .required('Please select your role')
-    .oneOf(['freelancer', 'client', 'guest'], 'Invalid role selected'),
+  // userRole: yup
+  //   .string()
+  //   .required('Please select your role')
+  //   .oneOf(['freelancer', 'client', 'guest'], 'Invalid role selected'),
   issueType: yup
     .string()
     .required('Please select an issue type')
     .oneOf(['technical', 'payment', 'dispute', 'account', 'content', 'other'], 'Invalid issue type'),
-  projectRef: yup.string(),
+  // projectRef: yup.string(),
   description: yup
     .string()
     .required('Please describe your issue')
     .min(20, 'Description must be at least 20 characters'),
-  screenshot: yup
-    .mixed()
-    .test('fileSize', 'File size must be less than 5MB', (value) => {
-      if (!value || value.length === 0) return true;
-      return value[0]?.size <= 5242880;
-    })
-    .test('fileType', 'Only JPG, PNG, and PDF files are allowed', (value) => {
-      if (!value || value.length === 0) return true;
-      const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf'];
-      return validTypes.includes(value[0]?.type);
-    }),
+  // screenshot: yup
+  //   .mixed()
+  //   .test('fileSize', 'File size must be less than 5MB', (value) => {
+  //     if (!value || value.length === 0) return true;
+  //     return value[0]?.size <= 5242880;
+  //   })
+  //   .test('fileType', 'Only JPG, PNG, and PDF files are allowed', (value) => {
+  //     if (!value || value.length === 0) return true;
+  //     const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf'];
+  //     return validTypes.includes(value[0]?.type);
+  //   }),
   priority: yup
     .string()
     .required('Please select a priority level')
     .oneOf(['low', 'medium', 'high'], 'Invalid priority level'),
-  responseMethod: yup
-    .string()
-    .required('Please select your preferred response method')
-    .oneOf(['email', 'inapp'], 'Invalid response method'),
+  // responseMethod: yup
+  //   .string()
+  //   .required('Please select your preferred response method')
+  //   .oneOf(['email', 'inapp'], 'Invalid response method'),
 });
 
 export default function ReportIssueForm() {
@@ -59,32 +60,28 @@ export default function ReportIssueForm() {
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
-      fullName: 'John Doe',
-      email: 'john.doe@example.com',
+      fullName: '',
+      email: '',
       userRole: 'freelancer',
       issueType: '',
-      projectRef: '',
+      // projectRef: '',
       description: '',
-      screenshot: null,
+      // screenshot: null,
       priority: '',
-      responseMethod: '',
+      // responseMethod: '',
     },
   });
 
+  
+  const {addIssue, isSuccess, isPending, isError, error } = useAddIssue()
   const onSubmit = async (data) => {
     console.log('Form Data:', data);
-    
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    setSubmitted(true);
-    setFileName('');
-    
-    setTimeout(() => {
-      setSubmitted(false);
-      reset();
-    }, 5000);
+    addIssue(data)
   };
+
+  useEffect(()=> {
+    reset()
+  },[isSuccess])
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#2a6d7a] to-[#1a4d57] p-5">
@@ -154,7 +151,7 @@ export default function ReportIssueForm() {
             </div>
 
             {/* User Role */}
-            <div className="mb-6">
+            {/* <div className="mb-6">
               <label className="block text-sm font-semibold text-[#2a6d7a] mb-2">
                 User Role <span className="text-red-500">*</span>
               </label>
@@ -186,7 +183,7 @@ export default function ReportIssueForm() {
                   {errors.userRole.message}
                 </span>
               )}
-            </div>
+            </div> */}
 
             {/* Issue Type */}
             <div className="mb-6">
@@ -227,7 +224,7 @@ export default function ReportIssueForm() {
             </div>
 
             {/* Project Reference */}
-            <div className="mb-6">
+            {/* <div className="mb-6">
               <label className="block text-sm font-semibold text-[#2a6d7a] mb-2">
                 Project / Job Reference (Optional)
               </label>
@@ -246,7 +243,7 @@ export default function ReportIssueForm() {
               <div className="text-xs text-gray-600 mt-1">
                 Specify if the issue is related to a specific job or transaction
               </div>
-            </div>
+            </div> */}
 
             {/* Description */}
             <div className="mb-6">
@@ -275,7 +272,7 @@ export default function ReportIssueForm() {
             </div>
 
             {/* Screenshot Upload */}
-            <div className="mb-6">
+            {/* <div className="mb-6">
               <label className="block text-sm font-semibold text-[#2a6d7a] mb-2">
                 Attach Screenshot (Optional)
               </label>
@@ -315,7 +312,7 @@ export default function ReportIssueForm() {
               {fileName && (
                 <div className="text-xs text-[#3b90a0] font-semibold mt-2">Selected: {fileName}</div>
               )}
-            </div>
+            </div> */}
 
             {/* Priority Level */}
             <div className="mb-6">
@@ -359,7 +356,7 @@ export default function ReportIssueForm() {
             </div>
 
             {/* Response Method */}
-            <div className="mb-6">
+            {/* <div className="mb-6">
               <label className="block text-sm font-semibold text-[#2a6d7a] mb-2">
                 Preferred Response Method <span className="text-red-500">*</span>
               </label>
@@ -390,20 +387,20 @@ export default function ReportIssueForm() {
                   {errors.responseMethod.message}
                 </span>
               )}
-            </div>
+            </div> */}
 
             {/* Submit Button */}
             <button
               type="button"
               onClick={handleSubmit(onSubmit)}
-              disabled={isSubmitting}
+              disabled={isPending}
               className="w-full py-4 bg-gradient-to-r from-[#3b90a0] to-[#2a7080] text-white rounded-lg text-base font-semibold cursor-pointer transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:translate-y-0"
             >
-              {isSubmitting ? 'Submitting...' : 'Submit Report'}
+              {isPending ? 'Submitting...' : 'Submit Report'}
             </button>
 
             {/* Confirmation Message */}
-            {submitted && (
+            {isSuccess && (
               <div className="mt-5 bg-green-100 border-2 border-[#3b90a0] text-green-800 p-5 rounded-lg text-center animate-fade-in">
                 <strong className="text-base">✓ Report Submitted Successfully!</strong>
                 <p className="text-sm mt-2">
