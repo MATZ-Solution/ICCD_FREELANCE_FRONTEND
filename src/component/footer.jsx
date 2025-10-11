@@ -100,8 +100,8 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-slate-800 mt-8 pt-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-          <p className="text-sm text-slate-400">© {currentYear} ICCD Talent Gate — All rights reserved.</p>
+        <div className="border-t border-slate-800 mt-8 pt-6 flex flex-col items-center justify-center md:flex-row md:items-center md:justify-between gap-4">
+          <p className="text-sm text-slate-400">© {currentYear} ICCD Talent Gate — All rights reserved. A Product of Islamic Chamber Of Commerce Powered by Matz </p>
           {/* <div className="flex items-center gap-4 text-sm">
             <a href="/privacy-policy" className="hover:underline text-slate-300">Privacy</a>
             <a href="/terms-of-service" className="hover:underline text-slate-300">Terms</a>
