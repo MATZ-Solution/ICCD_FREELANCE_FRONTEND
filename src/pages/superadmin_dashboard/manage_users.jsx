@@ -10,14 +10,13 @@ import {
   SortAsc,
   SortDesc,
   RefreshCw,
-  Download,
   ChevronDown,
   UserPlus,
   Settings,
   Activity,
   Shield,
   Clock,
-  MoreHorizontal,
+  MailIcon,
 } from "lucide-react";
 import { useGetAllUsers } from "../../../api/client/superadmin";
 import DataError from "./DataError";
@@ -46,13 +45,11 @@ function ManageUsers() {
 
   const { data, isLoading, isError, refetch } = useGetAllUsers({ search });
 
-  // Memoized filtered and sorted data
+  // Filter + sort logic
   const processedData = useMemo(() => {
     if (!data) return [];
 
     let filtered = [...data];
-
-    // Apply filters
     const now = new Date();
     const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
 
@@ -74,7 +71,6 @@ function ManageUsers() {
         break;
     }
 
-    // Apply sorting
     filtered.sort((a, b) => {
       let aValue = a[sortBy];
       let bValue = b[sortBy];
@@ -95,11 +91,6 @@ function ManageUsers() {
     return filtered;
   }, [data, search, sortBy, sortOrder, filterBy]);
 
-  // const handleView = useCallback((id) => {
-  //   console.log(`Navigating to user ${id}`);
-  //   // navigate(`/superadmin/user/${id}`);
-  // }, []);
-
   const handleSort = useCallback(
     (field) => {
       if (sortBy === field) {
@@ -119,6 +110,16 @@ function ManageUsers() {
       setSelectedUsers(new Set(processedData.map((user) => user.id)));
     }
   }, [selectedUsers.size, processedData]);
+
+  const handleSelectOne = (id) => {
+    const newSet = new Set(selectedUsers);
+    if (newSet.has(id)) {
+      newSet.delete(id);
+    } else {
+      newSet.add(id);
+    }
+    setSelectedUsers(newSet);
+  };
 
   const handleRefresh = useCallback(() => {
     refetch();
@@ -146,21 +147,15 @@ function ManageUsers() {
     return `${Math.floor(diffInDays / 365)} years ago`;
   };
 
-  if (isLoading) {
-    return <DataError tag="Users" />;
-  }
-
-  if (isError) {
-    return <DataError onclickfunction={handleRefresh} tag="Users" />;
-  }
+  if (isLoading) return <DataError tag="Users" />;
+  if (isError) return <DataError onclickfunction={handleRefresh} tag="Users" />;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       <div className="px-4 sm:px-6 lg:px-8 py-8 max-w-7xl mx-auto">
-        {/* Header Section */}
+        {/* Header */}
         <div className="mb-8">
           <div className="bg-white rounded-3xl shadow-lg border border-slate-200 p-8">
-            {/* Title and Search */}
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-6">
               <div className="flex items-center gap-4">
                 <div className="relative p-3 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl shadow-lg">
@@ -183,9 +178,7 @@ function ManageUsers() {
                     type="text"
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
-                    className="w-full sm:w-80 pl-10 pr-4 py-3 border border-slate-200 rounded-xl 
-                             bg-white placeholder-slate-400 focus:outline-none focus:ring-2 
-                             focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                    className="w-full sm:w-80 pl-10 pr-4 py-3 border border-slate-200 rounded-xl bg-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
                     placeholder="Search users..."
                   />
                 </div>
@@ -216,6 +209,7 @@ function ManageUsers() {
             {showFilters && (
               <div className="border-t border-slate-200 pt-6 animate-in slide-in-from-top duration-300">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  {/* Sort */}
                   <div>
                     <label className="block text-sm font-medium text-slate-700 mb-2">
                       Sort By
@@ -243,6 +237,7 @@ function ManageUsers() {
                     </div>
                   </div>
 
+                  {/* Filter */}
                   <div>
                     <label className="block text-sm font-medium text-slate-700 mb-2">
                       Filter
@@ -260,6 +255,7 @@ function ManageUsers() {
                     </select>
                   </div>
 
+                  {/* Selection */}
                   <div>
                     <label className="block text-sm font-medium text-slate-700 mb-2">
                       Selection
@@ -357,120 +353,87 @@ function ManageUsers() {
           </div>
         </div>
 
-        {/* Users Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
+        {/* Table */}
+        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-x-auto">
           {processedData.length > 0 ? (
-            processedData.map((user, index) => (
-              <div
-                key={user.id}
-                className="bg-white rounded-2xl shadow-sm border border-slate-200 
-                           hover:shadow-lg hover:border-blue-200 transition-all duration-300 
-                           transform hover:-translate-y-1"
-                style={{ animationDelay: `${index * 50}ms` }}
-              >
-                <div className="p-6">
-                  {/* User Header */}
-                  <div className="flex items-start gap-4 mb-4">
-                    <div className="flex items-center gap-3 flex-1">
-                      <div className="relative">
-                        {user?.fileUrl ? (
-                          <img
-                            src={user.fileUrl}
-                            alt={`${user.name}'s profile`}
-                            className="w-12 h-12 rounded-xl object-cover"
-                          />
-                        ) : (
-                          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-100 to-purple-100 flex items-center justify-center">
-                            <User className="w-6 h-6 text-blue-600" />
-                          </div>
-                        )}
-                      </div>
-
-                      <div className="flex-1 min-w-0">
-                        <h3 className="text-lg font-semibold text-slate-800 truncate">
-                          {user.name}
-                        </h3>
-                        <p className="text-slate-600 text-sm truncate flex items-center gap-1">
-                          <Mail className="w-3 h-3" />
-                          {user.email}
-                        </p>
-                      </div>
-
-                      <button className="p-1 hover:bg-slate-100 rounded-lg transition-colors">
-                        <MoreHorizontal className="w-4 h-4 text-slate-400" />
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* User Details */}
-                  <div className="space-y-3 mb-4">
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-slate-500 flex items-center gap-1">
-                        <Shield className="w-3 h-3" />
-                        User ID
-                      </span>
-                      <span className="font-medium text-slate-700">
-                        {user.id}
-                      </span>
-                    </div>
-
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-slate-500 flex items-center gap-1">
-                        <Calendar className="w-3 h-3" />
-                        Joined
-                      </span>
-                      <span className="font-medium text-slate-700">
-                        {formatDate(user.created_at)}
-                      </span>
-                    </div>
-
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-slate-500 flex items-center gap-1">
-                        <Clock className="w-3 h-3" />
-                        Last Active
-                      </span>
-                      <span className="font-medium text-slate-700">
-                        {getRelativeTime(user.updated_at)}
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Actions
-                  <div className="flex gap-2">
-                    {/* <button
-                      onClick={() => handleView(user.id)}
-                      className="flex-1 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-xl 
-                                 font-medium transition-colors duration-200 flex items-center justify-center gap-2"
-                    >
-                      <Eye className="w-4 h-4" />
-                      View Details
-                    </button> */}
-                  {/* <button className="p-2 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors duration-200">
-                      <Settings className="w-4 h-4 text-slate-600" />
-                    </button>
-                  </div> */}
-                </div>
-              </div>
-            ))
+            <table className="min-w-full divide-y divide-slate-200">
+              <thead className="bg-slate-50">
+                <tr>          
+                  <th
+                    onClick={() => handleSort("name")}
+                    className="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider cursor-pointer"
+                  >
+                    Name
+                  </th>
+                  <th
+                    onClick={() => handleSort("email")}
+                    className="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider cursor-pointer"
+                  >
+                    Email
+                  </th>
+                  <th
+                    onClick={() => handleSort("created_at")}
+                    className="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider cursor-pointer"
+                  >
+                    Joined
+                  </th>
+                  <th
+                    onClick={() => handleSort("updated_at")}
+                    className="px-4 py-3 text-left text-xs font-medium text-slate-500 uppercase tracking-wider cursor-pointer"
+                  >
+                    Last Active
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-200">
+                {processedData.map((user) => (
+                  <tr key={user.id} className="hover:bg-slate-50">
+                   
+                    <td className="px-4 py-3 text-sm font-medium text-slate-800 flex items-center gap-2">
+                      {user?.fileUrl ? (
+                        <img
+                          src={user.fileUrl}
+                          alt={user.name}
+                          className="w-8 h-8 rounded-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-8 h-8 rounded-full bg-slate-200 flex items-center justify-center">
+                          <User className="w-4 h-4 text-slate-500" />
+                        </div>
+                      )}
+                      {user.name}
+                    </td>
+                
+                      <td className="px-4 py-3 text-sm text-slate-600">
+                      {user.email}
+                    </td>
+                    <td className="px-4 py-3 text-sm text-slate-600">
+                      {formatDate(user.created_at)}
+                    </td>
+                    <td className="px-4 py-3 text-sm text-slate-600">
+                      {getRelativeTime(user.updated_at)}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           ) : (
-            <div className="col-span-full">
-              <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-12 text-center">
-                <Users className="w-16 h-16 text-slate-400 mx-auto mb-4" />
-                <h3 className="text-xl font-semibold text-slate-800 mb-2">
-                  No users found
-                </h3>
-                <p className="text-slate-600 mb-4">
-                  {search
-                    ? `No users match "${search}"`
-                    : "No users in the system yet"}
-                </p>
-                <button
-                  onClick={handleRefresh}
-                  className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-xl font-medium transition-colors duration-200"
-                >
-                  Refresh
-                </button>
-              </div>
+            <div className="p-12 text-center">
+              <Users className="w-16 h-16 text-slate-400 mx-auto mb-4" />
+              <h3 className="text-xl font-semibold text-slate-800 mb-2">
+                No users found
+              </h3>
+              <p className="text-slate-600 mb-4">
+                {search
+                  ? `No users match "${search}"`
+                  : "No users in the system yet"}
+              </p>
+              <button
+                onClick={handleRefresh}
+                className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-xl font-medium transition-colors duration-200"
+              >
+                Refresh
+              </button>
             </div>
           )}
         </div>

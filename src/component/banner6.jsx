@@ -1,21 +1,21 @@
 const Banner6 = () => {
-  const testimonials = [
-    {
-      text: "“If we didn't have Upwork… the quality of talent wouldn't be as easy to measure, and we wouldn't have the incredible support we get from the Upwork team.”",
-      author: "Jessica Khawaja, VP of People Operations",
-      bgColor: "#14416B",
-    },
-    {
-      text: "“If we didn't have Upwork… the quality of talent wouldn't be as easy to measure, and we wouldn't have the incredible support we get from the Upwork team.”",
-      author: "Jessica Khawaja, VP of People Operations",
-      bgColor: "#15A9B2",
-    },
-    {
-      text: "“If we didn't have Upwork… the quality of talent wouldn't be as easy to measure, and we wouldn't have the incredible support we get from the Upwork team.”",
-      author: "Jessica Khawaja, VP of People Operations",
-      bgColor: "#14416B",
-    },
-  ];
+const testimonials = [
+  {
+    text: "“ICCD Talent Gate has completely transformed the way we hire talent. The platform makes it effortless to find skilled professionals and get work done on time with excellent quality.”",
+    author: "Ayesha Khan, Head of Operations at TechSphere",
+    bgColor: "#307980",
+  },
+  {
+    text: "“Thanks to ICCD Talent Gate, we were able to scale our team quickly without compromising on quality. The support and transparency are unmatched.”",
+    author: "Imran Malik, Founder of CreativeHive",
+    bgColor: "#15A9B2",
+  },
+  {
+    text: "“ICCD Talent Gate connects us with top freelancers who deliver exceptional results. It's reliable, efficient, and built for modern businesses.”",
+    author: "Sara Ahmed, Project Manager at DigitalWave",
+    bgColor: "#307980",
+  },
+];
 
   return (
     <div className="px-3 sm:px-10 mt-10">

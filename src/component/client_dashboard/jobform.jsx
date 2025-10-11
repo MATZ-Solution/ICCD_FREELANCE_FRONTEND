@@ -328,7 +328,7 @@ function JobForm() {
             {/* Min Salary */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Minimum
+                Minimum (In Dollars $)
               </label>
               <Controller
                 name="minSalaray"
@@ -351,7 +351,7 @@ function JobForm() {
             {/* Max Salary */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Maximum
+                Maximum (In Dollars $)
               </label>
               <Controller
                 name="maxSalaray"

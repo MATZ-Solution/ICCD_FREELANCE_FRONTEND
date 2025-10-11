@@ -28,12 +28,9 @@ export default function JobDetailPage() {
   const { data, isSuccess, isPending, isError, isLoading } = useGetJobById(id);
   const { jobProposals, error } = getJobPropsalByClient({ id });
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const {
-    data: closeJobData,
-    isError: closeError,
-    isLoading: jobcloseloading,
-  } = useJobCloseById(id);
-  const { mutate, isLoading: actionloading } = useJobProposalAction();
+  const { closejob } = useJobCloseById(id);
+  const { updateProposalAction, isLoading: actionloading } =
+    useJobProposalAction();
 
   if (isLoading || isPending) {
     return <ICCDLoader />;
@@ -57,7 +54,7 @@ export default function JobDetailPage() {
   const jobData = data[0];
 
   const handleAction = (item, action) => {
-    mutate(
+    updateProposalAction(
       {
         id: item.id,
         name: item.freelancerName,
@@ -78,6 +75,7 @@ export default function JobDetailPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 py-8">
+        {console.log(jobData)}
         {/* Header Section */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 mb-8 overflow-hidden">
           <div className="bg-gradient-to-r from-[#043A53] via-[#065f73] to-[#47AAB3] rounded-xl p-6 text-white">
@@ -93,7 +91,7 @@ export default function JobDetailPage() {
                   </span>
                   <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium bg-white/20 text-white backdrop-blur-sm">
                     <MapPin className="w-4 h-4" />
-                    {jobData?.joblocation}
+                    {jobData?.city} , {jobData?.country}
                   </span>
                   <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium bg-white/20 text-white backdrop-blur-sm">
                     <Users className="w-4 h-4" />
@@ -101,6 +99,10 @@ export default function JobDetailPage() {
                     {jobData?.totalPersontoHire === 1
                       ? "Position"
                       : "Positions"}
+                  </span>
+                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full text-sm font-medium bg-white/20 text-white backdrop-blur-sm">
+                    <DollarSign className="w-4 h-4" /> {jobData?.minSalaray} -{" "}
+                    {jobData?.maxSalaray}
                   </span>
                 </div>
               </div>
@@ -133,7 +135,11 @@ export default function JobDetailPage() {
                 bg="bg-purple-100"
                 title="Status"
                 value={jobData?.status}
-                valueClass="text-green-600"
+                valueClass={
+                  jobData?.status !== "closed"
+                    ? "text-green-600 bg-green-100 px-2 py-1 rounded-full"
+                    : "text-red-600 bg-red-100 px-2 py-1 rounded-full"
+                }
               />
 
               <div className="flex  lg:items-center lg:justify-center">
@@ -175,7 +181,7 @@ export default function JobDetailPage() {
                         </button>
                         <button
                           onClick={() => {
-                            closeJobData;
+                            closejob();
                             setIsModalOpen(false);
                           }}
                           className="px-4 py-2 rounded-md bg-red-600 text-white hover:bg-red-700 transition"
@@ -249,7 +255,11 @@ function StatCard({ icon, bg, title, value, valueClass }) {
       </div>
       <div>
         <p className="text-sm text-gray-600">{title}</p>
-        <p className={`font-semibold ${valueClass || "text-gray-900"}`}>
+        <p
+          className={` capitalize font-semibold ${
+            valueClass || "text-gray-900"
+          }`}
+        >
           {value}
         </p>
       </div>
@@ -279,6 +289,7 @@ function ProposalSection({ jobProposals, handleAction, actionloading }) {
       </div>
 
       <div className="p-6">
+        {console.log(jobProposals)}
         {jobProposals?.length > 0 ? (
           <div className="space-y-4">
             {jobProposals.map((item, index) => (
@@ -309,12 +320,12 @@ function ProposalSection({ jobProposals, handleAction, actionloading }) {
 
                 {/* Action Buttons OR Status */}
                 <div className="flex flex-col lg:flex-row items-center gap-2">
-                  {item?.status === "accept" ? (
+                  {item?.status === "selected" ? (
                     <span className="inline-flex items-center gap-2 px-4 py-2 bg-green-50 text-green-700 rounded-lg border border-green-200">
                       <Check className="w-4 h-4" />
-                      accept
+                      Accepted
                     </span>
-                  ) : item?.status === "rejected" ? (
+                  ) : item?.status === "not selected" ? (
                     <span className="inline-flex items-center gap-2 px-4 py-2 bg-red-50 text-red-700 rounded-lg border border-red-200">
                       <XCircle className="w-4 h-4" />
                       Rejected
@@ -393,7 +404,7 @@ function JobInfoCard({ jobData }) {
           icon={<MapPin className="w-4 h-4 text-red-600" />}
           bg="bg-red-100"
           title="Location"
-          value={jobData?.joblocation}
+          value={jobData?.city}
           valueClass="text-red-700"
         />
         <InfoItem

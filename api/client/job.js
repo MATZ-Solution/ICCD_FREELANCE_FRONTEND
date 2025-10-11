@@ -220,42 +220,106 @@ export function useApplyJob() {
 }
 
 
+// export function useJobCloseById(id) {
+//   const { data, isSuccess, isPending, isError, isLoading } = useQuery({
+//     queryKey: [API_ROUTE.job.closejob, id],
+//     queryFn: async () => await api.put(`${API_ROUTE.job.closejob}/${id}`),
+//     enabled: id !== undefined && id !== null
+//   });
+//   return {
+//     data: data?.data?.data,
+//     isSuccess,
+//     isPending,
+//     isError,
+//     isLoading,
+//   };
+// }
+
 export function useJobCloseById(id) {
-  const { data, isSuccess, isPending, isError, isLoading } = useQuery({
-    queryKey: [API_ROUTE.job.closejob, id],
-    queryFn: async () => await api.put(`${API_ROUTE.job.closejob}/${id}`),
-    enabled: id !== undefined && id !== null
-  });
-  return {
-    data: data?.data?.data,
+  const queryClient = useQueryClient();
+  const {
+    mutate: closejob,
     isSuccess,
     isPending,
     isError,
-    isLoading,
-  };
+    error,
+  } = useMutation({
+    mutationFn: async (data) =>
+      await api.put(`${API_ROUTE.job.closejob}/${id}`, data, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: api.defaults.headers.common["Authorization"],
+        },
+        timeout: 30000,
+      }),
+    onSuccess: (data) => {
+       queryClient.invalidateQueries({
+      });
+      toast.success("Job Close Successfully")
+    },
+    onError: (error) => {
+            toast.error("Error in Closing Job ! ")
+
+    },
+  });
+  return { closejob, isSuccess, isPending, isError, error };
 }
 
+
 export function useJobProposalAction() {
-  const mutation = useMutation({
-    mutationFn: async ({ id, name, email, action }) => {
-      const response = await api.put(`${API_ROUTE.job.jobProposalAction}`, {
-        id,
-        name,
-        email,
-        action,
+  const queryClient = useQueryClient();
+
+  const {
+    mutate: updateProposalAction,
+    mutateAsync,
+    isSuccess,
+    isPending,
+    isError,
+    error,
+  } = useMutation({
+    mutationFn: async (data) => {
+      return await api.put(`${API_ROUTE.job.jobProposalAction}`, data, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: api.defaults.headers.common["Authorization"],
+        },
+        timeout: 30000,
       });
-      return response.data;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(['job']); 
+      toast.success("Job Proposal Updated Successfully");
+    },
+    onError: () => {
+      toast.error("Error in updating Job Proposal!");
     },
   });
 
-  return {
-    mutate: mutation.mutate,
-    mutateAsync: mutation.mutateAsync,
-    data: mutation.data,
-    isSuccess: mutation.isSuccess,
-    isPending: mutation.isPending,
-    isError: mutation.isError,
-    isLoading: mutation.isLoading,
-    error: mutation.error,
-  };
+  return { updateProposalAction, mutateAsync, isSuccess, isPending, isError, error };
 }
+
+
+// export function useJobProposalAction() {
+//   const mutation = useMutation({
+//     mutationFn: async ({ id, name, email, action }) => {
+//       const response = await api.put(`${API_ROUTE.job.jobProposalAction}`, {
+//         id,
+//         name,
+//         email,
+//         action,
+//       });
+//       return response.data;
+//     },
+//   });
+
+//   return {
+//     mutate: mutation.mutate,
+//     mutateAsync: mutation.mutateAsync,
+//     data: mutation.data,
+//     isSuccess: mutation.isSuccess,
+//     isPending: mutation.isPending,
+//     isError: mutation.isError,
+//     isLoading: mutation.isLoading,
+//     error: mutation.error,
+//   };
+// }

@@ -20,10 +20,14 @@ function Jobs_table({ data }) {
 
   const getPayTypeStyle = (payType) =>
     ({
-      Hourly: "bg-gradient-to-r from-emerald-500 to-emerald-600 text-white shadow-emerald-200",
-      Fixed: "bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-blue-200",
-      Monthly: "bg-gradient-to-r from-purple-500 to-purple-600 text-white shadow-purple-200",
-    }[payType] || "bg-gradient-to-r from-gray-500 to-gray-600 text-white shadow-gray-200");
+      Hourly:
+        "bg-gradient-to-r from-emerald-500 to-emerald-600 text-white shadow-emerald-200",
+      Fixed:
+        "bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-blue-200",
+      Monthly:
+        "bg-gradient-to-r from-purple-500 to-purple-600 text-white shadow-purple-200",
+    }[payType] ||
+    "bg-gradient-to-r from-gray-500 to-gray-600 text-white shadow-gray-200");
 
   const getLocationStyle = (location) => {
     if (!location) return "bg-gray-50 text-gray-600 border border-gray-200";
@@ -55,8 +59,7 @@ function Jobs_table({ data }) {
 
   return (
     <div className=" bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 px-6 py-8">
-
-
+      {console.log(data)}
       {/* Jobs Grid */}
       <div className="grid gap-6 rounded-xl  md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {data.map((item) => (
@@ -80,14 +83,24 @@ function Jobs_table({ data }) {
                 <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-[#043A53] transition-colors ml-2 flex-shrink-0" />
               </div>
 
-              {/* Pay Type Badge */}
-              <div className="mb-4">
+              {/* Pay Type & Salary Badge */}
+              <div className="mb-4 flex flex-wrap items-center gap-2">
+                {/* Salary Range Badge */}
                 <span
                   className={`inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-bold shadow-sm ${getPayTypeStyle(
                     item.payType
                   )}`}
                 >
                   <DollarSign className="w-3 h-3" />
+                  {item.minSalaray} - {item.maxSalaray}
+                </span>
+
+                {/* Pay Type Badge */}
+                <span
+                  className={`inline-flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-bold shadow-sm ${getPayTypeStyle(
+                    item.payType
+                  )}`}
+                >
                   {item.payType}
                 </span>
               </div>
@@ -102,7 +115,8 @@ function Jobs_table({ data }) {
                     item.joblocation
                   )}`}
                 >
-                  {item.joblocation || "Location TBD"}
+                  {item.country || "Location TBD"},{" "}
+                  {item.city || "Location TBD"}
                 </span>
               </div>
 

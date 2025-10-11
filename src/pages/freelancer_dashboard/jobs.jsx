@@ -71,7 +71,7 @@ function Jobs() {
           <p>{job.country}</p>
           <div className="flex gap-2 mt-2">
             <p className="font-semibold text-sm bg-gray-200 p-1 rounded-md">
-              Rs {job.minSalaray} - Rs {job.maxSalaray} a {job.payType}
+              $ {job.minSalaray} - $ {job.maxSalaray} a {job.payType}
             </p>
             <p className="font-semibold text-sm bg-gray-200 p-1 rounded-md">
               {job.jobType}
@@ -106,7 +106,7 @@ function Jobs() {
                 <div>
                   <p className="font-semibold">Pay</p>
                   <p className="mt-2 font-semibold text-sm bg-gray-200 p-1 rounded-md">
-                    Rs {job.minSalaray} - Rs {job.maxSalaray} a {job.payType}
+                    $ {job.minSalaray} - $ {job.maxSalaray} a {job.payType}
                   </p>
                 </div>
               </div>
@@ -168,10 +168,10 @@ function Jobs() {
                 Jobs Opportunities
               </h1>
               <p className="text-[#767676] mb-6">
-                Create an account or sign in to see your personalized job
+                Create an account or sign in to see your pe$onalized job
                 recommendations.
               </p>
-              <button className="shadow-xl flex items-center gap-3 bg-[#15A9B2] text-white px-6 py-3 rounded-full hover:bg-[#05929c] transition cursor-pointer">
+              <button className="shadow-xl flex items-center gap-3 bg-[#15A9B2] text-white px-6 py-3 rounded-full hover:bg-[#05929c] transition cu$or-pointer">
                 <span>Get Started</span>
                 <EastIcon />
               </button>
@@ -190,7 +190,7 @@ function Jobs() {
           </section>
         </div>
 
-        {/* Search & Filters */}
+        {/* Search & Filte$ */}
         <div className="w-full shadow-lg mt-5 rounded-2xl bg-gray-100">
           <div className="w-full flex flex-col items-center mb-5 mt-5 rounded-2xl bg-gray-100 shadow-md p-4 lg:flex-row lg:items-start lg:gap-4">
             {/* Search Input */}
@@ -203,7 +203,7 @@ function Jobs() {
               />
             </div>
 
-            {/* Filters */}
+            {/* Filte$ */}
             <div className="w-full flex flex-wrap gap-3 mb-4 lg:mb-0 lg:w-1/2">
               {filterNames.map((filterName) => (
                 <div key={filterName} className="w-full sm:w-40 relative">
@@ -225,9 +225,9 @@ function Jobs() {
                   {obj[filterName] && (
                     <button
                       onClick={() => {
-                        const newFilters = { ...obj };
-                        delete newFilters[filterName];
-                        setObj(newFilters);
+                        const newFilte$ = { ...obj };
+                        delete newFilte$[filterName];
+                        setObj(newFilte$);
                       }}
                       className="absolute -top-2 -right-2 bg-black text-white rounded-full px-2 text-sm font-bold hover:bg-[#3C939D]"
                       title="Clear filter"
@@ -262,7 +262,7 @@ function Jobs() {
                         setMobileJobModal(true);
                       }
                     }}
-                    className="relative mt-5 p-3 sm:p-5 border-[1px] border-gray-400 rounded-lg hover:border-[#15A9B2] shadow-lg cursor-pointer"
+                    className="relative mt-5 p-3 sm:p-5 border-[1px] border-gray-400 rounded-lg hover:border-[#15A9B2] shadow-lg cu$or-pointer"
                   >
                     <BookmarkBorderIcon className="absolute right-3 top-3 sm:right-4 sm:top-5 scale-110 sm:scale-125" />
                     <h1 className="font-bold text-lg sm:text-xl">
@@ -280,7 +280,7 @@ function Jobs() {
                     </p>
                     <div className="flex gap-1 sm:gap-2 mt-1 sm:mt-2">
                       <p className="font-semibold text-xs sm:text-sm bg-gray-200 p-1 rounded-md">
-                        Rs {job.minSalaray} - Rs {job.maxSalaray} a {job.payType}
+                        $ {job.minSalaray} - $ {job.maxSalaray} a {job.payType}
                       </p>
                       <p className="font-semibold text-xs sm:text-sm bg-gray-200 p-1 rounded-md">
                         {job.jobType}

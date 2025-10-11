@@ -224,30 +224,21 @@ export default function FAQPage() {
         <div className="max-w-6xl mx-auto">
           <div className="flex flex-col md:flex-row gap-4 items-center">
             {/* Category Filter */}
-            <div className="flex gap-2 overflow-x-auto pb-2 md:pb-0 w-full md:w-auto">
-              {categories.map((category, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => setSelectedCategory(category)}
-                  className={`px-4 py-2 rounded-full font-semibold whitespace-nowrap transition-all duration-300 ${
-                    selectedCategory === category
-                      ? " bg-gradient-to-r from-[#44A4AD] via-[#2E7A81] to-[#1C4C50] text-white shadow-lg scale-105"
-                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                  }`}
-                >
-                  {category}
-                </button>
-              ))}
-            </div>
-          </div>
 
-          {/* Results Count */}
-          {searchQuery && (
-            <div className="mt-4 text-center text-gray-600">
-              Found {filteredFAQs.length} result
-              {filteredFAQs.length !== 1 ? "s" : ""} for "{searchQuery}"
-            </div>
-          )}
+            {categories.map((category, idx) => (
+              <button
+                key={idx}
+                onClick={() => setSelectedCategory(category)}
+                className={`px-4 py-2 rounded-full font-semibold whitespace-nowrap transition-all duration-300 ${
+                  selectedCategory === category
+                    ? " bg-gradient-to-r from-[#44A4AD] via-[#2E7A81] to-[#1C4C50] text-white shadow-lg scale-105"
+                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                }`}
+              >
+                {category}
+              </button>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -294,7 +285,9 @@ export default function FAQPage() {
                         <div className="flex items-start space-x-4 flex-1">
                           <div
                             className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 transition-colors ${
-                              isOpen ? "bg-gradient-to-r from-[#44A4AD] via-[#2E7A81] to-[#1C4C50]" : "bg-blue-100"
+                              isOpen
+                                ? "bg-gradient-to-r from-[#44A4AD] via-[#2E7A81] to-[#1C4C50]"
+                                : "bg-blue-100"
                             }`}
                           >
                             <Icon

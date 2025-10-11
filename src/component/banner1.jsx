@@ -31,7 +31,7 @@ const Banner1 = () => {
 
         {/* Content */}
         <div className="relative z-10 w-full md:w-2/3 text-center md:text-left">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-snug md:leading-tight mb-6">
+          <h1 className="text-3xl capitalize sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-snug md:leading-tight mb-6">
             Connecting clients in need to freelancers who deliver
           </h1>
 

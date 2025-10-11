@@ -8,6 +8,7 @@ import EastIcon from "@mui/icons-material/East";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import Button from "../../component/button";
+import { Mail } from "lucide-react";
 
 function Login({ handleSwitch }) {
   const navigate = useNavigate();
@@ -38,7 +39,7 @@ function Login({ handleSwitch }) {
   };
 
   return (
-    <div className="w-full max-w-md mx-auto mt-10 p-8 bg-white rounded-2xl shadow-lg flex flex-col gap-5">
+    <div className="w-full gap-5">
       <h2 className="text-3xl font-bold text-gray-800 text-center">
         Welcome Back
       </h2>
@@ -49,6 +50,10 @@ function Login({ handleSwitch }) {
       {/* Email Input */}
       <div className="flex flex-col">
         <label className="text-sm font-medium text-gray-700 mb-1">Email</label>
+          {/* <Mail className="absolute bottom-4/6  text-gray-400" /> */}
+
+    
+
         <Controller
           control={control}
           name="email"
@@ -106,7 +111,7 @@ function Login({ handleSwitch }) {
 
       {/* Submit Button */}
       <Button
-        className="w-full py-3 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold mt-2 transition disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-full py-3 rounded-lg bg-[#46A5AD] hover:bg-[#1a7078] text-white font-semibold mt-2 transition disabled:opacity-50 disabled:cursor-not-allowed"
         text={isPending ? "Logging in..." : "Login"}
         onClick={handleSubmit(onSubmit)}
         disabled={isPending}

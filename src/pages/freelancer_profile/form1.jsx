@@ -47,6 +47,8 @@ export default function PersonalInfoStep() {
   const [languages, setLanguages] = useState([])
   const [currentLanguage, setCurrentLanguage] = useState("")
   const [currentLevel, setCurrentLevel] = useState("")
+    const [preview, setPreview] = useState(null);
+
   console.log("image: ", image)
 
   const navigate = useNavigate()
@@ -196,74 +198,65 @@ export default function PersonalInfoStep() {
           </div>
         </div>
 
-        {/* Display Name */}
-        <div className="grid grid-cols-2 gap-8 items-start">
-          <div>
-            <label className="block font-semibold text-lg mb-2">Display Name *</label>
-            <p className="text-sm text-gray-600 mb-2">
-              To help build credible and authentic connections with customers, how buyers see your
-              display name.
-            </p>
-            <p className="text-sm text-gray-600">
-              We suggest using your first name and first initial of last name.
-            </p>
-          </div>
-          <div>
-            <Controller
-              name="displayName"
-              control={control}
-              render={({ field }) => (
-                <input
-                  {...field}
-                  type="text"
-                  placeholder="Type your display name"
-                  className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent"
-                />
-              )}
-            />
-            {errors.displayName && (
-              <p className="text-red-500 text-sm mt-2">{errors.displayName.message}</p>
-            )}
-          </div>
-        </div>
+     
 
         {/* Profile Picture */}
-        <div className="grid grid-cols-2 gap-8 items-start">
-          <div>
-            <label className="block font-semibold text-lg mb-2">Profile Picture *</label>
-            <p className="text-sm text-gray-600">
-              Add a photo to build trust and connect with customers without exactly who they hire
-              from the world's largest.
-            </p>
-          </div>
-          <div>
-            <div className="flex items-center gap-4">
-              <div className="w-20 h-20 rounded-full bg-gray-100 flex items-center justify-center text-2xl text-gray-400">
-                👤
-              </div>
-              <Controller
-                name="files"
-                control={control}
-                render={({ field: { onChange, name } }) => (
-                  <input
-                    name={name}
-                    type="file"
-                    accept="image/*"
-                    onChange={(e) => {
-                      const filesArray = Array.from(e.target.files); // Convert FileList to array
-                      onChange(filesArray); // Update form state
-                    }}
-                    className="text-sm file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-cyan-50 file:text-cyan-700 hover:file:bg-cyan-100"
-                  />
-                )}
+      <div className="grid grid-cols-2 gap-8 items-start">
+      <div>
+        <label className="block font-semibold text-lg mb-2">
+          Profile Picture *
+        </label>
+        <p className="text-sm text-gray-600">
+          Add a photo to build trust and connect with customers without exactly
+          who they hire from the world's largest.
+        </p>
+      </div>
+
+      <div>
+        <div className="flex items-center gap-4">
+          <div className="w-20 h-20 rounded-full bg-gray-100 flex items-center justify-center overflow-hidden">
+            {preview ? (
+              <img
+                src={preview}
+                alt="Profile Preview"
+                className="w-full h-full object-cover"
               />
-            </div>
-            {errors.files && (
-              <p className="text-red-500 text-sm mt-2">{errors.files.message}</p>
+            ) : (
+              <span className="text-2xl text-gray-400">👤</span>
             )}
           </div>
+
+          <Controller
+            name="files"
+            control={control}
+            render={({ field: { onChange, name } }) => (
+              <input
+                name={name}
+                type="file"
+                accept="image/*"
+                onChange={(e) => {
+                  const filesArray = Array.from(e.target.files);
+                  onChange(filesArray);
+
+                  if (filesArray.length > 0) {
+                    const file = filesArray[0];
+                    const imageURL = URL.createObjectURL(file);
+                    setPreview(imageURL);
+                  } else {
+                    setPreview(null);
+                  }
+                }}
+                className="text-sm file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:font-semibold file:bg-cyan-50 file:text-cyan-700 hover:file:bg-cyan-100"
+              />
+            )}
+          />
         </div>
 
+        {errors.files && (
+          <p className="text-red-500 text-sm mt-2">{errors.files.message}</p>
+        )}
+      </div>
+    </div>
         {/* about_description */}
         <div className="grid grid-cols-2 gap-8 items-start">
           <div>
