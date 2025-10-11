@@ -108,10 +108,10 @@ export default function IccdPrivacyPolicyUI() {
   };
 
   const cardBg = dark ? 'bg-slate-800/50 backdrop-blur-xl border-slate-700/50' : 'bg-white/80 backdrop-blur-xl border-slate-200/50';
-  const accentGradient = 'bg-gradient-to-r from-[#043A53] via-[#065f73] to-[#3C939D]';
+  const accentGradient = 'bg-[#46A7B5]';
 
   return (
-    <div className={`min-h-screen bg-gradient-to-r from-[#043A53] via-[#065f73] to-[#3C939D] transition-all duration-500`}>
+    <div className={`min-h-screen  transition-all duration-500`}>
       {/* Animated background elements */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className={`absolute top-0 right-0 w-96 h-96 ${dark ? 'bg-indigo-500/10' : 'bg-indigo-500/5'} rounded-full blur-3xl`}></div>
@@ -172,8 +172,8 @@ export default function IccdPrivacyPolicyUI() {
                       onClick={() => toggle(i)} 
                       className={`w-full text-left px-3 py-2.5 rounded-xl transition-all duration-200 flex items-center gap-3 group ${
                         openSection === i 
-                          ? `${dark ? 'bg-gradient-to-r from-[#043A53] via-[#065f73] to-[#3C939D]' : 'bg-gradient-to-r from-[#043A53] via-[#065f73] to-[#3C939D]'}` 
-                          : 'hover:bg-slate-100/50 dark:hover:bg-slate-700/50'
+                          ? `${dark ? 'bg-gradient-to-r from-[#44A4AD] via-[#36969E] to-[#1E7B82]' : 'bg-gradient-to-r from-[#44A4AD] via-[#36969E] to-[#1E7B82]'}` 
+                          : 'hover:bg-[#46A7B5] dark:hover:bg-[#46A7B5]'
                       }`}
                     >
                       <Icon size={16} className="opacity-60" />
@@ -220,7 +220,7 @@ export default function IccdPrivacyPolicyUI() {
                 >
                   <button 
                     onClick={() => toggle(i)} 
-                    className="w-full p-6 flex items-center justify-between hover:bg-slate-50/50 dark:hover:bg-slate-700/50 transition-colors duration-200"
+                    className="w-full p-6 flex items-center justify-between  transition-colors duration-200"
                   >
                     <div className="flex items-center gap-4">
                       <div className={`${accentGradient} rounded-xl p-3 shadow-lg shadow-indigo-500/20`}>

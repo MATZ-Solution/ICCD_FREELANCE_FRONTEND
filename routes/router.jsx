@@ -952,7 +952,7 @@ export const router = createBrowserRouter([
   {
     path: "/report",
     element: withSuspense(
-        <MainTemplate isShowFooter={false}>
+        <MainTemplate isShowFooter={true}>
           <ReportIssueForm />
         </MainTemplate>
     ),
@@ -961,7 +961,7 @@ export const router = createBrowserRouter([
     {
     path: "/feedback",
     element: withSuspense(
-        <MainTemplate isShowFooter={false}>
+        <MainTemplate isShowFooter={true}>
           <FeedbackSection />
         </MainTemplate>
     ),

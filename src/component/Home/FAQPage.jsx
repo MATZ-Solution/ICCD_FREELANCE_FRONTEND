@@ -189,7 +189,7 @@ export default function FAQPage() {
       {/* Hero Section */}
       <section
         id="hero"
-        className="relative py-20 px-6 bg-gradient-to-br from-blue-900 via-blue-800 to-teal-700 text-white overflow-hidden"
+        className="relative py-20 px-6 bg-gradient-to-r from-[#44A4AD] via-[#36969E] to-[#1E7B82] to-teal-700 text-white overflow-hidden"
       >
         <div className="absolute inset-0 opacity-10">
           <div
@@ -208,7 +208,7 @@ export default function FAQPage() {
                 : "opacity-0 translate-y-10"
             }`}
           >
-            <HelpCircle className="w-20 h-20 mx-auto mb-6 text-amber-400" />
+            <HelpCircle className="w-20 h-20 mx-auto mb-6 text-[#07383c]" />
             <h1 className="text-5xl md:text-6xl font-bold mb-4">
               Frequently Asked Questions
             </h1>
@@ -231,7 +231,7 @@ export default function FAQPage() {
                   onClick={() => setSelectedCategory(category)}
                   className={`px-4 py-2 rounded-full font-semibold whitespace-nowrap transition-all duration-300 ${
                     selectedCategory === category
-                      ? "bg-blue-600 text-white shadow-lg scale-105"
+                      ? " bg-gradient-to-r from-[#44A4AD] via-[#2E7A81] to-[#1C4C50] text-white shadow-lg scale-105"
                       : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                   }`}
                 >
@@ -265,7 +265,7 @@ export default function FAQPage() {
                   setSearchQuery("");
                   setSelectedCategory("All");
                 }}
-                className="mt-4 text-blue-600 hover:text-blue-700 font-semibold"
+                className="mt-4  bg-gradient-to-r from-[#44A4AD] via-[#2E7A81] to-[#1C4C50] hover:text-[44A4AD] font-semibold"
               >
                 Clear filters
               </button>
@@ -294,18 +294,18 @@ export default function FAQPage() {
                         <div className="flex items-start space-x-4 flex-1">
                           <div
                             className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 transition-colors ${
-                              isOpen ? "bg-blue-600" : "bg-blue-100"
+                              isOpen ? "bg-gradient-to-r from-[#44A4AD] via-[#2E7A81] to-[#1C4C50]" : "bg-blue-100"
                             }`}
                           >
                             <Icon
                               className={`w-5 h-5 ${
-                                isOpen ? "text-white" : "text-blue-600"
+                                isOpen ? "text-white" : "text-[#3D949C]"
                               }`}
                             />
                           </div>
                           <div className="flex-1">
                             <div className="flex items-center gap-2 mb-1">
-                              <span className="text-xs font-semibold text-blue-600 bg-blue-50 px-2 py-1 rounded-full">
+                              <span className="text-xs font-semibold text-[#3D949C] bg-blue-50 px-2 py-1 rounded-full">
                                 {faq.category}
                               </span>
                             </div>
@@ -364,7 +364,7 @@ export default function FAQPage() {
       {/* Still Have Questions CTA */}
       <section
         id="cta"
-        className="py-20 px-6 bg-gradient-to-br from-blue-900 via-blue-800 to-teal-700 text-white"
+        className="py-20 px-6   bg-gradient-to-r from-[#44A4AD] via-[#2E7A81] to-[#1C4C50] text-white"
       >
         <div className="max-w-4xl mx-auto text-center">
           <div
@@ -386,7 +386,7 @@ export default function FAQPage() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
                 href="mailto:support@iccdfreelance.com"
-                className="bg-white text-blue-900 hover:bg-blue-50 font-bold py-4 px-10 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-2xl flex items-center justify-center"
+                className="bg-white text-black hover:bg-blue-50 font-bold py-4 px-10 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-2xl flex items-center justify-center"
               >
                 <MessageSquare className="w-5 h-5 mr-2" />
                 Contact Support
@@ -396,15 +396,15 @@ export default function FAQPage() {
             <div className="mt-12 pt-8 border-t border-white border-opacity-20">
               <div className="grid md:grid-cols-3 gap-6 text-center">
                 <div>
-                  <Shield className="w-8 h-8 mx-auto mb-2 text-blue-300" />
+                  <Shield className="w-8 h-8 mx-auto mb-2 text-[#42d7e5]" />
                   <p className="text-sm text-blue-100">Secure Platform</p>
                 </div>
                 <div>
-                  <Users className="w-8 h-8 mx-auto mb-2 text-blue-300" />
+                  <Users className="w-8 h-8 mx-auto mb-2 text-[#42d7e5]" />
                   <p className="text-sm text-blue-100">Community Driven</p>
                 </div>
                 <div>
-                  <Award className="w-8 h-8 mx-auto mb-2 text-blue-300" />
+                  <Award className="w-8 h-8 mx-auto mb-2 text-[#42d7e5]" />
                   <p className="text-sm text-blue-100">Ethically Guided</p>
                 </div>
               </div>

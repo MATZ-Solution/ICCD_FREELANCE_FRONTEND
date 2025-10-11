@@ -74,34 +74,34 @@ export default function TermsOfService() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-gray-100">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-[#F3FDF9]">
       {/* Header */}
-      <header className="border-b border-slate-700/50 bg-slate-900/50 backdrop-blur-sm sticky top-0 z-50">
+      <header className="border-b border-gray-200 bg-white/80 backdrop-blur-sm sticky top-0 z-50 shadow-sm">
         <div className="max-w-6xl mx-auto px-6 py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-[#3B90A0] to-[#2c6d7a] rounded-lg flex items-center justify-center">
+              <div className="w-10 h-10 bg-gradient-to-br from-[#47AAB3] to-[#3A9BA3] rounded-lg flex items-center justify-center shadow-md">
                 <FileText className="w-6 h-6 text-white" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-white">ICCD Talent Gate</h1>
-                <p className="text-sm text-gray-400">Terms of Service</p>
+                <h1 className="text-xl font-bold text-gray-900">ICCD Talent Gate</h1>
+                <p className="text-sm text-gray-600">Terms of Service</p>
               </div>
             </div>
-            <div className="text-sm text-gray-400">
-              Last Updated: <span className="text-[#3B90A0]">07-10-2025</span>
+            <div className="text-sm text-gray-600">
+              Last Updated: <span className="text-[#47AAB3] font-semibold">07-10-2025</span>
             </div>
           </div>
         </div>
       </header>
 
       {/* Hero Section */}
-      <div className="bg-gradient-to-r from-[#3B90A0]/20 to-[#2c6d7a]/20 border-b border-slate-700/50">
+      <div className="bg-gradient-to-r from-[#47AAB3]/10 to-[#3A9BA3]/10 border-b border-gray-200">
         <div className="max-w-6xl mx-auto px-6 py-16 text-center">
-          <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-[#3B90A0] to-[#5fb3c3] bg-clip-text text-transparent">
+          <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-[#47AAB3] to-[#5BC4CE] bg-clip-text text-transparent">
             Terms of Service
           </h2>
-          <p className="text-gray-300 text-lg max-w-3xl mx-auto leading-relaxed">
+          <p className="text-gray-700 text-lg max-w-3xl mx-auto leading-relaxed">
             Welcome to ICCD Talent Gate, a digital freelancing platform developed and managed by the Islamic Chamber of Commerce and Development (ICCD) under its Palestine Initiative. Please read these terms carefully before using the platform.
           </p>
         </div>
@@ -113,29 +113,29 @@ export default function TermsOfService() {
           {sections.map((section) => (
             <div
               key={section.id}
-              className="bg-slate-800/40 backdrop-blur-sm rounded-xl border border-slate-700/50 overflow-hidden hover:border-[#3B90A0]/50 transition-all duration-300"
+              className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:border-[#47AAB3] hover:shadow-lg transition-all duration-300"
             >
               <button
                 onClick={() => setActiveSection(activeSection === section.id ? null : section.id)}
-                className="w-full px-6 py-5 flex items-center justify-between text-left hover:bg-slate-700/20 transition-colors"
+                className="w-full px-6 py-5 flex items-center justify-between text-left hover:bg-gray-50 transition-colors"
               >
                 <div className="flex items-center space-x-4">
-                  <div className="w-10 h-10 bg-[#3B90A0]/20 rounded-lg flex items-center justify-center text-[#3B90A0]">
+                  <div className="w-10 h-10 bg-[#47AAB3]/10 rounded-lg flex items-center justify-center text-[#47AAB3]">
                     {section.icon}
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold text-white">{section.id}. {section.title}</h3>
+                    <h3 className="text-lg font-semibold text-gray-900">{section.id}. {section.title}</h3>
                   </div>
                 </div>
                 <div className={`transform transition-transform ${activeSection === section.id ? 'rotate-180' : ''}`}>
-                  <svg className="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <svg className="w-5 h-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
                 </div>
               </button>
               {activeSection === section.id && (
                 <div className="px-6 pb-6 pt-2">
-                  <div className="pl-14 text-gray-300 leading-relaxed border-l-2 border-[#3B90A0]/30">
+                  <div className="pl-14 text-gray-700 leading-relaxed border-l-2 border-[#47AAB3]/30">
                     {section.content}
                   </div>
                 </div>
@@ -145,24 +145,24 @@ export default function TermsOfService() {
         </div>
 
         {/* Contact Section */}
-        <div className="mt-12 bg-gradient-to-r from-[#3B90A0]/10 to-[#2c6d7a]/10 rounded-xl border border-[#3B90A0]/30 p-8">
-          <h3 className="text-2xl font-bold mb-6 text-white flex items-center">
-            <Mail className="w-6 h-6 mr-3 text-[#3B90A0]" />
+        <div className="mt-12 bg-gradient-to-r from-[#47AAB3]/5 to-[#3A9BA3]/5 rounded-xl border border-[#47AAB3]/20 p-8">
+          <h3 className="text-2xl font-bold mb-6 text-gray-900 flex items-center">
+            <Mail className="w-6 h-6 mr-3 text-[#47AAB3]" />
             Contact Information
           </h3>
-          <p className="text-gray-300 mb-6">
+          <p className="text-gray-700 mb-6">
             For questions, clarifications, or complaints regarding these Terms of Service, please contact:
           </p>
           <div className="grid md:grid-cols-2 gap-4">
-            <div className="flex items-center space-x-3 bg-slate-800/40 rounded-lg p-4 border border-slate-700/50">
-              <Mail className="w-5 h-5 text-[#3B90A0]" />
-              <a href="mailto:support@iccdtalentgate.com" className="text-[#3B90A0] hover:text-[#5fb3c3] transition-colors">
+            <div className="flex items-center space-x-3 bg-white rounded-lg p-4 border border-gray-200 hover:border-[#47AAB3] transition-colors">
+              <Mail className="w-5 h-5 text-[#47AAB3]" />
+              <a href="mailto:support@iccdtalentgate.com" className="text-[#47AAB3] hover:text-[#3A9BA3] transition-colors font-medium">
                 support@iccdtalentgate.com
               </a>
             </div>
-            <div className="flex items-center space-x-3 bg-slate-800/40 rounded-lg p-4 border border-slate-700/50">
-              <Globe className="w-5 h-5 text-[#3B90A0]" />
-              <a href="https://www.iccdtalentgate.com" className="text-[#3B90A0] hover:text-[#5fb3c3] transition-colors">
+            <div className="flex items-center space-x-3 bg-white rounded-lg p-4 border border-gray-200 hover:border-[#47AAB3] transition-colors">
+              <Globe className="w-5 h-5 text-[#47AAB3]" />
+              <a href="https://www.iccdtalentgate.com" className="text-[#47AAB3] hover:text-[#3A9BA3] transition-colors font-medium">
                 www.iccdtalentgate.com
               </a>
             </div>
@@ -171,8 +171,8 @@ export default function TermsOfService() {
       </div>
 
       {/* Footer */}
-      <footer className="border-t border-slate-700/50 bg-slate-900/50 mt-12">
-        <div className="max-w-6xl mx-auto px-6 py-8 text-center text-gray-400 text-sm">
+      <footer className="border-t border-gray-200 bg-white mt-12">
+        <div className="max-w-6xl mx-auto px-6 py-8 text-center text-gray-600 text-sm">
           <p>&copy; 2025 Islamic Chamber of Commerce and Development (ICCD). All rights reserved.</p>
           <p className="mt-2">Palestine Initiative - Empowering Digital Freelancing</p>
         </div>

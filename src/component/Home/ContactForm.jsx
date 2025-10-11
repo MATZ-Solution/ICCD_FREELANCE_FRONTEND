@@ -3,8 +3,8 @@ import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { useAddContact } from "../../../api/client/contact";
+import { Mail, User, Building2, Tag, FileText, MessageSquare, Send, CheckCircle } from "lucide-react";
 
-// ✅ Validation Schema
 const schema = yup.object().shape({
   fullName: yup.string().required("Full Name is required"),
   email: yup.string().email("Invalid email format").required("Email is required"),
@@ -12,13 +12,6 @@ const schema = yup.object().shape({
   category: yup.string().required("Please select a category"),
   subject: yup.string().required("Message Subject is required"),
   message: yup.string().required("Message is required"),
-  // attachment: yup
-  //   .mixed()
-  //   .test("fileSize", "File size must be less than 5MB", (fileList) => {
-  //     if (!fileList || fileList.length === 0) return true;
-  //     return fileList[0].size <= 5 * 1024 * 1024;
-  //   }),
-  // consent: yup.boolean().oneOf([true], "Consent is required"),
 });
 
 export default function ContactForm() {
@@ -37,165 +30,221 @@ export default function ContactForm() {
       category: "",
       subject: "",
       message: "",
-      // attachment: null,
-      // consent: false,
     },
   });
 
-  const { addContact, isSuccess, isPending, isError, error } = useAddContact()
+  const { addContact, isSuccess, isPending, isError, error } = useAddContact();
+  
   const onSubmit = (data) => {
-    addContact(data)
-    // const file = data.attachment?.[0] || null;
-    // console.log({
-    //   ...data,
-    //   attachment: file ? file.name : "No file attached",
-    // });
-    // reset();
+    addContact(data);
   };
 
   useEffect(() => {
-    reset()
-  }, [isSuccess])
+    if (isSuccess) {
+      reset();
+    }
+  }, [isSuccess, reset]);
 
   return (
-    <div className="max-w-2xl mx-auto bg-white/80 backdrop-blur-sm shadow-2xl rounded-2xl p-8 transition-all duration-300 border border-gray-100">
-      <div className="text-center mb-8">
-        <h1 className="text-3xl font-bold text-gray-800">📨 Contact Us</h1>
-        <p className="text-gray-500 mt-2">
-          We'd love to hear from you. Share your thoughts, inquiries, or partnership ideas below.
-        </p>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 py-12 px-4">
+      <div className="max-w-4xl mx-auto">
+        {/* Header Section */}
+        <div className="text-center mb-12">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-[#47AAB3] rounded-2xl mb-4 shadow-lg">
+            <Mail className="w-8 h-8 text-white" />
+          </div>
+          <h1 className="text-4xl font-bold text-gray-900 mb-3">Get in Touch</h1>
+          <p className="text-gray-600 max-w-2xl mx-auto">
+            Have a question or want to work together? We'd love to hear from you. Fill out the form below and we'll get back to you soon.
+          </p>
+        </div>
+
+        {/* Form Card */}
+        <div className="bg-white rounded-3xl shadow-xl p-8 md:p-10">
+          {isSuccess && (
+            <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-xl flex items-center gap-3">
+              <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0" />
+              <p className="text-green-800 text-sm">Your message has been sent successfully! We'll get back to you soon.</p>
+            </div>
+          )}
+
+          {isError && (
+            <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl">
+              <p className="text-red-800 text-sm">Something went wrong. Please try again.</p>
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+            {/* Full Name & Email Row */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Full Name <span className="text-red-500">*</span>
+                </label>
+                <div className="relative">
+                  <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <input
+                    type="text"
+                    {...register("fullName")}
+                    className={`w-full pl-11 pr-4 py-3 border ${
+                      errors.fullName ? "border-red-300" : "border-gray-300"
+                    } rounded-xl focus:ring-2 focus:ring-[#47AAB3] focus:border-transparent outline-none transition`}
+                    placeholder="John Doe"
+                  />
+                </div>
+                {errors.fullName && (
+                  <p className="text-red-500 text-xs mt-1">{errors.fullName.message}</p>
+                )}
+              </div>
+
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Email Address <span className="text-red-500">*</span>
+                </label>
+                <div className="relative">
+                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <input
+                    type="email"
+                    {...register("email")}
+                    className={`w-full pl-11 pr-4 py-3 border ${
+                      errors.email ? "border-red-300" : "border-gray-300"
+                    } rounded-xl focus:ring-2 focus:ring-[#47AAB3] focus:border-transparent outline-none transition`}
+                    placeholder="john@example.com"
+                  />
+                </div>
+                {errors.email && (
+                  <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>
+                )}
+              </div>
+            </div>
+
+            {/* Organization & Category Row */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Organization / Company
+                </label>
+                <div className="relative">
+                  <Building2 className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <input
+                    type="text"
+                    {...register("organization")}
+                    className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-[#47AAB3] focus:border-transparent outline-none transition"
+                    placeholder="Your Company"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Category <span className="text-red-500">*</span>
+                </label>
+                <div className="relative">
+                  <Tag className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <Controller
+                    name="category"
+                    control={control}
+                    render={({ field }) => (
+                      <select
+                        {...field}
+                        className={`w-full pl-11 pr-4 py-3 border ${
+                          errors.category ? "border-red-300" : "border-gray-300"
+                        } rounded-xl focus:ring-2 focus:ring-[#47AAB3] focus:border-transparent outline-none appearance-none bg-white transition`}
+                      >
+                        <option value="">Select a category</option>
+                        <option value="General Inquiry">General Inquiry</option>
+                        <option value="Technical Support">Technical Support</option>
+                        <option value="Partnership">Partnership</option>
+                        <option value="Feedback">Feedback</option>
+                        <option value="Account Issue">Account Issue</option>
+                        <option value="Other">Other</option>
+                      </select>
+                    )}
+                  />
+                </div>
+                {errors.category && (
+                  <p className="text-red-500 text-xs mt-1">{errors.category.message}</p>
+                )}
+              </div>
+            </div>
+
+            {/* Subject */}
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Subject <span className="text-red-500">*</span>
+              </label>
+              <div className="relative">
+                <FileText className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <input
+                  type="text"
+                  {...register("subject")}
+                  className={`w-full pl-11 pr-4 py-3 border ${
+                    errors.subject ? "border-red-300" : "border-gray-300"
+                  } rounded-xl focus:ring-2 focus:ring-[#47AAB3] focus:border-transparent outline-none transition`}
+                  placeholder="How can we help you?"
+                />
+              </div>
+              {errors.subject && (
+                <p className="text-red-500 text-xs mt-1">{errors.subject.message}</p>
+              )}
+            </div>
+
+            {/* Message */}
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Message <span className="text-red-500">*</span>
+              </label>
+              <div className="relative">
+                <MessageSquare className="absolute left-3 top-4 w-5 h-5 text-gray-400" />
+                <textarea
+                  rows={5}
+                  {...register("message")}
+                  className={`w-full pl-11 pr-4 py-3 border ${
+                    errors.message ? "border-red-300" : "border-gray-300"
+                  } rounded-xl focus:ring-2 focus:ring-[#47AAB3] focus:border-transparent outline-none transition resize-none`}
+                  placeholder="Tell us more about your inquiry..."
+                ></textarea>
+              </div>
+              {errors.message && (
+                <p className="text-red-500 text-xs mt-1">{errors.message.message}</p>
+              )}
+            </div>
+
+            {/* Submit Button */}
+            <button
+              type="submit"
+              disabled={isPending}
+              className={`w-full py-4 rounded-xl text-white font-semibold text-base shadow-lg transition-all duration-300 flex items-center justify-center gap-2 ${
+                isSuccess
+                  ? "bg-green-600 hover:bg-green-700"
+                  : "bg-[#47AAB3] hover:bg-[#3a8f96] hover:shadow-xl"
+              } ${isPending ? "opacity-70 cursor-not-allowed" : ""}`}
+            >
+              {isPending ? (
+                <>
+                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                  Sending...
+                </>
+              ) : isSuccess ? (
+                <>
+                  <CheckCircle className="w-5 h-5" />
+                  Message Sent Successfully
+                </>
+              ) : (
+                <>
+                  Send Message
+                  <Send className="w-5 h-5" />
+                </>
+              )}
+            </button>
+          </form>
+        </div>
+
+        {/* Footer Info */}
+        <div className="text-center mt-8 text-gray-600 text-sm">
+          <p>We typically respond within 24-48 hours during business days.</p>
+        </div>
       </div>
-
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        {/* Full Name & Email */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div className="relative">
-            <input
-              type="text"
-              {...register("fullName")}
-              placeholder=" "
-              className="peer w-full border border-gray-300 rounded-lg px-3 pt-5 pb-2 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition"
-            />
-            <label className="absolute z-0 left-3 top-2.5 text-gray-500 text-xs peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-sm peer-placeholder-shown:text-gray-400 transition-all">
-              Full Name*
-            </label>
-            {errors.fullName && <p className="text-red-500 text-xs mt-1">{errors.fullName.message}</p>}
-          </div>
-
-          <div className="relative">
-            <input
-              type="email"
-              {...register("email")}
-              placeholder=" "
-              className="peer w-full border border-gray-300 rounded-lg px-3 pt-5 pb-2 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition"
-            />
-            <label className="absolute left-3 top-2.5 text-gray-500 text-xs peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-sm peer-placeholder-shown:text-gray-400 transition-all">
-              Email Address*
-            </label>
-            {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>}
-          </div>
-        </div>
-
-        {/* Organization */}
-        <div className="relative">
-          <input
-            type="text"
-            {...register("organization")}
-            placeholder=" "
-            className="peer w-full border border-gray-300 rounded-lg px-3 pt-5 pb-2 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition"
-          />
-          <label className="absolute left-3 top-2.5 text-gray-500 text-xs peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-sm peer-placeholder-shown:text-gray-400 transition-all">
-            Organization / Company
-          </label>
-        </div>
-
-        {/* Category */}
-        <div className="relative">
-          <Controller
-            name="category"
-            control={control}
-            render={({ field }) => (
-              <select
-                {...field}
-                className="mt-1 w-full border border-gray-300 rounded-lg px-3 pt-5 pb-2 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none appearance-none bg-white transition"
-              >
-                <option value="">Select a category</option>
-                <option value="General Inquiry">General Inquiry</option>
-                <option value="Technical Support">Technical Support</option>
-                <option value="Partnership">Partnership</option>
-                <option value="Feedback">Feedback</option>
-                <option value="Account Issue">Account Issue</option>
-                <option value="Other">Other</option>
-              </select>
-            )}
-          />
-          <label className="absolute left-3 top-2.5 text-gray-500 text-xs peer-placeholder-shown:text-sm transition-all">
-            Category / Purpose*
-          </label>
-          {errors.category && <p className="text-red-500 text-xs mt-1">{errors.category.message}</p>}
-        </div>
-
-        {/* Subject */}
-        <div className="relative">
-          <input
-            type="text"
-            {...register("subject")}
-            placeholder=" "
-            className="peer w-full border border-gray-300 rounded-lg px-3 pt-5 pb-2 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition"
-          />
-          <label className="absolute left-3 top-2.5 text-gray-500 text-xs peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-sm peer-placeholder-shown:text-gray-400 transition-all">
-            Message Subject*
-          </label>
-          {errors.subject && <p className="text-red-500 text-xs mt-1">{errors.subject.message}</p>}
-        </div>
-
-        {/* Message */}
-        <div className="relative">
-          <textarea
-            rows={4}
-            {...register("message")}
-            placeholder=" "
-            className="peer w-full border border-gray-300 rounded-lg px-3 pt-5 pb-2 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-100 outline-none transition resize-none"
-          ></textarea>
-          <label className="absolute left-3 top-2.5 text-gray-500 text-xs peer-placeholder-shown:top-3.5 peer-placeholder-shown:text-sm peer-placeholder-shown:text-gray-400 transition-all">
-            Message / Description*
-          </label>
-          {errors.message && <p className="text-red-500 text-xs mt-1">{errors.message.message}</p>}
-        </div>
-
-        {/* Attachment */}
-        {/* <div>
-          <label className="block font-medium text-sm mb-1 text-gray-600">
-            Attachment (Optional, Max 5MB)
-          </label>
-          <input
-            type="file"
-            {...register("attachment")}
-            className="block w-full text-sm text-gray-600 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 file:mr-4 file:py-1 file:px-3 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-600 hover:file:bg-blue-100 transition"
-          />
-          {errors.attachment && <p className="text-red-500 text-xs mt-1">{errors.attachment.message}</p>}
-        </div> */}
-
-        {/* Consent */}
-        {/* <div className="flex items-start space-x-2">
-          <input type="checkbox" {...register("consent")} className="mt-1 h-4 w-4 text-blue-600 rounded" />
-          <span className="text-sm text-gray-600">
-            I consent to ICCD Talent Gate storing and using my data to process this inquiry.*
-          </span>
-        </div>
-        {errors.consent && <p className="text-red-500 text-xs">{errors.consent.message}</p>} */}
-
-        {/* Submit */}
-        <button
-          type="submit"
-          className={`w-full py-3 rounded-lg text-white font-semibold text-sm shadow-md transition-all ${isSuccess
-              ? "bg-green-600 hover:bg-green-700"
-              : "bg-blue-600 hover:bg-blue-700"
-            }`}
-        >
-          {isSuccess ? "Message Sent ✅" : "Send Message"}
-        </button>
-      </form>
     </div>
   );
 }

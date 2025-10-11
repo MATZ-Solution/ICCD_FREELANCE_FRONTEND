@@ -3,6 +3,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { useAddIssue } from '../../../api/client/issue';
+import { AlertCircle, AlertTriangle, FileText, Mail, User } from 'lucide-react';
 
 // Validation Schema
 const schema = yup.object().shape({
@@ -84,71 +85,76 @@ export default function ReportIssueForm() {
   },[isSuccess])
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#2a6d7a] to-[#1a4d57] p-5">
+    <div className="min-h-screen  p-5">
       <div className="max-w-3xl mx-auto bg-white rounded-xl shadow-2xl overflow-hidden">
         {/* Header */}
-        <div className="bg-gradient-to-r from-[#3b90a0] to-[#2a7080] text-white py-10 px-8 text-center">
-          <h1 className="text-4xl font-semibold mb-4">Report an Issue</h1>
-          <p className="text-base leading-relaxed opacity-95">
+             <div className="text-center mb-12">
+          <div className="inline-flex mt-4 items-center justify-center w-16 h-16 bg-[#47AAB3] rounded-2xl mb-4 shadow-lg">
+            <AlertCircle className="w-8  h-8 text-white" />
+          </div>
+          <h1 className="text-4xl font-bold text-gray-900 mb-3">Report an Issue</h1>
+          <p className="text-gray-600 max-w-2xl mx-auto">
             We're here to help. Please share the details of your issue so our team can resolve it as quickly as possible.
           </p>
         </div>
-
         {/* Form Container */}
         <div className="p-10">
           <div>
-            {/* Full Name */}
-            <div className="mb-6">
-              <label className="block text-sm font-semibold text-[#2a6d7a] mb-2">
-                Full Name <span className="text-red-500">*</span>
-              </label>
-              <Controller
-                name="fullName"
-                control={control}
-                render={({ field }) => (
-                  <input
-                    {...field}
-                    type="text"
-                    placeholder="Enter your full name"
-                    className={`w-full px-4 py-3 border-2 rounded-lg text-sm transition-all outline-none focus:ring-2 focus:ring-[#3b90a0] focus:ring-opacity-20 ${
-                      errors.fullName ? 'border-red-500' : 'border-gray-300 focus:border-[#3b90a0]'
-                    }`}
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Full Name <span className="text-red-500">*</span>
+                </label>
+                <div className="relative">
+                  <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <Controller
+                    name="fullName"
+                    control={control}
+                    render={({ field }) => (
+                      <input
+                        {...field}
+                        type="text"
+                        className={`w-full pl-11 pr-4 py-3 border ${
+                          errors.fullName ? "border-red-300" : "border-gray-300"
+                        } rounded-xl focus:ring-2 focus:ring-[#47AAB3] focus:border-transparent outline-none transition`}
+                        placeholder="John Doe"
+                      />
+                    )}
                   />
+                </div>
+                {errors.fullName && (
+                  <p className="text-red-500 text-xs mt-1">{errors.fullName.message}</p>
                 )}
-              />
-              {errors.fullName && (
-                <span className="block text-red-500 text-xs mt-1 font-medium">
-                  {errors.fullName.message}
-                </span>
-              )}
+              </div>
+
+              <div className="space-y-2">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Email Address <span className="text-red-500">*</span>
+                </label>
+                <div className="relative">
+                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <Controller
+                    name="email"
+                    control={control}
+                    render={({ field }) => (
+                      <input
+                        {...field}
+                        type="email"
+                        className={`w-full pl-11 pr-4 py-3 border ${
+                          errors.email ? "border-red-300" : "border-gray-300"
+                        } rounded-xl focus:ring-2 focus:ring-[#47AAB3] focus:border-transparent outline-none transition`}
+                        placeholder="john@example.com"
+                      />
+                    )}
+                  />
+                </div>
+                {errors.email && (
+                  <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>
+                )}
+                <p className="text-xs text-gray-500">Used for follow-up communication</p>
+              </div>
             </div>
 
-            {/* Email */}
-            <div className="mb-6">
-              <label className="block text-sm font-semibold text-[#2a6d7a] mb-2">
-                Email Address <span className="text-red-500">*</span>
-              </label>
-              <Controller
-                name="email"
-                control={control}
-                render={({ field }) => (
-                  <input
-                    {...field}
-                    type="email"
-                    placeholder="your.email@example.com"
-                    className={`w-full px-4 py-3 border-2 rounded-lg text-sm transition-all outline-none focus:ring-2 focus:ring-[#3b90a0] focus:ring-opacity-20 ${
-                      errors.email ? 'border-red-500' : 'border-gray-300 focus:border-[#3b90a0]'
-                    }`}
-                  />
-                )}
-              />
-              {errors.email && (
-                <span className="block text-red-500 text-xs mt-1 font-medium">
-                  {errors.email.message}
-                </span>
-              )}
-              <div className="text-xs text-gray-600 mt-1">Used for follow-up communication</div>
-            </div>
 
             {/* User Role */}
             {/* <div className="mb-6">
@@ -186,40 +192,36 @@ export default function ReportIssueForm() {
             </div> */}
 
             {/* Issue Type */}
-            <div className="mb-6">
-              <label className="block text-sm font-semibold text-[#2a6d7a] mb-2">
+                       {/* Issue Type */}
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
                 Issue Type <span className="text-red-500">*</span>
               </label>
-              <Controller
-                name="issueType"
-                control={control}
-                render={({ field }) => (
-                  <select
-                    {...field}
-                    className={`w-full px-4 py-3 border-2 rounded-lg text-sm transition-all outline-none appearance-none bg-white cursor-pointer focus:ring-2 focus:ring-[#3b90a0] focus:ring-opacity-20 ${
-                      errors.issueType ? 'border-red-500' : 'border-gray-300 focus:border-[#3b90a0]'
-                    }`}
-                    style={{
-                      backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%233b90a0' d='M6 9L1 4h10z'/%3E%3C/svg%3E")`,
-                      backgroundRepeat: 'no-repeat',
-                      backgroundPosition: 'right 15px center',
-                      paddingRight: '40px',
-                    }}
-                  >
-                    <option value="">Select issue type</option>
-                    <option value="technical">Technical Bug</option>
-                    <option value="payment">Payment Problem</option>
-                    <option value="dispute">Dispute</option>
-                    <option value="account">Account Access</option>
-                    <option value="content">Inappropriate Content</option>
-                    <option value="other">Other</option>
-                  </select>
-                )}
-              />
+              <div className="relative">
+                <AlertTriangle className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <Controller
+                  name="issueType"
+                  control={control}
+                  render={({ field }) => (
+                    <select
+                      {...field}
+                      className={`w-full pl-11 pr-4 py-3 border ${
+                        errors.issueType ? "border-red-300" : "border-gray-300"
+                      } rounded-xl focus:ring-2 focus:ring-[#47AAB3] focus:border-transparent outline-none appearance-none bg-white transition`}
+                    >
+                      <option value="">Select issue type</option>
+                      <option value="technical">Technical Bug</option>
+                      <option value="payment">Payment Problem</option>
+                      <option value="dispute">Dispute</option>
+                      <option value="account">Account Access</option>
+                      <option value="content">Inappropriate Content</option>
+                      <option value="other">Other</option>
+                    </select>
+                  )}
+                />
+              </div>
               {errors.issueType && (
-                <span className="block text-red-500 text-xs mt-1 font-medium">
-                  {errors.issueType.message}
-                </span>
+                <p className="text-red-500 text-xs mt-1">{errors.issueType.message}</p>
               )}
             </div>
 
@@ -246,28 +248,30 @@ export default function ReportIssueForm() {
             </div> */}
 
             {/* Description */}
-            <div className="mb-6">
-              <label className="block text-sm font-semibold text-[#2a6d7a] mb-2">
+                       {/* Description */}
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
                 Issue Description <span className="text-red-500">*</span>
               </label>
-              <Controller
-                name="description"
-                control={control}
-                render={({ field }) => (
-                  <textarea
-                    {...field}
-                    placeholder="Please describe what happened, when it occurred, and any error messages you received..."
-                    rows="5"
-                    className={`w-full px-4 py-3 border-2 rounded-lg text-sm transition-all outline-none resize-y focus:ring-2 focus:ring-[#3b90a0] focus:ring-opacity-20 ${
-                      errors.description ? 'border-red-500' : 'border-gray-300 focus:border-[#3b90a0]'
-                    }`}
-                  />
-                )}
-              />
+              <div className="relative">
+                <FileText className="absolute left-3 top-4 w-5 h-5 text-gray-400" />
+                <Controller
+                  name="description"
+                  control={control}
+                  render={({ field }) => (
+                    <textarea
+                      {...field}
+                      rows={5}
+                      className={`w-full pl-11 pr-4 py-3 border ${
+                        errors.description ? "border-red-300" : "border-gray-300"
+                      } rounded-xl focus:ring-2 focus:ring-[#47AAB3] focus:border-transparent outline-none transition resize-none`}
+                      placeholder="Please describe what happened, when it occurred, and any error messages you received..."
+                    ></textarea>
+                  )}
+                />
+              </div>
               {errors.description && (
-                <span className="block text-red-500 text-xs mt-1 font-medium">
-                  {errors.description.message}
-                </span>
+                <p className="text-red-500 text-xs mt-1">{errors.description.message}</p>
               )}
             </div>
 
@@ -315,46 +319,50 @@ export default function ReportIssueForm() {
             </div> */}
 
             {/* Priority Level */}
-            <div className="mb-6">
-              <label className="block text-sm font-semibold text-[#2a6d7a] mb-2">
+                 <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
                 Priority Level <span className="text-red-500">*</span>
               </label>
               <Controller
                 name="priority"
                 control={control}
                 render={({ field }) => (
-                  <div className="flex gap-5 flex-wrap">
-                    {['low', 'medium', 'high'].map((level) => (
-                      <div key={level} className="flex items-center gap-2">
+                  <div className="flex gap-6 flex-wrap">
+                    {[
+                      { value: 'low', label: 'Low', color: 'bg-green-50 border-green-200 text-green-700' },
+                      { value: 'medium', label: 'Medium', color: 'bg-yellow-50 border-yellow-200 text-yellow-700' },
+                      { value: 'high', label: 'High', color: 'bg-red-50 border-red-200 text-red-700' }
+                    ].map((level) => (
+                      <label
+                        key={level.value}
+                        className={`flex items-center gap-3 px-5 py-3 rounded-xl border-2 cursor-pointer transition-all ${
+                          field.value === level.value
+                            ? `${level.color} border-2 shadow-md`
+                            : 'bg-white border-gray-200 hover:border-gray-300'
+                        }`}
+                      >
                         <input
                           {...field}
                           type="radio"
-                          id={`priority-${level}`}
-                          value={level}
-                          checked={field.value === level}
-                          className="w-4 h-4 cursor-pointer accent-[#3b90a0]"
+                          value={level.value}
+                          checked={field.value === level.value}
+                          className="w-4 h-4 cursor-pointer accent-[#47AAB3]"
                         />
-                        <label
-                          htmlFor={`priority-${level}`}
-                          className="text-sm text-gray-700 cursor-pointer"
-                        >
-                          {level.charAt(0).toUpperCase() + level.slice(1)}
-                        </label>
-                      </div>
+                        <span className={`text-sm font-medium ${
+                          field.value === level.value ? '' : 'text-gray-700'
+                        }`}>
+                          {level.label}
+                        </span>
+                      </label>
                     ))}
                   </div>
                 )}
               />
               {errors.priority && (
-                <span className="block text-red-500 text-xs mt-1 font-medium">
-                  {errors.priority.message}
-                </span>
+                <p className="text-red-500 text-xs mt-1">{errors.priority.message}</p>
               )}
-              <div className="text-xs text-gray-600 mt-1">
-                Helps our team triage and prioritize support requests
-              </div>
+              <p className="text-xs text-gray-500">Helps our team triage and prioritize support requests</p>
             </div>
-
             {/* Response Method */}
             {/* <div className="mb-6">
               <label className="block text-sm font-semibold text-[#2a6d7a] mb-2">
