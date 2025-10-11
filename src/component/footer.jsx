@@ -54,7 +54,7 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="bg-slate-900 text-slate-100 pt-10 pb-6">
+    <footer className=" bg-gradient-to-r from-[#1C4C50] via-[#2E7A81] to-[#1C4C50] text-slate-100 pt-10 pb-6">
       <div className="max-w-7xl mx-auto px-6">
         <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-8">
           {/* Brand / Mission */}
