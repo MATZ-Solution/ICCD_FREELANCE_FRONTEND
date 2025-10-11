@@ -95,8 +95,8 @@ export default function JobDetailPage() {
                 icon={<Eye className="w-6 h-6 text-purple-600" />}
                 bg="bg-purple-100"
                 title="Status"
-                value="Active"
-                valueClass="text-green-600 font-semibold"
+                value={jobData?.status}
+                valueClass="text-green-600"
               />
 
               <div className="flex  lg:items-center lg:justify-center">
