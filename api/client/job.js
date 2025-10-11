@@ -68,7 +68,6 @@ export function useGetScoutFilterEntries(params = {}) {
   };
 }
 
-
 export function useAddJob() {
     // const pathname = usePathname();
     // const queryClient = useQueryClient();
@@ -219,3 +218,21 @@ export function useApplyJob() {
     });
     return { submitJob, isSuccess, isPending, isError, error };
 }
+
+
+export function useJobCloseById(id) {
+  const { data, isSuccess, isPending, isError, isLoading } = useQuery({
+    queryKey: [API_ROUTE.job.closejob, id],
+    queryFn: async () => await api.put(`${API_ROUTE.job.closejob}/${id}`),
+    enabled: id !== undefined && id !== null
+  });
+  return {
+    data: data?.data?.data,
+    isSuccess,
+    isPending,
+    isError,
+    isLoading,
+  };
+}
+
+

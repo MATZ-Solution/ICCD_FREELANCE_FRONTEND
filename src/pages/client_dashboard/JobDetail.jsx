@@ -9,7 +9,7 @@ import {
   BriefcaseBusiness,
   X,
 } from "lucide-react";
-import { useGetJobById, getJobPropsalByClient } from "../../../api/client/job";
+import { useGetJobById, getJobPropsalByClient , useJobCloseById } from "../../../api/client/job";
 import { useParams } from "react-router-dom";
 import { downloadFile } from "../../../functions/download_pdf";
 import ICCDLoader from "../../component/loader";
@@ -21,6 +21,7 @@ export default function JobDetailPage() {
   const { data, isSuccess, isPending, isError, isLoading } = useGetJobById(id);
   const { jobProposals, error } = getJobPropsalByClient({ id });
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { data:closeJobData, isError:closeError, isLoading:jobcloseloading } = useJobCloseById(id);
 
   if (isLoading || isPending) {
     return <ICCDLoader />;
@@ -135,7 +136,7 @@ export default function JobDetailPage() {
                         </button>
                         <button
                           onClick={() => {
-                            console.log(id);
+                            closeJobData;
                             setIsModalOpen(false);
                           }}
                           className="px-4 py-2 rounded-md bg-red-600 text-white hover:bg-red-700 transition"

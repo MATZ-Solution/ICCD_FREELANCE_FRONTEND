@@ -15,6 +15,7 @@ const API_ROUTE = {
     submitProposals: "/project/submitProposals",
     getProjectPropsalByClient: '/project/getProjectPropsalByClient',
     editProject: '/project/editProject'
+  
   },
   job: {
     getAllJob: "/job/getAllJob",
@@ -23,7 +24,8 @@ const API_ROUTE = {
     getJobsByClient: '/job/getJobsByClient',
     editJob: '/job/editJob',
     applyjob: "/job/applyJob",
-    getJobPropsalByClient: "/job/getJobPropsalByClient"
+    getJobPropsalByClient: "/job/getJobPropsalByClient",
+    closejob: "/job/closeJob"
   },
   gigs: {
     getGigs: "/gigs/getGigs",
