@@ -25,7 +25,8 @@ const API_ROUTE = {
     editJob: '/job/editJob',
     applyjob: "/job/applyJob",
     getJobPropsalByClient: "/job/getJobPropsalByClient",
-    closejob: "/job/closeJob"
+    closejob: "/job/closeJob",
+    jobProposalAction:"/job/jobProposalAction"
   },
   gigs: {
     getGigs: "/gigs/getGigs",

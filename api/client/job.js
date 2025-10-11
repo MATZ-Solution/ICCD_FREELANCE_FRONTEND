@@ -235,4 +235,27 @@ export function useJobCloseById(id) {
   };
 }
 
+export function useJobProposalAction() {
+  const mutation = useMutation({
+    mutationFn: async ({ id, name, email, action }) => {
+      const response = await api.put(`${API_ROUTE.job.jobProposalAction}`, {
+        id,
+        name,
+        email,
+        action,
+      });
+      return response.data;
+    },
+  });
 
+  return {
+    mutate: mutation.mutate,
+    mutateAsync: mutation.mutateAsync,
+    data: mutation.data,
+    isSuccess: mutation.isSuccess,
+    isPending: mutation.isPending,
+    isError: mutation.isError,
+    isLoading: mutation.isLoading,
+    error: mutation.error,
+  };
+}

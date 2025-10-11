@@ -15,6 +15,7 @@ import {
   useGetJobById,
   getJobPropsalByClient,
   useJobCloseById,
+  useJobProposalAction,
 } from "../../../api/client/job";
 import { useParams } from "react-router-dom";
 import { downloadFile } from "../../../functions/download_pdf";
@@ -32,6 +33,7 @@ export default function JobDetailPage() {
     isError: closeError,
     isLoading: jobcloseloading,
   } = useJobCloseById(id);
+  const { mutate, isLoading: actionloading } = useJobProposalAction();
 
   if (isLoading || isPending) {
     return <ICCDLoader />;
@@ -54,8 +56,24 @@ export default function JobDetailPage() {
 
   const jobData = data[0];
 
-  
-
+  const handleAction = (item, action) => {
+    mutate(
+      {
+        id: item.id,
+        name: item.freelancerName,
+        email: item.email,
+        action,
+      },
+      {
+        onSuccess: (res) => {
+          console.log("Action successful:", res);
+        },
+        onError: (err) => {
+          console.error("Error performing action:", err);
+        },
+      }
+    );
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -91,7 +109,13 @@ export default function JobDetailPage() {
 
           {/* Stats Bar */}
           <div className="bg-gray-50 px-6 py-6 border-t">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div
+              className={`grid grid-cols-1 sm:grid-cols-2 ${
+                jobData?.status !== "closed"
+                  ? "lg:grid-cols-4"
+                  : "lg:grid-cols-3"
+              } gap-4`}
+            >
               <StatCard
                 icon={<Users className="w-6 h-6 text-green-600" />}
                 bg="bg-green-100"
@@ -171,7 +195,11 @@ export default function JobDetailPage() {
           {/* Main Content Area */}
           <div className="xl:col-span-3 space-y-8">
             {/* Proposals Section */}
-            <ProposalSection jobProposals={jobProposals} />
+            <ProposalSection
+              jobProposals={jobProposals}
+              handleAction={handleAction}
+              actionloading={actionloading}
+            />
 
             {/* Job Description - moved below proposals */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
@@ -229,7 +257,7 @@ function StatCard({ icon, bg, title, value, valueClass }) {
   );
 }
 
-function ProposalSection({ jobProposals }) {
+function ProposalSection({ jobProposals, handleAction, actionloading }) {
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
       <div className="bg-gradient-to-r from-emerald-500 to-teal-600 p-6">
@@ -254,7 +282,6 @@ function ProposalSection({ jobProposals }) {
         {jobProposals?.length > 0 ? (
           <div className="space-y-4">
             {jobProposals.map((item, index) => (
-              
               <div
                 key={index}
                 className="flex flex-col md:flex-row md:items-center justify-between p-4 border border-gray-200 rounded-lg hover:border-emerald-300 hover:shadow-md transition-all duration-200"
@@ -280,48 +307,47 @@ function ProposalSection({ jobProposals }) {
                   </div>
                 </div>
 
-                {/* Action Buttons */}
+                {/* Action Buttons OR Status */}
                 <div className="flex flex-col lg:flex-row items-center gap-2">
-                  {/* Download CV */}
-                  <button
-                    onClick={() =>
-                      downloadFile(item?.fileUrl, item?.freelancerName)
-                    }
-                    className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-lg transition-colors duration-200 border border-emerald-200"
-                  >
-                    <Download className="w-4 h-4" />
-                    Download CV
-                  </button>
+                  {item?.status === "accept" ? (
+                    <span className="inline-flex items-center gap-2 px-4 py-2 bg-green-50 text-green-700 rounded-lg border border-green-200">
+                      <Check className="w-4 h-4" />
+                      accept
+                    </span>
+                  ) : item?.status === "rejected" ? (
+                    <span className="inline-flex items-center gap-2 px-4 py-2 bg-red-50 text-red-700 rounded-lg border border-red-200">
+                      <XCircle className="w-4 h-4" />
+                      Rejected
+                    </span>
+                  ) : (
+                    <>
+                      <button
+                        onClick={() =>
+                          downloadFile(item?.fileUrl, item?.freelancerName)
+                        }
+                        className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-lg transition-colors duration-200 border border-emerald-200"
+                      >
+                        <Download className="w-4 h-4" />
+                        Download CV
+                      </button>
 
-                  {/* Accept Button */}
-                  <button
-                    onClick={() => console.log(
-                      {
-                        name: item?.freelancerName,
-                        id: item?.id,
-                        email: item?.email,
-                        action: "accepted"
-                      }
-                      
-                    )}
-                    className="inline-flex  items-center gap-2 px-4 py-2 bg-green-50 hover:bg-green-100 text-green-700 rounded-lg transition-colors duration-200 border border-green-200"
-                  >
-                    <Check  /> Accept
-                  </button>
+                      <button
+                        onClick={() => handleAction(item, "accept")}
+                        disabled={actionloading}
+                        className="inline-flex items-center gap-2 px-4 py-2 bg-green-50 hover:bg-green-100 text-green-700 rounded-lg transition-colors duration-200 border border-green-200"
+                      >
+                        Accept
+                      </button>
 
-                  {/* Reject Button */}
-                  <button
-                    onClick={() => console.log(    {
-                        name: item?.freelancerName,
-                        id: item?.id,
-                        email: item?.email,
-                        action: "accepted"
-                      }
-                      )}
-                    className="inline-flex items-center gap-2 px-4 py-2 bg-red-50 hover:bg-red-100 text-red-700 rounded-lg transition-colors duration-200 border border-red-200"
-                  >
-                    <XCircle  /> Reject
-                  </button>
+                      <button
+                        onClick={() => handleAction(item, "rejected")}
+                        disabled={actionloading}
+                        className="inline-flex items-center gap-2 px-4 py-2 bg-red-50 hover:bg-red-100 text-red-700 rounded-lg transition-colors duration-200 border border-red-200"
+                      >
+                        Reject
+                      </button>
+                    </>
+                  )}
                 </div>
               </div>
             ))}
