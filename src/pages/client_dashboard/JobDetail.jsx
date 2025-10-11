@@ -8,8 +8,14 @@ import {
   Eye,
   BriefcaseBusiness,
   X,
+  Check,
+  XCircle,
 } from "lucide-react";
-import { useGetJobById, getJobPropsalByClient , useJobCloseById } from "../../../api/client/job";
+import {
+  useGetJobById,
+  getJobPropsalByClient,
+  useJobCloseById,
+} from "../../../api/client/job";
 import { useParams } from "react-router-dom";
 import { downloadFile } from "../../../functions/download_pdf";
 import ICCDLoader from "../../component/loader";
@@ -21,7 +27,11 @@ export default function JobDetailPage() {
   const { data, isSuccess, isPending, isError, isLoading } = useGetJobById(id);
   const { jobProposals, error } = getJobPropsalByClient({ id });
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { data:closeJobData, isError:closeError, isLoading:jobcloseloading } = useJobCloseById(id);
+  const {
+    data: closeJobData,
+    isError: closeError,
+    isLoading: jobcloseloading,
+  } = useJobCloseById(id);
 
   if (isLoading || isPending) {
     return <ICCDLoader />;
@@ -43,6 +53,9 @@ export default function JobDetailPage() {
   }
 
   const jobData = data[0];
+
+  
+
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -100,14 +113,14 @@ export default function JobDetailPage() {
               />
 
               <div className="flex  lg:items-center lg:justify-center">
-                {jobData?.status !== 'closed' && (
-                   <button
-                  onClick={() => setIsModalOpen(true)}
-                  className="flex items-center gap-2 w-40 justify-center px-4 py-2 bg-red-600 text-white rounded-lg shadow-sm hover:bg-red-700 transition"
-                >
-                  <BriefcaseBusiness className="w-5 h-5" />
-                  <span>Close the Job</span>
-                </button>
+                {jobData?.status !== "closed" && (
+                  <button
+                    onClick={() => setIsModalOpen(true)}
+                    className="flex items-center gap-2 w-40 justify-center px-4 py-2 bg-red-600 text-white rounded-lg shadow-sm hover:bg-red-700 transition"
+                  >
+                    <BriefcaseBusiness className="w-5 h-5" />
+                    <span>Close the Job</span>
+                  </button>
                 )}
 
                 {isModalOpen && (
@@ -241,11 +254,13 @@ function ProposalSection({ jobProposals }) {
         {jobProposals?.length > 0 ? (
           <div className="space-y-4">
             {jobProposals.map((item, index) => (
+              
               <div
                 key={index}
-                className="flex items-center justify-between p-4 border border-gray-200 rounded-lg hover:border-emerald-300 hover:shadow-md transition-all duration-200"
+                className="flex flex-col md:flex-row md:items-center justify-between p-4 border border-gray-200 rounded-lg hover:border-emerald-300 hover:shadow-md transition-all duration-200"
               >
-                <div className="flex items-center gap-4">
+                {/* Candidate Info */}
+                <div className="flex items-center gap-4 mb-3 md:mb-0">
                   <div className="relative">
                     <img
                       src={item?.candidateImg}
@@ -265,15 +280,49 @@ function ProposalSection({ jobProposals }) {
                   </div>
                 </div>
 
-                <button
-                  onClick={() =>
-                    downloadFile(item?.fileUrl, item?.freelancerName)
-                  }
-                  className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-lg transition-colors duration-200 border border-emerald-200"
-                >
-                  <Download className="w-4 h-4" />
-                  Download CV
-                </button>
+                {/* Action Buttons */}
+                <div className="flex flex-col lg:flex-row items-center gap-2">
+                  {/* Download CV */}
+                  <button
+                    onClick={() =>
+                      downloadFile(item?.fileUrl, item?.freelancerName)
+                    }
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-lg transition-colors duration-200 border border-emerald-200"
+                  >
+                    <Download className="w-4 h-4" />
+                    Download CV
+                  </button>
+
+                  {/* Accept Button */}
+                  <button
+                    onClick={() => console.log(
+                      {
+                        name: item?.freelancerName,
+                        id: item?.id,
+                        email: item?.email,
+                        action: "accepted"
+                      }
+                      
+                    )}
+                    className="inline-flex  items-center gap-2 px-4 py-2 bg-green-50 hover:bg-green-100 text-green-700 rounded-lg transition-colors duration-200 border border-green-200"
+                  >
+                    <Check  /> Accept
+                  </button>
+
+                  {/* Reject Button */}
+                  <button
+                    onClick={() => console.log(    {
+                        name: item?.freelancerName,
+                        id: item?.id,
+                        email: item?.email,
+                        action: "accepted"
+                      }
+                      )}
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-red-50 hover:bg-red-100 text-red-700 rounded-lg transition-colors duration-200 border border-red-200"
+                  >
+                    <XCircle  /> Reject
+                  </button>
+                </div>
               </div>
             ))}
           </div>
