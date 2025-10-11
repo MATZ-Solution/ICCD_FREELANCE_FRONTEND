@@ -35,135 +35,137 @@ const LoginController = ({ onClose, linker }) => {
 
   const floatingIcons = [
     {
-      Icon: Briefcase,
-      color: "text-blue-500",
+      Icon: TrendingUp,
+      color: "text-gray-500",
       delay: 0,
       position: "top-[15%] left-[10%]",
     },
     {
-      Icon: Code,
-      color: "text-purple-500",
+      Icon: Users,
+      color: "text-green-500",
       delay: 0.5,
       position: "top-[25%] right-[15%]",
     },
-    {
-      Icon: Palette,
-      color: "text-pink-500",
-      delay: 1,
-      position: "bottom-[30%] left-[15%]",
-    },
-    {
-      Icon: TrendingUp,
-      color: "text-green-500",
-      delay: 1.5,
-      position: "top-[45%] left-[20%]",
-    },
-    {
-      Icon: Users,
-      color: "text-orange-500",
-      delay: 2,
-      position: "bottom-[20%] right-[20%]",
-    },
-    {
-      Icon: Zap,
-      color: "text-yellow-500",
-      delay: 2.5,
-      position: "top-[60%] right-[10%]",
-    },
+
   ];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 sm:p-6 md:p-8 overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 p-4 sm:p-6 md:p-8 overflow-y-auto">
       {/* Animated background particles */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {[...Array(20)].map((_, i) => (
-          <div
-            key={i}
-            className="absolute w-2 h-2 bg-white rounded-full opacity-20"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animation: `pulse ${2 + Math.random() * 3}s ease-in-out infinite`,
-              animationDelay: `${Math.random() * 3}s`,
-            }}
-          />
-        ))}
-      </div>
+  
 
       <div className="relative flex flex-col lg:flex-row h-full w-full  max-w-5xl bg-white rounded-2xl shadow-lg overflow-hidden">
         {/* Left Banner (hidden on small screens) */}
-        <div
-          className="hidden lg:flex lg:w-1/2  bg-gradient-to-r from-[#44A4AD] via-[#2E7A81] to-[#1C4C50]
- relative overflow-hidden"
-        >
-          {/* Animated gradient overlay */}
-          <div
-            className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/10 to-transparent opacity-50"
-            style={{ animation: "pulse 4s ease-in-out infinite" }}
-          />
+        {/* Left Banner (hidden on small screens) */}
+        <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-[#44A4AD] via-[#2E7A81] to-[#1C4C50] relative overflow-hidden">
+          {/* Animated mesh gradient background */}
+          <div className="absolute inset-0">
+            <div className="absolute inset-0 bg-gradient-to-br from-[#44A4AD]/30 to-transparent animate-pulse" />
+            <div
+              className="absolute top-0 right-0 w-96 h-96 bg-cyan-400/20 rounded-full blur-3xl"
+              style={{ animation: "float 8s ease-in-out infinite" }}
+            />
+            <div
+              className="absolute bottom-0 left-0 w-96 h-96 bg-teal-400/20 rounded-full blur-3xl"
+              style={{ animation: "float 10s ease-in-out infinite reverse" }}
+            />
+          </div>
 
-          {/* Floating Icons */}
+          {/* Interactive grid pattern */}
+          <div className="absolute inset-0 opacity-10">
+            <div
+              className="absolute inset-0"
+              style={{
+                backgroundImage: `linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
+                               linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)`,
+                backgroundSize: "50px 50px",
+              }}
+            />
+          </div>
+
+          {/* Floating category cards */}
           {floatingIcons.map(({ Icon, color, delay, position }, idx) => (
             <div
               key={idx}
-              className={`absolute ${position} transform transition-all duration-500 cursor-pointer`}
+              className={`absolute ${position} transform transition-all duration-700 cursor-pointer group`}
               style={{
-                animation: `float ${3 + idx}s ease-in-out infinite`,
+                animation: `float ${4 + idx * 0.5}s ease-in-out infinite`,
                 animationDelay: `${delay}s`,
               }}
               onMouseEnter={() => setHoveredIcon(idx)}
               onMouseLeave={() => setHoveredIcon(null)}
             >
               <div
-                className={`p-4 bg-white/20 backdrop-blur-md rounded-2xl shadow-lg transition-transform duration-300 ${
-                  hoveredIcon === idx ? "scale-125" : ""
+                className={`relative p-3 bg-white/10 backdrop-blur-lg rounded-2xl border border-white/20 shadow-xl transition-all duration-500 group-hover:bg-white/25 group-hover:scale-125 group-hover:shadow-2xl ${
+                  hoveredIcon === idx ? "ring-2 ring-white/50" : ""
                 }`}
               >
-                <Icon className={`w-8 h-8 ${color}`} />
+                <Icon
+                  className={`w-6 h-6 ${color} transition-transform duration-300 group-hover:rotate-12`}
+                />
+                {hoveredIcon === idx && (
+                  <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-white text-gray-800 text-xs px-2 py-1 rounded whitespace-nowrap shadow-lg">
+                    {
+                      ["Business", "Tech", "Design", "Growth", "Team", "Fast"][
+                        idx
+                      ]
+                    }
+                  </div>
+                )}
               </div>
             </div>
           ))}
 
-          {/* Content */}
-          <div className="relative z-10 flex flex-col justify-center items-center p-12 text-white text-center">
-            <div className="mb-8 transform hover:scale-110 transition-transform duration-300">
-              <div className="w-24 h-24 bg-white backdrop-blur-md rounded-3xl flex items-center justify-center shadow-2xl">
+          {/* Main content */}
+          <div className="relative z-10 flex flex-col justify-center items-center p-12 text-white text-center w-full">
+            {/* Logo with glow effect */}
+            <div className="mb-8 relative group">
+              <div className="absolute inset-0 bg-white/30 rounded-3xl blur-xl group-hover:blur-2xl transition-all duration-300" />
+              <div className="relative w-24 h-24 bg-white rounded-3xl flex items-center justify-center shadow-2xl transform group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
                 <img
                   src={logo}
                   alt="ICCD Logo"
-                  className="w-100 h-100 object-contain"
+                  className="w-20 h-20 object-contain"
                 />
               </div>
             </div>
 
-            <h1 className="text-4xl font-bold mb-4">ICCD Talent Gate</h1>
+            {/* Title with gradient text */}
+            <h1 className="text-4xl font-bold mb-3 bg-gradient-to-r from-white via-cyan-100 to-white bg-clip-text text-transparent">
+              ICCD Talent Gate
+            </h1>
 
-            <p className="text-lg text-white/90 mb-8 max-w-md">
+            <p className="text-base text-white/90 mb-10 max-w-sm leading-relaxed">
               Connect with top talent and clients worldwide. Your freelance
               journey starts here.
             </p>
 
-            {/* Stats */}
-            <div className="grid grid-cols-3 gap-6 w-full max-w-md">
+            {/* Feature highlights */}
+            <div className="space-y-3 w-full max-w-sm">
               {[
-                { number: "50K+", label: "Freelancers" },
-                { number: "10K+", label: "Projects" },
-                { number: "95%", label: "Success Rate" },
-              ].map((stat, idx) => (
+                { icon: Zap, text: "Quick Setup" },
+                { icon: Code, text: "Secure Platform" },
+                { icon: Palette, text: "Creative Freedom" },
+              ].map((feature, idx) => (
                 <div
                   key={idx}
-                  className="bg-white/10 backdrop-blur-md rounded-xl p-4 hover:bg-white/20 transition-all duration-300 hover:scale-105 cursor-pointer"
+                  className="flex items-center gap-3 bg-white/5 backdrop-blur-sm rounded-lg p-3 hover:bg-white/10 transition-all duration-300 group cursor-pointer border border-white/10 hover:border-white/20"
+                  style={{ animationDelay: `${idx * 0.2}s` }}
                 >
-                  <div className="text-2xl font-bold">{stat.number}</div>
-                  <div className="text-sm text-white/80">{stat.label}</div>
+                  <div className="p-2 bg-white/10 rounded-lg group-hover:bg-white/20 transition-colors duration-300">
+                    <feature.icon className="w-4 h-4 text-white/90 group-hover:scale-110 transition-transform duration-300" />
+                  </div>
+                  <span className="text-sm text-white/90 font-medium">
+                    {feature.text}
+                  </span>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Decorative circles */}
-          <div className="absolute -bottom-20 -left-20 w-64 h-64 bg-white/10 rounded-full blur-3xl" />
-          <div className="absolute -top-20 -right-20 w-64 h-64 bg-white/10 rounded-full blur-3xl" />
+          {/* Animated corner accents */}
+          <div className="absolute top-0 left-0 w-32 h-32 border-t-2 border-l-2 border-white/20 rounded-tl-3xl" />
+          <div className="absolute bottom-0 right-0 w-32 h-32 border-b-2 border-r-2 border-white/20 rounded-br-3xl" />
         </div>
 
         {/* Right Form Section */}
@@ -196,7 +198,7 @@ const LoginController = ({ onClose, linker }) => {
           </div>
 
           {/* Optional Terms text */}
-          {/* <p className="text-xs text-center text-gray-500 mt-4">
+          {/* <p className="text-xs text-center text-gray-500">
             By joining, you agree to the ICCD Freelance Terms of Service and
             Privacy Policy.
           </p> */}
