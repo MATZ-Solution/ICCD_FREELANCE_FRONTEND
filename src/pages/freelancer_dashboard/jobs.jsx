@@ -10,7 +10,7 @@ import { useSelector } from "react-redux";
 import { useGetAllJobs, useGetJobById } from "../../../api/client/job";
 import Select from "../../component/buttonSelect.jsx";
 import { useLocation, useNavigate } from "react-router-dom";
-import Pagination from "../../component/pagination"; 
+import Pagination from "../../component/pagination";
 
 const ProposalModal = lazy(() => import("../../component/ProposalModal"));
 
@@ -35,20 +35,24 @@ function Jobs() {
     { enabled: !!selectedJobId }
   );
 
-  const filterNames = ["jobType", "joblocation"];
-
-  const filterOptions = {
-    jobType: [
-      { value: "Full Time", label: "Full Time" },
-      { value: "part_time", label: "Part Time" },
-      { value: "contract", label: "Contract" },
-    ],
-    joblocation: [
-      { value: "remote", label: "Remote" },
-      { value: "karachi", label: "Karachi" },
-      { value: "lahore", label: "Lahore" },
-    ],
-  };
+  const filterOptions = [
+    {
+      name: "type",
+      option: [
+        { value: "Full Time", label: "Full Time" },
+        { value: "part_time", label: "Part Time" },
+        { value: "contract", label: "Contract" },
+      ]
+    },
+    {
+      name: "country",
+      option: [
+        { value: "remote", label: "Remote" },
+        { value: "karachi", label: "Karachi" },
+        { value: "lahore", label: "Lahore" },
+      ]
+    }
+  ]
 
   useEffect(() => {
     if (allJobsSuccess && allJobs.length > 0 && !selectedJobId) {
@@ -61,7 +65,7 @@ function Jobs() {
 
   const renderJobDetails = () => {
     return (
-      jobDetailsSuccess &&
+      (jobDetails?.length > 0) &&
       jobDetails?.map((job, index) => (
         <div key={index} className="w-full p-5">
           <h1 className="font-bold text-xl">
@@ -205,28 +209,28 @@ function Jobs() {
 
             {/* Filters */}
             <div className="w-full flex flex-wrap gap-3 mb-4 lg:mb-0 lg:w-1/2">
-              {filterNames.map((filterName) => (
-                <div key={filterName} className="w-full sm:w-40 relative">
+              {filterOptions?.map((item, index) => (
+                <div key={index} className="w-full sm:w-40 relative">
                   <Select
-                    option={filterOptions[filterName]}
-                    placeholder={filterName === 'jobType' ? 'Type' : 'Location'}
+                    option={item?.option}
+                    placeholder={item?.name}
                     value={
-                      obj[filterName]
-                        ? filterOptions[filterName]?.find(
-                            (opt) => opt.value === obj[filterName]
-                          )
+                      obj[item.name]
+                        ? filterOptions[item.name]?.find(
+                          (opt) => opt.value === obj[item.name]
+                        )
                         : null
                     }
                     onChange={(selectedOption) =>
-                      setObj({ ...obj, [filterName]: selectedOption?.value })
+                      setObj({ ...obj, [item.name]: selectedOption?.value })
                     }
                     isClearable={false}
                   />
-                  {obj[filterName] && (
+                  {obj[item.name] && (
                     <button
                       onClick={() => {
                         const newFilters = { ...obj };
-                        delete newFilters[filterName];
+                        delete newFilters[item.name];
                         setObj(newFilters);
                       }}
                       className="absolute -top-2 -right-2 bg-black text-white rounded-full px-2 text-sm font-bold hover:bg-[#3C939D]"
@@ -276,7 +280,7 @@ function Jobs() {
                     </p>
                     <p className="text-sm sm:text-base">{job.companyName}</p>
                     <p className="mt-1 text-sm sm:mt-3 sm:text-base">
-                      {job.joblocation}
+                      {job.country}
                     </p>
                     <div className="flex gap-1 sm:gap-2 mt-1 sm:mt-2">
                       <p className="font-semibold text-xs sm:text-sm bg-gray-200 p-1 rounded-md">
@@ -294,11 +298,13 @@ function Jobs() {
                 </div>
               )}
 
-              <Pagination
-                currentPage={page}
-                totalPages={totalPages}
-                onPageChange={(newPage) => setPage(newPage)}
-              />
+              {allJobs?.length > 0 && (
+                <Pagination
+                  currentPage={page}
+                  totalPages={totalPages}
+                  onPageChange={(newPage) => setPage(newPage)}
+                />
+              )}
             </div>
 
             {/* Right: Job Details */}
