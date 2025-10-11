@@ -1,4 +1,4 @@
-import API_ROUTE from "../endpoints";
+import API_ROUTE from "../endPoints";
 import api from "../axios/index";
 import { useQuery } from "@tanstack/react-query";
 import { useSelector } from "react-redux";
