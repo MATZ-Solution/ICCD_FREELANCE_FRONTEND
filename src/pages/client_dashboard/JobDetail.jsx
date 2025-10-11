@@ -99,13 +99,15 @@ export default function JobDetailPage() {
               />
 
               <div className="flex  lg:items-center lg:justify-center">
-                <button
+                {jobData?.status !== 'closed' && (
+                   <button
                   onClick={() => setIsModalOpen(true)}
                   className="flex items-center gap-2 w-40 justify-center px-4 py-2 bg-red-600 text-white rounded-lg shadow-sm hover:bg-red-700 transition"
                 >
                   <BriefcaseBusiness className="w-5 h-5" />
                   <span>Close the Job</span>
                 </button>
+                )}
 
                 {isModalOpen && (
                   <div className="fixed inset-0 z-50 flex items-center justify-center bg-opacity-50 backdrop-blur-sm">
