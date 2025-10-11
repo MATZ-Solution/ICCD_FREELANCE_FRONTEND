@@ -68,7 +68,7 @@ function Jobs() {
             {job.jobTitle} {job.mode}
           </h1>
           <p className="mt-3">{job.name}</p>
-          <p>{job.joblocation}</p>
+          <p>{job.country}</p>
           <div className="flex gap-2 mt-2">
             <p className="font-semibold text-sm bg-gray-200 p-1 rounded-md">
               Rs {job.minSalaray} - Rs {job.maxSalaray} a {job.payType}

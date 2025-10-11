@@ -1,4 +1,4 @@
-import { useForm, Controller } from "react-hook-form";
+import { useForm, Controller, useWatch } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import hirefast from "../../assets/client_dashboard/hirefast.png";
@@ -12,13 +12,13 @@ import { useEffect } from "react";
 import { memo } from 'react';
 import ICCDLoader from "../loader";
 import Button from "../button";
-
-
+import { countryData } from "../../../data/citiesData";
 
 // Validation schema
 const schema = yup.object({
   jobTitle: yup.string().required("Job title is required"),
-  joblocation: yup.string().required("Location is required"),
+  country: yup.string().required("Location is required"),
+  city: yup.string().required("City is required"),
   jobType: yup.string().required("Job type is required"),
   minSalaray: yup
     .number()
@@ -47,32 +47,19 @@ const payTypeOptions = [
   { value: "Monthly", label: "Monthly" },
 ];
 
-const locationOptions = [
-  { value: "Karachi", label: "Karachi" },
-  { value: "Lahore", label: "Lahore" },
-  { value: "Islamabad", label: "Islamabad" },
-  { value: "Rawalpindi", label: "Rawalpindi" },
-  { value: "Faisalabad", label: "Faisalabad" },
-  { value: "Peshawar", label: "Peshawar" },
-  { value: "Quetta", label: "Quetta" },
-  { value: "Multan", label: "Multan" },
-  { value: "Hyderabad", label: "Hyderabad" },
-  { value: "Sialkot", label: "Sialkot" },
-];
+const locationOptions = countryData.data.map(item => ({
+  value: item.country,
+  label: item.country
+}));
+
 
 function JobForm() {
-  const pathName = useLocation().pathname
   const { id } = useParams()
+  const navigate = useNavigate();
+  const pathName = useLocation().pathname
   const { addjob, isSuccess, isPending, isError, error } = useAddJob()
   const { data, isSuccess: getJobIsSucc, isPending: getJobIsPend, isError: getJobIsErr, isLoading: getJobIsLoad } = useGetJobById(id)
   const { editJob, isSuccess: editJobIsSucc, isPending: editJobIsPend, isError: editJobIsErr, error: editJobErr } = useEditJobs(id)
-
-  
-
-
-  console.log("data: ", data)
-
-  const navigate = useNavigate();
 
   const {
     control,
@@ -83,7 +70,8 @@ function JobForm() {
     resolver: yupResolver(schema),
     defaultValues: {
       jobTitle: "",
-      joblocation: "",
+      country: "",
+      city: "",
       jobType: "",
       payType: "",
       minSalaray: 0,
@@ -93,6 +81,20 @@ function JobForm() {
     },
   });
 
+  const selectedCountry = useWatch({
+    control,
+    name: "country",
+  });
+
+  const findCity = selectedCountry ?
+    countryData.data.find(item => item.country === selectedCountry)
+    : []
+
+  const citiesoption = findCity.cities ? findCity.cities.map(item => ({
+    value: item,
+    label: item
+  })) : [];
+
   const onSubmit = (data) => {
     if (pathName.includes('edit-job')) {
       editJob(data)
@@ -100,7 +102,7 @@ function JobForm() {
       addjob(data)
 
     }
-          navigate('/client/jobs')
+    navigate('/client/jobs')
 
   };
 
@@ -122,15 +124,15 @@ function JobForm() {
 
   if (getJobIsLoad) return <ICCDLoader />;
 
-if (getJobIsLoad)  {
-  return <ICCDLoader />;
-}
-// Show error component if any error occurs
-if (getJobIsErr || editJobIsErr || isError) {
-  const combinedError = error || getJobIsErr || editJobErr;
-  console.error("Error: ", combinedError);
-  return <ICCDError error={combinedError} />;
-}
+  if (getJobIsLoad) {
+    return <ICCDLoader />;
+  }
+
+  if (getJobIsErr || editJobIsErr || isError) {
+    const combinedError = error || getJobIsErr || editJobErr;
+    console.error("Error: ", combinedError);
+    return <ICCDError error={combinedError} />;
+  }
   return (
     <div
       className="min-h-screen bg-fixed bg-cover bg-center"
@@ -198,10 +200,10 @@ if (getJobIsErr || editJobIsErr || isError) {
             {/* Location */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Location
+                Country
               </label>
               <Controller
-                name="joblocation"
+                name="country"
                 control={control}
                 render={({ field }) => (
                   <Select
@@ -213,8 +215,36 @@ if (getJobIsErr || editJobIsErr || isError) {
                   />
                 )}
               />
-              {errors.joblocation && (
-                <p className="text-red-500 text-sm mt-1">{errors.joblocation.message}</p>
+              {errors.country && (
+                <p className="text-red-500 text-sm mt-1">{errors.country.message}</p>
+              )}
+            </div>
+
+            {/* Cities */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                City
+              </label>
+              <Controller
+                name="city"
+                control={control}
+                render={({ field }) => (
+                  <Select
+                    {...field}
+                    options={citiesoption}
+                    value={citiesoption.find(opt => opt.value === field.value) || null}
+                    onChange={(selected) => field.onChange(selected?.value)}
+                    placeholder={
+                      selectedCountry
+                        ? "Select a city"
+                        : "Please select a country first"
+                    }
+                    isDisabled={!selectedCountry}
+                  />
+                )}
+              />
+              {errors.city && (
+                <p className="text-red-500 text-sm mt-1">{errors.city.message}</p>
               )}
             </div>
           </div>
@@ -430,7 +460,7 @@ if (getJobIsErr || editJobIsErr || isError) {
             className="w-full px-5 py-3"
             isLoading={isPending}
           />
-            
+
         </div>
       </form>
     </div>
