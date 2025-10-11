@@ -110,7 +110,8 @@ function JobForm() {
     if (data && data?.length > 0) {
       reset({
         jobTitle: data[0]?.jobTitle || '',
-        joblocation: data[0]?.joblocation || '',
+        country: data[0]?.country || '',
+        city: data[0]?.city || '',
         jobType: data[0]?.jobType || "",
         payType: data[0]?.payType || "",
         minSalaray: data[0]?.minSalaray || 0,
