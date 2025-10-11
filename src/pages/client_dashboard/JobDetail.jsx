@@ -90,7 +90,7 @@ export default function JobDetailPage() {
                 icon={<Eye className="w-5 h-5 text-purple-600" />}
                 bg="bg-purple-100"
                 title="Status"
-                value="Active"
+                value={jobData?.status}
                 valueClass="text-green-600"
               />
             </div>

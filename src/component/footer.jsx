@@ -5,6 +5,7 @@ import { Facebook } from '@mui/icons-material';
 import { Instagram } from '@mui/icons-material';
 import { YouTube } from '@mui/icons-material';
 import { Twitter } from '@mui/icons-material';
+import XIcon from '@mui/icons-material/X';
 export default function Footer() {
   const currentYear = new Date().getFullYear();
 
@@ -74,7 +75,7 @@ export default function Footer() {
               <p>Follow us </p>
               <div className="flex items-center gap-3">
                 <Link to="https://www.facebook.com/Iccden"><Facebook style={{ fontSize: 30 }} /></Link>
-                <Link to="https://www.linkedin.com/company/islamic-chamber-of-commece-and-development"><LinkedIn style={{ fontSize: 30 }} /></Link>
+                <Link to="https://www.linkedin.com/company/islamic-chamber-of-commece-and-development"><XIcon style={{ fontSize: 25 }} /></Link>
                 <Link to="https://x.com/iccia_iccd"><Twitter style={{ fontSize: 30 }} /></Link>
                 <Link to="https://www.instagram.com/iccd_online"><Instagram style={{ fontSize: 30 }} /></Link>
               </div>
