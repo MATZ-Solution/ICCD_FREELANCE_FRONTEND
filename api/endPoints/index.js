@@ -94,12 +94,15 @@ const API_ROUTE = {
     useFreelancerAverageRating : '/rating/getFreelancerAverageRating'
   },
   feedback: {
+    getAllFeedback: '/feedback/getAllFeedback',
     addFeedback: '/feedback/addFeedback'
   },
    issue: {
+    getAllIssue: '/issue/getAllIssue',
     addIssue: '/issue/addIssue'
   },
    contact: {
+    getAllContacts: '/contact/getAllContacts',
     addContacts: '/contact/addContacts'
   } 
 };

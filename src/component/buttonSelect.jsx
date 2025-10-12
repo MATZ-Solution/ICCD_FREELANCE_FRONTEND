@@ -25,7 +25,7 @@ function ReactSelect({ selectedOption = null, onChange, option = [], placeholder
             onChange={onChange}
             options={option}
             value={value}
-            
+            isClearable={true}
             styles={customStyles}
             theme={(theme) => ({
                 ...theme,

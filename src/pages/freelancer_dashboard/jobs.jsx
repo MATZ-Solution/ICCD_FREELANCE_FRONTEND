@@ -11,10 +11,13 @@ import { useGetAllJobs, useGetJobById } from "../../../api/client/job";
 import Select from "../../component/buttonSelect.jsx";
 import { useLocation, useNavigate } from "react-router-dom";
 import Pagination from "../../component/pagination";
+import { countryData } from "../../../data/citiesData.js";
 
 const ProposalModal = lazy(() => import("../../component/ProposalModal"));
 
 function Jobs() {
+  const [city, setCity] = useState("")
+  const [country, setCountry] = useState("")
   const [obj, setObj] = useState({});
   const [show, setShow] = useState(false);
   const [page, setPage] = useState(1);
@@ -22,37 +25,36 @@ function Jobs() {
   const navigate = useNavigate();
   const [selectedJobId, setSelectedJobId] = useState(null);
 
+
+  console.log("country: ", country)
+
+  const locationOptions = countryData.data.map(item => ({
+    value: item.country,
+    label: item.country
+  }));
+
+  const findCity = country ?
+    countryData.data.find(item => item.country === country)
+    : []
+
+  const citiesoption = findCity.cities ? findCity.cities.map(item => ({
+    value: item,
+    label: item
+  })) : [];
+
   const freelancerData = useSelector((state) => state.userProfile.userProfile);
 
   const {
     data: allJobs,
     totalPages,
     isSuccess: allJobsSuccess,
-  } = useGetAllJobs({ ...obj, page });
+  } = useGetAllJobs({ city, country, page });
 
   const { data: jobDetails, isSuccess: jobDetailsSuccess } = useGetJobById(
     selectedJobId,
     { enabled: !!selectedJobId }
   );
 
-  const filterOptions = [
-    {
-      name: "type",
-      option: [
-        { value: "Full Time", label: "Full Time" },
-        { value: "part_time", label: "Part Time" },
-        { value: "contract", label: "Contract" },
-      ]
-    },
-    {
-      name: "country",
-      option: [
-        { value: "remote", label: "Remote" },
-        { value: "karachi", label: "Karachi" },
-        { value: "lahore", label: "Lahore" },
-      ]
-    }
-  ]
 
   useEffect(() => {
     if (allJobsSuccess && allJobs.length > 0 && !selectedJobId) {
@@ -208,8 +210,24 @@ function Jobs() {
             </div>
 
             {/* Filte$ */}
-            <div className="w-full flex flex-wrap gap-3 mb-4 lg:mb-0 lg:w-1/2">
-              {filterOptions?.map((item, index) => (
+            <div className="w-full flex flex-col md:flex-row gap-3 mb-4 lg:mb-0 lg:w-1/2">
+
+              <Select
+                placeholder="Country"
+                option={locationOptions}
+                value={locationOptions.find(opt => opt.value === country) || ""}
+                onChange={(selected) => setCountry(selected?.value || '')}
+              />
+
+              <Select
+                placeholder={country ? "Select a city" : "Please select a country first"}
+                option={citiesoption}
+                value={citiesoption.find(opt => opt.value === city) || null}
+                onChange={(selected) => setCity(selected?.value || '')}
+                isDisabled={!country}
+              />
+
+              {/* {filterOptions?.map((item, index) => (
                 <div key={index} className="w-full sm:w-40 relative">
                   <Select
                     option={item?.option}
@@ -240,7 +258,7 @@ function Jobs() {
                     </button>
                   )}
                 </div>
-              ))}
+              ))} */}
             </div>
 
             {/* Mobile Search Button */}

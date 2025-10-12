@@ -21,3 +21,17 @@ export function useAddContact() {
   });
   return { addContact, isSuccess, isPending, isError, error };
 }
+
+export function useGetAllContacts(params = {}) {
+  const constructQueryString = (params) => {
+    const query = new URLSearchParams(params).toString();
+    return query ? `&${query}` : "";
+  };
+  const queryKey = [API_ROUTE.contact.getAllContacts, params];
+  const { data, error, isLoading, isError } = useQuery({
+    queryKey,
+    queryFn: () =>
+      api.get(`${API_ROUTE.contact.getAllContacts}?${constructQueryString(params)}`),
+  });
+  return { data: data?.data?.data, totalPages: data?.data?.totalPages, error, isLoading, isError };
+}

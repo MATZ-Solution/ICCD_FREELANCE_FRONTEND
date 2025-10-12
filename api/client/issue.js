@@ -21,3 +21,17 @@ export function useAddIssue() {
   });
   return { addIssue, isSuccess, isPending, isError, error };
 }
+
+export function useGetAllIssue(params = {}) {
+  const constructQueryString = (params) => {
+    const query = new URLSearchParams(params).toString();
+    return query ? `&${query}` : "";
+  };
+  const queryKey = [API_ROUTE.issue.getAllIssue, params];
+  const { data, error, isLoading, isError } = useQuery({
+    queryKey,
+    queryFn: () =>
+      api.get(`${API_ROUTE.issue.getAllIssue}?${constructQueryString(params)}`),
+  });
+  return { data: data?.data?.data, totalPages: data?.data?.totalPages, error, isLoading, isError };
+}
