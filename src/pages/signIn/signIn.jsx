@@ -39,7 +39,7 @@ function Login({ handleSwitch }) {
   };
 
   return (
-    <div className="w-full gap-5">
+    <div className="w-full space-y-5">
       <h2 className="text-3xl font-bold text-gray-800 text-center">
         Welcome Back
       </h2>
