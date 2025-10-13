@@ -39,7 +39,7 @@ function Login({ handleSwitch }) {
   };
 
   return (
-    <div className="w-full space-y-5">
+    <div className="w-full">
       <h2 className="text-3xl font-bold text-gray-800 text-center">
         Welcome Back
       </h2>
@@ -48,12 +48,8 @@ function Login({ handleSwitch }) {
       </p>
 
       {/* Email Input */}
-      <div className="flex flex-col">
+      <div className="mt-2 flex flex-col">
         <label className="text-sm font-medium text-gray-700 mb-1">Email</label>
-          {/* <Mail className="absolute bottom-4/6  text-gray-400" /> */}
-
-    
-
         <Controller
           control={control}
           name="email"
@@ -74,7 +70,7 @@ function Login({ handleSwitch }) {
       </div>
 
       {/* Password Input */}
-      <div className="flex flex-col relative">
+      <div className="mt-2 flex flex-col relative">
         <label className="text-sm font-medium text-gray-700 mb-1">
           Password
         </label>
@@ -111,7 +107,7 @@ function Login({ handleSwitch }) {
 
       {/* Submit Button */}
       <Button
-        className="w-full py-3 rounded-lg bg-[#46A5AD] hover:bg-[#1a7078] text-white font-semibold mt-2 transition disabled:opacity-50 disabled:cursor-not-allowed"
+        className="w-full py-3 rounded-lg bg-[#46A5AD] hover:bg-[#1a7078] text-white font-semibold mt-5 transition disabled:opacity-50 disabled:cursor-not-allowed"
         text={isPending ? "Logging in..." : "Login"}
         onClick={handleSubmit(onSubmit)}
         disabled={isPending}

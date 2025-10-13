@@ -36,11 +36,11 @@ function SignUp({ handleSwitch }) {
   };
 
   return (
-    <div className="w-full max-w-md mx-auto p-6 bg-white ">
-      <h2 className="text-3xl font-bold text-gray-800 text-center mb-6">Create Account</h2>
+    <div className="w-full max-w-md mx-auto bg-white ">
+      <h2 className="text-3xl font-bold text-gray-800 text-center ">Create Account</h2>
 
       {/* Name */}
-      <div className="mb-4">
+      <div className="mt-2">
         <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
         <Controller
           name="name"
