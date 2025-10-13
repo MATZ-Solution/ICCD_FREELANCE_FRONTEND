@@ -97,6 +97,10 @@ import ContactForm from '../src/component/Home/ContactForm';
 import FeedbackSection from '../src/component/Home/FeedbackSection';
 import GoogleCallback from '../src/component/GoogleCallback';
 import AdminTemplate from '../src/templates/adminTemplate';
+import ActiveJobs from "../src/pages/superadmin_dashboard/manage-jobs";
+import Feedbacks from "../src/pages/superadmin_dashboard/manage_feedbacks";
+import Reports from "../src/pages/superadmin_dashboard/manage-reports";
+import ManageContactform from "../src/pages/superadmin_dashboard/manage-contactform";
 
 const stripePromise = loadStripe("pk_test_51QCl1eCDh3RtIJ6XkYcN5vHd3KTO2f8enRSNv9Wx7Li0iCI7cr9khTDQx0vS5RmbazZoaECNW83FesOMwLeIgMLb00BJG4pPZR");
 
@@ -787,14 +791,43 @@ export const router = createBrowserRouter([
       // </AuthRoute>
     ),
   },
-
+  {
+    path: "superadmin/manage-contactform",
+    element: withSuspense(
+      // <AuthRoute>
+        <AdminTemplate isShowFooter={false}>
+          <ManageContactform />
+        </AdminTemplate>
+      // </AuthRoute>
+    ),
+  },
+    {
+    path: "superadmin/manage-feedbacks",
+    element: withSuspense(
+      // <AuthRoute>
+        <AdminTemplate isShowFooter={false}>
+          <Feedbacks />
+        </AdminTemplate>
+      // </AuthRoute>
+    ),
+  },
+    {
+    path: "/superadmin/manage-reports",
+    element: withSuspense(
+      // <AuthRoute>
+        <AdminTemplate isShowFooter={false}>
+          <Reports />
+        </AdminTemplate>
+      // </AuthRoute>
+    ),
+  },
     {
     path: "superadmin/user/:id",
     element: withSuspense(
       // <AuthRoute>
-        <MainTemplate isShowFooter={false}>
+        <AdminTemplate isShowFooter={false}>
           <UserDetailPage />
-        </MainTemplate>
+        </AdminTemplate>
       // </AuthRoute>
     ),
   },
@@ -802,9 +835,9 @@ export const router = createBrowserRouter([
     path: "/superadmin/Active-freelancers",
     element: withSuspense(
       // <AuthRoute>
-        <MainTemplate isShowFooter={false}>
+        <AdminTemplate isShowFooter={false}>
           <Manage_freelancers />
-        </MainTemplate>
+        </AdminTemplate>
       // </AuthRoute>
     ),
   },
@@ -812,9 +845,9 @@ export const router = createBrowserRouter([
     path: "/superadmin/manage-gigs",
     element: withSuspense(
       // <AuthRoute>
-        <MainTemplate isShowFooter={false}>
+        <AdminTemplate isShowFooter={false}>
           <Manage_gigs />
-        </MainTemplate>
+        </AdminTemplate>
       // </AuthRoute>
     ),
   },
@@ -825,6 +858,17 @@ export const router = createBrowserRouter([
       // <AuthRoute>
         <AdminTemplate isShowFooter={false}>
           <ActiveProjects />
+        </AdminTemplate>
+      // </AuthRoute>
+    ),
+  },
+
+    {
+    path: "/superadmin/manage-jobs",
+    element: withSuspense(
+      // <AuthRoute>
+        <AdminTemplate isShowFooter={false}>
+          <ActiveJobs />
         </AdminTemplate>
       // </AuthRoute>
     ),

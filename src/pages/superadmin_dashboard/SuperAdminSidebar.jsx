@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   X,
   ChevronLeft,
@@ -10,27 +9,70 @@ import {
   LogOut,
   Users,
   FileText,
+  ClipboardList,
+  MessageSquare,
+  ThumbsUp,
+  Flag,
+  BriefcaseBusiness,
 } from "lucide-react";
 
-const AdminSidebar = ({ 
-  collapsed, 
-  onToggleCollapse, 
-  showMobile, 
+import { useNavigate, useLocation } from "react-router-dom";
+import useLogout from "../../../hooks/useLogout";
+
+const AdminSidebar = ({
+  collapsed,
+  onToggleCollapse,
+  showMobile,
   onCloseMobile,
-  activeItem = "Dashboard",
+  activeItem,
   onMenuItemClick,
-  quickStats = null 
+  quickStats = null,
 }) => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
+    const logout = useLogout()
+
+
   const menuItems = [
-    { icon: Home, label: "Dashboard", path: "/admin/dashboard" },
-    { icon: Users, label: "Users", path: "superadmin/manage-users" },
-    { icon: ShoppingCart, label: "Freelancers", path: "/superadmin/Active-freelancers" },
-    { icon: Briefcase, label: "Gigs", path: "/superadmin/manage-gigs" },
-    { icon: FileText, label: "Projects", path: "/superadmin/manage-projects" },
-    { icon: Settings, label: "Dispute", path: "/superadmin/manage-disputes" },
-  ];
+  { icon: Home, label: "Dashboard", path: "/superadmin/dashboard" },
+  { icon: Users, label: "Users", path: "/superadmin/manage-users" },
+  {
+    icon: ShoppingCart,
+    label: "Active Freelancers",
+    path: "/superadmin/active-freelancers",
+  },
+  { icon: Briefcase, label: "Active Gigs", path: "/superadmin/manage-gigs" },
+  {
+    icon: ClipboardList,
+    label: "Active Projects",
+    path: "/superadmin/manage-projects",
+  },
+  { icon: BriefcaseBusiness, label: "Active Jobs", path: "/superadmin/manage-jobs" },
+  { icon: Settings, label: "Disputes", path: "/superadmin/manage-disputes" },
+  {
+    icon: MessageSquare,
+    label: "Contact Form",
+    path: "/superadmin/manage-contactform",
+  },
+  { icon: ThumbsUp, label: "Feedbacks", path: "/superadmin/manage-feedbacks" },
+  { icon: Flag, label: "Reports", path: "/superadmin/manage-reports" },
+];
+
+
+  // Determine active item based on current path if not explicitly provided
+  const getActiveItem = () => {
+    if (activeItem) return activeItem;
+
+    const currentPath = location.pathname;
+    const activeMenuItem = menuItems.find((item) => item.path === currentPath);
+    return activeMenuItem ? activeMenuItem.label : "Dashboard";
+  };
+
+  const currentActiveItem = getActiveItem();
 
   const handleMenuClick = (item) => {
+    navigate(item.path);
     if (onMenuItemClick) {
       onMenuItemClick(item);
     }
@@ -76,9 +118,7 @@ const AdminSidebar = ({
 
       {/* Profile Section */}
       <div
-        className={`p-4 border-b border-gray-200 ${
-          collapsed ? "px-2" : ""
-        }`}
+        className={`p-4 border-b border-gray-200 ${collapsed ? "px-2" : ""}`}
       >
         <div
           className={`flex items-center ${
@@ -112,7 +152,7 @@ const AdminSidebar = ({
                 className={`
                   w-full flex items-center px-3 py-2.5 rounded-lg transition-all
                   ${
-                    activeItem === item.label
+                    currentActiveItem === item.label
                       ? "bg-gradient-to-r from-blue-50 to-purple-50 text-blue-600"
                       : "text-gray-600 hover:bg-gray-50"
                   }
@@ -133,12 +173,13 @@ const AdminSidebar = ({
       {!collapsed && quickStats && (
         <div className="p-4 border-t border-gray-200">
           <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-lg p-4 space-y-3">
-            <h4 className="text-sm font-semibold text-gray-800">
-              Quick Stats
-            </h4>
+            <h4 className="text-sm font-semibold text-gray-800">Quick Stats</h4>
             <div className="space-y-2">
               {quickStats.map((stat, index) => (
-                <div key={index} className="flex items-center justify-between text-xs">
+                <div
+                  key={index}
+                  className="flex items-center justify-between text-xs"
+                >
                   <span className="text-gray-600">{stat.label}</span>
                   <span className="font-bold text-gray-900">{stat.value}</span>
                 </div>
@@ -156,11 +197,10 @@ const AdminSidebar = ({
             text-red-600 hover:bg-red-50 transition-all
             ${collapsed ? "justify-center" : "space-x-3"}
           `}
+          onClick={logout}
         >
           <LogOut className="w-5 h-5" />
-          {!collapsed && (
-            <span className="text-sm font-medium">Logout</span>
-          )}
+          {!collapsed && <span className="text-sm font-medium">Logout</span>}
         </button>
       </div>
     </aside>
