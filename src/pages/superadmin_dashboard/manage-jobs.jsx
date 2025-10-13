@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Briefcase, MapPin, Clock, TrendingUp } from "lucide-react";
-import { useGetAllJobs } from '../../../api/client/job';
+import { useGetAllJobs } from '../../../api/client/superadmin';
 
 const ActiveJobs = () => {
   const [currentPage, setCurrentPage] = useState(1);
