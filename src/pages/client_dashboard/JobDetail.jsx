@@ -59,15 +59,9 @@ export default function JobDetailPage() {
         id: item.id,
         name: item.freelancerName,
         email: item.email,
+        remaining_position: jobData?.remaining_position,
+        jobId: jobData?.id,
         action,
-      },
-      {
-        onSuccess: (res) => {
-          console.log("Action successful:", res);
-        },
-        onError: (err) => {
-          console.error("Error performing action:", err);
-        },
       }
     );
   };
@@ -234,7 +228,7 @@ export default function JobDetailPage() {
             {/* Application Progress */}
             <ApplicationProgress
               applications={jobProposals?.length || 0}
-              totalPositions={jobData?.totalPersontoHire}
+              totalPositions={jobData?.remaining_position}
             />
           </div>
         </div>
