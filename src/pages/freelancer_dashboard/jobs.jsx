@@ -25,9 +25,6 @@ function Jobs() {
   const navigate = useNavigate();
   const [selectedJobId, setSelectedJobId] = useState(null);
 
-
-  console.log("country: ", country)
-
   const locationOptions = countryData.data.map(item => ({
     value: item.country,
     label: item.country
@@ -226,39 +223,6 @@ function Jobs() {
                 onChange={(selected) => setCity(selected?.value || '')}
                 isDisabled={!country}
               />
-
-              {/* {filterOptions?.map((item, index) => (
-                <div key={index} className="w-full sm:w-40 relative">
-                  <Select
-                    option={item?.option}
-                    placeholder={item?.name}
-                    value={
-                      obj[item.name]
-                        ? filterOptions[item.name]?.find(
-                          (opt) => opt.value === obj[item.name]
-                        )
-                        : null
-                    }
-                    onChange={(selectedOption) =>
-                      setObj({ ...obj, [item.name]: selectedOption?.value })
-                    }
-                    isClearable={false}
-                  />
-                  {obj[item.name] && (
-                    <button
-                      onClick={() => {
-                        const newFilters = { ...obj };
-                        delete newFilters[item.name];
-                        setObj(newFilters);
-                      }}
-                      className="absolute -top-2 -right-2 bg-black text-white rounded-full px-2 text-sm font-bold hover:bg-[#3C939D]"
-                      title="Clear filter"
-                    >
-                      ×
-                    </button>
-                  )}
-                </div>
-              ))} */}
             </div>
 
             {/* Mobile Search Button */}
