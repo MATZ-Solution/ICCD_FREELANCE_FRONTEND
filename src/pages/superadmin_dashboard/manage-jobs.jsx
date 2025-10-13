@@ -19,6 +19,7 @@ const ActiveJobs = () => {
     data: jobs,
     totalPages,
     active_jobs,
+    total_jobs,
     isPending,
     isError,
   } = useGetAllJobs({
@@ -40,7 +41,7 @@ const ActiveJobs = () => {
 
   // Calculate stats from jobs data
   const stats = {
-    totalJobs: jobs?.length || 0,
+    totalJobs: total_jobs || 0,
     activeThisWeek:
       jobs?.filter((job) => {
         const daysSincePosted = Math.floor(
@@ -112,7 +113,7 @@ const ActiveJobs = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-green-600 text-sm font-medium mb-1">
-                  Active Projects
+                  Active Jobs
                 </p>
                 <p className="text-3xl font-bold text-green-900">
                   {active_jobs}
