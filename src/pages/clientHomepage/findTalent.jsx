@@ -3,7 +3,6 @@ import GigCard from "../../component/client_dashboard/gig_card";
 import { useGetGigs } from "../../../api/client/gigs";
 import { useNavigate, useLocation } from "react-router-dom";
 import { SearchIcon } from "lucide-react";
-import ICCDLoader from "../../component/loader";
 import useDebounce from "../../../hooks/useDebounce";
 import Pagination from "../../component/pagination";
 import DataLoader from "../superadmin_dashboard/DataLoader";
@@ -30,9 +29,7 @@ export default function FindTalent() {
         navigate({ search: params.toString() }, { replace: true });
     }, [search]);
 
-    if (isLoading) {
-        return <DataLoader />
-    }
+    if (isLoading) return <DataLoader />
 
     return (
         <div className="min-h-screen px-4 bg-white">

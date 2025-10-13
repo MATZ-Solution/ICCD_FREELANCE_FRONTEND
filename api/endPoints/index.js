@@ -57,7 +57,8 @@ const API_ROUTE = {
     getAllGigs: '/superadmin/getAllGigs',
     getAllProjects: '/superadmin/getAllProjects',
     getAllUsers: '/superadmin/getAllUsers',
-    statisticData: '/superadmin/statisticData'
+    statisticData: '/superadmin/statisticData',
+    getAllJobs: '/superadmin/getAllJobs'
 
   },
   dispute: {

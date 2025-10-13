@@ -106,3 +106,26 @@ export function useGetAllProjects(params = {}) {
     isError,
   };
 }
+
+export function useGetAllJobs(params = {}) {
+  const constructQueryString = (params) => {
+    const query = new URLSearchParams(params).toString();
+    return query ? `&${query}` : "";
+  };
+  const { data, isSuccess, isPending, isError, isLoading } = useQuery({
+    queryKey: [API_ROUTE.superadmin.getAllJobs, params],
+    queryFn: async () => await api.get(`${API_ROUTE.superadmin.getAllJobs}?${constructQueryString(params)}`),
+    // refetchOnWindowFocus: true,
+    // staleTime: 0,
+    // refetchOnMount: true,
+  });
+  return {
+    data: data?.data?.data,
+    totalPages: data?.data?.totalPages,
+    active_jobs: data?.data?.active_jobs,
+    isSuccess,
+    isPending,
+    isError,
+    isLoading,
+  };
+}
