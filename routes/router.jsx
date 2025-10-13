@@ -96,6 +96,7 @@ import FAQPage from '../src/component/Home/FAQPage';
 import ContactForm from '../src/component/Home/ContactForm';
 import FeedbackSection from '../src/component/Home/FeedbackSection';
 import GoogleCallback from '../src/component/GoogleCallback';
+import AdminTemplate from '../src/templates/adminTemplate';
 
 const stripePromise = loadStripe("pk_test_51QCl1eCDh3RtIJ6XkYcN5vHd3KTO2f8enRSNv9Wx7Li0iCI7cr9khTDQx0vS5RmbazZoaECNW83FesOMwLeIgMLb00BJG4pPZR");
 
@@ -719,9 +720,9 @@ export const router = createBrowserRouter([
     path: "/superadmin/dashboard",
     element: withSuspense(
       // <AuthRoute>
-        <MainTemplate isShowFooter={false}>
+        <AdminTemplate isShowFooter={false}>
           <SuperAdminDashboard />
-        </MainTemplate>
+        </AdminTemplate>
       // </AuthRoute>
     ),
   },
@@ -729,9 +730,9 @@ export const router = createBrowserRouter([
     path: "/superadmin/manage-disputes",
     element: withSuspense(
       <AuthRoute>
-        <MainTemplate isShowFooter={false}>
+        <AdminTemplate isShowFooter={false}>
           <AdminManageDisputes />
-        </MainTemplate>
+        </AdminTemplate>
       </AuthRoute>
     ),
   },
@@ -739,9 +740,9 @@ export const router = createBrowserRouter([
     path: "/superadmin/admindisputedetail/:id",
     element: withSuspense(
       <AuthRoute>
-        <MainTemplate isShowFooter={false}>
+        <AdminTemplate isShowFooter={false}>
           <DisputeDetailView />
-        </MainTemplate>
+        </AdminTemplate>
       </AuthRoute>
     ),
   },
@@ -750,9 +751,9 @@ export const router = createBrowserRouter([
     path: "/superadmin/orders",
     element: withSuspense(
       // <AuthRoute>
-        <MainTemplate isShowFooter={false}>
+        <AdminTemplate isShowFooter={false}>
           <SuperAdminAllOrders />
-        </MainTemplate>
+        </AdminTemplate>
       // </AuthRoute>
     ),
   },
@@ -760,9 +761,9 @@ export const router = createBrowserRouter([
     path: "/superadmin/orders/:orderId",
     element: withSuspense(
       // <AuthRoute>
-        <MainTemplate isShowFooter={false}>
+        <AdminTemplate isShowFooter={false}>
           <OrderDetailPage />
-        </MainTemplate>
+        </AdminTemplate>
       // </AuthRoute>
     ),
   },
@@ -770,9 +771,9 @@ export const router = createBrowserRouter([
     path: "/superadmin/manage-dispute",
     element: withSuspense(
       // <AuthRoute>
-        <MainTemplate isShowFooter={false}>
+        <AdminTemplate isShowFooter={false}>
           <ManageDispute />
-        </MainTemplate>
+        </AdminTemplate>
       // </AuthRoute>
     ),
   },
@@ -780,9 +781,9 @@ export const router = createBrowserRouter([
     path: "/superadmin/manage-users",
     element: withSuspense(
       // <AuthRoute>
-        <MainTemplate isShowFooter={false}>
+        <AdminTemplate isShowFooter={false}>
           <ManageUsers />
-        </MainTemplate>
+        </AdminTemplate>
       // </AuthRoute>
     ),
   },
@@ -822,9 +823,9 @@ export const router = createBrowserRouter([
     path: "superadmin/manage-projects",
     element: withSuspense(
       // <AuthRoute>
-        <MainTemplate isShowFooter={false}>
+        <AdminTemplate isShowFooter={false}>
           <ActiveProjects />
-        </MainTemplate>
+        </AdminTemplate>
       // </AuthRoute>
     ),
   },
@@ -832,9 +833,9 @@ export const router = createBrowserRouter([
     path: "/superadmin/reviews",
     element: withSuspense(
       // <AuthRoute>
-        <MainTemplate isShowFooter={false}>
+        <AdminTemplate isShowFooter={false}>
           <ReviewPage />
-        </MainTemplate>
+        </AdminTemplate>
       // </AuthRoute>
     ),
   },
