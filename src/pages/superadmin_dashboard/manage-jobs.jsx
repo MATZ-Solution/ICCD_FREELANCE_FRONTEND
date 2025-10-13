@@ -19,6 +19,7 @@ const ActiveJobs = () => {
     data: jobs,
     totalPages,
     active_jobs,
+    total_jobs,
     isPending,
     isError,
   } = useGetAllJobs({
@@ -30,7 +31,7 @@ const ActiveJobs = () => {
 
   // Calculate stats from jobs data
   const stats = {
-    totalJobs: jobs?.length || 0,
+    totalJobs: total_jobs || 0,
     activeThisWeek:
       jobs?.filter((job) => {
         const daysSincePosted = Math.floor(

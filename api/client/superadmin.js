@@ -123,6 +123,7 @@ export function useGetAllJobs(params = {}) {
     data: data?.data?.data,
     totalPages: data?.data?.totalPages,
     active_jobs: data?.data?.active_jobs,
+    total_jobs: data?.data?.total_jobs,
     isSuccess,
     isPending,
     isError,
