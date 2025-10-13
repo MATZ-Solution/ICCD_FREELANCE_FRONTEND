@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { useGetAllJobs } from "../../../api/client/superadmin";
 import { Briefcase, MapPin, Clock, TrendingUp } from "lucide-react";
+import { useGetAllJobs } from '../../../api/client/job';
 
 const ActiveJobs = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -26,17 +26,7 @@ const ActiveJobs = () => {
     ...filters,
   });
 
-  const handleSearch = (e) => {
-    e.preventDefault();
-    setFilters(searchInputs);
-    setCurrentPage(1);
-  };
-
-  const handleReset = () => {
-    setSearchInputs({ jobTitle: "", jobType: "", joblocation: "" });
-    setFilters({ jobTitle: "", jobType: "", joblocation: "" });
-    setCurrentPage(1);
-  };
+  
 
   // Calculate stats from jobs data
   const stats = {
@@ -112,7 +102,7 @@ const ActiveJobs = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-green-600 text-sm font-medium mb-1">
-                  Active Projects
+                  Active Jobs
                 </p>
                 <p className="text-3xl font-bold text-green-900">
                   {active_jobs}

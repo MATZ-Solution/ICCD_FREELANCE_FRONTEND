@@ -83,52 +83,70 @@ export default function ManageContactForm() {
          
         </div>
 
-        {showDetails && selectedContact && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 overflow-y-auto">
-            <div className="bg-white rounded-lg p-6 w-full max-w-2xl my-8 shadow-lg">
-              <h2 className="text-2xl font-bold mb-6 text-gray-800">
-                Contact Details
-              </h2>
+      {showDetails && selectedContact && (
+  <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+    <div className="bg-white rounded-3xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden flex flex-col">
 
-              <div className="space-y-4 max-h-96 overflow-y-auto">
-                <div>
-                  <p className="text-sm font-medium text-gray-500">Full Name</p>
-                  <p className="text-gray-800 font-semibold">{selectedContact.fullName}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-500">Email</p>
-                  <p className="text-gray-800">{selectedContact.email}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-500">Organization</p>
-                  <p className="text-gray-800">{selectedContact.organization}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-500">Category</p>
-                  <p className="text-gray-800">{selectedContact.category}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-500">Subject</p>
-                  <p className="text-gray-800">{selectedContact.subject}</p>
-                </div>
-                <div>
-                  <p className="text-sm font-medium text-gray-500">Message</p>
-                  <p className="text-gray-800 whitespace-pre-line">{selectedContact.message}</p>
-                </div>
-              </div>
+      {/* Header */}
+      <div className="sticky top-0 bg-gradient-to-r from-[#3c9299] to-[#2d7178] text-white px-6 py-4 rounded-t-3xl flex items-center justify-between">
+        <h2 className="text-2xl font-semibold tracking-wide">Contact Details</h2>
+        <button
+          onClick={() => setShowDetails(false)}
+          className="text-white/80 hover:text-white transition"
+          title="Close"
+        >
+          ✕
+        </button>
+      </div>
 
-              <div className="flex justify-end pt-6 border-t border-gray-200 mt-6">
-                <button
-                  type="button"
-                  onClick={() => setShowDetails(false)}
-                  className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition"
-                >
-                  Close
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
+      {/* Content */}
+      <div className="p-6 space-y-5 overflow-y-auto">
+        <div>
+          <p className="text-sm text-gray-500 font-medium">Full Name</p>
+          <p className="text-gray-800 font-semibold">{selectedContact.fullName}</p>
+        </div>
+
+        <div>
+          <p className="text-sm text-gray-500 font-medium">Email</p>
+          <p className="text-gray-800">{selectedContact.email}</p>
+        </div>
+
+        <div>
+          <p className="text-sm text-gray-500 font-medium">Organization</p>
+          <p className="text-gray-800">{selectedContact.organization}</p>
+        </div>
+
+        <div>
+          <p className="text-sm text-gray-500 font-medium">Category</p>
+          <p className="text-gray-800">{selectedContact.category}</p>
+        </div>
+
+        <div>
+          <p className="text-sm text-gray-500 font-medium">Subject</p>
+          <p className="text-gray-800">{selectedContact.subject}</p>
+        </div>
+
+        <div>
+          <p className="text-sm text-gray-500 font-medium">Message</p>
+          <p className="text-gray-800 whitespace-pre-line">{selectedContact.message}</p>
+        </div>
+      </div>
+
+      {/* Footer */}
+      <div className="border-t border-gray-200 px-6 py-4 flex justify-end bg-gray-50 rounded-b-3xl">
+        <button
+          onClick={() => setShowDetails(false)}
+          className="px-5 py-2.5 rounded-lg bg-[#3c9299] text-white hover:bg-[#347a80] transition font-medium"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
+
+        
 
         {/* Contacts Table */}
         <div className="bg-white rounded-lg shadow overflow-hidden">
@@ -173,11 +191,13 @@ export default function ManageContactForm() {
                           {/* 👁️ View Details */}
                           <button
                             onClick={() => handleViewDetails(contact)}
-                            className="p-2 text-gray-600 hover:bg-gray-50 rounded-lg transition"
+                            className="flex items-center gap-2 px-4 py-2 bg-[#3c9299] text-white rounded-xl hover:bg-[#2d7178] transition-colors font-medium"
                             title="View Details"
                           >
-                            <Eye className="w-4 h-4" />
+                            <Eye className="w-4 h-4" /> View
                           </button>
+
+                          
 
                      
                         </div>
