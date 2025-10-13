@@ -288,8 +288,9 @@ const SuperAdminDashboard = () => {
                         ${parseFloat(order.total_price || order.amount || 0).toFixed(2)}
                       </td>
                       <td className="px-6 py-4 text-sm text-gray-500">
-                        {new Date(order.createdAt || order.date).toLocaleDateString()}
+                        {new Date(order.created_at || order.date).toLocaleDateString()}
                       </td>
+                      {console.log(order)}
                     </tr>
                   ))}
                 </tbody>
