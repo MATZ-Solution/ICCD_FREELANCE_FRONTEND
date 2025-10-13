@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useGetAllJobs } from "../../../api/client/job";
+import { useGetAllJobs } from "../../../api/client/superadmin";
 import { Briefcase, MapPin, Clock, TrendingUp } from "lucide-react";
 
 const ActiveJobs = () => {
@@ -18,6 +18,7 @@ const ActiveJobs = () => {
   const {
     data: jobs,
     totalPages,
+    active_jobs,
     isPending,
     isError,
   } = useGetAllJobs({
@@ -111,10 +112,10 @@ const ActiveJobs = () => {
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-green-600 text-sm font-medium mb-1">
-                  Posted This Week
+                  Active Projects
                 </p>
                 <p className="text-3xl font-bold text-green-900">
-                  {stats.activeThisWeek}
+                  {active_jobs}
                 </p>
               </div>
               <div className="bg-green-200 p-3 rounded-lg">

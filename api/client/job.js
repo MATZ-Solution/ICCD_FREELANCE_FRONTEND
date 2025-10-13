@@ -287,11 +287,16 @@ export function useJobProposalAction() {
       });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(['job']); 
+       queryClient.invalidateQueries({
+        queryKey: [API_ROUTE.job.getJobById],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [API_ROUTE.job.getJobPropsalByClient],
+      });
       toast.success("Job Proposal Updated Successfully");
     },
-    onError: () => {
-      toast.error("Error in updating Job Proposal!");
+    onError: (message) => {
+      toast.error(message?.response?.data?.message);
     },
   });
 
