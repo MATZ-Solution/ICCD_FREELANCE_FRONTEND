@@ -10,10 +10,14 @@ import { useFreelancerGigRatings } from "../../../api/client/review";
 import { User2 } from "lucide-react";
 import { Language } from "@mui/icons-material";
 import StarRating from "../StarRating";
+import GigContactMe from "./GigContactMe";
 
 export default function ServicePage() {
   const [activeNavTab, setActiveNavTab] = useState("Basic");
+  // const [isModalOpen, setIsModalOpen] = useState(false);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isContactModalOpen, setIsContactModalOpen] = useState(false); 
 
   const navigate = useNavigate();
   const userDetails = useSelector((state) => state.user.userDetails);
@@ -25,7 +29,7 @@ export default function ServicePage() {
   const gigInfo = gig?.gigsDescription;
   const freelancer = gig?.freelancerDetails;
   // const freelancerId = freelancer?.freelancerId;
-  console.log(freelancer)
+  console.log(freelancer);
 
   // const {
   //   data: ratings,
@@ -33,8 +37,6 @@ export default function ServicePage() {
   //   isError: isRatingsError,
   //   error: ratingsError,
   // } = useFreelancerGigRatings(id);
-
- 
 
   // const {
   //   data: ratings = [],
@@ -85,7 +87,9 @@ export default function ServicePage() {
           {/* About Gig */}
           <div className="bg-white border border-gray-200 rounded-xl shadow-sm p-6">
             <h3 className="text-2xl font-bold mb-4">About This Gig</h3>
-            <h4 className="text-xl capitalize font-semibold mb-2">{gigInfo?.gigsTitle}</h4>
+            <h4 className="text-xl capitalize font-semibold mb-2">
+              {gigInfo?.gigsTitle}
+            </h4>
             <p className="text-gray-700 capitalize leading-relaxed">
               {gigInfo?.gigsDescription}
             </p>
@@ -109,7 +113,7 @@ export default function ServicePage() {
                 <div className="flex flex-wrap gap-2 my-2">
                   {freelancer?.FreelancerLanguages && (
                     <span className="bg-gray-100 capitalize text-gray-700 px-3 py-1 rounded-full text-sm">
-                     <Language/>  {freelancer?.FreelancerLanguages}
+                      <Language /> {freelancer?.FreelancerLanguages}
                     </span>
                   )}
                 </div>
@@ -218,7 +222,10 @@ export default function ServicePage() {
                     >
                       Continue
                     </button>
-                    <button className="w-full border border-gray-300 text-gray-700 hover:bg-gray-50 py-3 px-4 rounded-lg font-medium transition-colors">
+                    <button
+                      onClick={() => setIsContactModalOpen(true)}
+                      className="w-full border border-gray-300 text-gray-700 hover:bg-gray-50 py-3 px-4 rounded-lg font-medium transition-colors"
+                    >
                       Contact me
                     </button>
                   </>
@@ -231,7 +238,21 @@ export default function ServicePage() {
         </div>
       </div>
 
-      {/* Order Options Modal */}
+      {isContactModalOpen && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg relative">
+            <button
+              onClick={() => setIsContactModalOpen(false)}
+              className="absolute top-3 right-3 text-gray-500 hover:text-gray-700"
+            >
+              ✕
+            </button>
+
+            <GigContactMe name={freelancer?.freelancerName} />
+          </div>
+        </div>
+      )}
+
       {selectedPackage && freelancer && (
         <OrderOptions
           isOpen={isModalOpen}
