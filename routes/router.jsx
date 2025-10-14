@@ -101,6 +101,7 @@ import ActiveJobs from "../src/pages/superadmin_dashboard/manage-jobs";
 import Feedbacks from "../src/pages/superadmin_dashboard/manage_feedbacks";
 import Reports from "../src/pages/superadmin_dashboard/manage-reports";
 import ManageContactform from "../src/pages/superadmin_dashboard/manage-contactform";
+import MessageCheck from "../src/pages/messagesCheck";
 
 const stripePromise = loadStripe("pk_test_51QCl1eCDh3RtIJ6XkYcN5vHd3KTO2f8enRSNv9Wx7Li0iCI7cr9khTDQx0vS5RmbazZoaECNW83FesOMwLeIgMLb00BJG4pPZR");
 
@@ -936,7 +937,8 @@ export const router = createBrowserRouter([
     element: withSuspense(
       <AuthRoute>
         <MainTemplate isShowFooter={false}>
-          <WhatsAppClone />
+          {/* <WhatsAppClone /> */}
+          <MessageCheck />
         </MainTemplate>
       </AuthRoute>
     ),
