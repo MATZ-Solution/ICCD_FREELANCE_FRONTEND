@@ -91,10 +91,10 @@ const ManageFreelancers = () => {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
       <div className="px-4 sm:px-6 lg:px-8 py-8 max-w-7xl mx-auto">
         {/* Header */}
-        <div className="mb-8 bg-white/70 backdrop-blur-sm rounded-xl shadow-xl border border-white/20 p-4">
+        <div className="mb-8 p-4">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between ">
             <div className="flex items-center gap-6">
-              <div className="p-3 bg-gradient-to-br from-blue-500 via-blue-600 to-indigo-600 rounded-2xl shadow-lg">
+               <div className="p-4 bg-gradient-to-r from-[#3C9299] via-[#2DD4BF] to-[#3C9299] rounded-2xl shadow-lg shadow-blue-500/30">
                 <Users className="w-8 h-8 text-white" />
               </div>
               <div>
@@ -103,7 +103,7 @@ const ManageFreelancers = () => {
                 </h1>
                 <p className="text-slate-600 mt-2 text-lg">
                   Manage and view all freelancers •{" "}
-                  <span className="font-semibold text-blue-600">
+                  <span className="font-semibold text-[#57AEB1">
                     {freelancers.length} total
                   </span>
                 </p>
@@ -166,6 +166,7 @@ const ManageFreelancers = () => {
             </div>
           </div>
         </div>
+
 
         {/* Freelancers Grid */}
         <div className="space-y-6">

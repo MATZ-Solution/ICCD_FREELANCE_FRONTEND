@@ -8,6 +8,10 @@ import {
   Filter,
   Download,
   Eye,
+  MessageCircle,
+  Sparkles,
+  TrendingUp,
+  Flag,
 } from "lucide-react";
 import { useGetAllIssue } from "../../../api/client/issue";
 
@@ -73,13 +77,32 @@ export default function Reports() {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8 flex justify-between items-start">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Reports</h1>
-            <p className="text-gray-600">
+          <div className="mb-8">
+          <div className=" backdrop-blur-xl border-b border-slate-200/60 sticky top-0 z-10">
+            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+              <div className="flex items-start gap-4">
+                <div className="p-4 bg-gradient-to-r from-[#3C9299] via-[#2DD4BF] to-[#3C9299] rounded-2xl shadow-lg shadow-blue-500/30">
+                  <Flag className="w-7 h-7 text-white" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2 mb-2">
+                    <h1 className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-slate-900 via-blue-900 to-slate-900 bg-clip-text text-transparent">
+                      Reports Management
+                    </h1>
+                    <Sparkles className="w-5 h-5 text-blue-500" />
+                  </div>
+                  <p className="text-slate-600 flex items-center gap-2">
+                    <TrendingUp className="w-4 h-4" />
               Track and manage all issues and reports
-            </p>
+                 </p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
+
+        </div>
+        
 
         {/* Controls */}
         <div className="mb-6 space-y-4">

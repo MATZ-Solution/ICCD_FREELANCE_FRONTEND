@@ -1,6 +1,6 @@
 import { useState, memo } from "react";
 import { useNavigate } from "react-router-dom";
-import { Search, Box } from "lucide-react";
+import { Search, Box, BriefcaseBusiness, TrendingUp, Sparkles } from "lucide-react";
 import { useGetAllGigs } from "../../../api/client/superadmin";
 
 const ManageGigs = () => {
@@ -48,11 +48,11 @@ const ManageGigs = () => {
       <div className="px-4 sm:px-6 lg:px-8 py-8">
         {/* Header */}
         <div className="mb-8">
-          <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-6">
+          <div className="  p-6">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
               <div className="flex items-center gap-3">
-                <div className="p-3 bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl">
-                  <Box className="w-6 h-6 text-white" />
+               <div className="p-4 bg-gradient-to-r from-[#3C9299] via-[#2DD4BF] to-[#3C9299] rounded-2xl shadow-lg shadow-blue-500/30">
+                  <Box className="w-7 h-7 text-white" />
                 </div>
                 <div>
                   <h1 className="text-2xl sm:text-3xl font-bold text-slate-800">
@@ -95,6 +95,8 @@ const ManageGigs = () => {
             </div>
           </div>
         </div>
+    
+        
 
         {/* Gigs Grid */}
         {filteredGigs?.length > 0 ? (
