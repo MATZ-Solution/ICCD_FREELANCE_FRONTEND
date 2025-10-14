@@ -17,13 +17,11 @@ import MessageRightSide from "../component/messages/MessageRightSide";
 const MessageCheck = () => {
     
     const [friendId, setFriendId] = useState(null);
-
-
    
     return (
         <div className="flex flex-col md:flex-row h-screen antialiased text-gray-800 bg-gray-100 font-inter">
             <MessageLeftSide setFriendId={setFriendId}/>
-            <MessageRightSide friendId={friendId}/>
+            {friendId && (<MessageRightSide friendId={friendId}/>)}
         </div>
     );
 };

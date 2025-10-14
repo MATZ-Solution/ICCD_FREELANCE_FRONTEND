@@ -1,9 +1,8 @@
-import React from 'react'
-import { Send, ArrowLeft } from "lucide-react";
-import { useState, useEffect } from 'react';
-import { getSocket } from '../../../config/socket.config';
+import { useMemo, useRef } from 'react';
 import { useSelector } from 'react-redux';
-import { useMemo } from 'react';
+import { useState, useEffect } from 'react';
+import { Send, ArrowLeft } from "lucide-react";
+import { getSocket } from '../../../config/socket.config';
 import { formatTo12HourTime } from '../../../functions/timeFormat';
 import { useGetAllMsgByReceiptant } from '../../../api/client/message';
 
@@ -13,11 +12,19 @@ function MessageRightSide({ friendId }) {
     const [message, setMessages] = useState([]);
     const [messageInput, setMessagesInput] = useState("");
     const client = useSelector((state) => state.user.userDetails);
+    const [isNextPage, setIsNextPage] = useState(true);
+    console.log("isNextPage: ", isNextPage)
+
+    const containerRef = useRef(null);
+    const lastScrollTopRef = useRef(0);
+    const isFetchingRef = useRef(false);
+
     const { data: singleData, isSuccess, isPending, isError, isLoading } = useGetAllMsgByReceiptant({
         userId: friendId?.senderId || null,
         recipientId: friendId?.receiverId || null,
         page: page,
     });
+    console.log("messages: ", message)
 
     const socket = useMemo(() => {
         return getSocket(client.id);
@@ -25,7 +32,6 @@ function MessageRightSide({ friendId }) {
 
     // send messages
     const handleSubmitMessages = () => {
-        console.log("1")
         if (!messageInput.trim() || !friendId) return console.log("Not Submitted!");
         const newMessage = {
             senderId: client.id,
@@ -41,7 +47,6 @@ function MessageRightSide({ friendId }) {
     // get message in real time
     useEffect(() => {
         const handleReceiveMessage = (data) => {
-            // shouldScrollRef.current = true;
             setMessages((prev) => [...prev, data]);
         };
         socket.on("receive_message", handleReceiveMessage);
@@ -50,14 +55,61 @@ function MessageRightSide({ friendId }) {
         };
     }, [socket]);
 
-    // get message from database
+    // get message from database and if page changes it will add new incoming data into existing messages
     useEffect(() => {
-        if (!singleData?.length) return
-        setMessages((prev) => [...singleData, ...prev]);
-    }, [singleData]);
+        console.log("1")
+        if (!singleData?.length) return;
+        if (page === 1) {
+            console.log("2")
+            setMessages(singleData);
+        } else {
+            setMessages((prev) => [...singleData, ...prev]);
+        }
+    }, [singleData, page]);
+
+    // scrolling logic and increment the page by 1 when user go to the top
+    useEffect(() => {
+        const container = containerRef.current;
+        if (!container) return;
+
+        lastScrollTopRef.current = container.scrollTop;
+
+        const handleScroll = () => {
+            const currentScrollTop = container.scrollTop;
+            const isScrollingUp = currentScrollTop < lastScrollTopRef.current;
+
+            // If user is scrolling up & near top & not already fetching
+            if (isScrollingUp && currentScrollTop <= 50 && !isFetchingRef.current) {
+                isFetchingRef.current = true;
+                setPage((prev) => prev + 1);
+                setTimeout(() => {
+                    isFetchingRef.current = false;
+                }, 800);
+            }
+            lastScrollTopRef.current = currentScrollTop;
+        };
+
+        container.addEventListener("scroll", handleScroll);
+        return () => container.removeEventListener("scroll", handleScroll);
+    }, [])
+
+    // reset the page when switch to the new chat
+    // useEffect(() => {
+    //     setPage(1);
+    //     setMessages([]);
+    // }, [friendId]);
+
+    // make the div to scroll from the bottom
+    useEffect(() => {
+        const container = containerRef.current;
+        if (!container) return;
+        setTimeout(() => {
+            container.scrollTop = container.scrollHeight;
+        }, 100);
+    }, []);
 
     return (
-        <div className="flex flex-col flex-1 bg-white">
+        <div className="flex flex-col flex-1 bg-white ">
             <div className="flex items-center justify-between p-4 bg-white border-b border-gray-200 shadow-sm">
                 <div className="flex gap-3 items-center">
                     <button
@@ -74,14 +126,10 @@ function MessageRightSide({ friendId }) {
                     </h2>
                 </div>
             </div>
-
-            <div
-                className="h-[60vh] flex-1 p-4 sm:p-6 overflow-y-auto bg-gray-50"
-            >
+            <div ref={containerRef} className="h-[60vh] flex-1 p-4 sm:p-6 overflow-y-auto bg-gray-50 ">
                 {message?.map((message, index) => {
                     const isOwnMessage = message.senderId == client.id;
-                    const introMsg =
-                        message.messages === "You can now communicate with each other";
+                    const introMsg = message.messages === "You can now communicate with each other";
                     return (
                         <div
                             key={index}
@@ -92,6 +140,7 @@ function MessageRightSide({ friendId }) {
                                     : "justify-start"
                                 }`}
                         >
+
                             <div
                                 className={`max-w-xs sm:max-w-md px-4 py-2 rounded-lg shadow-md ${introMsg
                                     ? "bg-[#FEFCE8] font-serif text-black rounded-br-none"
@@ -108,9 +157,7 @@ function MessageRightSide({ friendId }) {
                         </div>
                     );
                 })}
-                {/* <div ref={messagesEndRef} /> */}
             </div>
-
             <div className="flex items-center p-2 sm:p-4 bg-white border-t border-gray-200 shadow-sm">
                 <button className="text-gray-500 hover:text-green-600 p-2 rounded-full hover:bg-gray-100 mr-2">
                     <i className="fas fa-smile text-xl"></i>
