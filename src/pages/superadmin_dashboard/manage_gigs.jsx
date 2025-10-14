@@ -1,16 +1,55 @@
 import { useState, memo } from "react";
-import { useNavigate } from "react-router-dom";
-import { Search, Box, BriefcaseBusiness, TrendingUp, Sparkles } from "lucide-react";
-import { useGetAllGigs } from "../../../api/client/superadmin";
+import { Search, Box, TrendingUp, Sparkles, Calendar, User, Tag, Eye, Layers } from "lucide-react";
 
 const ManageGigs = () => {
   const [search, setSearch] = useState("");
-  const navigate = useNavigate();
 
-  const { data: gigs, isLoading, isError } = useGetAllGigs({search});
+  // Mock data for demo
+  const gigs = [
+    {
+      id: 1,
+      title: "Professional Logo Design",
+      category: "Graphic Design",
+      subCategory: "Logo & Brand Identity",
+      description: "I will create a unique and professional logo for your business with unlimited revisions and multiple file formats",
+      freelancer_id: "FL-2024-001",
+      created_at: "2024-10-01",
+      price: "$150"
+    },
+    {
+      id: 2,
+      title: "React Website Development",
+      category: "Web Development",
+      subCategory: "Frontend Development",
+      description: "Full-featured responsive website using React, Tailwind CSS, and modern web technologies with clean code",
+      freelancer_id: "FL-2024-002",
+      created_at: "2024-10-05",
+      price: "$500"
+    },
+    {
+      id: 3,
+      title: "SEO Optimization Service",
+      category: "Digital Marketing",
+      subCategory: "SEO",
+      description: "Complete SEO audit and optimization to improve your website ranking on search engines",
+      freelancer_id: "FL-2024-003",
+      created_at: "2024-10-10",
+      price: "$200"
+    },
+    {
+      id: 4,
+      title: "Mobile App UI Design",
+      category: "Design",
+      subCategory: "Mobile UI/UX",
+      description: "Modern and intuitive mobile app interface design with prototypes and design system",
+      freelancer_id: "FL-2024-004",
+      created_at: "2024-10-12",
+      price: "$350"
+    }
+  ];
 
   const handleView = (id) => {
-    navigate(`/superadmin/gig/${id}`);
+    console.log("View gig:", id);
   };
 
   const formatDate = (dateString) => {
@@ -27,142 +66,165 @@ const ManageGigs = () => {
       gig.category?.toLowerCase().includes(search.toLowerCase())
   );
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-      </div>
-    );
-  }
-
-  if (isError) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p className="text-red-500 text-lg">Error fetching gigs</p>
-      </div>
-    );
-  }
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
-      <div className="px-4 sm:px-6 lg:px-8 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-teal-50/30 to-cyan-50/20">
+      <div className="px-4 sm:px-6 lg:px-8 py-8 max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <div className="  p-6">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
-              <div className="flex items-center gap-3">
-               <div className="p-4 bg-gradient-to-r from-[#3C9299] via-[#2DD4BF] to-[#3C9299] rounded-2xl shadow-lg shadow-blue-500/30">
-                  <Box className="w-7 h-7 text-white" />
+          <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-xl shadow-teal-200/30 border border-white/60 p-8">
+            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+              <div className="flex items-center gap-5">
+                <div className="relative">
+                  <div className="absolute inset-0 bg-gradient-to-r from-[#4EB5AE] to-[#2DD4BF] rounded-2xl blur-xl opacity-40 animate-pulse"></div>
+                  <div className="relative p-4 bg-gradient-to-br from-[#4EB5AE] via-[#3C9299] to-[#2DD4BF] rounded-2xl shadow-lg shadow-teal-500/40">
+                    <Box className="w-8 h-8 text-white" />
+                  </div>
                 </div>
                 <div>
-                  <h1 className="text-2xl sm:text-3xl font-bold text-slate-800">
-                    Gigs Management
-                  </h1>
-                  <p className="text-slate-600 mt-1">Manage and view all gigs</p>
+                  <div className="flex items-center gap-2 mb-2">
+                    <h1 className="text-3xl sm:text-4xl font-bold text-black bg-clip-text ">
+                      Gigs Management
+                    </h1>
+                    <Sparkles className="w-6 h-6 text-[#4EB5AE]" />
+                  </div>
+                  <p className="text-slate-600 flex items-center gap-2 text-lg">
+                    <TrendingUp className="w-4 h-4 text-[#4EB5AE]" />
+                    Manage and view all freelancer gigs •{" "}
+                    <span className="font-bold text-[#4EB5AE]">
+                      {gigs.length} total
+                    </span>
+                  </p>
                 </div>
               </div>
 
               {/* Search Bar */}
-              <div className="relative">
+              <div className="relative group lg:min-w-96">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <Search className="h-5 w-5 text-slate-400" />
+                  <Search className="h-5 w-5 text-slate-400 group-focus-within:text-[#4EB5AE] transition-colors" />
                 </div>
                 <input
                   type="text"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  className="block w-full sm:w-80 pl-12 pr-4 py-3 border border-slate-300 rounded-xl
-                             bg-white placeholder-slate-400 focus:outline-none focus:ring-2
-                             focus:ring-blue-500 focus:border-transparent transition-all duration-200
-                             shadow-sm hover:shadow-md"
+                  className="block w-full pl-12 pr-4 py-4 border border-slate-200 rounded-xl
+                             bg-slate-50 placeholder-slate-400 focus:outline-none focus:ring-2
+                             focus:ring-[#4EB5AE]/20 focus:border-[#4EB5AE] focus:bg-white
+                             transition-all duration-300 shadow-sm hover:shadow-md font-medium"
                   placeholder="Search gigs by title or category..."
                 />
               </div>
             </div>
 
-            {/* Stats */}
-            <div className="mt-6 pt-6 border-t border-slate-200">
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-slate-600">
-                  {filteredGigs?.length > 0
-                    ? `${filteredGigs.length} gigs found`
-                    : "No gigs found"}
-                </span>
-                <span className="text-slate-500">
-                  Last updated: {new Date().toLocaleDateString()}
-                </span>
+            {/* Stats Bar */}
+            <div className="mt-8 pt-6 border-t border-slate-200/60">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <StatBadge
+                  label="Total Gigs"
+                  value={filteredGigs?.length || 0}
+                  icon={<Layers className="w-4 h-4" />}
+                />
+                <StatBadge
+                  label="Categories"
+                  value={new Set(gigs.map(g => g.category)).size}
+                  icon={<Tag className="w-4 h-4" />}
+                />
+                <StatBadge
+                  label="Last Updated"
+                  value={new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                  icon={<Calendar className="w-4 h-4" />}
+                />
               </div>
             </div>
           </div>
         </div>
-    
-        
 
         {/* Gigs Grid */}
         {filteredGigs?.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredGigs.map((gig) => (
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+            {filteredGigs.map((gig, idx) => (
               <div
                 key={gig.id}
-                className="bg-white rounded-xl shadow-sm border border-slate-200
-                           hover:shadow-md hover:border-blue-200 transition-all duration-300
-                           transform hover:-translate-y-1 overflow-hidden"
+                className="group relative bg-white/80 backdrop-blur-xl rounded-2xl shadow-lg shadow-slate-200/50 border border-white/60
+                           hover:shadow-2xl hover:shadow-teal-200/50 hover:border-[#4EB5AE]/40
+                           transition-all duration-500 transform hover:-translate-y-2 overflow-hidden"
+                style={{ animationDelay: `${idx * 100}ms` }}
               >
-                <div className="p-6 flex flex-col gap-4">
-                  {/* Info */}
-                  <div className="flex-1">
-                    <h3 className="text-lg font-semibold text-slate-800 truncate">
+                {/* Gradient Accent */}
+                <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#4EB5AE] via-[#2DD4BF] to-[#4EB5AE]"></div>
+                
+                {/* Background Glow Effect */}
+                <div className="absolute -top-24 -right-24 w-48 h-48 bg-gradient-to-br from-[#4EB5AE]/20 to-[#2DD4BF]/20 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                
+                <div className="relative p-6 flex flex-col gap-5 h-full">
+                  {/* Category Badge */}
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-[#4EB5AE]/10 to-[#2DD4BF]/10 text-[#3C9299] text-xs font-bold rounded-full border border-[#4EB5AE]/30">
+                      <Tag className="w-3 h-3" />
+                      {gig.category}
+                    </span>
+                    {gig.price && (
+                      <span className="text-lg font-bold text-[#4EB5AE]">
+                        {gig.price}
+                      </span>
+                    )}
+                  </div>
+
+                  {/* Title & Description */}
+                  <div className="flex-1 space-y-3">
+                    <h3 className="text-xl font-bold text-slate-900 group-hover:text-[#4EB5AE] transition-colors line-clamp-2 leading-tight">
                       {gig.title}
                     </h3>
-                    <p className="text-slate-600 mt-1">{gig.category}</p>
-                    <p className="text-slate-500 text-sm mt-1 line-clamp-3">
+                    <p className="text-slate-600 text-sm leading-relaxed line-clamp-3">
                       {gig.description}
                     </p>
                   </div>
 
-                  {/* Dates & Details */}
-                  <div className="grid grid-cols-2 gap-4 text-sm">
-                    <div>
-                      <span className="text-slate-500 font-medium">Created</span>
-                      <p className="text-slate-800 font-semibold">
-                        {formatDate(gig.created_at)}
-                      </p>
-                    </div>
-                    <div>
-                      <span className="text-slate-500 font-medium">
-                        SubCategory
-                      </span>
-                      <p className="text-slate-800 font-semibold">
+                  {/* Gig Details */}
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between p-3 bg-gradient-to-br from-slate-50 to-teal-50/30 rounded-xl border border-slate-200/60">
+                      <div className="flex items-center gap-2 text-slate-600">
+                        <Layers className="w-4 h-4 text-[#4EB5AE]" />
+                        <span className="text-xs font-semibold">Subcategory</span>
+                      </div>
+                      <span className="text-sm font-bold text-slate-900">
                         {gig.subCategory}
-                      </p>
-                    </div>
-                    <div>
-                      <span className="text-slate-500 font-medium">
-                        Freelancer ID
                       </span>
-                      <p className="text-slate-800 font-semibold">
+                    </div>
+
+                    <div className="flex items-center justify-between p-3 bg-gradient-to-br from-slate-50 to-teal-50/30 rounded-xl border border-slate-200/60">
+                      <div className="flex items-center gap-2 text-slate-600">
+                        <User className="w-4 h-4 text-[#4EB5AE]" />
+                        <span className="text-xs font-semibold">Freelancer</span>
+                      </div>
+                      <span className="text-sm font-bold text-slate-900 font-mono">
                         {gig.freelancer_id}
-                      </p>
+                      </span>
+                    </div>
+
+                    <div className="flex items-center justify-between p-3 bg-gradient-to-br from-teal-500/5 to-cyan-500/5 rounded-xl border border-[#4EB5AE]/20">
+                      <div className="flex items-center gap-2 text-[#3C9299]">
+                        <Calendar className="w-4 h-4" />
+                        <span className="text-xs font-semibold">Created</span>
+                      </div>
+                      <span className="text-sm font-bold text-[#3C9299]">
+                        {formatDate(gig.created_at)}
+                      </span>
                     </div>
                   </div>
 
-                  {/* Actions */}
-                  {/* <button
-                    onClick={() => handleView(gig.id)}
-                    className="mt-4 w-full bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 
-                               rounded-lg font-medium transition-colors duration-200"
-                  >
-                    View Gig
-                  </button> */}
+                 
                 </div>
-                <div className="h-1 bg-gradient-to-r from-blue-500 to-blue-600 opacity-20"></div>
               </div>
             ))}
           </div>
         ) : (
-          <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-12">
+          <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-xl shadow-teal-200/30 border border-white/60 p-16">
             <div className="text-center">
-              <p className="text-slate-600 mb-6">
+              <div className="inline-flex items-center justify-center w-24 h-24 rounded-full bg-gradient-to-br from-teal-100 to-cyan-100 mb-6 shadow-lg">
+                <Box className="w-12 h-12 text-[#4EB5AE]" />
+              </div>
+              <h3 className="text-2xl font-bold text-slate-900 mb-3">No Gigs Found</h3>
+              <p className="text-slate-600 mb-6 max-w-md mx-auto text-lg">
                 {search
                   ? `No gigs match your search for "${search}"`
                   : "There are no gigs in the system yet"}
@@ -170,8 +232,9 @@ const ManageGigs = () => {
               {search && (
                 <button
                   onClick={() => setSearch("")}
-                  className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg
-                             font-medium transition-colors duration-200"
+                  className="bg-gradient-to-r from-[#4EB5AE] to-[#2DD4BF] hover:from-[#3C9299] hover:to-[#4EB5AE]
+                             text-white px-8 py-3.5 rounded-xl font-bold transition-all duration-300
+                             shadow-lg shadow-teal-500/30 hover:shadow-xl hover:shadow-teal-500/40 transform hover:scale-105"
                 >
                   Clear Search
                 </button>
@@ -179,6 +242,20 @@ const ManageGigs = () => {
             </div>
           </div>
         )}
+      </div>
+    </div>
+  );
+};
+
+const StatBadge = ({ label, value, icon }) => {
+  return (
+    <div className="flex items-center gap-3 p-4 bg-gradient-to-br from-[#4EB5AE]/10 to-[#2DD4BF]/10 text-[#3C9299] rounded-xl border border-[#4EB5AE]/30 hover:shadow-md transition-shadow">
+      <div className="p-2 bg-white rounded-lg shadow-sm">
+        {icon}
+      </div>
+      <div>
+        <p className="text-xs font-semibold opacity-75 uppercase tracking-wide">{label}</p>
+        <p className="text-lg font-bold">{value}</p>
       </div>
     </div>
   );
