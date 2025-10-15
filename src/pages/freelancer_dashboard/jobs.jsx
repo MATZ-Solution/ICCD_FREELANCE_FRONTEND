@@ -12,12 +12,15 @@ import Select from "../../component/buttonSelect.jsx";
 import { useLocation, useNavigate } from "react-router-dom";
 import Pagination from "../../component/pagination";
 import { countryData } from "../../../data/citiesData.js";
+import useDebounce from "../../../hooks/useDebounce.jsx";
+import { oicCountries } from "../../../data/oic_contries.js";
 
 const ProposalModal = lazy(() => import("../../component/ProposalModal"));
 
 function Jobs() {
   const [city, setCity] = useState("")
   const [country, setCountry] = useState("")
+  const [jobTitle, setJobTitle] = useState("")
   const [obj, setObj] = useState({});
   const [show, setShow] = useState(false);
   const [page, setPage] = useState(1);
@@ -25,13 +28,13 @@ function Jobs() {
   const navigate = useNavigate();
   const [selectedJobId, setSelectedJobId] = useState(null);
 
-  const locationOptions = countryData.data.map(item => ({
+  const locationOptions = oicCountries.map(item => ({
     value: item.country,
     label: item.country
   }));
 
   const findCity = country ?
-    countryData.data.find(item => item.country === country)
+    oicCountries.find(item => item.country === country)
     : []
 
   const citiesoption = findCity.cities ? findCity.cities.map(item => ({
@@ -45,7 +48,7 @@ function Jobs() {
     data: allJobs,
     totalPages,
     isSuccess: allJobsSuccess,
-  } = useGetAllJobs({ city, country, page });
+  } = useGetAllJobs({ jobTitle: useDebounce(jobTitle), city, country, page });
 
   const { data: jobDetails, isSuccess: jobDetailsSuccess } = useGetJobById(
     selectedJobId,
@@ -97,9 +100,9 @@ function Jobs() {
             >
               Apply Now
             </button>
-            <button className="bg-gray-300 p-1 rounded-md">
+            {/* <button className="bg-gray-300 p-1 rounded-md">
               <LinkIcon className="text-black" />
-            </button>
+            </button> */}
           </div>
           <div className="mt-10 border-t pt-4">
             <h1 className="mt-4 font-bold text-xl">Job Details</h1>
@@ -174,10 +177,10 @@ function Jobs() {
                 Create an account or sign in to see your pe$onalized job
                 recommendations.
               </p>
-              <button className="shadow-xl flex items-center gap-3 bg-[#15A9B2] text-white px-6 py-3 rounded-full hover:bg-[#05929c] transition cu$or-pointer">
+              {/* <button className="shadow-xl flex items-center gap-3 bg-[#15A9B2] text-white px-6 py-3 rounded-full hover:bg-[#05929c] transition cu$or-pointer">
                 <span>Get Started</span>
                 <EastIcon />
-              </button>
+              </button> */}
               <p className="mt-5 text-[#767676]">
                 <span className="text-[#05929c] font-medium">Post your CV</span> - It only takes a few seconds
               </p>
@@ -200,7 +203,7 @@ function Jobs() {
             <div className="w-full relative mb-4 lg:mb-0 lg:w-1/2">
               <SearchOutlinedIcon className="absolute top-3 left-3 text-gray-400" />
               <input
-                onChange={(e) => setObj({ ...obj, jobTitle: e.target.value })}
+                onChange={(e) => setJobTitle(e.target.value)}
                 className="w-full h-10 px-10 rounded-md border border-gray-300 outline-none focus:ring-2 focus:ring-[#15A9B2]"
                 placeholder="Job title, keywords, or company"
               />
