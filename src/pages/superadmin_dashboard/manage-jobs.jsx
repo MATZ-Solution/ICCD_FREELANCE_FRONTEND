@@ -1,6 +1,14 @@
 import React, { useState } from "react";
-import { Briefcase, MapPin, Clock, TrendingUp } from "lucide-react";
-import { useGetAllJobs } from '../../../api/client/job';
+import {
+  Briefcase,
+  MapPin,
+  Clock,
+  TrendingUp,
+  Settings,
+  Sparkles,
+  BriefcaseBusiness,
+} from "lucide-react";
+import { useGetAllJobs } from "../../../api/client/superadmin";
 
 const ActiveJobs = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -26,8 +34,6 @@ const ActiveJobs = () => {
     page: currentPage,
     ...filters,
   });
-
-  
 
   // Calculate stats from jobs data
   const stats = {
@@ -74,10 +80,30 @@ const ActiveJobs = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">Active Jobs</h1>
-        <p className="text-gray-600">
-          Manage and monitor your active job listings
-        </p>
+        {/* Header */}
+        <div className="mb-8">
+          <div className=" backdrop-blur-xl border-b border-slate-200/60 sticky top-0 z-10">
+            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+              <div className="flex items-start gap-4">
+                <div className="p-4 bg-gradient-to-r from-[#3C9299] via-[#2DD4BF] to-[#3C9299] rounded-2xl shadow-lg shadow-blue-500/30">
+                  <BriefcaseBusiness className="w-7 h-7 text-white" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2 mb-2">
+                    <h1 className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-slate-900 via-blue-900 to-slate-900 bg-clip-text text-transparent">
+                      Job Management
+                    </h1>
+                    <Sparkles className="w-5 h-5 text-blue-500" />
+                  </div>
+                  <p className="text-slate-600 flex items-center gap-2">
+                    <TrendingUp className="w-4 h-4" />
+                    Monitor And Manage Active And Inactive Job Listings
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Stats Cards */}

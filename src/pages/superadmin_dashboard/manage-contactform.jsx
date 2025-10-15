@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, Plus, Trash2, Edit2, Eye, Loader } from 'lucide-react';
+import { Search, Plus, Trash2, Edit2, Eye, Loader, BriefcaseBusiness, Sparkles, TrendingUp, MessageCircle } from 'lucide-react';
 import { useGetAllContacts } from '../../../api/client/contact';
 
 export default function ManageContactForm() {
@@ -62,12 +62,29 @@ export default function ManageContactForm() {
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Manage Contacts</h1>
-          <p className="text-gray-600">Create, edit, and manage your contact submissions</p>
+     
+ <div className="mb-8">
+          <div className=" backdrop-blur-xl border-b border-slate-200/60 sticky top-0 z-10">
+            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+              <div className="flex items-start gap-4">
+                <div className="p-4 bg-gradient-to-r from-[#3C9299] via-[#2DD4BF] to-[#3C9299] rounded-2xl shadow-lg shadow-blue-500/30">
+                  <MessageCircle className="w-7 h-7 text-white" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2 mb-2">
+                    <h1 className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-slate-900 via-blue-900 to-slate-900 bg-clip-text text-transparent">
+                      Manage Contacts
+                    </h1>
+                    <Sparkles className="w-5 h-5 text-blue-500" />
+                  </div>
+                  <p className="text-slate-600 flex items-center gap-2">
+                    <TrendingUp className="w-4 h-4" />
+Create, edit, and manage your contact submissions                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-
         {/* Controls */}
         <div className="flex gap-4 mb-6">
           <div className="flex-1 relative">

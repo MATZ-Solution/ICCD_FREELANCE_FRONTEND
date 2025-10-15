@@ -65,6 +65,8 @@ const AdminSidebar = ({
   };
 
   const currentActiveItem = getActiveItem();
+  const currentPath = location.pathname;
+
 
   const handleMenuClick = (item) => {
     navigate(item.path);
@@ -160,51 +162,48 @@ const AdminSidebar = ({
 
         {/* Navigation */}
         <nav className="flex-1 p-3 overflow-y-auto overflow-x-hidden space-y-1.5 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent hover:scrollbar-thumb-gray-400">
-          {menuItems.map((item, index) => {
-            const isActive = currentActiveItem === item.label;
-            return (
-              <button
-                key={index}
-                onClick={() => handleMenuClick(item)}
-                className={`
-                  w-full flex items-center justify-between px-4 py-3 rounded-xl 
-                  transition-all duration-200 group relative overflow-hidden
-                  ${
-                    isActive
-                      ? "bg-gradient-to-r from-[#3C9299] to-[#2DD4BF] text-white shadow-lg shadow-teal-500/30 scale-[1.02]"
-                      : "text-gray-700 hover:bg-gray-100 hover:scale-[1.01] active:scale-[0.99]"
-                  }
-                  ${collapsed ? "justify-center px-0" : ""}
-                `}
-                title={collapsed ? item.label : ""}
-              >
-                {isActive && !collapsed && (
-                  <div className="absolute inset-0 bg-white/20 animate-pulse rounded-xl" />
-                )}
-                <div
-                  className={`flex items-center relative z-10 ${
-                    collapsed ? "" : "space-x-3"
-                  }`}
-                >
-                  <item.icon
-                    className={`w-5 h-5 flex-shrink-0 transition-transform duration-200 ${
-                      isActive ? "" : "group-hover:scale-110"
-                    }`}
-                  />
-                  {!collapsed && (
-                    <span className="font-medium text-sm truncate">
-                      {item.label}
-                    </span>
-                  )}
-                </div>
-                {!collapsed && item.badge && (
-                  <span className="px-2 py-0.5 text-xs font-semibold rounded-full bg-red-500 text-white shadow-sm flex-shrink-0 relative z-10">
-                    {item.badge}
-                  </span>
-                )}
-              </button>
-            );
-          })}
+         {menuItems.map((item, index) => {
+  const isActive = currentPath === item.path; // ✅ Directly check URL path
+
+  return (
+    <button
+      key={index}
+      onClick={() => handleMenuClick(item)}
+      className={`
+        w-full flex items-center justify-between px-4 py-3 rounded-xl 
+        transition-all duration-200 group relative overflow-hidden
+        ${
+          isActive
+            ? "bg-gradient-to-r from-[#3C9299] to-[#2DD4BF] text-white shadow-lg shadow-teal-500/30 scale-[1.02]"
+            : "text-gray-700 hover:bg-gray-100 hover:scale-[1.01] active:scale-[0.99]"
+        }
+        ${collapsed ? "justify-center px-0" : ""}
+      `}
+      title={collapsed ? item.label : ""}
+    >
+      {isActive && !collapsed && (
+        <div className="absolute inset-0 bg-white/20 animate-pulse rounded-xl" />
+      )}
+      <div
+        className={`flex items-center relative z-10 ${
+          collapsed ? "" : "space-x-3"
+        }`}
+      >
+        <item.icon
+          className={`w-5 h-5 flex-shrink-0 transition-transform duration-200 ${
+            isActive ? "" : "group-hover:scale-110"
+          }`}
+        />
+        {!collapsed && (
+          <span className="font-medium text-sm truncate">
+            {item.label}
+          </span>
+        )}
+      </div>
+    </button>
+  );
+})}
+
         </nav>
 
         {/* Quick Stats */}
