@@ -1,5 +1,6 @@
 import {
   MapPin,
+  User,
   Clock,
   DollarSign,
   Users,
@@ -69,7 +70,6 @@ export default function JobDetailPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 py-8">
-        {console.log(jobData)}
         {/* Header Section */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 mb-8 overflow-hidden">
           <div className="bg-gradient-to-r from-[#043A53] via-[#065f73] to-[#47AAB3] rounded-xl p-6 text-white">
@@ -194,14 +194,8 @@ export default function JobDetailPage() {
         <div className="grid grid-cols-1 xl:grid-cols-4 gap-8">
           {/* Main Content Area */}
           <div className="xl:col-span-3 space-y-8">
-            {/* Proposals Section */}
-            <ProposalSection
-              jobProposals={jobProposals}
-              handleAction={handleAction}
-              actionloading={actionloading}
-            />
 
-            {/* Job Description - moved below proposals */}
+                {/* Job Description - moved below proposals */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
               <div className="bg-gray-50 p-6 border-gray-300 border-b">
                 <h2 className="text-xl font-semibold text-gray-900 flex items-center gap-2">
@@ -218,13 +212,19 @@ export default function JobDetailPage() {
                 />
               </div>
             </div>
+
+            {/* Proposals Section */}
+            <ProposalSection
+              jobProposals={jobProposals}
+              handleAction={handleAction}
+              actionloading={actionloading}
+            />
           </div>
 
           {/* Sidebar */}
           <div className="space-y-6">
             {/* Job Info */}
             <JobInfoCard jobData={jobData} />
-
             {/* Application Progress */}
             <ApplicationProgress
               applications={jobProposals?.length || 0}
@@ -283,7 +283,6 @@ function ProposalSection({ jobProposals, handleAction, actionloading }) {
       </div>
 
       <div className="p-6">
-        {console.log(jobProposals)}
         {jobProposals?.length > 0 ? (
           <div className="space-y-4">
             {jobProposals.map((item, index) => (
@@ -293,21 +292,22 @@ function ProposalSection({ jobProposals, handleAction, actionloading }) {
               >
                 {/* Candidate Info */}
                 <div className="flex items-center gap-4 mb-3 md:mb-0">
-                  <div className="relative">
+                  {/* <div className="relative">
                     <img
                       src={item?.candidateImg}
                       alt={item?.freelancerName}
                       className="w-12 h-12 rounded-full object-cover border-2 border-gray-100"
                     />
                     <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-white"></div>
-                  </div>
+                  </div> */}
+                  <User />
                   <div>
                     <h3 className="font-semibold text-gray-900">
-                      {item?.freelancerName}
+                      {item?.name}
                     </h3>
                     <p className="text-sm text-gray-600 flex items-center gap-1">
                       <Briefcase className="w-3 h-3" />
-                      {item?.experience}
+                      Experience: {item?.experience} Years
                     </p>
                   </div>
                 </div>

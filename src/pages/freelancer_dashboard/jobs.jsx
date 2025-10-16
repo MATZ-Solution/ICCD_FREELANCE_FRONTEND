@@ -21,7 +21,6 @@ function Jobs() {
   const [city, setCity] = useState("")
   const [country, setCountry] = useState("")
   const [jobTitle, setJobTitle] = useState("")
-  const [obj, setObj] = useState({});
   const [show, setShow] = useState(false);
   const [page, setPage] = useState(1);
   const [mobileJobModal, setMobileJobModal] = useState(false);
