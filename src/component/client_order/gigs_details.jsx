@@ -253,12 +253,14 @@ export default function ServicePage() {
         </div>
       )}
 
+      {console.log("selectedPackage", selectedPackage)}
+
       {selectedPackage && freelancer && (
         <OrderOptions
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
           packageType={selectedPackage.packageType}
-          packageDescription={selectedPackage.description}
+          packageDescription={selectedPackage.packageDescription}
           delivery={selectedPackage.deliverytime || "3 Days"}
           revisions={selectedPackage.revisions}
           basePrice={selectedPackage.price}
