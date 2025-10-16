@@ -13,6 +13,7 @@ import { memo } from 'react';
 import ICCDLoader from "../loader";
 import Button from "../button";
 import { countryData } from "../../../data/citiesData";
+import { oicCountries } from "../../../data/oic_contries";
 
 // Validation schema
 const schema = yup.object({
@@ -41,13 +42,18 @@ const schema = yup.object({
 });
 
 const payTypeOptions = [
-  { value: "Hourly", label: "Hourly" },
-  { value: "Salary", label: "Salary" },
+  { value: "Hourly",     label: "Hourly" },
+  { value: "Daily",      label: "Daily" },
+  { value: "Weekly",     label: "Weekly" },
+  { value: "Monthly",    label: "Monthly" },
+  { value: "Yearly",     label: "Yearly" },
+  { value: "Per Project", label: "Per Project" },
+  { value: "Per Task",    label: "Per Task" },
   { value: "Commission", label: "Commission" },
-  { value: "Monthly", label: "Monthly" },
 ];
 
-const locationOptions = countryData.data.map(item => ({
+
+const locationOptions = oicCountries.map(item => ({
   value: item.country,
   label: item.country
 }));
@@ -87,7 +93,7 @@ function JobForm() {
   });
 
   const findCity = selectedCountry ?
-    countryData.data.find(item => item.country === selectedCountry)
+    oicCountries.find(item => item.country === selectedCountry)
     : []
 
   const citiesoption = findCity.cities ? findCity.cities.map(item => ({

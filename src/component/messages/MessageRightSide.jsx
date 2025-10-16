@@ -24,7 +24,6 @@ function MessageRightSide({ friendId }) {
         recipientId: friendId?.receiverId || null,
         page: page,
     });
-    console.log("messages: ", message)
 
     const socket = useMemo(() => {
         return getSocket(client.id);
@@ -57,10 +56,8 @@ function MessageRightSide({ friendId }) {
 
     // get message from database and if page changes it will add new incoming data into existing messages
     useEffect(() => {
-        console.log("1")
         if (!singleData?.length) return;
         if (page === 1) {
-            console.log("2")
             setMessages(singleData);
         } else {
             setMessages((prev) => [...singleData, ...prev]);

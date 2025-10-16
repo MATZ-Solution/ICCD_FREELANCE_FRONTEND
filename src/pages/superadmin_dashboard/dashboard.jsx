@@ -16,9 +16,10 @@ import {
   ChevronRight,
   DollarSign,
 } from "lucide-react";
-import { useGetAllFreelancers, useGetAllGigs, useGetAllProjects, useGetAllUsers } from "../../../api/client/superadmin";
+import { useGetAllFreelancers, useGetAllGigs, useGetAllProjects, useGetAllUsers, useGetStatisticsData } from "../../../api/client/superadmin";
 import OverviewChart from '../../component/freelancer_dashboard/overview';
 import { useGetAllOrderByAdmin } from "../../../api/client/order";
+import DataLoader from "./DataLoader";
 
 // // Mock hooks for demonstration
 // const useGetAllOrderByAdmin = () => ({
@@ -36,6 +37,9 @@ import { useGetAllOrderByAdmin } from "../../../api/client/order";
 const SuperAdminDashboard = () => {
   const [showMobileSidebar, setShowMobileSidebar] = useState(false);
   const [selectedPeriod, setSelectedPeriod] = useState("month");
+
+  const { data=[], isSuccess, isPending, isError, isLoading } = useGetStatisticsData()
+  console.log("data: ", data)
 
   const {
     data: orders = [],
@@ -58,56 +62,44 @@ const SuperAdminDashboard = () => {
   } = useGetAllGigs();
 
 
-
-  // Calculate metrics
-  const totalEarnings = useMemo(() => {
-    return orders.reduce((total, order) => {
-      if (order.status === "paid") {
-        return total + (parseFloat(order.total_price) || 0);
-      }
-      return total;
-    }, 0);
-  }, [orders]);
-
   const statsCards = [
     {
       title: "Total Users",
-      value: users.length || 0,
-      change: 8.2,
-      trend: "up",
+      value: data[0]?.total_users || 0,
       icon: Users,
       gradient: "from-blue-500 to-cyan-500",
-      description: "Registered users"
     },
     {
-      title: "Total Orders",
-      value: orders.length || 0,
+      title: "Total Projects",
+      value: data[0]?.total_projects || 0,
       change: 12.5,
       trend: "up",
       icon: ShoppingCart,
       gradient: "from-purple-500 to-pink-500",
-      description: `${orders.filter((o) => o.status === "paid").length} completed`
+      // description: `${orders.filter((o) => o.status === "paid").length} completed`
     },
-    {
-      title: "Active Gigs",
-      value: gigs.length || 0,
-      change: 5.7,
-      trend: "up",
-      icon: Briefcase,
-      gradient: "from-orange-500 to-red-500",
-      description: `${freelancers.length} freelancers`
-    },
-    {
-      title: "Revenue",
-      value: Math.round(totalEarnings),
+     {
+      title: "Total Jobs",
+      value: data[0]?.total_jobs || 0,
       change: 18.3,
       trend: "up",
       icon: DollarSign,
       gradient: "from-[#3C9299] to-[#2DD4BF]",
       description: "Total earnings",
       isRevenue: true
-    }
+    },
+    {
+      title: "Total Gigs",
+      value: data[0]?.total_gigs || 0,
+      change: 5.7,
+      trend: "up",
+      icon: Briefcase,
+      gradient: "from-orange-500 to-red-500",
+      description: `${freelancers?.length} freelancers`
+    },
   ];
+
+  if(isLoading) return <DataLoader />
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-cyan-50">
@@ -132,14 +124,14 @@ const SuperAdminDashboard = () => {
                 </div>
               </div>
 
-              <div className="flex items-center space-x-3">
+              {/* <div className="flex items-center space-x-3">
                 <button className="relative p-2 hover:bg-gray-100 rounded-xl transition-colors">
                   <Search className="w-5 h-5 text-gray-600" />
                 </button>
                 <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#3C9299] to-[#2DD4BF] flex items-center justify-center cursor-pointer">
                   <span className="text-white font-semibold">AD</span>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </header>
@@ -165,19 +157,19 @@ const SuperAdminDashboard = () => {
 
           {/* Stats Cards */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {statsCards.map((card, index) => (
+            {statsCards?.map((card, index) => (
               <div
                 key={index}
                 className="relative bg-white rounded-2xl p-6 border border-gray-200/50 hover:shadow-2xl hover:shadow-teal-500/10 transition-all duration-300 group overflow-hidden"
               >
-                <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${card.gradient} opacity-5 rounded-full -mr-16 -mt-16 group-hover:opacity-10 transition-opacity`}></div>
+                {/* <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${card.gradient} opacity-5 rounded-full -mr-16 -mt-16 group-hover:opacity-10 transition-opacity`}></div> */}
                 
                 <div className="relative">
                   <div className="flex items-center justify-between mb-4">
                     <div className={`p-3 bg-gradient-to-br ${card.gradient} rounded-xl shadow-lg`}>
                       <card.icon className="w-6 h-6 text-white" />
                     </div>
-                    <div className={`flex items-center space-x-1 px-2 py-1 rounded-full ${
+                    {/* <div className={`flex items-center space-x-1 px-2 py-1 rounded-full ${
                       card.trend === "up" ? "bg-green-100" : "bg-red-100"
                     }`}>
                       {card.trend === "up" ? (
@@ -190,15 +182,15 @@ const SuperAdminDashboard = () => {
                       }`}>
                         {card.change}%
                       </span>
-                    </div>
+                    </div> */}
                   </div>
                   <h3 className="text-sm font-medium text-gray-500 mb-1">
                     {card.title}
                   </h3>
                   <p className="text-3xl font-bold text-gray-900">
-                    {card.isRevenue ? `$${card.value.toLocaleString()}` : card.value.toLocaleString()}
+                    {card.value.toLocaleString()}
                   </p>
-                  <p className="text-xs text-gray-400 mt-2">{card.description}</p>
+                  {/* <p className="text-xs text-gray-400 mt-2">{card.description}</p> */}
                 </div>
               </div>
             ))}

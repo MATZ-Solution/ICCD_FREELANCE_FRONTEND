@@ -18,6 +18,17 @@ export default function Footer() {
         { label: 'Contact Us', href: '/contactus' },
       ],
     },
+
+      {
+      title: 'Quick Access',
+      links: [
+        { label: 'Login / Register', href: '/login' },
+        { label: 'Post a Project', href: '/client/post-project' },
+        { label: 'Find Freelancers', href: '/find-talent' },
+        { label: 'Become a Freelancer', href: '/freelancer-profile' },
+      ],
+    },
+    
     {
       title: 'Legal & Policy',
       links: [
@@ -41,16 +52,8 @@ export default function Footer() {
         { label: 'Blog / Insights', href: '/blog' },
       ],
     },
-   
-    {
-      title: 'Quick Access',
-      links: [
-        { label: 'Login / Register', href: '/login' },
-        { label: 'Post a Project', href: '/client/post-project' },
-        { label: 'Find Freelancers', href: '/find-talent' },
-        { label: 'Become a Freelancer', href: '/freelancer-profile' },
-      ],
-    },
+
+  
   ];
 
   return (
@@ -82,7 +85,7 @@ export default function Footer() {
           </div>
 
           {/* Links grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 gap-6 md:gap-8 md:w-2/3">
+          <div className="grid grid-cols-2 sm:grid-cols-5 md:w-2/3 gap-6 md:gap-8 ">
             {sections.map((sec) => (
               <div key={sec.title}>
                 <h4 className="text-sm font-semibold text-slate-200 mb-3">{sec.title}</h4>
@@ -100,9 +103,20 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-slate-800 mt-8 pt-6 flex flex-col items-center justify-center md:flex-row md:items-center md:justify-between gap-4">
-          <p className="text-sm text-white/80">© {currentYear} ICCD Talent Gate — All rights reserved. A Product of Islamic Chamber Of Commerce Powered by Matz </p>
+        <div className="mt-10">
+          <p className="text-sm text-center text-white/80">
+            © {currentYear} ICCD Talent Gate — All rights reserved. A Product of Islamic Chamber Of Commerce Powered by{" "}
+            <a
+              href="https://development.matzsolutions.com/"
+              className="hover:underline underline-offset-2 text-white"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Matz Solutions (PVT LTD)
+            </a>
+          </p>
         </div>
+
       </div>
     </footer>
   );
