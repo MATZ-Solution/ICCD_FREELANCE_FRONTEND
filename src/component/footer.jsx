@@ -59,6 +59,13 @@ export default function Footer() {
   return (
     <footer className=" bg-gradient-to-r from-[#1C4C50] via-[#2E7A81] to-[#1C4C50] text-slate-100 pt-10 pb-6">
       <div className="max-w-7xl mx-auto px-6">
+         <div className="absolute right-0 top-0 w-1/2 h-full opacity-5">
+              <svg className="w-full h-full" viewBox="0 0 400 400">
+                <circle cx="350" cy="50" r="100" fill="white"/>
+                <circle cx="300" cy="200" r="60" fill="white"/>
+                <circle cx="380" cy="300" r="80" fill="white"/>
+              </svg>
+            </div>
         <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-8">
           {/* Brand / Mission */}
           <div className="md:w-1/3">
@@ -71,6 +78,14 @@ export default function Footer() {
               Empowering professionals across the OIC region with global freelancing opportunities , connecting talent,
               institutions and projects through a trusted digital marketplace.
             </p>
+
+             <div className="absolute right-0 top-0 w-1/2 h-full opacity-5">
+              <svg className="w-full h-full" viewBox="0 0 400 400">
+                <circle cx="350" cy="50" r="100" fill="white"/>
+                <circle cx="300" cy="200" r="60" fill="white"/>
+                <circle cx="380" cy="300" r="80" fill="white"/>
+              </svg>
+            </div>
 
             <div className="mt-7 flex  items-center gap-3">
               {/* Social icons */}
