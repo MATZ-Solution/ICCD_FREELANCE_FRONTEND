@@ -235,14 +235,14 @@ function Jobs() {
                   Connect with leading companies and find positions that match your skills, ambitions, and lifestyle.
                 </p>
 
-                <div className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 mb-6 sm:mb-8">
+                {/* <div className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 mb-6 sm:mb-8">
                   <button className="px-6 sm:px-8 py-3 sm:py-4 bg-white text-[#44A4AD] rounded-xl font-semibold hover:scale-105 transition-transform shadow-lg text-sm sm:text-base">
                     Browse All Jobs
                   </button>
                   <button className="px-6 sm:px-8 py-3 sm:py-4 bg-white/10 backdrop-blur-sm text-white rounded-xl font-semibold hover:bg-white/20 transition-all border border-white/30 text-sm sm:text-base">
                     Upload Your CV
                   </button>
-                </div>
+                </div> */}
 
                 <div className="flex flex-wrap gap-4 sm:gap-6 text-white/80 text-xs sm:text-sm">
                   <div className="flex items-center gap-2">
@@ -365,9 +365,9 @@ function Jobs() {
                 />
               </div>
 
-              <button className="h-14 px-8 bg-gradient-to-r from-[#44A4AD] to-[#3a8c94] text-white rounded-xl font-semibold hover:shadow-lg transition-all whitespace-nowrap">
+              {/* <button className="h-14 px-8 bg-gradient-to-r from-[#44A4AD] to-[#3a8c94] text-white rounded-xl font-semibold hover:shadow-lg transition-all whitespace-nowrap">
                 Search
-              </button>
+              </button> */}
             </div>
 
             {/* Mobile Filter Toggle */}
@@ -404,7 +404,7 @@ function Jobs() {
         </div>
 
         {/* Results Section */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 sm:mb-6 gap-3 sm:gap-0">
+        {/* <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-4 sm:mb-6 gap-3 sm:gap-0">
           <p className="text-gray-600 text-sm sm:text-base">
             Showing <span className="font-bold text-[#44A4AD]">{allJobs?.length || 0}</span> opportunities
           </p>
@@ -413,7 +413,7 @@ function Jobs() {
             <option>Latest</option>
             <option>Salary: High to Low</option>
           </select>
-        </div>
+        </div> */}
 
         {/* Job Listings - Fully Responsive */}
         <div className="flex flex-col lg:flex-row gap-4 sm:gap-6">

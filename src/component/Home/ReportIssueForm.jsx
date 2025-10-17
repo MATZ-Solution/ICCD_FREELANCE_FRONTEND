@@ -56,8 +56,8 @@ const issueOptions = [
 
 export default function ReportIssueForm() {
   const [showTick, setShowTick] = useState(false);
-    const [showModal, setShowModal] = useState(false);
-  
+  const [showModal, setShowModal] = useState(false);
+
 
   const {
     control,
@@ -120,9 +120,8 @@ export default function ReportIssueForm() {
                       <input
                         {...field}
                         type="text"
-                        className={`w-full pl-11 pr-4 py-3 border ${
-                          errors.fullName ? "border-red-300" : "border-gray-300"
-                        } rounded-xl focus:ring-2 focus:ring-[#47AAB3] outline-none transition`}
+                        className={`w-full pl-11 pr-4 py-3 border ${errors.fullName ? "border-red-300" : "border-gray-300"
+                          } rounded-xl focus:ring-2 focus:ring-[#47AAB3] outline-none transition`}
                         placeholder="John Doe"
                       />
                     )}
@@ -146,9 +145,8 @@ export default function ReportIssueForm() {
                       <input
                         {...field}
                         type="email"
-                        className={`w-full pl-11 pr-4 py-3 border ${
-                          errors.email ? "border-red-300" : "border-gray-300"
-                        } rounded-xl focus:ring-2 focus:ring-[#47AAB3] outline-none transition`}
+                        className={`w-full pl-11 pr-4 py-3 border ${errors.email ? "border-red-300" : "border-gray-300"
+                          } rounded-xl focus:ring-2 focus:ring-[#47AAB3] outline-none transition`}
                         placeholder="john@example.com"
                       />
                     )}
@@ -265,11 +263,10 @@ export default function ReportIssueForm() {
                     <textarea
                       {...field}
                       rows={5}
-                      className={`w-full pl-11 pr-4 py-3 border ${
-                        errors.description
+                      className={`w-full pl-11 pr-4 py-3 border ${errors.description
                           ? "border-red-300"
                           : "border-gray-300"
-                      } rounded-xl focus:ring-2 focus:ring-[#47AAB3] outline-none resize-none`}
+                        } rounded-xl focus:ring-2 focus:ring-[#47AAB3] outline-none resize-none`}
                       placeholder="Please describe the issue..."
                     ></textarea>
                   )}
@@ -312,11 +309,10 @@ export default function ReportIssueForm() {
                     ].map((level) => (
                       <label
                         key={level.value}
-                        className={`flex items-center gap-3 px-5 py-3 rounded-xl border-2 cursor-pointer transition-all ${
-                          field.value === level.value
+                        className={`flex items-center gap-3 px-5 py-3 rounded-xl border-2 cursor-pointer transition-all ${field.value === level.value
                             ? `${level.color} border-2 shadow-md`
                             : "bg-white border-gray-200 hover:border-gray-300"
-                        }`}
+                          }`}
                       >
                         <input
                           {...field}
@@ -326,11 +322,10 @@ export default function ReportIssueForm() {
                           className="w-4 h-4 accent-[#47AAB3]"
                         />
                         <span
-                          className={`text-sm font-medium ${
-                            field.value === level.value
+                          className={`text-sm font-medium ${field.value === level.value
                               ? ""
                               : "text-gray-700"
-                          }`}
+                            }`}
                         >
                           {level.label}
                         </span>
@@ -349,11 +344,10 @@ export default function ReportIssueForm() {
             <button
               type="submit"
               disabled={isPending || showTick}
-              className={`w-full py-4 flex justify-center items-center gap-2 text-white rounded-lg text-base font-semibold transition-all shadow-lg ${
-                showTick
+              className={`w-full py-4 flex justify-center items-center gap-2 text-white rounded-lg text-base font-semibold transition-all shadow-lg ${showTick
                   ? "bg-green-600 hover:bg-green-600"
                   : "bg-gradient-to-r from-[#3b90a0] to-[#2a7080] hover:shadow-xl"
-              }`}
+                }`}
             >
               {showTick ? (
                 <>
@@ -370,13 +364,12 @@ export default function ReportIssueForm() {
             </button>
           </form>
 
-          {showTick && (
-
-  <SuccessModal message='Your issue report has been received.' onClose={() => setShowModal(false)} />
-)}
 
         </div>
       </div>
+          {showTick && (
+            <SuccessModal message='Your issue report has been received.' onClose={() => setShowModal(false)} />
+          )}
     </div>
   );
 }
