@@ -243,7 +243,6 @@ function Jobs() {
                     Upload Your CV
                   </button>
                 </div> */}
-
                 <div className="flex flex-wrap gap-4 sm:gap-6 text-white/80 text-xs sm:text-sm">
                   <div className="flex items-center gap-2">
                     <TrendingUpIcon fontSize="small" />
