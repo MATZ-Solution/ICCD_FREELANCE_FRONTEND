@@ -13,6 +13,7 @@ import {
   User,
   CheckCircle2,
 } from "lucide-react";
+import SuccessModal from "../SuccessModal";
 
 const schema = yup.object().shape({
   fullName: yup
@@ -55,6 +56,8 @@ const issueOptions = [
 
 export default function ReportIssueForm() {
   const [showTick, setShowTick] = useState(false);
+    const [showModal, setShowModal] = useState(false);
+  
 
   const {
     control,
@@ -366,6 +369,12 @@ export default function ReportIssueForm() {
               )}
             </button>
           </form>
+
+          {showTick && (
+
+  <SuccessModal message='Your issue report has been received.' onClose={() => setShowModal(false)} />
+)}
+
         </div>
       </div>
     </div>

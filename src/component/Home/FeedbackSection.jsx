@@ -1,34 +1,54 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import Select from "react-select";
 import { useAddFeedback } from "../../../api/client/feedback";
+import SuccessModal from "../SuccessModal";
 
 const schema = yup.object().shape({
   name: yup.string().required("Name is required"),
   email: yup.string().email("Invalid email").required("Email is required"),
+  userRole: yup.object().nullable().required("Please select a role"),
   message: yup.string().required("Please enter your feedback"),
 });
 
 export default function FeedbackSection() {
+  const [showModal, setShowModal] = useState(false);
+
   const {
     control,
     handleSubmit,
     reset,
-    formState: { errors, isSubmitSuccessful, isSubmitting },
+    formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
   });
 
-  const { addFeedback, isSuccess, isPending, isError, error } = useAddFeedback()
+  const { addFeedback, isSuccess, isPending } = useAddFeedback();
+
   const onSubmit = (data) => {
-    addFeedback(data)
+    const payload = {
+      ...data,
+      userRole: data.userRole?.value,
+    };
+    addFeedback(payload);
   };
 
-  useEffect(()=>{
-    reset()
-  },[isSuccess])
+  useEffect(() => {
+    if (isSuccess) {
+      setShowModal(true);
+      reset();
+      setTimeout(() => setShowModal(false), 2000);
+    }
+  }, [isSuccess, reset]);
+
+  const roleOptions = [
+    { value: "freelancer", label: "Freelancer" },
+    { value: "client", label: "Client" },
+    { value: "visitor", label: "Visitor" },
+  ];
 
   return (
     <section
@@ -50,6 +70,7 @@ export default function FeedbackSection() {
           </div>
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+            {/* Name */}
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">
                 Your Name
@@ -77,6 +98,7 @@ export default function FeedbackSection() {
               )}
             </div>
 
+            {/* Email */}
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">
                 Email Address
@@ -105,6 +127,49 @@ export default function FeedbackSection() {
               )}
             </div>
 
+            {/* Role Dropdown */}
+            <div>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                I am a...
+              </label>
+              <Controller
+                name="userRole"
+                control={control}
+                defaultValue={null}
+                render={({ field }) => (
+                  <Select
+                    {...field}
+                    options={roleOptions}
+                    placeholder="Select your role"
+                    classNamePrefix="react-select"
+                    className="w-full text-sm"
+                    styles={{
+                      control: (base, state) => ({
+                        ...base,
+                        borderColor: errors.userRole
+                          ? "#FCA5A5"
+                          : state.isFocused
+                          ? "#47AAB3"
+                          : "#E5E7EB",
+                        boxShadow: state.isFocused
+                          ? "0 0 0 3px rgba(71,170,179,0.3)"
+                          : "none",
+                        borderWidth: "2px",
+                        borderRadius: "0.75rem",
+                        padding: "2px 4px",
+                      }),
+                    }}
+                  />
+                )}
+              />
+              {errors.userRole && (
+                <p className="text-red-500 text-sm mt-2 flex items-center gap-1">
+                  ⚠️ {errors.userRole.message}
+                </p>
+              )}
+            </div>
+
+            {/* Message */}
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">
                 Your Feedback
@@ -133,6 +198,7 @@ export default function FeedbackSection() {
               )}
             </div>
 
+            {/* Submit Button */}
             <button
               type="submit"
               disabled={isPending}
@@ -150,17 +216,16 @@ export default function FeedbackSection() {
                 </>
               )}
             </button>
-
-            {isSuccess && (
-              <div className="bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-200 text-green-700 px-6 py-4 rounded-xl text-center animate-pulse">
-                <p className="flex items-center justify-center gap-2 font-semibold">
-                  ✅ Thank you! Your feedback has been received.
-                </p>
-              </div>
-            )}
           </form>
         </div>
       </div>
+
+      {showModal && (
+        <SuccessModal
+          message="Thank you for your feedback! We appreciate your input."
+          onClose={() => setShowModal(false)}
+        />
+      )}
     </section>
   );
 }
