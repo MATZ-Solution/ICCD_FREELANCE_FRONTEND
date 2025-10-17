@@ -17,9 +17,6 @@ const validationSchema = Yup.object({
   lastName: Yup.string()
     .required("Last name is required")
     .min(2, "Last name must be at least 2 characters"),
-  displayName: Yup.string()
-    .required("Display name is required")
-    .min(3, "Display name must be at least 3 characters"),
   about_description: Yup.string()
     .required("About description is required")
     .min(50, "Must be at least 50 characters")
@@ -63,7 +60,6 @@ export default function PersonalInfoStep() {
     defaultValues: {
       firstName: "",
       lastName: "",
-      displayName: "",
       about_description: "",
       files: [],
       languages: [],
@@ -225,7 +221,7 @@ export default function PersonalInfoStep() {
         </div>
 
         {/* Display Name */}
-        <div className="grid grid-cols-2 gap-8 items-start">
+        {/* <div className="grid grid-cols-2 gap-8 items-start">
           <div>
             <label className="block font-semibold text-lg mb-2">
               Display Name *
@@ -253,7 +249,7 @@ export default function PersonalInfoStep() {
               </p>
             )}
           </div>
-        </div>
+        </div> */}
 
         {/* Profile Picture */}
         <div className="grid grid-cols-2 gap-8 items-start">

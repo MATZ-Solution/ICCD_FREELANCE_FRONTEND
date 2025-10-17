@@ -37,12 +37,12 @@ function Login({ handleSwitch }) {
       <div className="relative w-full max-w-md">
         <div className="backdrop-blur-xl ">
           {/* Header */}
-          <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-14 h-14 rounded-xl bg-gradient-to-br from-teal-400 to-cyan-500 mb-4 shadow-lg">
+          <div className="flex items-center justify-center gap-5 ">
+            <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-br from-teal-400 to-cyan-500 mb-4 shadow-lg">
               <Lock className="w-7 h-7 text-white" />
             </div>
-            <h2 className="text-3xl font-bold text-black mb-2">Welcome Back</h2>
-            <p className="text-gray-400 text-sm">Login to continue to your account</p>
+            <h2 className="text-3xl font-bold text-black mb-2">Login</h2>
+            {/* <p className="text-gray-400 text-sm">Login to continue to your account</p> */}
           </div>
 
           {/* Form */}
@@ -128,7 +128,7 @@ function Login({ handleSwitch }) {
           </div>
 
           {/* Divider */}
-          <div className="flex items-center gap-3 my-7">
+          <div className="flex items-center gap-3 my-2">
             <div className="flex-1 h-px bg-gradient-to-r from-transparent via-black/20 to-transparent" />
             <span className="text-xs text-gray-500 font-medium">OR</span>
             <div className="flex-1 h-px bg-gradient-to-r from-transparent via-black/20 to-transparent" />
