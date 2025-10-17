@@ -17,9 +17,9 @@ import useDebounce from "../../../hooks/useDebounce.jsx";
 const ProposalModal = lazy(() => import("../../component/ProposalModal"));
 
 function Jobs() {
-  const [city, setCity] = useState("");
-  const [country, setCountry] = useState("");
-  const [jobTitle, setJobTitle] = useState("");
+  const [city, setCity] = useState("")
+  const [country, setCountry] = useState("")
+  const [jobTitle, setJobTitle] = useState("")
   const [show, setShow] = useState(false);
   const [page, setPage] = useState(1);
   const [mobileJobModal, setMobileJobModal] = useState(false);

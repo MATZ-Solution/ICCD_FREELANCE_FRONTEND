@@ -4,6 +4,7 @@ import {
   Home,
   Users,
   ShoppingCart,
+  Trophy,
   Briefcase,
   FileText,
   Settings,
@@ -97,6 +98,15 @@ const SuperAdminDashboard = () => {
       gradient: "from-orange-500 to-red-500",
       description: `${freelancers?.length} freelancers`
     },
+    {
+      title: "Awarded Jobs",
+      value: data[0]?.awarded_jobs || 0,
+      change: 5.7,
+      trend: "up",
+      icon: Trophy,
+      gradient: "from-yellow-500 to-red-500",
+      description: `${freelancers?.length} freelancers`
+    },
   ];
 
   if(isLoading) return <DataLoader />
@@ -156,7 +166,7 @@ const SuperAdminDashboard = () => {
           </div> */}
 
           {/* Stats Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6">
             {statsCards?.map((card, index) => (
               <div
                 key={index}
