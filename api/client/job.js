@@ -44,6 +44,30 @@ export function useGetJobById(id) {
   };
 }
 
+export function useGetJobByIdFreelancer(params = {}) {
+  console.log("params: ", params)
+  const { id, freelancerId } = params
+  const constructQueryString = (params) => {
+    const query = new URLSearchParams(params).toString();
+    return query ? `&${query}` : "";
+  };
+  const { data, isSuccess, isPending, isError, isLoading } = useQuery({
+    queryKey: [API_ROUTE.job.getJobByIdFreelancer, params],
+    queryFn: async () => await api.get(`${API_ROUTE.job.getJobByIdFreelancer}?${constructQueryString(params)}`),
+    enabled: id !== undefined && id !== null && freelancerId !== undefined && freelancerId !== null
+    // refetchOnWindowFocus: true,
+    // staleTime: 0,
+    // refetchOnMount: true,
+  });
+  return {
+    data: data?.data?.data,
+    isSuccess,
+    isPending,
+    isError,
+    isLoading,
+  };
+}
+
 // infinite query
 export function useGetScoutFilterEntries(params = {}) {
   const constructQueryString = (params) => {
@@ -69,36 +93,36 @@ export function useGetScoutFilterEntries(params = {}) {
 }
 
 export function useAddJob() {
-    // const pathname = usePathname();
-    // const queryClient = useQueryClient();
-    // const { dispatch } = useGlobalState();
+  // const pathname = usePathname();
+  // const queryClient = useQueryClient();
+  // const { dispatch } = useGlobalState();
 
-    const { mutate: addjob, isSuccess, isPending, isError, error} = useMutation({
-        mutationFn: async (data) =>
-            await api.post(`${API_ROUTE.job.addJob}`, data, {
-                headers: {
-                    "Content-Type": "application/json",
-                    
-                    Authorization: api.defaults.headers.common["Authorization"],
-                },
-                timeout: 30000,
-            }),
-        onSuccess: (data) => {
-           toast.success("Job Added successfully!")
-            
+  const { mutate: addjob, isSuccess, isPending, isError, error } = useMutation({
+    mutationFn: async (data) =>
+      await api.post(`${API_ROUTE.job.addJob}`, data, {
+        headers: {
+          "Content-Type": "application/json",
 
+          Authorization: api.defaults.headers.common["Authorization"],
         },
-        onError: (error) => {
-            // Toast.show({
-            //     type: "error",
-            //     text1: "Error",
-            //     text2: "Failed to edit scout",
-            // });
-          toast.error("Error In Addding Job Added !")
+        timeout: 30000,
+      }),
+    onSuccess: (data) => {
+      toast.success("Job Added successfully!")
 
-        },
-    });
-    return { addjob, isSuccess, isPending, isError, error };
+
+    },
+    onError: (error) => {
+      // Toast.show({
+      //     type: "error",
+      //     text1: "Error",
+      //     text2: "Failed to edit scout",
+      // });
+      toast.error("Error In Addding Job Added !")
+
+    },
+  });
+  return { addjob, isSuccess, isPending, isError, error };
 }
 // get project
 export function useGetJob(params = {}) {
@@ -173,7 +197,7 @@ export function useEditJobs(id) {
         timeout: 30000,
       }),
     onSuccess: (data) => {
-       queryClient.invalidateQueries({
+      queryClient.invalidateQueries({
         queryKey: [API_ROUTE.job.getJobsByClient],
       });
       toast.success("Job Edit Successfully")
@@ -184,7 +208,7 @@ export function useEditJobs(id) {
       //     text1: "Error",
       //     text2: "Failed to edit scout",
       // });
-            toast.error("Error in Editing Job ! ")
+      toast.error("Error in Editing Job ! ")
 
     },
   });
@@ -192,31 +216,31 @@ export function useEditJobs(id) {
 }
 
 export function useApplyJob() {
-    
-    const { mutate: submitJob, isSuccess, isPending, isError, error} = useMutation({
-        mutationFn: async (data) =>
-            await api.post(`${API_ROUTE.job.applyjob}`, data, {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                    Authorization: api.defaults.headers.common["Authorization"],
-                },
-                timeout: 30000,
-            }),
-        onSuccess: (data) => {
-                  toast.success("CV send successfully!")
 
+  const { mutate: submitJob, isSuccess, isPending, isError, error } = useMutation({
+    mutationFn: async (data) =>
+      await api.post(`${API_ROUTE.job.applyjob}`, data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: api.defaults.headers.common["Authorization"],
         },
-        onError: (error) => {
-            // Toast.show({
-            //     type: "error",
-            //     text1: "Error",
-            //     text2: "Failed to edit scout",
-            // });
-                              toast.success("Failed to Send CV send !")
+        timeout: 30000,
+      }),
+    onSuccess: (data) => {
+      toast.success("CV send successfully!")
 
-        },
-    });
-    return { submitJob, isSuccess, isPending, isError, error };
+    },
+    onError: (error) => {
+      // Toast.show({
+      //     type: "error",
+      //     text1: "Error",
+      //     text2: "Failed to edit scout",
+      // });
+      toast.success("Failed to Send CV send !")
+
+    },
+  });
+  return { submitJob, isSuccess, isPending, isError, error };
 }
 
 
@@ -253,12 +277,12 @@ export function useJobCloseById(id) {
         timeout: 30000,
       }),
     onSuccess: (data) => {
-       queryClient.invalidateQueries({
+      queryClient.invalidateQueries({
       });
       toast.success("Job Close Successfully")
     },
     onError: (error) => {
-            toast.error("Error in Closing Job ! ")
+      toast.error("Error in Closing Job ! ")
 
     },
   });
@@ -287,7 +311,7 @@ export function useJobProposalAction() {
       });
     },
     onSuccess: () => {
-       queryClient.invalidateQueries({
+      queryClient.invalidateQueries({
         queryKey: [API_ROUTE.job.getJobById],
       });
       queryClient.invalidateQueries({
