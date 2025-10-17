@@ -31,10 +31,7 @@ function Login({ handleSwitch }) {
 
   return (
     <div className=" w-full flex items-center justify-center  relative  ">
-      {/* Decorative blob */}
-
-      {/* Main Card */}
-      <div className="relative w-full max-w-md">
+\      <div className="relative w-full max-w-md">
         <div className="backdrop-blur-xl ">
           {/* Header */}
           <div className="text-center mb-8">
