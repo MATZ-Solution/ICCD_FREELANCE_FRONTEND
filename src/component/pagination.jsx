@@ -14,8 +14,8 @@ export default function Pagination({
           onClick={() => onPageChange(currentPage - 1)}
           className={`flex items-center justify-center w-8 h-8 rounded-full transition-all duration-300
             ${currentPage === 1
-              ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-              : "bg-white text-[#15A9B2] hover:bg-gray-100"
+              ? "bg-gray-200 text-black cursor-not-allowed"
+              : "bg-white text-black hover:bg-black"
             }`}
         >
           <ChevronLeft size={16} />
