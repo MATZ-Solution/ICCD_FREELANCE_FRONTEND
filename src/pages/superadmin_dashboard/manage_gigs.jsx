@@ -1,70 +1,22 @@
 import { useState, memo } from "react";
 import { Search, Box, TrendingUp, Sparkles, Calendar, User, Tag, Eye, Layers } from "lucide-react";
+import useDebounce from "../../../hooks/useDebounce";
+import { useGetAllGigs } from "../../../api/client/superadmin";
+import DataLoader from "./DataLoader";
+import ICCDError from "../../component/ICCDError";
+import { formatDate } from "../../../functions/timeFormat";
 
 const ManageGigs = () => {
   const [search, setSearch] = useState("");
+  const { data, isSuccess, isPending, isError, isLoading } = useGetAllGigs({ search: useDebounce(search) })
 
-  // Mock data for demo
-  const gigs = [
-    {
-      id: 1,
-      title: "Professional Logo Design",
-      category: "Graphic Design",
-      subCategory: "Logo & Brand Identity",
-      description: "I will create a unique and professional logo for your business with unlimited revisions and multiple file formats",
-      freelancer_id: "FL-2024-001",
-      created_at: "2024-10-01",
-      price: "$150"
-    },
-    {
-      id: 2,
-      title: "React Website Development",
-      category: "Web Development",
-      subCategory: "Frontend Development",
-      description: "Full-featured responsive website using React, Tailwind CSS, and modern web technologies with clean code",
-      freelancer_id: "FL-2024-002",
-      created_at: "2024-10-05",
-      price: "$500"
-    },
-    {
-      id: 3,
-      title: "SEO Optimization Service",
-      category: "Digital Marketing",
-      subCategory: "SEO",
-      description: "Complete SEO audit and optimization to improve your website ranking on search engines",
-      freelancer_id: "FL-2024-003",
-      created_at: "2024-10-10",
-      price: "$200"
-    },
-    {
-      id: 4,
-      title: "Mobile App UI Design",
-      category: "Design",
-      subCategory: "Mobile UI/UX",
-      description: "Modern and intuitive mobile app interface design with prototypes and design system",
-      freelancer_id: "FL-2024-004",
-      created_at: "2024-10-12",
-      price: "$350"
-    }
-  ];
-
-  const handleView = (id) => {
-    console.log("View gig:", id);
-  };
-
-  const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    });
-  };
-
-  const filteredGigs = gigs?.filter(
-    (gig) =>
-      gig.title?.toLowerCase().includes(search.toLowerCase()) ||
-      gig.category?.toLowerCase().includes(search.toLowerCase())
-  );
+  // const filteredGigs = gigs?.filter(
+  //   (gig) =>
+  //     gig.title?.toLowerCase().includes(search.toLowerCase()) ||
+  //     gig.category?.toLowerCase().includes(search.toLowerCase())
+  // );
+  if (isLoading) return <DataLoader />;
+  if (isError) return <ICCDError />
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-teal-50/30 to-cyan-50/20">
@@ -90,9 +42,9 @@ const ManageGigs = () => {
                   <p className="text-slate-600 flex items-center gap-2 text-lg">
                     <TrendingUp className="w-4 h-4 text-[#4EB5AE]" />
                     Manage and view all freelancer gigs •{" "}
-                    <span className="font-bold text-[#4EB5AE]">
+                    {/* <span className="font-bold text-[#4EB5AE]">
                       {gigs.length} total
-                    </span>
+                    </span> */}
                   </p>
                 </div>
               </div>
@@ -116,7 +68,7 @@ const ManageGigs = () => {
             </div>
 
             {/* Stats Bar */}
-            <div className="mt-8 pt-6 border-t border-slate-200/60">
+            {/* <div className="mt-8 pt-6 border-t border-slate-200/60">
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <StatBadge
                   label="Total Gigs"
@@ -134,16 +86,15 @@ const ManageGigs = () => {
                   icon={<Calendar className="w-4 h-4" />}
                 />
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
-
         {/* Gigs Grid */}
-        {filteredGigs?.length > 0 ? (
+        {data?.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-            {filteredGigs.map((gig, idx) => (
+            {data?.map((gig, idx) => (
               <div
-                key={gig.id}
+                key={gig?.id}
                 className="group relative bg-white/80 backdrop-blur-xl rounded-2xl shadow-lg shadow-slate-200/50 border border-white/60
                            hover:shadow-2xl hover:shadow-teal-200/50 hover:border-[#4EB5AE]/40
                            transition-all duration-500 transform hover:-translate-y-2 overflow-hidden"
@@ -151,16 +102,16 @@ const ManageGigs = () => {
               >
                 {/* Gradient Accent */}
                 <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#4EB5AE] via-[#2DD4BF] to-[#4EB5AE]"></div>
-                
+
                 {/* Background Glow Effect */}
                 <div className="absolute -top-24 -right-24 w-48 h-48 bg-gradient-to-br from-[#4EB5AE]/20 to-[#2DD4BF]/20 rounded-full blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                
+
                 <div className="relative p-6 flex flex-col gap-5 h-full">
                   {/* Category Badge */}
                   <div className="flex items-center justify-between gap-2">
                     <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-[#4EB5AE]/10 to-[#2DD4BF]/10 text-[#3C9299] text-xs font-bold rounded-full border border-[#4EB5AE]/30">
                       <Tag className="w-3 h-3" />
-                      {gig.category}
+                      {gig?.category}
                     </span>
                     {gig.price && (
                       <span className="text-lg font-bold text-[#4EB5AE]">
@@ -194,7 +145,7 @@ const ManageGigs = () => {
                     <div className="flex items-center justify-between p-3 bg-gradient-to-br from-slate-50 to-teal-50/30 rounded-xl border border-slate-200/60">
                       <div className="flex items-center gap-2 text-slate-600">
                         <User className="w-4 h-4 text-[#4EB5AE]" />
-                        <span className="text-xs font-semibold">Freelancer</span>
+                        <span className="text-xs font-semibold">Freelancer ID</span>
                       </div>
                       <span className="text-sm font-bold text-slate-900 font-mono">
                         {gig.freelancer_id}
@@ -212,7 +163,7 @@ const ManageGigs = () => {
                     </div>
                   </div>
 
-                 
+
                 </div>
               </div>
             ))}

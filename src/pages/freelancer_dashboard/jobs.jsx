@@ -80,7 +80,7 @@ function Jobs() {
     return (
       (jobDetails?.length > 0) &&
       jobDetails?.map((job, index) => (
-        <div key={index} className="w-full  p-4 sm:p-6 lg:p-8 animate-fadeIn">
+        <div key={index} className="w-full p-4 sm:p-6 lg:p-8 animate-fadeIn">
           {/* Header with glassmorphism effect */}
           <div className="bg-gradient-to-r from-[#44A4AD]/10 to-transparent p-4 sm:p-6 rounded-2xl mb-4 sm:mb-6 border border-[#44A4AD]/20">
             <div className="flex items-start justify-between mb-3 sm:mb-4">
@@ -224,7 +224,7 @@ function Jobs() {
                   🚀 {allJobs?.length || 0}+ Active Opportunities
                 </div>
                 
-                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6 leading-tight animate-slideUp">
+                <h1 className="text-2xl sm:text-3xl md:text-4xl  font-bold text-white mb-4 sm:mb-6 leading-tight animate-slideUp">
                   Discover Your Next
                   <span className="block mt-1 sm:mt-2 bg-gradient-to-r from-white via-yellow-100 to-white bg-clip-text text-transparent">
                     Career Adventure
@@ -264,7 +264,7 @@ function Jobs() {
               <div className="hidden lg:flex justify-center items-center">
                 <div className="relative w-full max-w-md animate-float">
                   {/* 3D Isometric Job Cards Illustration */}
-                  <svg viewBox="0 0 400 400" className="w-full h-auto drop-shadow-2xl">
+                  <svg viewBox="0 0 400 400" className="w-full h-[50vh] drop-shadow-2xl">
                     <g opacity="0.6" transform="translate(50, 20) rotate(-10)">
                       <rect x="0" y="0" width="120" height="150" rx="12" fill="white"/>
                       <rect x="15" y="20" width="90" height="12" rx="4" fill="#44A4AD"/>

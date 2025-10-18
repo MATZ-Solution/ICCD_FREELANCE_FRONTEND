@@ -44,17 +44,12 @@ export function useGetJobById(id) {
   };
 }
 
-export function useGetJobByIdFreelancer(params = {}) {
-  console.log("params: ", params)
-  const { id, freelancerId } = params
-  const constructQueryString = (params) => {
-    const query = new URLSearchParams(params).toString();
-    return query ? `&${query}` : "";
-  };
+export function useGetJobShortlistCandidate(id) {
+
   const { data, isSuccess, isPending, isError, isLoading } = useQuery({
-    queryKey: [API_ROUTE.job.getJobByIdFreelancer, params],
-    queryFn: async () => await api.get(`${API_ROUTE.job.getJobByIdFreelancer}?${constructQueryString(params)}`),
-    enabled: id !== undefined && id !== null && freelancerId !== undefined && freelancerId !== null
+    queryKey: [API_ROUTE.job.getJobShortListCandidate, id],
+    queryFn: async () => await api.get(`${API_ROUTE.job.getJobShortListCandidate}/${id}`),
+    enabled: id !== undefined && id !== null 
     // refetchOnWindowFocus: true,
     // staleTime: 0,
     // refetchOnMount: true,
