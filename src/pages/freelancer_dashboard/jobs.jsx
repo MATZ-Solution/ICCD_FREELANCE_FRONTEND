@@ -80,7 +80,7 @@ function Jobs() {
     return (
       (jobDetails?.length > 0) &&
       jobDetails?.map((job, index) => (
-        <div key={index} className="w-full p-4 sm:p-6 lg:p-8 animate-fadeIn">
+        <div key={index} className="w-full  p-4 sm:p-6 lg:p-8 animate-fadeIn">
           {/* Header with glassmorphism effect */}
           <div className="bg-gradient-to-r from-[#44A4AD]/10 to-transparent p-4 sm:p-6 rounded-2xl mb-4 sm:mb-6 border border-[#44A4AD]/20">
             <div className="flex items-start justify-between mb-3 sm:mb-4">
@@ -224,7 +224,7 @@ function Jobs() {
                   🚀 {allJobs?.length || 0}+ Active Opportunities
                 </div>
                 
-                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-bold text-white mb-4 sm:mb-6 leading-tight animate-slideUp">
+                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6 leading-tight animate-slideUp">
                   Discover Your Next
                   <span className="block mt-1 sm:mt-2 bg-gradient-to-r from-white via-yellow-100 to-white bg-clip-text text-transparent">
                     Career Adventure
@@ -488,7 +488,7 @@ function Jobs() {
 
           {/* Right: Job Details - Desktop Only */}
           <div className="hidden lg:block lg:w-1/2">
-            <div className="sticky top-6 bg-white rounded-2xl border-2 border-gray-200 max-h-[calc(100vh-120px)] overflow-y-auto shadow-lg">
+            <div className="sticky top-6 bg-white rounded-2xl border-2 border-gray-200 max-h-[92vh] overflow-y-auto shadow-lg">
               {renderJobDetails()}
             </div>
           </div>
