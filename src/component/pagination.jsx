@@ -1,42 +1,43 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-export default function Pagination({
-  currentPage,
-  totalPages,
-  onPageChange,
-}) {
+export default function Pagination({ currentPage, totalPages, onPageChange }) {
+  const isFirst = currentPage === 1;
+  const isLast = currentPage === totalPages;
+
   return (
-    <div className="flex items-center justify-center mt-6">
-      <div className="flex items-center justify-between bg-[#0E7D84] px-4 py-2 rounded-full shadow-md w-56">
+    <div className="flex items-center justify-center mt-8">
+      <div className="flex items-center gap-6 bg-white/90 backdrop-blur-sm border border-gray-200 rounded-full shadow-lg px-6 py-3">
         {/* Prev Button */}
         <button
-          disabled={currentPage === 1}
+          disabled={isFirst}
           onClick={() => onPageChange(currentPage - 1)}
-          className={`flex items-center justify-center w-8 h-8 rounded-full transition-all duration-300
-            ${currentPage === 1
-              ? "bg-gray-200 text-black cursor-not-allowed"
-              : "bg-white text-black hover:bg-black"
+          className={`flex items-center justify-center w-9 h-9 rounded-full transition-all duration-300 
+            ${isFirst
+              ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+              : "bg-[#0E7D84] text-white hover:bg-[#09686F] hover:scale-105"
             }`}
         >
-          <ChevronLeft size={16} />
+          <ChevronLeft size={18} />
         </button>
 
         {/* Page Info */}
-        <span className="text-sm font-medium text-white">
-          {currentPage} <span className="text-gray-200">of</span> {totalPages}
+        <span className="text-sm font-medium text-gray-800">
+          Page <span className="font-semibold text-[#0E7D84]">{currentPage}</span>{" "}
+          <span className="text-gray-500">/</span>{" "}
+          <span className="font-semibold text-gray-700">{totalPages}</span>
         </span>
 
         {/* Next Button */}
         <button
-          disabled={currentPage === totalPages}
+          disabled={isLast}
           onClick={() => onPageChange(currentPage + 1)}
-          className={`flex items-center justify-center w-8 h-8 rounded-full transition-all duration-300 
-            ${currentPage === totalPages
-              ? "bg-gray-200 text-gray-400 cursor-not-allowed"
-              : "bg-[#15A9B2] text-white hover:bg-[#129199]"
+          className={`flex items-center justify-center w-9 h-9 rounded-full transition-all duration-300 
+            ${isLast
+              ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+              : "bg-[#0E7D84] text-white hover:bg-[#09686F] hover:scale-105"
             }`}
         >
-          <ChevronRight size={16} />
+          <ChevronRight size={18} />
         </button>
       </div>
     </div>
