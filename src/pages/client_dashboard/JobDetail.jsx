@@ -17,6 +17,7 @@ import {
   getJobPropsalByClient,
   useJobCloseById,
   useJobProposalAction,
+  useGetJobShortlistCandidate,
 } from "../../../api/client/job";
 import { useParams } from "react-router-dom";
 import { downloadFile } from "../../../functions/download_pdf";
@@ -27,19 +28,17 @@ import { useState } from "react";
 export default function JobDetailPage() {
   const { id } = useParams();
   const { data, isSuccess, isPending, isError, isLoading } = useGetJobById(id);
+  const { data: shorlistCand,  isPending: shorlistCandIsPend, isError: shorlistCandIsErr, isLoading: shorlistCandIsLoad } = useGetJobShortlistCandidate(id);
+  console.log("shorlistCand", shorlistCand);
+
   const { jobProposals, error } = getJobPropsalByClient({ id });
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { closejob } = useJobCloseById(id);
   const { updateProposalAction, isLoading: actionloading } =
     useJobProposalAction();
 
-  if (isLoading || isPending) {
-    return <ICCDLoader />;
-  }
-
-  if (isError) {
-    return <ICCDError message={isError} />;
-  }
+  if (isLoading || isPending) return <ICCDLoader />
+  if (isError) return <ICCDError message={isError} />
 
   if (!data || data.length === 0) {
     return (
@@ -104,11 +103,10 @@ export default function JobDetailPage() {
           {/* Stats Bar */}
           <div className="bg-gray-50 px-6 py-6 border-t">
             <div
-              className={`grid grid-cols-1 sm:grid-cols-2 ${
-                jobData?.status !== "closed"
-                  ? "lg:grid-cols-4"
-                  : "lg:grid-cols-3"
-              } gap-4`}
+              className={`grid grid-cols-1 sm:grid-cols-2 ${jobData?.status !== "closed"
+                ? "lg:grid-cols-4"
+                : "lg:grid-cols-3"
+                } gap-4`}
             >
               <StatCard
                 icon={<Users className="w-6 h-6 text-green-600" />}
@@ -233,7 +231,6 @@ export default function JobDetailPage() {
     </div>
   );
 }
-
 /* ----------------- COMPONENTS ----------------- */
 
 function StatCard({ icon, bg, title, value, valueClass }) {
@@ -247,9 +244,8 @@ function StatCard({ icon, bg, title, value, valueClass }) {
       <div>
         <p className="text-sm text-gray-600">{title}</p>
         <p
-          className={` capitalize font-semibold ${
-            valueClass || "text-gray-900"
-          }`}
+          className={` capitalize font-semibold ${valueClass || "text-gray-900"
+            }`}
         >
           {value}
         </p>
@@ -484,9 +480,8 @@ function JobInfoCard({ jobData }) {
           icon={<Users className="w-4 h-4 text-purple-600" />}
           bg="bg-purple-100"
           title="Open Positions"
-          value={`${jobData?.totalPersontoHire} ${
-            jobData?.totalPersontoHire === 1 ? "opening" : "openings"
-          }`}
+          value={`${jobData?.totalPersontoHire} ${jobData?.totalPersontoHire === 1 ? "opening" : "openings"
+            }`}
           valueClass="text-purple-700"
         />
       </div>
@@ -525,6 +520,10 @@ function ApplicationProgress({ applications, totalPositions }) {
       </div>
       <div className="p-4">
         <div className="space-y-3">
+          <div className="flex justify-between items-center">
+            <span className="text-sm text-gray-600">Shortlisted Candidate</span>
+            <span className="font-semibold text-gray-900">{applications}</span>
+          </div>
           <div className="flex justify-between items-center">
             <span className="text-sm text-gray-600">Applications received</span>
             <span className="font-semibold text-gray-900">{applications}</span>

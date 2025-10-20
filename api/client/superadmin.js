@@ -10,7 +10,7 @@ export function useGetAllUsers(params = {}) {
 
   const queryKey = [API_ROUTE.superadmin.getAllUsers, params];
 
-  const { data, error, isLoading, isError } = useQuery({
+  const { data, error, isLoading, isError, isPending } = useQuery({
     queryKey,
     queryFn: () =>
       api.get(`${API_ROUTE.superadmin.getAllUsers}${constructQueryString(params)}`),
@@ -21,10 +21,10 @@ export function useGetAllUsers(params = {}) {
     totalPages: data?.data?.totalPages,
     error,
     isLoading,
+    isPending,
     isError,
   };
 }
-
 
 export function useGetAllFreelancers(params = {}) {
   const constructQueryString = (params) => {
@@ -69,7 +69,6 @@ export function useGetAllGigs(params = {}) {
     isError,
   };
 }
-
 
 export function useGetAllProjects(params = {}) {
   const constructQueryString = (params) => {
@@ -116,6 +115,8 @@ export function useGetAllJobs(params = {}) {
     isLoading,
   };
 }
+
+
 
 export function useGetStatisticsData(params = {}) {
   const constructQueryString = (params) => {

@@ -1,11 +1,12 @@
-import { useState, memo } from "react";
-import { Search, Users, User } from "lucide-react";
+import { useState, memo, useEffect } from "react";
+import { Search, Users, User, TrendingUp, Sparkles } from "lucide-react";
 import { useGetAllUsers } from "../../../api/client/superadmin";
 import DataError from "./DataError";
 import useDebounce from "../../../hooks/useDebounce";
 import DataLoader from "./DataLoader";
 import { formatDate, getRelativeTime } from "../../../functions/timeFormat";
 import Pagination from "../../component/pagination";
+import ICCDError from "../../component/ICCDError";
 
 const SORT_OPTIONS = [
   { value: "name", label: "Name" },
@@ -28,62 +29,79 @@ function ManageUsers() {
   const { data, totalPages, isLoading, isError, error } = useGetAllUsers({ search: useDebounce(search), page });
 
   if (isLoading) return <DataLoader />;
-  if (isError) return <DataError onclickfunction={handleRefresh} tag="Users" />;
+  if (isError) return <ICCDError />
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
       <div className="px-4 sm:px-6 lg:px-8 py-8 max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <div className="px-8 py-3">
-            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-6">
-              <div className="flex items-center gap-4">
-                <div className="p-4 bg-gradient-to-r from-[#3C9299] via-[#2DD4BF] to-[#3C9299] rounded-2xl shadow-lg shadow-blue-500/30">
-                  <Users className="w-8 h-8 text-white" />
+          <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-xl shadow-teal-200/30 border border-white/60 p-8">
+            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+              <div className="flex items-center gap-5">
+                <div className="relative">
+                  <div className="absolute inset-0 bg-gradient-to-r from-[#4EB5AE] to-[#2DD4BF] rounded-2xl blur-xl opacity-40 animate-pulse"></div>
+                  <div className="relative p-4 bg-gradient-to-br from-[#4EB5AE] via-[#3C9299] to-[#2DD4BF] rounded-2xl shadow-lg shadow-teal-500/40">
+                    <Users className="w-8 h-8 text-white" />
+                  </div>
                 </div>
                 <div>
-                  <h1 className="text-3xl font-bold text-slate-800">
-                    User Management
-                  </h1>
-                  <p className="text-slate-600 mt-1">
-                    Manage and monitor all system users
+                  <div className="flex items-center gap-2 mb-2">
+                    <h1 className="text-3xl sm:text-4xl font-bold text-black bg-clip-text ">
+                      User Management
+                    </h1>
+                    <Sparkles className="w-6 h-6 text-[#4EB5AE]" />
+                  </div>
+                  <p className="text-slate-600 flex items-center gap-2 text-lg">
+                    <TrendingUp className="w-4 h-4 text-[#4EB5AE]" />
+                    Manage and monitor all system users •{" "}
+                    {/* <span className="font-bold text-[#4EB5AE]">
+                      {gigs.length} total
+                    </span> */}
                   </p>
                 </div>
               </div>
 
-              <div className="flex flex-col sm:flex-row gap-3">
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-slate-400" />
-                  <input
-                    type="text"
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                    className="w-full sm:w-80 pl-10 pr-4 py-3 border border-slate-200 rounded-xl bg-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
-                    placeholder="Search users..."
-                  />
+              {/* Search Bar */}
+              <div className="relative group lg:min-w-96">
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                  <Search className="h-5 w-5 text-slate-400 group-focus-within:text-[#4EB5AE] transition-colors" />
                 </div>
+                <input
+                  type="text"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  className="block w-full pl-12 pr-4 py-4 border border-slate-200 rounded-xl
+                             bg-slate-50 placeholder-slate-400 focus:outline-none focus:ring-2
+                             focus:ring-[#4EB5AE]/20 focus:border-[#4EB5AE] focus:bg-white
+                             transition-all duration-300 shadow-sm hover:shadow-md font-medium"
+                  placeholder="Search gigs by title or category..."
+                />
               </div>
             </div>
 
-            {/* Stats */}
-            {/* <div className="mt-6 pt-6 border-t border-slate-200">
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div className="bg-gradient-to-r from-blue-50 to-blue-100 p-4 rounded-xl">
-                  <div className="flex items-center gap-3">
-                    <Users className="w-6 h-6 text-blue-600" />
-                    <div>
-                      <p className="text-xl font-bold text-blue-800">
-                        {data?.length}
-                      </p>
-                      <p className="text-blue-600 text-xs">Total Users</p>
-                    </div>
-                  </div>
-                </div>
+            {/* Stats Bar */}
+            {/* <div className="mt-8 pt-6 border-t border-slate-200/60">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <StatBadge
+                  label="Total Gigs"
+                  value={filteredGigs?.length || 0}
+                  icon={<Layers className="w-4 h-4" />}
+                />
+                <StatBadge
+                  label="Categories"
+                  value={new Set(gigs.map(g => g.category)).size}
+                  icon={<Tag className="w-4 h-4" />}
+                />
+                <StatBadge
+                  label="Last Updated"
+                  value={new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                  icon={<Calendar className="w-4 h-4" />}
+                />
               </div>
             </div> */}
           </div>
         </div>
-
         {/* Table */}
         <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-x-auto">
           {data?.length > 0 ? (
@@ -159,12 +177,12 @@ function ManageUsers() {
                   ? `No users match "${search}"`
                   : "No users in the system yet"}
               </p>
-              <button
-                onClick={handleRefresh}
-                className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-xl font-medium transition-colors duration-200"
-              >
-                Refresh
-              </button>
+              {/* <button
+                      onClick={handleRefresh}
+                      className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-xl font-medium transition-colors duration-200"
+                    >
+                      Refresh
+                    </button> */}
             </div>
           )}
         </div>
@@ -175,6 +193,7 @@ function ManageUsers() {
           onPageChange={(newPage) => setPage(newPage)}
         />
       </div>
+      )
     </div>
   );
 }
