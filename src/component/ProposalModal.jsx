@@ -1,23 +1,27 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import { useApplyProject } from '../../api/client/project';
 import { useLocation } from 'react-router-dom';
 import { useApplyJob } from '../../api/client/job';
-import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
+import { X, Upload, FileText, CheckCircle, ChevronDown } from 'lucide-react';
 
 const schema = yup.object().shape({
-    name: yup.string().required('Name is required'),
+    projectTitle: yup.string().required('Project title is required'),
+    freelancerName: yup.string().required('Name is required'),
     email: yup.string().email('Invalid email').required('Email is required'),
-    experience: yup
-        .number()
-        .typeError('Must be a number')
-        .min(0, 'Cannot be negative')
-        .required('Experience is required'),
-    files: yup
-        .mixed()
-        .test('fileExists', 'Please upload your CV', (value) => value?.length > 0)
+    coverLetter: yup.string().min(50, 'Cover letter must be at least 50 characters').required('Cover letter is required'),
+    proposedDeliverables: yup.string().required('Please list your proposed deliverables'),
+    estimatedTime: yup.number().min(1, 'Time must be greater than 0').required('Estimated time is required'),
+    timeUnit: yup.string().required('Time unit is required'),
+    proposedBudget: yup.number().min(0, 'Budget cannot be negative').required('Proposed budget is required'),
+    currency: yup.string().required('Currency is required'),
+    paymentTerms: yup.string().required('Payment terms is required'),
+    portfolioLinks: yup.string().url('Enter valid URL').required('Portfolio link is required'),
+    additionalComments: yup.string(),
+    acknowledgment: yup.boolean().oneOf([true], 'You must acknowledge the terms'),
+    CV: yup.mixed().test('fileExists', 'Please upload your CV', (value) => value?.length > 0)
         .test('fileType', 'Only PDF or DOCX allowed', (value) => {
             if (!value?.[0]) return false;
             return ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'].includes(
@@ -27,190 +31,485 @@ const schema = yup.object().shape({
 });
 
 const ProposalModal = ({ onClose, data, freelancerData }) => {
-    console.log("freelancerData: ", freelancerData)
-    const { firstName, lastName, id: freelancerId, email } = freelancerData
-    const clientID = data[0]?.clientID
-    const projectID = data[0]?.id
-    const pathName = useLocation().pathname
+    const [fileName, setFileName] = useState('');
+    const [sampleFiles, setSampleFiles] = useState([]);
+    const [isDragging, setIsDragging] = useState(false);
+    const [step, setStep] = useState(1);
+
+    const { firstName, lastName, id: freelancerId, email } = freelancerData;
+    const clientID = data[0]?.clientID;
+    const projectID = data[0]?.id;
+    const projectTitle = data[0]?.title;
+    const pathName = useLocation().pathname;
+
     const {
         register,
         handleSubmit,
         formState: { errors },
+        setValue,
+        watch,
     } = useForm({
         resolver: yupResolver(schema),
+        mode: 'onBlur',
         defaultValues: {
-            name: firstName + " " + lastName,
-            email: email
-        }
+            projectTitle: projectTitle || '',
+            freelancerName: firstName + " " + lastName,
+            email: email,
+            timeUnit: 'days',
+            currency: 'USD',
+            paymentTerms: 'fixed',
+        },
     });
-    const { submitProposals, isSuccess, isPending, isError, error } = useApplyProject()
-    const { submitJob } = useApplyJob()
 
-    const onSubmit = (data) => {
-        const updateData = { ...data, projectId: projectID, clientId: clientID, freelancerId: freelancerId }
-        const formData = new FormData()
+    const { submitProposals, isPending } = useApplyProject();
+    const { submitJob } = useApplyJob();
+    const acknowledgment = watch('acknowledgment');
+
+    const onSubmit = (formData) => {
+        const updateData = {
+            ...formData,
+            projectId: projectID,
+            clientId: clientID,
+            freelancerId: freelancerId,
+        };
+        
+        const formDataObj = new FormData();
         for (const key in updateData) {
-            if (key === 'files') {
-                formData.append("files", updateData.files[0]);
-            }
-            else if (Array.isArray(updateData[key])) {
-                formData.append(key, JSON.stringify(updateData[key]));
-            }
-            else {
-                formData.append(key, updateData[key])
+            if (key === 'CV') {
+                if (updateData.CV?.[0]) formDataObj.append('CV', updateData.CV[0]);
+            } else if (Array.isArray(updateData[key])) {
+                formDataObj.append(key, JSON.stringify(updateData[key]));
+            } else {
+                formDataObj.append(key, updateData[key]);
             }
         }
-        // submitProposals(formData)
+
+        sampleFiles.forEach((file) => {
+            formDataObj.append('sampleFiles', file);
+        });
+
         if (pathName.includes('manage-jobs')) {
-            submitJob(formData)
+            submitJob(formDataObj);
+                        console.log('Submitted Proposal:', updateData);
+
         } else {
-            submitProposals(formData)
+            submitProposals(formDataObj);
+            console.log('Submitted Proposal:', updateData);
         }
-        onClose()
+        onClose();
     };
 
+    const handleFileChange = (e) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            setFileName(file.name);
+            setValue('CV', e.target.files);
+        }
+    };
+
+    const handleSampleFiles = (e) => {
+        const files = Array.from(e.target.files || []);
+        setSampleFiles([...sampleFiles, ...files]);
+    };
+
+    const removeSampleFile = (index) => {
+        setSampleFiles(sampleFiles.filter((_, i) => i !== index));
+    };
+
+    const handleDragOver = (e) => {
+        e.preventDefault();
+        setIsDragging(true);
+    };
+
+    const handleDragLeave = () => {
+        setIsDragging(false);
+    };
+
+    const handleDrop = (e) => {
+        e.preventDefault();
+        setIsDragging(false);
+        const files = e.dataTransfer.files;
+        if (files?.[0]) {
+            setFileName(files[0].name);
+            setValue('CV', files);
+        }
+    };
+
+    const totalSteps = 5;
+    const stepTitles = ['Project Details', 'Proposal Overview', 'Pricing', 'Experience', 'Confirmation'];
+
     return (
-        <div className="fixed top-0 flex items-center justify-center z-40  bg-black/50 w-full h-[100vh]">
-            <div className="bg-white w-[35rem] h-full sm:h-auto sm:rounded-3xl">
-                <div className="bg-[#F8F8F8] px-6 py-3 rounded-t-3xl flex justify-between">
-                    <h1 className="font-semibold">Add Details</h1>
-                    <CloseOutlinedIcon className="cursor-pointer"
-                    onClick={onClose}
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/40 backdrop-blur-sm p-4">
+            <div className="bg-white w-full max-w-2xl max-h-[90vh] rounded-3xl shadow-2xl overflow-hidden flex flex-col animate-in fade-in zoom-in-95 duration-300">
+                {/* Header */}
+                <div className="bg-gradient-to-r from-teal-50 to-indigo-50 px-6 sm:px-8 py-4 sm:py-6 border-b border-gray-100 flex justify-between items-start">
+                    <div className="flex-1">
+                        <h1 className="text-xl sm:text-2xl font-bold text-gray-900">Submit Proposal</h1>
+                        <p className="text-xs sm:text-sm text-gray-500 mt-1">Step {step} of {totalSteps}: {stepTitles[step - 1]}</p>
+                    </div>
+                    <button
+                        onClick={onClose}
+                        className="p-2 hover:bg-white rounded-full transition-all duration-200 text-gray-500 hover:text-gray-900 flex-shrink-0"
+                    >
+                        <X className="w-5 h-5" />
+                    </button>
+                </div>
+
+                {/* Progress Bar */}
+                <div className="h-1 bg-gray-200">
+                    <div
+                        className="h-full  bg-gradient-to-r from-[#44A4AD] via-[#2E7A81] to-[#1C4C50] transition-all duration-300"
+                        style={{ width: `${(step / totalSteps) * 100}%` }}
                     />
                 </div>
-                <form onSubmit={handleSubmit(onSubmit)}>
-                    <div className="flex flex-col gap-3 px-6 mt-3">
-                        <h1 className="font-semibold">Name</h1>
-                        <input
-                            type="text"
-                            {...register('name')}
-                            className="w-full h-12 border-[2px] border-[#D9D9D9] rounded-lg p-2 shadow-lg "
-                            placeholder="Enter your name"
-                        ></input>
-                        {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
-                    </div>
-                    <div className="flex flex-col gap-3 px-6 mt-3">
-                        <h1 className="font-semibold">Email</h1>
-                        <input
-                            type="email"
-                            {...register('email')}
-                            className="w-full h-12 border-[2px] border-[#D9D9D9] rounded-lg p-2 shadow-lg "
-                            placeholder="Enter your email"
-                        ></input>
-                        {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
-                    </div>
-                    <div className="flex flex-col gap-3 px-6 mt-3">
-                        <h1 className="font-semibold">Experience</h1>
-                        <input
-                            type="number"
-                            {...register('experience')}
-                            className="w-full h-12 border-[2px] border-[#D9D9D9] rounded-lg p-2 shadow-lg "
-                            placeholder="0"
-                        ></input>
-                        {errors.experience && <p className="text-red-500 text-sm">{errors.experience.message}</p>}
-                    </div>
-                    <div className="flex flex-col gap-3 px-6 p-3">
-                        <h1 className="font-semibold">Upload CV</h1>
-                        <input
-                            accept=".pdf,.docx"
-                            {...register('files')} type='file' className="flex flex-col gap-3 text-center rounded-lg items-center justify-center border-[2px] border-dashed border-[#D9D9D9] px-3 py-5"
-                            placeholder='Click or drag file to this area to upload'
-                        >
-                            {/* <Image src={file} alt='dra files'/> */}
-                            {/* <p className="flex font-semibold">
-                                Click or drag file to this area to upload
-                            </p> */}
-                        </input>
-                        {errors.files && <p className="text-red-500 text-sm">{errors.files.message}</p>}
-                    </div>
-                    <div className="flex gap-2 justify-end p-4">
-                        <button className="text-black font-semibold border[#D9D9D9] border-[1px] rounded-full pl-6 pr-6 pt-2 pb-2 "
-                            onClick={onClose}
-                        >
-                            Cancel
-                        </button>
-                        <button className=" bg-[#01AEAD] hover:bg-[#05929c] rounded-full pl-6 pr-6 pt-2 pb-2 text-white"
-                            type="submit"
-                        >
-                            Add
-                        </button>
+
+                {/* Form */}
+                <form onSubmit={handleSubmit(onSubmit)} className="overflow-y-auto flex-1">
+                    <div className="p-6 sm:p-8">
+                        <div className="space-y-6">
+                            {/* STEP 1: Project & Freelancer Details */}
+                            {step === 1 && (
+                                <div className="space-y-6 animate-in fade-in">
+                                    <div>
+                                        <label className="block text-sm font-semibold text-gray-900 mb-2">
+                                            Project Title <span className="text-red-500">*</span>
+                                        </label>
+                                        <input
+                                            type="text"
+                                            {...register('projectTitle')}
+                                            disabled
+                                            className="w-full px-4 py-3 border border-gray-200 rounded-2xl bg-gray-50 text-gray-600"
+                                        />
+                                        {errors.projectTitle && <p className="text-red-500 text-sm mt-2">{errors.projectTitle.message}</p>}
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-sm font-semibold text-gray-900 mb-2">
+                                            Freelancer / Company Name <span className="text-red-500">*</span>
+                                        </label>
+                                        <input
+                                            type="text"
+                                            {...register('freelancerName')}
+                                            className="w-full px-4 py-3 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-[#44A4AD] focus:border-transparent outline-none transition-all placeholder-gray-400"
+                                            placeholder="Your name or company"
+                                        />
+                                        {errors.freelancerName && <p className="text-red-500 text-sm mt-2">{errors.freelancerName.message}</p>}
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-sm font-semibold text-gray-900 mb-2">
+                                            Contact Email <span className="text-red-500">*</span>
+                                        </label>
+                                        <input
+                                            type="email"
+                                            {...register('email')}
+                                            className="w-full px-4 py-3 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-[#44A4AD] focus:border-transparent outline-none transition-all placeholder-gray-400"
+                                            placeholder="your@email.com"
+                                        />
+                                        {errors.email && <p className="text-red-500 text-sm mt-2">{errors.email.message}</p>}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* STEP 2: Proposal Overview */}
+                            {step === 2 && (
+                                <div className="space-y-6 animate-in fade-in">
+                                    <div>
+                                        <label className="block text-sm font-semibold text-gray-900 mb-2">
+                                            Cover Letter <span className="text-red-500">*</span>
+                                        </label>
+                                        <textarea
+                                            {...register('coverLetter')}
+                                            className="w-full px-4 py-3 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-[#44A4AD] focus:border-transparent outline-none transition-all placeholder-gray-400 resize-none"
+                                            rows="5"
+                                            placeholder="Explain your understanding of the project and your proposed approach..."
+                                        />
+                                        {errors.coverLetter && <p className="text-red-500 text-sm mt-2">{errors.coverLetter.message}</p>}
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-sm font-semibold text-gray-900 mb-2">
+                                            Proposed Deliverables <span className="text-red-500">*</span>
+                                        </label>
+                                        <textarea
+                                            {...register('proposedDeliverables')}
+                                            className="w-full px-4 py-3 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-[#44A4AD] focus:border-transparent outline-none transition-all placeholder-gray-400 resize-none"
+                                            rows="4"
+                                            placeholder="List the items you commit to delivering (one per line)..."
+                                        />
+                                        {errors.proposedDeliverables && <p className="text-red-500 text-sm mt-2">{errors.proposedDeliverables.message}</p>}
+                                    </div>
+
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        <div>
+                                            <label className="block text-sm font-semibold text-gray-900 mb-2">
+                                                Estimated Time <span className="text-red-500">*</span>
+                                            </label>
+                                            <input
+                                                type="number"
+                                                {...register('estimatedTime')}
+                                                className="w-full px-4 py-3 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-[#44A4AD] focus:border-transparent outline-none transition-all"
+                                                placeholder="e.g., 15"
+                                            />
+                                            {errors.estimatedTime && <p className="text-red-500 text-sm mt-2">{errors.estimatedTime.message}</p>}
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm font-semibold text-gray-900 mb-2">
+                                                Time Unit <span className="text-red-500">*</span>
+                                            </label>
+                                            <select
+                                                {...register('timeUnit')}
+                                                className="w-full px-4 py-3 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-[#44A4AD] focus:border-transparent outline-none transition-all appearance-none cursor-pointer bg-white"
+                                            >
+                                                <option value="hours">Hours</option>
+                                                <option value="days">Days</option>
+                                                <option value="weeks">Weeks</option>
+                                                <option value="months">Months</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* STEP 3: Pricing Details */}
+                            {step === 3 && (
+                                <div className="space-y-6 animate-in fade-in">
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        <div>
+                                            <label className="block text-sm font-semibold text-gray-900 mb-2">
+                                                Proposed Budget <span className="text-red-500">*</span>
+                                            </label>
+                                            <input
+                                                type="number"
+                                                {...register('proposedBudget')}
+                                                className="w-full px-4 py-3 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-[#44A4AD] focus:border-transparent outline-none transition-all"
+                                                placeholder="0.00"
+                                            />
+                                            {errors.proposedBudget && <p className="text-red-500 text-sm mt-2">{errors.proposedBudget.message}</p>}
+                                        </div>
+                                        <div>
+                                            <label className="block text-sm font-semibold text-gray-900 mb-2">
+                                                Currency <span className="text-red-500">*</span>
+                                            </label>
+                                            <select
+                                                {...register('currency')}
+                                                className="w-full px-4 py-3 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-[#44A4AD] focus:border-transparent outline-none transition-all appearance-none cursor-pointer bg-white"
+                                            >
+                                                <option value="USD">USD</option>
+                                                <option value="EUR">EUR</option>
+                                                <option value="GBP">GBP</option>
+                                                <option value="PKR">PKR</option>
+                                                <option value="AED">AED</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-sm font-semibold text-gray-900 mb-4">
+                                            Payment Terms <span className="text-red-500">*</span>
+                                        </label>
+                                        <div className="space-y-3">
+                                            {[
+                                                { value: 'fixed', label: 'Fixed Price', desc: 'One-time payment for the entire project' },
+                                                { value: 'milestone', label: 'Milestone Based', desc: 'Payment divided into project milestones' },
+                                                { value: 'hourly', label: 'Hourly', desc: 'Payment based on hours worked' }
+                                            ].map(option => (
+                                                <label key={option.value} className="flex items-start gap-3 p-3 border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-all">
+                                                    <input
+                                                        type="radio"
+                                                        {...register('paymentTerms')}
+                                                        value={option.value}
+                                                        className="mt-1 w-4 h-4 text-blue-500 cursor-pointer"
+                                                    />
+                                                    <div>
+                                                        <p className="font-medium text-gray-900">{option.label}</p>
+                                                        <p className="text-xs text-gray-500">{option.desc}</p>
+                                                    </div>
+                                                </label>
+                                            ))}
+                                        </div>
+                                        {errors.paymentTerms && <p className="text-red-500 text-sm mt-2">{errors.paymentTerms.message}</p>}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* STEP 4: Supporting Information */}
+                            {step === 4 && (
+                                <div className="space-y-6 animate-in fade-in">
+                                    <div>
+                                        <label className="block text-sm font-semibold text-gray-900 mb-2">
+                                            Portfolio / Website Link <span className="text-red-500">*</span>
+                                        </label>
+                                        <input
+                                            type="url"
+                                            {...register('portfolioLinks')}
+                                            className="w-full px-4 py-3 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-[#44A4AD] focus:border-transparent outline-none transition-all placeholder-gray-400"
+                                            placeholder="https://yourportfolio.com"
+                                        />
+                                        {errors.portfolioLinks && <p className="text-red-500 text-sm mt-2">{errors.portfolioLinks.message}</p>}
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-sm font-semibold text-gray-900 mb-3">
+                                            Upload CV <span className="text-red-500">*</span>
+                                        </label>
+                                        <label
+                                            onDragOver={handleDragOver}
+                                            onDragLeave={handleDragLeave}
+                                            onDrop={handleDrop}
+                                            className={`relative flex flex-col items-center justify-center w-full px-6 py-8 border-2 border-dashed rounded-2xl cursor-pointer transition-all duration-200 ${
+                                                isDragging
+                                                    ? 'border-blue-500 bg-blue-50'
+                                                    : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                                            } ${fileName ? 'border-solid border-green-300 bg-green-50' : ''}`}
+                                        >
+                                            <input
+                                                type="file"
+                                                accept=".pdf,.docx"
+                                                {...register('CV')}
+                                                onChange={handleFileChange}
+                                                className="hidden"
+                                            />
+                                            <div className="flex flex-col items-center justify-center gap-2">
+                                                {fileName ? (
+                                                    <>
+                                                        <CheckCircle className="w-10 h-10 text-green-500" />
+                                                        <p className="text-sm font-semibold text-gray-900 text-center break-all">{fileName}</p>
+                                                        <p className="text-xs text-gray-500">Click or drag to change</p>
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <Upload className="w-8 h-8 text-gray-400" />
+                                                        <p className="text-sm font-semibold text-gray-900">Drag CV here</p>
+                                                        <p className="text-xs text-gray-500">or click to browse</p>
+                                                        <p className="text-xs text-gray-400 mt-1">PDF or DOCX (max 5MB)</p>
+                                                    </>
+                                                )}
+                                            </div>
+                                        </label>
+                                        {errors.CV && <p className="text-red-500 text-sm mt-2">{errors.CV.message}</p>}
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-sm font-semibold text-gray-900 mb-3">
+                                            Work Samples (Optional)
+                                        </label>
+                                        <label className="relative flex flex-col items-center justify-center w-full px-6 py-6 border-2 border-dashed border-gray-200 rounded-2xl cursor-pointer hover:border-gray-300 hover:bg-gray-50 transition-all">
+                                            <input
+                                                type="file"
+                                                multiple
+                                                {...register('workSamples')}
+                                                onChange={handleSampleFiles}
+                                                className="hidden"
+                                            />
+                                            <Upload className="w-6 h-6 text-gray-400 mb-2" />
+                                            <p className="text-sm font-medium text-gray-900">Upload work samples</p>
+                                            <p className="text-xs text-gray-500">or click to browse</p>
+                                        </label>
+                                        {sampleFiles.length > 0 && (
+                                            <div className="mt-3 space-y-2">
+                                                {sampleFiles.map((file, idx) => (
+                                                    <div key={idx} className="flex items-center justify-between bg-gray-50 p-3 rounded-lg">
+                                                        <p className="text-sm text-gray-700 truncate">{file.name}</p>
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => removeSampleFile(idx)}
+                                                            className="text-red-500 hover:text-red-700 text-sm font-medium"
+                                                        >
+                                                            Remove
+                                                        </button>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        )}
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-sm font-semibold text-gray-900 mb-2">
+                                            Additional Comments (Optional)
+                                        </label>
+                                        <textarea
+                                            {...register('additionalComments')}
+                                            className="w-full px-4 py-3 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-[#44A4AD] focus:border-transparent outline-none transition-all placeholder-gray-400 resize-none"
+                                            rows="3"
+                                            placeholder="Any additional information you'd like to share..."
+                                        />
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* STEP 5: Confirmation */}
+                            {step === 5 && (
+                                <div className="space-y-6 animate-in fade-in">
+                                    <div className="bg-blue-50 border border-blue-200 rounded-2xl p-6">
+                                        <h3 className="font-semibold text-gray-900 mb-3">Proposal Summary</h3>
+                                        <div className="space-y-2 text-sm text-gray-700">
+                                            <p><span className="font-medium">Project:</span> {watch('projectTitle')}</p>
+                                            <p><span className="font-medium">Budget:</span> {watch('proposedBudget')} {watch('currency')}</p>
+                                            <p><span className="font-medium">Timeline:</span> {watch('estimatedTime')} {watch('timeUnit')}</p>
+                                            <p><span className="font-medium">Payment:</span> {watch('paymentTerms')}</p>
+                                        </div>
+                                    </div>
+
+                                    <label className="flex items-start gap-3 p-4 border-2 border-gray-200 rounded-2xl cursor-pointer hover:bg-gray-50 transition-all">
+                                        <input
+                                            type="checkbox"
+                                            {...register('acknowledgment')}
+                                            className="mt-1 w-5 h-5 text-blue-500 rounded cursor-pointer"
+                                        />
+                                        <div>
+                                            <p className="text-sm text-gray-900">
+                                                I confirm that this proposal represents my original work and aligns with <span className="font-semibold">ICCD Talent Gate's guidelines</span>.
+                                            </p>
+                                            <p className="text-xs text-gray-500 mt-1">Please read our terms of service before submitting.</p>
+                                        </div>
+                                    </label>
+                                    {errors.acknowledgment && <p className="text-red-500 text-sm">{errors.acknowledgment.message}</p>}
+
+                                    <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-4">
+                                        <p className="text-sm text-emerald-900">
+                                            ✓ Your proposal is ready to submit. Make sure all information is accurate before proceeding.
+                                        </p>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </form>
+
+                {/* Footer */}
+                <div className="bg-gray-50 px-6 sm:px-8 py-4 border-t border-gray-100 flex gap-3">
+                    {step > 1 && (
+                        <button
+                            type="button"
+                            onClick={() => setStep(step - 1)}
+                            className="flex-1 px-4 py-3 border border-gray-200 text-gray-900 font-semibold rounded-xl hover:bg-gray-100 transition-all duration-200"
+                        >
+                            Back
+                        </button>
+                    )}
+                    {step < totalSteps ? (
+                        <button
+                            type="button"
+                            onClick={() => setStep(step + 1)}
+                            className="flex-1 sm:flex-auto px-6 py-3  bg-gradient-to-r from-[#44A4AD] via-[#2E7A81] to-[#1C4C50] hover:from-[#2E7A81] hover:to-[#1C4C50] text-white font-semibold rounded-xl transition-all duration-200 hover:shadow-lg"
+                        >
+                            Next
+                        </button>
+                    ) : (
+                        <button
+                            type="submit"
+                            onClick={handleSubmit(onSubmit)}
+                            disabled={!acknowledgment || isPending}
+                            className="flex-1 sm:flex-auto px-6 py-3 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 disabled:from-gray-400 disabled:to-gray-400 text-white font-semibold rounded-xl transition-all duration-200 hover:shadow-lg active:scale-95"
+                        >
+                            {isPending ? 'Submitting...' : 'Submit Proposal'}
+                        </button>
+                    )}
+                </div>
             </div>
         </div>
     );
 };
 
 export default ProposalModal;
-
-// old cv modal
-{/* <div className="w-full flex fixed z-20 inset-0 sm:p-5 sm:items-center sm:justify-center lg:p-10">
-    <div className="absolute inset-0 bg-black/50 z-0"></div>
-    <div className="z-10 bg-white rounded-xl p-6 w-full max-w-md shadow-lg space-y-4">
-        <h2 className="text-xl font-semibold text-center">Upload Your CV</h2>
-
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-
-            <div>
-                <label className="block mb-1 font-medium">Name</label>
-                <input
-                    type="text"
-                    {...register('name')}
-                    className="w-full border rounded px-3 py-2"
-                    placeholder="Enter your name"
-                />
-                {errors.name && <p className="text-red-500 text-sm">{errors.name.message}</p>}
-            </div>
-
-            <div>
-                <label className="block mb-1 font-medium">Email</label>
-                <input
-                    type="email"
-                    {...register('email')}
-                    className="w-full border rounded px-3 py-2"
-                    placeholder="Enter your email"
-                />
-                {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
-            </div>
-
-            <div>
-                <label className="block mb-1 font-medium">Experience (years)</label>
-                <input
-                    type="number"
-                    {...register('experience')}
-                    className="w-full border rounded px-3 py-2"
-                    placeholder="0"
-                />
-                {errors.experience && <p className="text-red-500 text-sm">{errors.experience.message}</p>}
-            </div>
-
-            <div>
-                <label className="block mb-1 font-medium">Upload CV (PDF or DOCX)</label>
-                <input
-                    type="file"
-                    accept=".pdf,.docx"
-                    {...register('files')}
-                    className="w-full"
-                />
-                {errors.files && <p className="text-red-500 text-sm">{errors.files.message}</p>}
-            </div>
-
-            <div className="flex justify-between space-x-2">
-                <button
-                    type="button"
-                    onClick={onClose}
-                    className="w-1/2 bg-gray-300 hover:bg-gray-400 text-black py-2 rounded"
-                >
-                    Cancel
-                </button>
-                <button
-                    type="submit"
-                    className="cursor-pointer w-1/2 bg-[#01AEAD] hover:bg-[#05929c] text-white py-2 rounded"
-                >
-                    Submit
-                </button>
-            </div>
-
-        </form>
-    </div>
-</div> */}
