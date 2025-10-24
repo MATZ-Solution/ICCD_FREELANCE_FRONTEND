@@ -90,9 +90,9 @@ function Jobs() {
                 </h1>
                 <p className="text-base sm:text-lg text-[#44A4AD] font-medium">{job.name}</p>
               </div>
-           
+
             </div>
-            
+
             <div className="flex items-center gap-2 text-gray-600 mb-3 sm:mb-4 text-sm sm:text-base">
               <LocationOnIcon className="text-[#44A4AD]" fontSize="small" />
               <span>{job.country}</span>
@@ -207,13 +207,13 @@ function Jobs() {
               <div className="absolute top-0 left-1/4 w-48 sm:w-72 md:w-96 h-48 sm:h-72 md:h-96 bg-white rounded-full blur-3xl animate-float"></div>
               <div className="absolute bottom-0 right-1/4 w-40 sm:w-60 md:w-80 h-40 sm:h-60 md:h-80 bg-white rounded-full blur-3xl animate-float-delayed"></div>
             </div>
-            
+
             {/* Geometric patterns */}
             <div className="absolute right-0 top-0 w-1/2 h-full opacity-5">
               <svg className="w-full h-full" viewBox="0 0 400 400">
-                <circle cx="350" cy="50" r="100" fill="white"/>
-                <circle cx="300" cy="200" r="60" fill="white"/>
-                <circle cx="380" cy="300" r="80" fill="white"/>
+                <circle cx="350" cy="50" r="100" fill="white" />
+                <circle cx="300" cy="200" r="60" fill="white" />
+                <circle cx="380" cy="300" r="80" fill="white" />
               </svg>
             </div>
 
@@ -223,14 +223,14 @@ function Jobs() {
                 <div className="inline-block mb-3 sm:mb-4 px-3 sm:px-4 py-1.5 sm:py-2 bg-white/20 backdrop-blur-sm rounded-full text-white text-xs sm:text-sm font-semibold animate-slideDown">
                   🚀 {allJobs?.length || 0}+ Active Opportunities
                 </div>
-                
+
                 <h1 className="text-2xl sm:text-3xl md:text-4xl  font-bold text-white mb-4 sm:mb-6 leading-tight animate-slideUp">
                   Discover Your Next
                   <span className="block mt-1 sm:mt-2 bg-gradient-to-r from-white via-yellow-100 to-white bg-clip-text text-transparent">
                     Career Adventure
                   </span>
                 </h1>
-                
+
                 <p className="text-base sm:text-lg md:text-xl text-white/90 mb-6 sm:mb-8 max-w-xl leading-relaxed">
                   Connect with leading companies and find positions that match your skills, ambitions, and lifestyle.
                 </p>
@@ -265,62 +265,62 @@ function Jobs() {
                   {/* 3D Isometric Job Cards Illustration */}
                   <svg viewBox="0 0 400 400" className="w-full h-[50vh] drop-shadow-2xl">
                     <g opacity="0.6" transform="translate(50, 20) rotate(-10)">
-                      <rect x="0" y="0" width="120" height="150" rx="12" fill="white"/>
-                      <rect x="15" y="20" width="90" height="12" rx="4" fill="#44A4AD"/>
-                      <rect x="15" y="45" width="70" height="8" rx="4" fill="#E5E7EB"/>
-                      <rect x="15" y="60" width="60" height="8" rx="4" fill="#E5E7EB"/>
-                      <circle cx="95" cy="25" r="8" fill="#FFD700"/>
+                      <rect x="0" y="0" width="120" height="150" rx="12" fill="white" />
+                      <rect x="15" y="20" width="90" height="12" rx="4" fill="#44A4AD" />
+                      <rect x="15" y="45" width="70" height="8" rx="4" fill="#E5E7EB" />
+                      <rect x="15" y="60" width="60" height="8" rx="4" fill="#E5E7EB" />
+                      <circle cx="95" cy="25" r="8" fill="#FFD700" />
                     </g>
 
                     {/* Main card */}
                     <g transform="translate(100, 80)">
-                      <rect x="0" y="0" width="200" height="240" rx="16" fill="white" filter="url(#shadow)"/>
-                      
+                      <rect x="0" y="0" width="200" height="240" rx="16" fill="white" filter="url(#shadow)" />
+
                       {/* Company logo circle */}
-                      <circle cx="100" cy="40" r="25" fill="#44A4AD" opacity="0.2"/>
-                      <circle cx="100" cy="40" r="20" fill="#44A4AD"/>
+                      <circle cx="100" cy="40" r="25" fill="#44A4AD" opacity="0.2" />
+                      <circle cx="100" cy="40" r="20" fill="#44A4AD" />
                       <text x="100" y="48" textAnchor="middle" fill="white" fontSize="20" fontWeight="bold">W</text>
-                      
+
                       {/* Job title */}
-                      <rect x="40" y="80" width="120" height="16" rx="4" fill="#1F2937"/>
-                      
+                      <rect x="40" y="80" width="120" height="16" rx="4" fill="#1F2937" />
+
                       {/* Details */}
-                      <rect x="30" y="110" width="80" height="10" rx="4" fill="#9CA3AF"/>
-                      <rect x="30" y="130" width="100" height="10" rx="4" fill="#9CA3AF"/>
-                      
+                      <rect x="30" y="110" width="80" height="10" rx="4" fill="#9CA3AF" />
+                      <rect x="30" y="130" width="100" height="10" rx="4" fill="#9CA3AF" />
+
                       {/* Tags */}
-                      <rect x="30" y="160" width="60" height="24" rx="12" fill="#44A4AD" opacity="0.2"/>
-                      <rect x="100" y="160" width="70" height="24" rx="12" fill="#44A4AD" opacity="0.2"/>
-                      
+                      <rect x="30" y="160" width="60" height="24" rx="12" fill="#44A4AD" opacity="0.2" />
+                      <rect x="100" y="160" width="70" height="24" rx="12" fill="#44A4AD" opacity="0.2" />
+
                       {/* Apply button */}
-                      <rect x="30" y="200" width="140" height="30" rx="15" fill="#44A4AD"/>
+                      <rect x="30" y="200" width="140" height="30" rx="15" fill="#44A4AD" />
                       <text x="100" y="220" textAnchor="middle" fill="white" fontSize="12" fontWeight="600">Apply Now</text>
                     </g>
 
                     {/* Floating card top right */}
                     <g opacity="0.7" transform="translate(280, 40) rotate(10)">
-                      <rect x="0" y="0" width="100" height="130" rx="10" fill="white"/>
-                      <rect x="12" y="15" width="76" height="10" rx="4" fill="#44A4AD"/>
-                      <rect x="12" y="35" width="60" height="7" rx="3" fill="#E5E7EB"/>
-                      <rect x="12" y="50" width="50" height="7" rx="3" fill="#E5E7EB"/>
-                      <circle cx="78" cy="20" r="6" fill="#10B981"/>
+                      <rect x="0" y="0" width="100" height="130" rx="10" fill="white" />
+                      <rect x="12" y="15" width="76" height="10" rx="4" fill="#44A4AD" />
+                      <rect x="12" y="35" width="60" height="7" rx="3" fill="#E5E7EB" />
+                      <rect x="12" y="50" width="50" height="7" rx="3" fill="#E5E7EB" />
+                      <circle cx="78" cy="20" r="6" fill="#10B981" />
                     </g>
 
                     {/* Bottom floating element */}
                     <g opacity="0.5" transform="translate(60, 300)">
-                      <circle cx="30" cy="30" r="30" fill="white"/>
-                      <path d="M20 30 L30 40 L40 20" stroke="#44A4AD" strokeWidth="3" fill="none" strokeLinecap="round"/>
+                      <circle cx="30" cy="30" r="30" fill="white" />
+                      <path d="M20 30 L30 40 L40 20" stroke="#44A4AD" strokeWidth="3" fill="none" strokeLinecap="round" />
                     </g>
 
                     {/* Decorative dots */}
-                    <circle cx="320" cy="260" r="4" fill="white" opacity="0.6"/>
-                    <circle cx="80" cy="280" r="3" fill="white" opacity="0.6"/>
-                    <circle cx="340" cy="180" r="5" fill="white" opacity="0.6"/>
-                    
+                    <circle cx="320" cy="260" r="4" fill="white" opacity="0.6" />
+                    <circle cx="80" cy="280" r="3" fill="white" opacity="0.6" />
+                    <circle cx="340" cy="180" r="5" fill="white" opacity="0.6" />
+
                     {/* Shadow filter */}
                     <defs>
                       <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
-                        <feDropShadow dx="0" dy="10" stdDeviation="20" floodOpacity="0.3"/>
+                        <feDropShadow dx="0" dy="10" stdDeviation="20" floodOpacity="0.3" />
                       </filter>
                     </defs>
                   </svg>
@@ -370,7 +370,7 @@ function Jobs() {
             </div>
 
             {/* Mobile Filter Toggle */}
-            <button 
+            <button
               onClick={() => setShowFilters(!showFilters)}
               className="lg:hidden h-12 sm:h-14 px-4 sm:px-6 bg-[#44A4AD] text-white rounded-lg sm:rounded-xl font-semibold flex items-center justify-center gap-2 text-sm sm:text-base"
             >
@@ -428,20 +428,19 @@ function Jobs() {
                       setMobileJobModal(true);
                     }
                   }}
-                  className={`group relative bg-white p-4 sm:p-6 rounded-xl sm:rounded-2xl border-2 transition-all cursor-pointer hover:shadow-xl hover:-translate-y-1 ${
-                    selectedJobId === job.id 
-                      ? 'border-[#44A4AD] shadow-lg' 
+                  className={`group relative bg-white p-4 sm:p-6 rounded-xl sm:rounded-2xl border-2 transition-all cursor-pointer hover:shadow-xl hover:-translate-y-1 ${selectedJobId === job.id
+                      ? 'border-[#44A4AD] shadow-lg'
                       : 'border-gray-200 hover:border-[#44A4AD]'
-                  }`}
+                    }`}
                 >
-               
+
                   <div className="pr-8 sm:pr-12">
                     <h3 className="font-bold text-lg sm:text-xl text-gray-900 mb-2 group-hover:text-[#44A4AD] transition-colors">
                       {job.jobTitle}
                     </h3>
-                    
+
                     <p className="text-[#44A4AD] font-medium mb-2 sm:mb-3 text-sm sm:text-base">{job.name}</p>
-                    
+
                     <div className="flex items-center gap-2 text-gray-600 mb-3 sm:mb-4 text-xs sm:text-sm">
                       <LocationOnIcon fontSize="small" className="text-gray-400" />
                       <span>{job.country}</span>
@@ -467,7 +466,7 @@ function Jobs() {
                 </div>
               ))
             ) : (
-              <div className="text-center py-12 sm:py-16 bg-white rounded-xl sm:rounded-2xl border-2 border-dashed border-gray-200">
+              <div className="w-full text-center py-12 sm:py-16 bg-white rounded-xl sm:rounded-2xl border-2 border-dashed border-gray-200">
                 <WorkIcon className="mx-auto text-gray-300 mb-4" sx={{ fontSize: { xs: 48, sm: 64 } }} />
                 <p className="text-gray-500 text-base sm:text-lg">No jobs found matching your criteria</p>
                 <p className="text-gray-400 text-xs sm:text-sm mt-2">Try adjusting your filters</p>
@@ -486,11 +485,14 @@ function Jobs() {
           </div>
 
           {/* Right: Job Details - Desktop Only */}
-          <div className="hidden lg:block lg:w-1/2">
-            <div className="sticky top-6 bg-white rounded-2xl border-2 border-gray-200 max-h-[92vh] overflow-y-auto shadow-lg">
-              {renderJobDetails()}
+
+          {allJobs?.length > 0 && (
+            <div className="hidden lg:block lg:w-1/2">
+              <div className="sticky top-6 bg-white rounded-2xl border-2 border-gray-200 max-h-[92vh] overflow-y-auto shadow-lg">
+                {renderJobDetails()}
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
 

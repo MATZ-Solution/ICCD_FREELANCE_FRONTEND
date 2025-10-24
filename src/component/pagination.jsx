@@ -5,7 +5,7 @@ export default function Pagination({ currentPage, totalPages, onPageChange }) {
   const isLast = currentPage === totalPages;
 
   return (
-    <div className="flex items-center justify-center mt-8">
+    <div className="flex items-center justify-center py-6">
       <div className="flex items-center gap-6 bg-white/90 backdrop-blur-sm border border-gray-200 rounded-full shadow-lg px-6 py-3">
         {/* Prev Button */}
         <button

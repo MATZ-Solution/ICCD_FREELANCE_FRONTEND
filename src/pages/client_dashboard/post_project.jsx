@@ -1,4 +1,4 @@
-import { useForm, Controller } from "react-hook-form";
+import { useForm, Controller, useWatch } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import Select from "react-select";
@@ -11,6 +11,7 @@ import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import ICCDError from '../../component/ICCDError';
 import Button from "../../component/button";
+import { categoryData } from "../../../data/categoryData";
 
 const schema = yup.object({
   title: yup.string().required("Project title is required").max(80),
@@ -45,30 +46,27 @@ const schema = yup.object({
 });
 
 
-const categoryOptions = [
-  { value: "Digital Marketing", label: "Digital Marketing" },
-  { value: "Web", label: "Web Development" },
-  { value: "Graphic", label: "Graphic Designing" },
-  { value: "Figma", label: "Figma Design" },
-];
+//   { value: "Digital Marketing", label: "Digital Marketing" },
+//   { value: "Web", label: "Web Development" },
+//   { value: "Graphic", label: "Graphic Designing" },
+//   { value: "Figma", label: "Figma Design" },
+// ];
+// const categoryOptions = [
+//   { value: "Digital Marketing", label: "Digital Marketing" },
+//   { value: "Web", label: "Web Development" },
+//   { value: "Graphic", label: "Graphic Designing" },
+//   { value: "Figma", label: "Figma Design" },
+// ];
 
-const subCategoryOptions = [
-  { value: "FullStack", label: "FullStack" },
-  { value: "FrontEnd", label: "FrontEnd" },
-  { value: "Backend", label: "Backend" },
-  { value: "Design", label: "Design" },
-  { value: "API", label: "API Integration" },
-];
-
-const skillsOptions = [
-  { value: "React", label: "React" },
-  { value: "Node.js", label: "Node.js" },
-  { value: "Figma", label: "Figma" },
-  { value: "Photoshop", label: "Photoshop" },
-  { value: "SEO", label: "SEO" },
-  { value: "Laravel", label: "Laravel" },
-  { value: "Java", label: "Java" },
-];
+// const skillsOptions = [
+//   { value: "React", label: "React" },
+//   { value: "Node.js", label: "Node.js" },
+//   { value: "Figma", label: "Figma" },
+//   { value: "Photoshop", label: "Photoshop" },
+//   { value: "SEO", label: "SEO" },
+//   { value: "Laravel", label: "Laravel" },
+//   { value: "Java", label: "Java" },
+// ];
 
 const languageOptions = [
   { value: "French", label: "French" },
@@ -127,12 +125,43 @@ const ProjectForm = () => {
     },
   });
 
-  const {id} = useParams()
-  const { addProject, isSuccess, isPending, isError, error } = useAddproject();
-  const { editProject} = useEditProjects(id)
-  console.log("id: ", id)
-  const {data: getProData} = useGetProjectsById(id)
+  const categoryOptions = categoryData ? categoryData.map((item) => ({
+    value: item.category, label: item.category
+  })) : []
+
+  const selectedCategory = useWatch({
+    control,
+    name: "category",
+  });
+
+  const subCategoryOptions = selectedCategory ?
+    categoryData.find(item => item.category === selectedCategory).subcategories.map((item) => ({
+      value: item.subcategory, label: item.subcategory
+    }))
+    : []
+
+  const selectedSubCategory = useWatch({
+    control,
+    name: "subCategory",
+  });
+
+const skillsOptions = selectedSubCategory
+  ? categoryData
+      ?.find(item => item.category === selectedCategory)
+      ?.subcategories
+      ?.find(sub => sub.subcategory === selectedSubCategory)
+      ?.skills
+      ?.map(skill => ({
+        value: skill,
+        label: skill,
+      })) || []
+  : [];
   
+  const { id } = useParams()
+  const { addProject, isSuccess, isPending, isError, error } = useAddproject();
+  const { editProject } = useEditProjects(id)
+  const { data: getProData } = useGetProjectsById(id)
+
   const onSubmit = (data) => {
     if (pathName.includes('edit-project')) {
       editProject(data)
@@ -238,11 +267,17 @@ const ProjectForm = () => {
               render={({ field: { onChange, value } }) => (
                 <Select
                   inputId="subCategory"
-                  placeholder="Select Subcategory"
+                  // placeholder="Select Subcategory"
                   onChange={(selectedOption) => onChange(selectedOption?.value || "")}
                   options={subCategoryOptions}
                   value={subCategoryOptions.find((option) => option.value === value) || null}
                   className="mt-1"
+                  placeholder={
+                    selectedCategory
+                      ? "Select Subcategory"
+                      : "Please select category first"
+                  }
+                  isDisabled={!selectedCategory}
                 />
               )}
             />
@@ -264,13 +299,19 @@ const ProjectForm = () => {
                 <Select
                   inputId="skills"
                   isMulti
-                  placeholder="Select Required Skills"
+                  // placeholder="Select Required Skills"
                   onChange={(selectedOptions) =>
                     onChange(selectedOptions ? selectedOptions.map((option) => option.value) : [])
                   }
                   options={skillsOptions}
-                  value={skillsOptions.filter((option) => value && value.includes(option.value))}
+                  value={skillsOptions.filter((option) => value && value.includes(option.value)) || null}
                   className="mt-1"
+                  placeholder={
+                    selectedSubCategory
+                      ? "Select Skills"
+                      : "Please select SubCategory first"
+                  }
+                  isDisabled={!selectedSubCategory}
                 />
                 {errors.skills && (
                   <p className="text-red-500 text-sm mt-1">{errors.skills.message}</p>
@@ -557,8 +598,8 @@ const ProjectForm = () => {
         </div>
 
         <Button text="Submit" className="w-full px-5 py-2 rounded" isLoading={isPending} onClick={handleSubmit(onSubmit)} />
-          
-        
+
+
       </div>
     </div>
   );

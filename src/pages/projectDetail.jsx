@@ -18,8 +18,9 @@ import { useGetProjectProposalByClient, useGetProjectsById } from '../../api/cli
 import { formatSingleDate } from "../../functions/timeFormat";
 import ProposalModal from "../component/ProposalModal";
 import { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { downloadFile } from "../../functions/download_pdf";
+import { useSelector } from "react-redux";
 import ICCDLoader from "../component/loader";
 import ICCDError from "../component/ICCDError";
 
@@ -28,16 +29,13 @@ export const ProjectDetail = () => {
   const { id } = useParams()
   let [show, setShow] = useState(false)
   const pathName = useLocation().pathname
+  const navigate = useNavigate()
+  const isFreelancerPath = location.pathname.includes("/freelancer");
+  const freelancerData = useSelector((state) => state.userProfile.userProfile);
   const { data, isSuccess, isPending, isError, isLoading } = useGetProjectsById(id)
 
-  
-  if (isLoading) {
-     return <ICCDLoader /> 
-   }
-   
-    if (isError) {
-       return <ICCDError /> 
-     }
+  if (isLoading) return <ICCDLoader />
+  if (isError) return <ICCDError />
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
@@ -156,11 +154,11 @@ export const ProjectDetail = () => {
                 <h2 className="text-xl font-bold text-gray-900">Deliverables</h2>
               </div>
               <div className="p-8 space-y-6">
-               
-                 <div
-                className="prose prose-sm prose-gray max-w-none"
-                dangerouslySetInnerHTML={{ __html: data[0]?.deliverable }}
-              />
+
+                <div
+                  className="prose prose-sm prose-gray max-w-none"
+                  dangerouslySetInnerHTML={{ __html: data[0]?.deliverable }}
+                />
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {/* <div className="bg-gradient-to-br from-orange-50 to-red-50 p-6 rounded-xl border border-orange-200">
@@ -228,15 +226,13 @@ export const ProjectDetail = () => {
               </div>
             </div>
 
-           
+
           </div>
 
           {/* Sidebar */}
 
           <div className="lg:col-span-1">
-
             <div className="sticky top-6 space-y-8">
-
               {/* Budget */}
               <div className="bg-white  rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300">
                 <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-6 border-b border-gray-200">
@@ -254,38 +250,46 @@ export const ProjectDetail = () => {
                     {/* <span className="text-sm text-gray-600 font-medium">{propData && propData?.length} Proposals</span> */}
                   </div>
                 </div>
-                {pathName.includes('freelancer') && (
+                {/* {pathName.includes('freelancer') && ( */}
                   <div className="p-6 space-y-4">
-                    <button onClick={() => setShow(true)} className="cursor-pointer w-full bg-[#01AEAD] hover:bg-[#05929c]  text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center gap-3">
+                    <button onClick={() => {
+                      if (
+                        !freelancerData ||
+                        Object.keys(freelancerData).length === 0 ||
+                        !isFreelancerPath
+                      ) {
+                        navigate("/login");
+                      } else {
+                        setShow(true);
+                      }
+                    }} className="cursor-pointer w-full bg-[#01AEAD] hover:bg-[#05929c]  text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center gap-3">
                       <span className="text-xl">👍</span>
                       <span>{"I'm interested"}</span>
                     </button>
                   </div>
-                )}
-
-                 {/* Skills and Freelancer Type */}
-           
+             
+                {/* Skills and Freelancer Type */}
               </div>
-               <div className="grid grid-cols-1 md:grid-cols-1  mt-8 gap-8">
-              <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300">
-                <div className="bg-gradient-to-r from-yellow-50 to-orange-50 p-6 border-b border-gray-200">
-                  <h2 className="text-xl font-bold text-gray-900">Required Skills</h2>
+              <div className="grid grid-cols-1 md:grid-cols-1  mt-8 gap-8">
+                <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300">
+                  <div className="bg-gradient-to-r from-yellow-50 to-orange-50 p-6 border-b border-gray-200">
+                    <h2 className="text-xl font-bold text-gray-900">Required Skills</h2>
 
-                  {/* <p className="text-sm text-orange-600 font-medium mt-1">
+                    {/* <p className="text-sm text-orange-600 font-medium mt-1">
                     You have 2 out of 3 skills required for the job
                   </p> */}
-                </div>
-                <div className="p-6">
-                  <div className="flex gap-2">
-                    {
-                      data[0]?.skills?.split(',').map((item, index) => (
-                        <span key={index} className="inline-flex  items-center px-4 py-2 rounded-full text-sm font-semibold bg-gradient-to-r from-pink-100 to-rose-100 text-pink-800 border border-pink-200">
-                          {item}
-                        </span>
-                      ))
-                    }
                   </div>
-                  {/* <div className="flex items-center gap-2">
+                  <div className="p-6">
+                    <div className="flex gap-2">
+                      {
+                        data[0]?.skills?.split(',').map((item, index) => (
+                          <span key={index} className="inline-flex  items-center px-4 py-2 rounded-full text-sm font-semibold bg-gradient-to-r from-pink-100 to-rose-100 text-pink-800 border border-pink-200">
+                            {item}
+                          </span>
+                        ))
+                      }
+                    </div>
+                    {/* <div className="flex items-center gap-2">
                     <div className="flex">
                       <Star className="w-5 h-5 text-yellow-400 fill-current" />
                       <Star className="w-5 h-5 text-yellow-400 fill-current" />
@@ -293,19 +297,19 @@ export const ProjectDetail = () => {
                     </div>
                     <span className="text-sm text-gray-600 font-medium">Skill Match</span>
                   </div> */}
+                  </div>
+                </div>
+                <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300">
+                  <div className="bg-gradient-to-r from-pink-50 to-rose-50 p-6 border-b border-gray-200">
+                    <h2 className="text-xl font-bold text-gray-900">Freelancer Type</h2>
+                  </div>
+                  <div className="p-6">
+                    <span className="inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold bg-gradient-to-r from-pink-100 to-rose-100 text-pink-800 border border-pink-200">
+                      {data[0]?.freelancerType}
+                    </span>
+                  </div>
                 </div>
               </div>
-              <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300">
-                <div className="bg-gradient-to-r from-pink-50 to-rose-50 p-6 border-b border-gray-200">
-                  <h2 className="text-xl font-bold text-gray-900">Freelancer Type</h2>
-                </div>
-                <div className="p-6">
-                  <span className="inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold bg-gradient-to-r from-pink-100 to-rose-100 text-pink-800 border border-pink-200">
-                    {data[0]?.freelancerType}
-                  </span>
-                </div>
-              </div>
-            </div>
 
               {/* About the Employer */}
               {/* <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300">
@@ -343,7 +347,7 @@ export const ProjectDetail = () => {
                 </div>
               </div> */}
 
-              
+
             </div>
           </div>
         </div>

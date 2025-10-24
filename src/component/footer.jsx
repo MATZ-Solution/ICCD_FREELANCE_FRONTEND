@@ -127,7 +127,7 @@ export default function Footer() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              Matz Solutions (PVT LTD)
+              MATZ Solutions (Pvt.) Ltd.
             </a>
           </p>
         </div>

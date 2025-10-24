@@ -2,6 +2,7 @@ export const navigation = [
   { name: "Home", path: "/" },
   { name: "Find Talent", path: "/find-talent" },
   { name: "Find Jobs", path: "/browse-jobs" },
+  { name: "Find Projects", path: "/browse-projects" },
   { name: "About Us", path: "/aboutus" },
   // { name: "Contact Us", href: "/contactus" },
   // { name: "Login", path: "/login" },
