@@ -21,16 +21,16 @@ const schema = yup.object().shape({
     portfolioLinks: yup.string().url('Enter valid URL').required('Portfolio link is required'),
     additionalComments: yup.string(),
     acknowledgment: yup.boolean().oneOf([true], 'You must acknowledge the terms'),
-    CV:yup
-        .mixed()
-        .test('fileExists', 'Please upload your Resume', (value) => value?.length > 0)
-        .test('fileType', 'Only PDF or DOCX allowed', (value) => {
-          if (!value?.[0]) return false;
-          return [
-            'application/pdf',
-            'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-          ].includes(value[0].type);
-        }),
+CV: yup
+    .mixed()
+    .test('fileExists', 'Please upload your Resume', (value) => value?.length > 0)
+    .test('fileType', 'Only PDF or DOCX allowed', (value) => {
+      if (!value?.[0]) return false;
+      return [
+        'application/pdf',
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      ].includes(value[0].type);
+    }),
 });
 
 const ProposalModal = ({ onClose, data, freelancerData }) => {
@@ -69,6 +69,7 @@ const ProposalModal = ({ onClose, data, freelancerData }) => {
     const acknowledgment = watch('acknowledgment');
 
     const onSubmit = (formData) => {
+        console.log('Form Data:', formData);
         const updateData = {
             ...formData,
             projectId: projectID,
@@ -102,13 +103,13 @@ const ProposalModal = ({ onClose, data, freelancerData }) => {
         onClose();
     };
 
-    const handleFileChange = (e) => {
-        const file = e.target.files?.[0];
-        if (file) {
-            setFileName(file.name);
-            setValue('CV', e.target.files);
-        }
-    };
+const handleFileChange = (e) => {
+    const file = e.target.files?.[0];
+    if (file) {
+        setFileName(file.name);
+        setValue('CV', Array.from(e.target.files));
+    }
+};
 
     const handleSampleFiles = (e) => {
         const files = Array.from(e.target.files || []);
@@ -128,15 +129,15 @@ const ProposalModal = ({ onClose, data, freelancerData }) => {
         setIsDragging(false);
     };
 
-    const handleDrop = (e) => {
-        e.preventDefault();
-        setIsDragging(false);
-        const files = e.dataTransfer.files;
-        if (files?.[0]) {
-            setFileName(files[0].name);
-            setValue('CV', files);
-        }
-    };
+ const handleDrop = (e) => {
+    e.preventDefault();
+    setIsDragging(false);
+    const files = e.dataTransfer.files;
+    if (files?.[0]) {
+        setFileName(files[0].name);
+        setValue('CV', Array.from(files)); 
+    }
+};
 
     const totalSteps = 5;
     const stepTitles = ['Project Details', 'Proposal Overview', 'Pricing', 'Experience', 'Confirmation'];
