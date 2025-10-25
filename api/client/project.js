@@ -18,7 +18,7 @@ export function useAddproject() {
       }),
     onSuccess: (data) => {
       toast.success("Project added successfully!")
-      navigate('/client/projects')
+      // navigate('/client/projects')
     },
     onError: (error) => {
       toast.error("Error in Adding Project added !")

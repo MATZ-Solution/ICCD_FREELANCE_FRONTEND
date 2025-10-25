@@ -34,12 +34,12 @@ const schema = yup.object({
       return !isNaN(min) && !isNaN(max) && min < max && max - min >= 100;
     }
   ),
-  currency: yup.string().required("Currency is required"),
+  // currency: yup.string().required("Currency is required"),
   duration: yup.string().required("Project duration is required"),
   deadline: yup.date().required("Deadline is required").nullable(),
   freelancerType: yup.string().required("Freelancer type is required"),
   experienceLevel: yup.string().required("Experience level is required"),
-  locationPreference: yup.string().required("Location preference is required"),
+  // locationPreference: yup.string().required("Location preference is required"),
   attachments: yup.array(),
   termsAcknowledged: yup.boolean().oneOf([true], "You must accept the terms"),
 });
@@ -106,12 +106,12 @@ const ProjectForm = () => {
       description: "",
       deliverable: "",
       budget: "",
-      currency: "USD",
+      // currency: "USD",
       duration: "",
       deadline: null,
       freelancerType: "",
       experienceLevel: "",
-      locationPreference: "",
+      // locationPreference: "",
       attachments: [],
       termsAcknowledged: false
     },
@@ -168,6 +168,7 @@ const ProjectForm = () => {
     });
 
     setUploadedFiles([...uploadedFiles, ...validFiles.map(f => ({
+      file: f,
       name: f.name,
       size: (f.size / 1024 / 1024).toFixed(2),
       id: Math.random()
@@ -179,11 +180,25 @@ const ProjectForm = () => {
   };
 
   const onSubmit = (data) => {
-    const formData = {
-      ...data,
-      attachments: uploadedFiles
-    };
+    const formData = new FormData();
 
+    if (uploadedFiles && uploadedFiles.length > 0) {
+      uploadedFiles?.forEach((img) => {
+        if (img.file) formData.append("files", img.file);
+      });
+    }
+
+    for (const key in data) {
+      if (Array.isArray(data[key])) {
+        formData.append(key, JSON.stringify(data[key]));
+      }
+      else if (typeof data[key] === "object") {
+        formData.append(key, JSON.stringify(data[key]));
+      }
+      else {
+        formData.append(key, data[key])
+      }
+    }
     if (pathName.includes('edit-project')) {
       editProject(formData);
     } else {
@@ -221,9 +236,9 @@ const ProjectForm = () => {
     }
   }, [getProData, reset, pathName]);
 
-  if (isError) {
-    return <ICCDError message={error?.message || "An error occurred"} />;
-  }
+  // if (isError) {
+  //   return <ICCDError message={error?.message || "An error occurred"} />;
+  // }
 
   return (
     <div
@@ -250,7 +265,7 @@ const ProjectForm = () => {
 
       {/* Form Section */}
       <div className="max-w-5xl bg-white mx-auto px-6 py-8 space-y-8 my-8 rounded-lg shadow-lg">
-        
+
         {/* Section 1: Basic Information */}
         <div>
           <h3 className="text-2xl font-bold text-gray-800 mb-6 pb-3 border-b-2 border-teal-500">
@@ -414,33 +429,35 @@ const ProjectForm = () => {
           </div>
 
           {/* Budget, Currency and Duration */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-            <div className="md:col-span-2">
-              <Controller
-                control={control}
-                name="budget"
-                render={({ field }) => (
-                  <div>
-                    <label htmlFor="budget" className="block text-sm font-semibold text-gray-700 mb-2">
-                      Estimated Budget <span className="text-red-500">*</span>
-                    </label>
-                    <input
-                      {...field}
-                      id="budget"
-                      placeholder="e.g., 500 - 1000"
-                      className="w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-                      aria-label="Budget range"
-                    />
-                    <p className="text-gray-500 text-xs mt-1">Enter range like: 500 - 1000</p>
-                    {errors.budget && (
-                      <p className="text-red-500 text-sm mt-1">{errors.budget.message}</p>
-                    )}
-                  </div>
-                )}
-              />
-            </div>
-
+          {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6"> */}
+          {/* <div className="md:col-span-2"> */}
+          <div className="mb-6">
             <Controller
+              control={control}
+              name="budget"
+              render={({ field }) => (
+                <div>
+                  <label htmlFor="budget" className="block text-sm font-semibold text-gray-700 mb-2">
+                    Estimated Budget <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    {...field}
+                    id="budget"
+                    placeholder="e.g., 500 - 1000"
+                    className="w-full border border-gray-300 rounded px-4 py-2 focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                    aria-label="Budget range"
+                  />
+                  <p className="text-gray-500 text-xs mt-1">Enter range like: 500 - 1000</p>
+                  {errors.budget && (
+                    <p className="text-red-500 text-sm mt-1">{errors.budget.message}</p>
+                  )}
+                </div>
+              )}
+            />
+          </div>
+          {/* </div> */}
+
+          {/* <Controller
               control={control}
               name="currency"
               render={({ field: { onChange, value } }) => (
@@ -461,8 +478,8 @@ const ProjectForm = () => {
                   )}
                 </div>
               )}
-            />
-          </div>
+            /> */}
+          {/* </div> */}
 
           {/* Project Duration */}
           <Controller
@@ -494,7 +511,7 @@ const ProjectForm = () => {
               Attachments <span className="text-gray-500">(Optional)</span>
             </label>
             <p className="text-gray-500 text-xs mb-3">Upload briefs, mockups, requirements, or project files. Max 5MB per file.</p>
-            
+
             <label className="flex items-center justify-center w-full px-4 py-6 border-2 border-dashed border-teal-300 rounded-lg cursor-pointer hover:border-teal-500 hover:bg-teal-50 transition-colors">
               <div className="flex flex-col items-center">
                 <Upload className="w-8 h-8 text-teal-600 mb-2" />
@@ -593,7 +610,7 @@ const ProjectForm = () => {
           </div>
 
           {/* Location Preference */}
-          <Controller
+          {/* <Controller
             control={control}
             name="locationPreference"
             render={({ field: { onChange, value } }) => (
@@ -614,7 +631,7 @@ const ProjectForm = () => {
                 )}
               </div>
             )}
-          />
+          /> */}
 
           {/* Deadline */}
           <Controller

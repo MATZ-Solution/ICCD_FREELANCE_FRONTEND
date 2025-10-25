@@ -66,8 +66,6 @@ function Gallery() {
     navigate('/freelancer/manage-gigs');
   };
 
-  console.log("gigs_details: ", gigs_details)
-
   return (
     <Profile>
       <div className='md:py-5'>
