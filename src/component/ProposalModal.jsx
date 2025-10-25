@@ -21,12 +21,15 @@ const schema = yup.object().shape({
     portfolioLinks: yup.string().url('Enter valid URL').required('Portfolio link is required'),
     additionalComments: yup.string(),
     acknowledgment: yup.boolean().oneOf([true], 'You must acknowledge the terms'),
-    CV: yup.mixed().test('fileExists', 'Please upload your CV', (value) => value?.length > 0)
+    CV:yup
+        .mixed()
+        .test('fileExists', 'Please upload your Resume', (value) => value?.length > 0)
         .test('fileType', 'Only PDF or DOCX allowed', (value) => {
-            if (!value?.[0]) return false;
-            return ['application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'].includes(
-                value[0].type
-            );
+          if (!value?.[0]) return false;
+          return [
+            'application/pdf',
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+          ].includes(value[0].type);
         }),
 });
 

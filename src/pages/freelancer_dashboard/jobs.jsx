@@ -14,7 +14,7 @@ import Pagination from "../../component/pagination";
 import { oicCountries } from "../../../data/oic_contries.js";
 import useDebounce from "../../../hooks/useDebounce.jsx";
 
-const ProposalModal = lazy(() => import("../../component/ProposalModal"));
+const JobProposalModal = lazy(() => import("../../component/JobProposalModal"));
 
 function Jobs() {
   const [city, setCity] = useState("")
@@ -175,7 +175,7 @@ function Jobs() {
       {/* Proposal Modal */}
       {show && jobDetails?.length > 0 && (
         <Suspense fallback={<div className="text-center mt-5">Loading...</div>}>
-          <ProposalModal
+          <JobProposalModal
             onClose={() => setShow(false)}
             data={jobDetails}
             freelancerData={freelancerData}
