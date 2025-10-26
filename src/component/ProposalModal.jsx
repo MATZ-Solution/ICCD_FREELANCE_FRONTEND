@@ -21,16 +21,16 @@ const schema = yup.object().shape({
     portfolioLinks: yup.string().url('Enter valid URL').required('Portfolio link is required'),
     additionalComments: yup.string(),
     acknowledgment: yup.boolean().oneOf([true], 'You must acknowledge the terms'),
-CV: yup
-    .mixed()
-    .test('fileExists', 'Please upload your Resume', (value) => value?.length > 0)
-    .test('fileType', 'Only PDF or DOCX allowed', (value) => {
-      if (!value?.[0]) return false;
-      return [
-        'application/pdf',
-        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-      ].includes(value[0].type);
-    }),
+    CV: yup
+        .mixed()
+        .test('fileExists', 'Please upload your Resume', (value) => value?.length > 0)
+        .test('fileType', 'Only PDF or DOCX allowed', (value) => {
+            if (!value?.[0]) return false;
+            return [
+                'application/pdf',
+                'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            ].includes(value[0].type);
+        }),
 });
 
 const ProposalModal = ({ onClose, data, freelancerData }) => {
@@ -76,11 +76,11 @@ const ProposalModal = ({ onClose, data, freelancerData }) => {
             clientId: clientID,
             freelancerId: freelancerId,
         };
-        
+
         const formDataObj = new FormData();
         for (const key in updateData) {
             if (key === 'CV') {
-                if (updateData.CV?.[0]) formDataObj.append('CV', updateData.CV[0]);
+                if (updateData.CV?.[0]) formDataObj.append('files', updateData.CV[0]);
             } else if (Array.isArray(updateData[key])) {
                 formDataObj.append(key, JSON.stringify(updateData[key]));
             } else {
@@ -88,13 +88,13 @@ const ProposalModal = ({ onClose, data, freelancerData }) => {
             }
         }
 
-        sampleFiles.forEach((file) => {
-            formDataObj.append('sampleFiles', file);
-        });
+        // sampleFiles.forEach((file) => {
+        //     formDataObj.append('sampleFiles', file);
+        // });
 
         if (pathName.includes('manage-jobs')) {
             submitJob(formDataObj);
-                        console.log('Submitted Proposal:', updateData);
+            console.log('Submitted Proposal:', updateData);
 
         } else {
             submitProposals(formDataObj);
@@ -103,13 +103,13 @@ const ProposalModal = ({ onClose, data, freelancerData }) => {
         onClose();
     };
 
-const handleFileChange = (e) => {
-    const file = e.target.files?.[0];
-    if (file) {
-        setFileName(file.name);
-        setValue('CV', Array.from(e.target.files));
-    }
-};
+    const handleFileChange = (e) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            setFileName(file.name);
+            setValue('CV', Array.from(e.target.files));
+        }
+    };
 
     const handleSampleFiles = (e) => {
         const files = Array.from(e.target.files || []);
@@ -129,15 +129,15 @@ const handleFileChange = (e) => {
         setIsDragging(false);
     };
 
- const handleDrop = (e) => {
-    e.preventDefault();
-    setIsDragging(false);
-    const files = e.dataTransfer.files;
-    if (files?.[0]) {
-        setFileName(files[0].name);
-        setValue('CV', Array.from(files)); 
-    }
-};
+    const handleDrop = (e) => {
+        e.preventDefault();
+        setIsDragging(false);
+        const files = e.dataTransfer.files;
+        if (files?.[0]) {
+            setFileName(files[0].name);
+            setValue('CV', Array.from(files));
+        }
+    };
 
     const totalSteps = 5;
     const stepTitles = ['Project Details', 'Proposal Overview', 'Pricing', 'Experience', 'Confirmation'];
@@ -361,11 +361,10 @@ const handleFileChange = (e) => {
                                             onDragOver={handleDragOver}
                                             onDragLeave={handleDragLeave}
                                             onDrop={handleDrop}
-                                            className={`relative flex flex-col items-center justify-center w-full px-6 py-8 border-2 border-dashed rounded-2xl cursor-pointer transition-all duration-200 ${
-                                                isDragging
+                                            className={`relative flex flex-col items-center justify-center w-full px-6 py-8 border-2 border-dashed rounded-2xl cursor-pointer transition-all duration-200 ${isDragging
                                                     ? 'border-blue-500 bg-blue-50'
                                                     : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
-                                            } ${fileName ? 'border-solid border-green-300 bg-green-50' : ''}`}
+                                                } ${fileName ? 'border-solid border-green-300 bg-green-50' : ''}`}
                                         >
                                             <input
                                                 type="file"
@@ -394,7 +393,7 @@ const handleFileChange = (e) => {
                                         {errors.CV && <p className="text-red-500 text-sm mt-2">{errors.CV.message}</p>}
                                     </div>
 
-                                    <div>
+                                    {/* <div>
                                         <label className="block text-sm font-semibold text-gray-900 mb-3">
                                             Work Samples (Optional)
                                         </label>
@@ -426,9 +425,9 @@ const handleFileChange = (e) => {
                                                 ))}
                                             </div>
                                         )}
-                                    </div>
+                                    </div> */}
 
-                                    <div>
+                                    {/* <div>
                                         <label className="block text-sm font-semibold text-gray-900 mb-2">
                                             Additional Comments (Optional)
                                         </label>
@@ -438,7 +437,7 @@ const handleFileChange = (e) => {
                                             rows="3"
                                             placeholder="Any additional information you'd like to share..."
                                         />
-                                    </div>
+                                    </div> */}
                                 </div>
                             )}
 
