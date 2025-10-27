@@ -83,8 +83,8 @@ const JobProposalModal = ({ onClose, data, freelancerData }) => {
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-40 bg-black/40 backdrop-blur-sm p-4">
-      <div className="bg-white w-full max-w-md rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-300">
+    <div className="fixed inset-0 flex items-center justify-center z-40 bg-black/40 backdrop-blur-sm p-4 ">
+      <div className="bg-white w-full max-w-xl h-[95vh] overflow-y-scroll rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-300">
         {/* Header */}
         <div className="bg-gradient-to-r from-[#01AEAD] to-[#05929c] px-6 py-5 flex justify-between items-center">
           <h1 className="text-xl font-bold text-white">Submit Your Proposal</h1>
@@ -132,7 +132,7 @@ const JobProposalModal = ({ onClose, data, freelancerData }) => {
 
           {/* Experience Field */}
           <div className="space-y-2">
-            <label className="block text-sm font-semibold text-gray-800">Years of Experience</label>
+            <label className="block text-sm font-semibold text-gray-800">Years of Experience (In years)</label>
             <input
               type="number"
               {...register('experience')}

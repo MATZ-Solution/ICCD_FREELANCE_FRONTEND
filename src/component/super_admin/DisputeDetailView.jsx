@@ -14,15 +14,16 @@ import {
   Image as ImageIcon,
 } from "lucide-react";
 import { useGetDisputeAdminById } from "../../../api/client/dispute";
+import { useClosedDispute } from "../../../api/client/superadmin";
+import { formatDate } from "../../../functions/timeFormat";
 
 export default function ViewDisputeDetail() {
-  const { id } = useParams();
-  const { data, responseData, isSuccess, isLoading, isError } = useGetDisputeAdminById(id);
 
+  const { id } = useParams();
   const [partialAmount, setPartialAmount] = useState("");
   const [selectedImage, setSelectedImage] = useState(null);
-
-  console.log("responseData: ", responseData)
+  const { data, responseData, isSuccess, isLoading, isError } = useGetDisputeAdminById(id);
+  const { closeDispute, isSuccess: isSuccCloseDispute, isError: isErrCloseDispute } = useClosedDispute(id)
 
   if (isLoading) return <div className="p-6 text-center">Loading...</div>;
   if (isError)
@@ -65,9 +66,8 @@ export default function ViewDisputeDetail() {
     };
     return (
       <span
-        className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border ${
-          colors[status] || colors.default
-        }`}
+        className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border ${colors[status] || colors.default
+          }`}
       >
         {status}
       </span>
@@ -179,7 +179,7 @@ export default function ViewDisputeDetail() {
                     </h4>
                     <p className="text-red-700">{dispute.subject}</p>
                   </div>
-                  
+
                   <div className="bg-red-50 border border-red-200 rounded-xl p-4">
                     <h4 className="font-semibold text-red-800 mb-2 flex items-center gap-2">
                       <MessageSquare className="w-4 h-4" />
@@ -438,7 +438,7 @@ export default function ViewDisputeDetail() {
               <div className="p-6 space-y-4">
                 <button
                   className="w-full bg-gradient-to-r from-emerald-500 to-green-600 text-white py-4 px-6 rounded-xl hover:from-emerald-600 hover:to-green-700 transform transition-all duration-200 hover:scale-105 flex items-center justify-center gap-3 shadow-lg hover:shadow-xl"
-                  onClick={() => handleAction("refundClient")}
+                  onClick={() => closeDispute({ status: 'closed', action: 'Full Refund to Client', closed_reason: 'Any reason' })}
                 >
                   <DollarSign className="w-5 h-5" />
                   <span className="font-medium">Full Refund to Client</span>
