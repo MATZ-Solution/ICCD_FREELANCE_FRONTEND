@@ -27,7 +27,9 @@ const API_ROUTE = {
     applyjob: "/job/applyJob",
     getJobPropsalByClient: "/job/getJobPropsalByClient",
     closejob: "/job/closeJob",
-    jobProposalAction:"/job/jobProposalAction"
+    jobProposalAction:"/job/jobProposalAction",
+    getJobShortListCandidate : "/job/getAllJobs/shortlist"
+    
   },
   gigs: {
     getGigs: "/gigs/getGigs",
@@ -59,7 +61,8 @@ const API_ROUTE = {
     getAllProjects: '/superadmin/getAllProjects',
     getAllUsers: '/superadmin/getAllUsers',
     statisticData: '/superadmin/statisticData',
-    getAllJobs: '/superadmin/getAllJobs'
+    getAllJobs: '/superadmin/getAllJobs',
+    closeDispute: '/superadmin/closeDispute'
 
   },
   dispute: {

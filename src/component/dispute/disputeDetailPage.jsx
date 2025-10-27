@@ -11,6 +11,7 @@ import {
   MessageSquare,
 } from "lucide-react";
 import ResponseDispute from "../client_order/ResponseDispute";
+import { formatDate } from "../../../functions/timeFormat";
 
 function DisputeDetailPage({ userResponseData = [], data = [] }) {
   const navigate = useNavigate();
@@ -21,17 +22,15 @@ function DisputeDetailPage({ userResponseData = [], data = [] }) {
 
   const disputeData = data[0] || null;
 
-  console.log("useruserResponseData", userResponseData);
-
   const userApplyResData =
     disputeData && disputeData.raised_by !== userType
       ? {
-          disputeId: disputeData.id,
-          userId: disputeData.freelancerId,
-          client_id: disputeData.clientId,
-          userType: userType,
-          freelancerUserID: disputeData.freelancerUserID,
-        }
+        disputeId: disputeData.id,
+        userId: disputeData.freelancerId,
+        client_id: disputeData.clientId,
+        userType: userType,
+        freelancerUserID: disputeData.freelancerUserID,
+      }
       : null;
 
   const getStatusBadge = (status) => {
@@ -104,7 +103,7 @@ function DisputeDetailPage({ userResponseData = [], data = [] }) {
                 </div>
                 <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6 text-sm text-gray-500">
                   <span>Order: {disputeData.orderId}</span>
-                  <span>Created at : {disputeData.created_at}</span>
+                  <span>Created at : {formatDate(disputeData.created_at)}</span>
                 </div>
               </div>
             </div>
@@ -151,6 +150,9 @@ function DisputeDetailPage({ userResponseData = [], data = [] }) {
                       {disputeData.gigId}
                     </p>
                   </div>
+                </div>
+                <div>
+                  <p> Payment Status: {disputeData?.action || 'No action taken yet'}</p>
                 </div>
               </div>
             </div>
@@ -226,21 +228,23 @@ function DisputeDetailPage({ userResponseData = [], data = [] }) {
           <div className="space-y-6">
             {/* Freelancer Action Notice */}
             {userType === "freelancer" &&
-              (userResponseData?.length === 0 ? (
-                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                  <h2 className="text-sm p-2 font-semibold text-red-600 bg-red-50 mb-4">
-                    You have only 7 days left to respond to this dispute. If no
-                    response is submitted, the decision will be made based on
-                    the available information, which may weaken your case.
-                  </h2>
-                  <button
-                    onClick={() => setShowSettlementModal(true)}
-                    className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
-                  >
-                    <Scale className="w-4 h-4" />
-                    Respond To The Dispute
-                  </button>
-                </div>
+              ((userResponseData?.length === 0 ) ? (
+                userResponseData?.action && (
+                  <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <h2 className="text-sm p-2 font-semibold text-red-600 bg-red-50 mb-4">
+                      You have only 7 days left to respond to this dispute. If no
+                      response is submitted, the decision will be made based on
+                      the available information, which may weaken your case.
+                    </h2>
+                    <button
+                      onClick={() => setShowSettlementModal(true)}
+                      className="w-full inline-flex items-center justify-center gap-2 px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+                    >
+                      <Scale className="w-4 h-4" />
+                      Respond To The Dispute
+                    </button>
+                  </div>
+                )
               ) : (
                 <div className=" bg-blue-50 rounded-lg shadow-sm border border-gray-200 p-6">
                   <h2 className="text-sm capitalize p-2 font-semibold text-blue-800  mb-4">
@@ -248,7 +252,7 @@ function DisputeDetailPage({ userResponseData = [], data = [] }) {
                     reply from the super admin.
                   </h2>
 
-                   <div className="mt-8 pt-6 p-6 border-t border-slate-200">
+                  <div className="mt-8 pt-6 p-6 border-t border-slate-200">
                     <h3 className="text-lg font-semibold text-slate-800 mb-4 flex items-center gap-2">
                       <MessageSquare className="w-5 h-5 text-blue-500" />
                       Your Response
@@ -286,8 +290,6 @@ function DisputeDetailPage({ userResponseData = [], data = [] }) {
                     </div>
                   </div>
                 </div>
-
-                
               ))}
 
             {/* Client View */}

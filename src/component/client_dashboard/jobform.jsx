@@ -18,6 +18,8 @@ import { oicCountries } from "../../../data/oic_contries";
 // Validation schema
 const schema = yup.object({
   jobTitle: yup.string().required("Job title is required"),
+  companyName: yup.string().required("Company Name is required"),
+
   country: yup.string().required("Location is required"),
   city: yup.string().required("City is required"),
   jobType: yup.string().required("Job type is required"),
@@ -76,6 +78,7 @@ function JobForm() {
     resolver: yupResolver(schema),
     defaultValues: {
       jobTitle: "",
+      companyName:"",
       country: "",
       city: "",
       jobType: "",
@@ -115,6 +118,7 @@ function JobForm() {
   useEffect(() => {
     if (data && data?.length > 0) {
       reset({
+        companyName: data[0]?.companyName || '',
         jobTitle: data[0]?.jobTitle || '',
         country: data[0]?.country || '',
         city: data[0]?.city || '',
@@ -201,6 +205,27 @@ function JobForm() {
               />
               {errors.jobTitle && (
                 <p className="text-red-500 text-sm mt-1">{errors.jobTitle.message}</p>
+              )}
+            </div>
+               {/* Job Title */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Company Name 
+              </label>
+              <Controller
+                name="companyName"
+                control={control}
+                render={({ field }) => (
+                  <input
+                    {...field}
+                    type="text"
+                    placeholder="Company Name"
+                    className={`w-full px-3 py-2 border rounded-md focus:ring-2 ${errors.companyName ? "border-red-500" : "border-gray-300"}`}
+                  />
+                )}
+              />
+              {errors.companyName && (
+                <p className="text-red-500 text-sm mt-1">{errors.companyName.message}</p>
               )}
             </div>
 

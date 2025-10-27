@@ -110,7 +110,7 @@ const Payment = () => {
                   <div className="bg-gradient-to-r from-[#40978A]/5 to-transparent px-4 sm:px-6 py-3 sm:py-4 border-t border-[#40978A]/10">
                     <div className="flex items-start gap-3">
                       <Shield className="w-4 h-4 text-[#40978A] flex-shrink-0 mt-0.5" />
-                      <p className="text-xs sm:text-sm text-gray-700">
+                      <p className="text-xs capitalize sm:text-sm text-gray-700">
                         Your payment information is encrypted and secured. You'll be redirected to a secure payment page to complete your transaction.
                       </p>
                     </div>
@@ -169,7 +169,7 @@ const Payment = () => {
 
                   {/* Package Type & Price */}
                   <div className="flex justify-between items-center pb-4 border-b border-gray-200">
-                    <span className="text-sm sm:text-base font-semibold text-gray-900">{packageType} Package</span>
+                    <span className="text-sm capitalize sm:text-base font-semibold text-gray-900">{packageType} Package</span>
                     <span className="text-lg sm:text-xl font-bold text-[#40978A]">${totalPrice}</span>
                   </div>
 

@@ -1,6 +1,9 @@
 import API_ROUTE from "../endPoints";
 import api from "../axios/index";
 import { useQuery } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "react-toastify";
 
 export function useGetAllUsers(params = {}) {
   const constructQueryString = (params) => {
@@ -10,7 +13,7 @@ export function useGetAllUsers(params = {}) {
 
   const queryKey = [API_ROUTE.superadmin.getAllUsers, params];
 
-  const { data, error, isLoading, isError } = useQuery({
+  const { data, error, isLoading, isError, isPending } = useQuery({
     queryKey,
     queryFn: () =>
       api.get(`${API_ROUTE.superadmin.getAllUsers}${constructQueryString(params)}`),
@@ -21,10 +24,10 @@ export function useGetAllUsers(params = {}) {
     totalPages: data?.data?.totalPages,
     error,
     isLoading,
+    isPending,
     isError,
   };
 }
-
 
 export function useGetAllFreelancers(params = {}) {
   const constructQueryString = (params) => {
@@ -69,7 +72,6 @@ export function useGetAllGigs(params = {}) {
     isError,
   };
 }
-
 
 export function useGetAllProjects(params = {}) {
   const constructQueryString = (params) => {
@@ -133,4 +135,32 @@ export function useGetStatisticsData(params = {}) {
     isError,
     isLoading,
   };
+}
+
+export function useClosedDispute(id) {
+  const navigate = useNavigate()
+  const {
+    mutate: closeDispute,
+    isSuccess,
+    isPending,
+    isError,
+    error,
+  } = useMutation({
+    mutationFn: async (data) =>
+      await api.put(`${API_ROUTE.superadmin.closeDispute}/${id}`, data, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: api.defaults.headers.common["Authorization"],
+        },
+        timeout: 30000,
+      }),
+    onSuccess: (data) => {
+      toast.success("Dispute Close Successfully")
+    },
+    onError: (error) => {
+      toast.error("Failed to close dispute.")
+
+    },
+  });
+  return { closeDispute, isSuccess, isPending, isError, error };
 }

@@ -50,7 +50,7 @@ const LoginController = ({ onClose, linker }) => {
   ];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 p-4 sm:p-6 md:p-8 overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-xl bg-transparent p-4 sm:p-6 md:p-8 overflow-y-auto">
       {/* Animated background particles */}
   
 
