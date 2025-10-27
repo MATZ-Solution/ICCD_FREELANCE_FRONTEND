@@ -1,6 +1,9 @@
 import API_ROUTE from "../endPoints";
 import api from "../axios/index";
 import { useQuery } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
+import { toast } from "react-toastify";
 
 export function useGetAllUsers(params = {}) {
   const constructQueryString = (params) => {
@@ -116,8 +119,6 @@ export function useGetAllJobs(params = {}) {
   };
 }
 
-
-
 export function useGetStatisticsData(params = {}) {
   const constructQueryString = (params) => {
     const query = new URLSearchParams(params).toString();
@@ -134,4 +135,32 @@ export function useGetStatisticsData(params = {}) {
     isError,
     isLoading,
   };
+}
+
+export function useClosedDispute(id) {
+  const navigate = useNavigate()
+  const {
+    mutate: closeDispute,
+    isSuccess,
+    isPending,
+    isError,
+    error,
+  } = useMutation({
+    mutationFn: async (data) =>
+      await api.put(`${API_ROUTE.superadmin.closeDispute}/${id}`, data, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: api.defaults.headers.common["Authorization"],
+        },
+        timeout: 30000,
+      }),
+    onSuccess: (data) => {
+      toast.success("Dispute Close Successfully")
+    },
+    onError: (error) => {
+      toast.error("Failed to close dispute.")
+
+    },
+  });
+  return { closeDispute, isSuccess, isPending, isError, error };
 }
