@@ -26,6 +26,7 @@ import { useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
 import ICCDLoader from "../../component/loader";
 import ICCDError from "../../component/ICCDError";
+import { UserRound, CircleUserRound, CircleUser   } from 'lucide-react';
 
 const ProjectDetailFreelancer = () => {
   const { id } = useParams();
@@ -342,13 +343,16 @@ const ProjectDetailFreelancer = () => {
                 </div>
                 <div className="p-6 space-y-5">
                   <div className="flex items-center gap-4">
-                    <img
-                      className="w-14 h-14 object-cover rounded-full ring-2 ring-blue-100"
-                      src={
-                        project?.companyImg || "https://via.placeholder.com/56"
-                      }
-                      alt="Company logo"
-                    />
+                    {
+                      project?.companyImg ?
+                        <img
+                          className="w-14 h-14 object-cover rounded-full ring-2 ring-blue-100"
+                          src={project?.companyImg}
+                          alt="Company logo"
+                        />
+                        : <CircleUser size={35}/>
+                    }
+
                     <div>
                       <div className="font-bold text-gray-900 text-lg">
                         {project?.companyName || "Company"}
