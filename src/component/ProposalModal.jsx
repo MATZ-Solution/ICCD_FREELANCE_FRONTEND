@@ -300,10 +300,10 @@ const ProposalModal = ({ onClose, data, freelancerData }) => {
                                                 className="w-full px-4 py-3 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-[#44A4AD] focus:border-transparent outline-none transition-all appearance-none cursor-pointer bg-white"
                                             >
                                                 <option value="USD">USD</option>
-                                                <option value="EUR">EUR</option>
+                                                {/* <option value="EUR">EUR</option>
                                                 <option value="GBP">GBP</option>
                                                 <option value="PKR">PKR</option>
-                                                <option value="AED">AED</option>
+                                                <option value="AED">AED</option>  */}
                                             </select>
                                         </div>
                                     </div>
@@ -355,7 +355,7 @@ const ProposalModal = ({ onClose, data, freelancerData }) => {
 
                                     <div>
                                         <label className="block text-sm font-semibold text-gray-900 mb-3">
-                                            Upload CV <span className="text-red-500">*</span>
+                                            Upload Proposals <span className="text-red-500">*</span>
                                         </label>
                                         <label
                                             onDragOver={handleDragOver}
@@ -383,7 +383,7 @@ const ProposalModal = ({ onClose, data, freelancerData }) => {
                                                 ) : (
                                                     <>
                                                         <Upload className="w-8 h-8 text-gray-400" />
-                                                        <p className="text-sm font-semibold text-gray-900">Drag CV here</p>
+                                                        <p className="text-sm font-semibold text-gray-900">Drag proposals here</p>
                                                         <p className="text-xs text-gray-500">or click to browse</p>
                                                         <p className="text-xs text-gray-400 mt-1">PDF or DOCX (max 5MB)</p>
                                                     </>
