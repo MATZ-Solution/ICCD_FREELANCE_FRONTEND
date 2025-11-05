@@ -12,6 +12,10 @@ import {
   Briefcase,
   Calendar,
   Globe,
+  Paperclip,
+  FileText,
+  File,
+  Download
 } from "lucide-react"
 import { useParams } from "react-router-dom";
 import { useGetProjectProposalByClient, useGetProjectsById } from '../../api/client/project'
@@ -62,7 +66,7 @@ export const ProjectDetail = () => {
                     <div className="w-5 h-5 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full flex items-center justify-center">
                       <Globe className="w-3 h-3 text-white" />
                     </div>
-                    <span className="font-medium text-blue-700">{data[0]?.mode}</span>
+                    <span className="font-medium text-blue-700">{data[0]?.mode || 'N/A'}</span>
                   </div>
                   <div className="flex items-center gap-3 bg-emerald-50 px-4 py-2 rounded-full">
                     <Clock className="w-5 h-5 text-emerald-600" />
@@ -154,12 +158,10 @@ export const ProjectDetail = () => {
                 <h2 className="text-xl font-bold text-gray-900">Deliverables</h2>
               </div>
               <div className="p-8 space-y-6">
-
                 <div
                   className="prose prose-sm prose-gray max-w-none"
                   dangerouslySetInnerHTML={{ __html: data[0]?.deliverable }}
                 />
-
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {/* <div className="bg-gradient-to-br from-orange-50 to-red-50 p-6 rounded-xl border border-orange-200">
                     <div className="flex items-center gap-3 mb-3">
@@ -179,6 +181,56 @@ export const ProjectDetail = () => {
                 </div>
               </div>
             </div>
+
+            {data[0]?.files && data[0]?.files?.split(",")?.length > 0 && (
+              <div className="bg-white rounded-3xl shadow-md border border-blue-100 overflow-hidden hover:shadow-xl transition-all duration-300 hover:border-blue-200">
+                <div className="bg-gradient-to-r from-orange-50 to-red-50 p-6 border-b border-blue-100">
+                  <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-3">
+                    <Paperclip className="w-6 h-6 text-orange-600" />
+                    Project Attachments
+                  </h2>
+                </div>
+                <div className="p-8">
+                  <div className="space-y-4">
+                    {data[0]?.files?.split(",").map((fileUrl, index) => {
+                      const fileName = fileUrl.split("/").pop().replace(/^\d+-/,""); // extract filename from URL
+                      const fileType = fileName.split(".").pop().toLowerCase(); // get extension
+                      return (
+                        <div
+                          key={index}
+                          className="flex items-center justify-between p-5 bg-gradient-to-r from-orange-50 to-red-50 rounded-2xl border border-orange-200 hover:border-orange-300 transition-all hover:shadow-md"
+                        >
+                          <div className="flex items-center gap-4">
+                            <div className="w-12 h-12 bg-gradient-to-r from-orange-500 to-red-500 rounded-lg flex items-center justify-center">
+                              {fileType === "pdf" ? (
+                                <FileText className="w-6 h-6 text-white" />
+                              ) : (
+                                <File className="w-6 h-6 text-white" />
+                              )}
+                            </div>
+                            <div>
+                              <p className="font-bold text-gray-900">
+                                {fileName}
+                              </p>
+                              <p className="text-xs text-gray-500">File</p>
+                            </div>
+                          </div>
+                          <a
+                            href={fileUrl}
+                            download={fileName}
+                            className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-bold rounded-lg transition-all duration-300 hover:shadow-lg transform hover:scale-105 active:scale-95"
+                          >
+                            <Download className="w-4 h-4" />
+                            <span>Download</span>
+                          </a>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+            )}
+
             {/* Time commitment */}
             {/* <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300">
               <div className="bg-gradient-to-r from-teal-50 to-cyan-50 p-6 border-b border-gray-200">
@@ -207,14 +259,14 @@ export const ProjectDetail = () => {
                     <Briefcase className="w-6 h-6 text-white" />
                   </div>
                   <h3 className="font-bold text-gray-900 mb-2">Project Type</h3>
-                  <p className="text-gray-700 font-medium">{data[0]?.type}</p>
+                  <p className="text-gray-700 font-medium">{data[0]?.type || 'N/A'}</p>
                 </div>
                 <div className="text-center">
                   <div className="w-12 h-12 bg-gradient-to-r from-emerald-500 to-teal-600 rounded-full flex items-center justify-center mx-auto mb-4">
                     <Globe className="w-6 h-6 text-white" />
                   </div>
                   <h3 className="font-bold text-gray-900 mb-2">Languages</h3>
-                  <p className="text-gray-700 font-medium">{data[0]?.languages}</p>
+                  <p className="text-gray-700 font-medium">{data[0]?.languages || 'N/A'}</p>
                 </div>
                 <div className="text-center">
                   <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-600 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -251,23 +303,23 @@ export const ProjectDetail = () => {
                   </div>
                 </div>
                 {/* {pathName.includes('freelancer') && ( */}
-                  <div className="p-6 space-y-4">
-                    <button onClick={() => {
-                      if (
-                        !freelancerData ||
-                        Object.keys(freelancerData).length === 0 ||
-                        !isFreelancerPath
-                      ) {
-                        navigate("/login");
-                      } else {
-                        setShow(true);
-                      }
-                    }} className="cursor-pointer w-full bg-[#01AEAD] hover:bg-[#05929c]  text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center gap-3">
-                      <span className="text-xl">👍</span>
-                      <span>{"I'm interested"}</span>
-                    </button>
-                  </div>
-             
+                <div className="p-6 space-y-4">
+                  <button onClick={() => {
+                    if (
+                      !freelancerData ||
+                      Object.keys(freelancerData).length === 0 ||
+                      !isFreelancerPath
+                    ) {
+                      navigate("/login");
+                    } else {
+                      setShow(true);
+                    }
+                  }} className="cursor-pointer w-full bg-[#01AEAD] hover:bg-[#05929c]  text-white font-bold py-4 px-6 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center gap-3">
+                    <span className="text-xl">👍</span>
+                    <span>{"I'm interested"}</span>
+                  </button>
+                </div>
+
                 {/* Skills and Freelancer Type */}
               </div>
               <div className="grid grid-cols-1 md:grid-cols-1  mt-8 gap-8">
