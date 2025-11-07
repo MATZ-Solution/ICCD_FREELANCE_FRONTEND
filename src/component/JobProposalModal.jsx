@@ -87,7 +87,7 @@ const JobProposalModal = ({ onClose, data, freelancerData }) => {
       <div className="bg-white w-full max-w-xl h-[95vh] overflow-y-scroll rounded-2xl shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-300">
         {/* Header */}
         <div className="bg-gradient-to-r from-[#01AEAD] to-[#05929c] px-6 py-5 flex justify-between items-center">
-          <h1 className="text-xl font-bold text-white">Submit Your Proposal</h1>
+          <h1 className="text-xl font-bold text-white">Details</h1>
           <button
             onClick={onClose}
             className="text-white hover:bg-white/20 p-1 rounded-lg transition-colors"
@@ -202,7 +202,7 @@ const JobProposalModal = ({ onClose, data, freelancerData }) => {
               type="submit"
               className="flex-1 px-4 py-3 bg-gradient-to-r from-[#01AEAD] to-[#05929c] text-white font-semibold rounded-lg hover:shadow-lg hover:from-[#05929c] hover:to-[#047580] transition-all active:scale-95"
             >
-              Submit Proposal
+              Submit
             </button>
           </div>
         </form>

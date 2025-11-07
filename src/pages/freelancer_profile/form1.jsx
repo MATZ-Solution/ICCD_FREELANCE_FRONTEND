@@ -8,6 +8,10 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setUserProfile } from "../../../redux/slices/userProfileSlice";
 import { fileToBase64 } from "../../../functions/base64FileConversion";
+import { oicCountries } from "../../../data/oic_contries.js";
+import Select from "../../component/buttonSelect.jsx";
+import ProgressBar from "../../component/freelancer_profile/ProgressBar.jsx";
+
 
 // ✅ Validation Schema
 const validationSchema = Yup.object({
@@ -17,10 +21,13 @@ const validationSchema = Yup.object({
   lastName: Yup.string()
     .required("Last name is required")
     .min(2, "Last name must be at least 2 characters"),
-  about_description: Yup.string()
-    .required("About description is required")
-    .min(50, "Must be at least 50 characters")
-    .max(500, "Cannot exceed 500 characters"),
+  email: Yup.string()
+    .required("Email is required")
+    .email("Enter a valid email address"),
+  // about_description: Yup.string()
+  //   .required("About description is required")
+  //   .min(50, "Must be at least 50 characters")
+  //   .max(500, "Cannot exceed 500 characters"),
   files: Yup.mixed()
     .required("Profile picture is required")
     .test("fileSize", "File size must be less than 5MB", (value) =>
@@ -31,17 +38,22 @@ const validationSchema = Yup.object({
       value[0] &&
       ["image/jpeg", "image/png", "image/gif"].includes(value[0].type)
     ),
-  languages: Yup.array()
-    .min(1, "At least one language is required")
-    .of(
-      Yup.object({
-        language: Yup.string().required(),
-        level: Yup.string().required(),
-      })
-    ),
+  // languages: Yup.array()
+  //   .min(1, "At least one language is required")
+  //   .of(
+  //     Yup.object({
+  //       language: Yup.string().required(),
+  //       level: Yup.string().required(),
+  //     })
+  //   ),
+  country: Yup.string()
+    .required("Country is required"),
+  city: Yup.string()
+    .required("City is required")
 });
 
 export default function PersonalInfoStep() {
+
   const [languages, setLanguages] = useState([]);
   const [currentLanguage, setCurrentLanguage] = useState("");
   const [currentLevel, setCurrentLevel] = useState("");
@@ -53,6 +65,7 @@ export default function PersonalInfoStep() {
   const {
     control,
     handleSubmit,
+    watch,
     formState: { errors },
     setValue,
   } = useForm({
@@ -60,19 +73,20 @@ export default function PersonalInfoStep() {
     defaultValues: {
       firstName: "",
       lastName: "",
-      about_description: "",
+      email: "",
+      // about_description: "",
       files: [],
-      languages: [],
+      // languages: [],
+      country: "",
+      city: ""
     },
   });
-
+  const country = watch("country");
   // ✅ Add Language
   const addLanguage = () => {
     if (currentLanguage && currentLevel) {
       if (languages.some((lang) => lang.language === currentLanguage)) return;
-
       const newLanguages = [...languages, { language: currentLanguage, level: currentLevel }];
-
       setLanguages(newLanguages);
       setValue("languages", newLanguages);
       setCurrentLanguage("");
@@ -81,10 +95,20 @@ export default function PersonalInfoStep() {
   };
   const removeLanguage = (index) => {
     const newLanguages = languages.filter((_, i) => i !== index);
-
     setLanguages(newLanguages);
     setValue("languages", newLanguages);
   };
+
+  const locationOptions = oicCountries.map(item => ({
+    value: item.country,
+    label: item.country
+  }));
+
+  const findCity = oicCountries.find(item => item.country === country);
+  const citiesoption = findCity?.cities?.map(city => ({
+    value: city,
+    label: city
+  })) || [];
 
   useEffect(() => {
     return () => {
@@ -98,15 +122,12 @@ export default function PersonalInfoStep() {
     try {
       const file = data.files[0];
       const base64File = await fileToBase64(file);
-
-
       dispatch(
         setUserProfile({
           ...data,
           files: [{ name: file.name, type: file.type, base64: base64File }],
         })
       );
-
       navigate("/freelancer/profile-form/2");
     } catch (error) {
       console.error("❌ Error in onSubmit:", error);
@@ -123,43 +144,7 @@ export default function PersonalInfoStep() {
   return (
     <div className="max-w-6xl mx-auto p-5">
       {/* Progress Bar */}
-      <div className="mb-8">
-        <div className="bg-gray-300 my-6 h-px w-full"></div>
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0 md:space-x-3 mb-5">
-          <div className="flex flex-wrap items-center gap-3">
-            {[1, 2].map((step) => (
-              <div key={step} className="flex items-center gap-1">
-                <div
-                  className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                    step === 1
-                      ? "bg-[#01AEAD] text-white"
-                      : "border border-gray-300 bg-white text-gray-300"
-                  }`}
-                >
-                  {step}
-                </div>
-                <span
-                  className={`${step === 1 ? "text-[#01AEAD]" : "text-gray-600"}`}
-                >
-                  {step === 1 ? "Personal Info" : "Professional Info"}
-                </span>
-              </div>
-            ))}
-          </div>
-          <div className="w-full md:w-auto">
-            <div className="text-gray-500 text-sm md:text-base mb-2 md:mb-0">
-              Completion Rate: 50%
-            </div>
-            <div className="h-2 w-full bg-gray-200 rounded overflow-hidden">
-              <div
-                className="h-full bg-[#01AEAD] rounded"
-                style={{ width: "50%" }}
-              ></div>
-            </div>
-          </div>
-        </div>
-        <div className="bg-gray-300 my-6 h-px w-full"></div>
-      </div>
+      <ProgressBar currentStep={1}/> 
 
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between md:items-center mb-8">
@@ -177,79 +162,6 @@ export default function PersonalInfoStep() {
 
       {/* Form */}
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
-        {/* Full Name */}
-        <div className="grid grid-cols-2 gap-8 items-start">
-          <div>
-            <label className="block font-semibold text-lg mb-2">
-              Full Name * <span className="italic font-normal">Private</span>
-            </label>
-            <p className="text-sm text-gray-600">Ex: John Smith</p>
-          </div>
-          <div>
-            <div className="flex gap-3">
-              <Controller
-                name="firstName"
-                control={control}
-                render={({ field }) => (
-                  <input
-                    {...field}
-                    type="text"
-                    placeholder="First Name"
-                    className="flex-1 p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-cyan-500"
-                  />
-                )}
-              />
-              <Controller
-                name="lastName"
-                control={control}
-                render={({ field }) => (
-                  <input
-                    {...field}
-                    type="text"
-                    placeholder="Last Name"
-                    className="flex-1 p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-cyan-500"
-                  />
-                )}
-              />
-            </div>
-            {(errors.firstName || errors.lastName) && (
-              <p className="text-red-500 text-sm mt-2">
-                {errors.firstName?.message || errors.lastName?.message}
-              </p>
-            )}
-          </div>
-        </div>
-
-        {/* Display Name */}
-        {/* <div className="grid grid-cols-2 gap-8 items-start">
-          <div>
-            <label className="block font-semibold text-lg mb-2">
-              Display Name *
-            </label>
-            <p className="text-sm text-gray-600">
-              This name will appear publicly on your profile.
-            </p>
-          </div>
-          <div>
-            <Controller
-              name="displayName"
-              control={control}
-              render={({ field }) => (
-                <input
-                  {...field}
-                  type="text"
-                  placeholder="Display Name"
-                  className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-cyan-500"
-                />
-              )}
-            />
-            {errors.displayName && (
-              <p className="text-red-500 text-sm mt-2">
-                {errors.displayName.message}
-              </p>
-            )}
-          </div>
-        </div> */}
 
         {/* Profile Picture */}
         <div className="grid grid-cols-2 gap-8 items-start">
@@ -305,8 +217,126 @@ export default function PersonalInfoStep() {
           </div>
         </div>
 
-        {/* About Description */}
+        {/* Full Name */}
         <div className="grid grid-cols-2 gap-8 items-start">
+          <div>
+            <label className="block font-semibold text-lg mb-2">
+              Full Name *
+              {/* <span className="italic font-normal">Private</span> */}
+            </label>
+            <p className="text-sm text-gray-600">Ex: John Smith</p>
+          </div>
+          <div>
+            <div className="flex gap-3">
+              <div>
+                <Controller
+                  name="firstName"
+                  control={control}
+                  render={({ field }) => (
+                    <input
+                      {...field}
+                      type="text"
+                      placeholder="First Name"
+                      className="flex-1 p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                    />
+                  )}
+                />
+                {(errors.firstName) && (
+                  <p className="text-red-500 text-sm mt-2">
+                    {errors.firstName?.message}
+                  </p>
+                )}
+              </div>
+              <div>
+                <Controller
+                  name="lastName"
+                  control={control}
+                  render={({ field }) => (
+                    <input
+                      {...field}
+                      type="text"
+                      placeholder="Last Name"
+                      className="flex-1 p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                    />
+                  )}
+                />
+                {(errors.lastName) && (
+                  <p className="text-red-500 text-sm mt-2">
+                    {errors.lastName?.message}
+                  </p>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Email */}
+        <div className="grid grid-cols-2  items-start">
+          <div>
+            <label className="block font-semibold text-lg mb-2">
+              Email *
+              {/* <span className="italic font-normal">Private</span> */}
+            </label>
+            <p className="text-sm text-gray-600">Ex: John Smith</p>
+          </div>
+          <div>
+            <div className="w-full ">
+              <Controller
+                name="email"
+                control={control}
+                render={({ field }) => (
+                  <input
+                    {...field}
+                    type="text"
+                    placeholder="Email"
+                    className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                  />
+                )}
+              />
+              {(errors.email) && (
+                <p className="text-red-500 text-sm mt-2">
+                  {errors.email?.message}
+                </p>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Display Name */}
+        {/* <div className="grid grid-cols-2 gap-8 items-start">
+          <div>
+            <label className="block font-semibold text-lg mb-2">
+              Display Name *
+            </label>
+            <p className="text-sm text-gray-600">
+              This name will appear publicly on your profile.
+            </p>
+          </div>
+          <div>
+            <Controller
+              name="displayName"
+              control={control}
+              render={({ field }) => (
+                <input
+                  {...field}
+                  type="text"
+                  placeholder="Display Name"
+                  className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-cyan-500"
+                />
+              )}
+            />
+            {errors.displayName && (
+              <p className="text-red-500 text-sm mt-2">
+                {errors.displayName.message}
+              </p>
+            )}
+          </div>
+        </div> */}
+
+
+
+        {/* About Description */}
+        {/* <div className="grid grid-cols-2 gap-8 items-start">
           <div>
             <label htmlFor="about_description" className="block font-semibold text-lg mb-2">
               About Description *
@@ -336,10 +366,10 @@ export default function PersonalInfoStep() {
               </p>
             )}
           </div>
-        </div>
+        </div> */}
 
         {/* Languages */}
-        <div className="grid grid-cols-2 gap-8 items-start">
+        {/* <div className="grid grid-cols-2 gap-8 items-start">
           <div>
             <label className="block font-semibold text-lg mb-2">Languages *</label>
             <p className="text-sm text-gray-600">
@@ -374,11 +404,10 @@ export default function PersonalInfoStep() {
                 type="button"
                 onClick={addLanguage}
                 disabled={!currentLanguage || !currentLevel}
-                className={`px-4 py-3 rounded text-white transition-colors ${
-                  currentLanguage && currentLevel
-                    ? "bg-[#01AEAD] hover:bg-cyan-600"
-                    : "bg-gray-300 cursor-not-allowed"
-                }`}
+                className={`px-4 py-3 rounded text-white transition-colors ${currentLanguage && currentLevel
+                  ? "bg-[#01AEAD] hover:bg-cyan-600"
+                  : "bg-gray-300 cursor-not-allowed"
+                  }`}
               >
                 Add
               </button>
@@ -410,6 +439,63 @@ export default function PersonalInfoStep() {
                 {errors.languages.message}
               </p>
             )}
+          </div>
+        </div> */}
+
+        {/* Country */}
+        <div className="grid grid-cols-2 gap-8 items-start">
+          <div>
+            <label className="block font-semibold text-lg mb-2">Country *</label>
+            <p className="text-sm text-gray-600">
+              Select your Counrty.
+            </p>
+          </div>
+          <div className="flex gap-3 items-center">
+            <div className="w-56">
+              <Controller
+                control={control}
+                name="country"
+                render={({ field }) => (
+                  <Select
+                    placeholder="Country"
+                    option={locationOptions}
+                    value={locationOptions.find(opt => opt.value === field.value) || null}
+                    onChange={(selected) => field.onChange(selected?.value || "")}
+                  />
+                )}
+              />
+              {errors.country && (
+                <p className="text-red-500 text-sm mt-2">
+                  {errors.country.message}
+                </p>
+              )}
+            </div>
+
+            <div className="w-56">
+              <Controller
+                control={control}
+                name="city"
+                render={({ field }) => (
+                  <Select
+                    placeholder={country ? "City" : "Select country first"}
+                    option={citiesoption}
+                    value={citiesoption.find(opt => opt.value === field.value) || null}
+                    onChange={(selected) => field.onChange(selected?.value || "")}
+                    isDisabled={!country}
+                  />
+                )}
+              />
+              {errors.city && (
+                <p className="text-red-500 text-sm mt-2">
+                  {errors.city.message}
+                </p>
+              )}
+            </div>
+
+            {/* <button className="h-14 px-8 bg-gradient-to-r from-[#44A4AD] to-[#3a8c94] text-white rounded-xl font-semibold hover:shadow-lg transition-all whitespace-nowrap">
+                        Search
+                      </button> */}
+          </div> <div>
           </div>
         </div>
 

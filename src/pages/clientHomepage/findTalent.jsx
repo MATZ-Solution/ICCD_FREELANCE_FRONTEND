@@ -6,6 +6,7 @@ import { SearchIcon } from "lucide-react";
 import useDebounce from "../../../hooks/useDebounce";
 import Pagination from "../../component/pagination";
 import DataLoader from "../superadmin_dashboard/DataLoader";
+import ItemNotFound from "../../component/itemNotFound";
 
 export default function FindTalent() {
 
@@ -54,35 +55,43 @@ export default function FindTalent() {
             <div className="flex flex-col sm:flex-row">
                 {/* Main Content */}
                 <main className="mt-10 flex-1">
-                    <h1 className="font-semibold mb-3 text-xl">
-                        Based on what you might be looking for
-                    </h1>
+                    {gigs?.length > 0 && (
+                        <h1 className="font-semibold mb-3 text-xl">
+                            Based on what you might be looking for
+                        </h1>
+                    )}
                     {/* Gig Cards Section */}
-                    <div className="mt-6 mb-4 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                        {gigs?.map((data, index) => (
-                            <GigCard
-                                key={index}
-                                onClick={() => navigate(`/find-talent/${data?.id}`)}
-                                image={data?.fileUrls ? data?.fileUrls.split(",")[0] : ""}
-                                title={data.title}
-                                author={data.firstName + " " + data.lastName}
-                                authorImg={data?.freelancerImg}
-                                level="Level 2++"
-                                rating={4.7}
-                                reviews={187}
-                                price={2977}
-                                offersVideoConsultation={true}
-                            />
-                        ))}
-                    </div>
+                    {gigs?.length === 0 ?
+                        <ItemNotFound title="No gigs found" description="There is no gigs that you searched" />
+                        :
+                        <div className="mt-6 mb-4 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                            {gigs?.map((data, index) => (
+                                <GigCard
+                                    key={index}
+                                    onClick={() => navigate(`/find-talent/${data?.id}`)}
+                                    image={data?.fileUrls ? data?.fileUrls.split(",")[0] : ""}
+                                    title={data.title}
+                                    author={data.firstName + " " + data.lastName}
+                                    authorImg={data?.freelancerImg}
+                                    level="Level 2++"
+                                    rating={4.7}
+                                    reviews={187}
+                                    price={2977}
+                                    offersVideoConsultation={true}
+                                />
+                            ))}
+                        </div>
+                    }
                 </main>
             </div>
 
-            <Pagination
-                currentPage={page}
-                totalPages={totalPages}
-                onPageChange={(newPage) => setPage(newPage)}
-            />
+            {gigs?.length > 0 && (
+                <Pagination
+                    currentPage={page}
+                    totalPages={totalPages}
+                    onPageChange={(newPage) => setPage(newPage)}
+                />
+            )}
         </div>
     );
 }

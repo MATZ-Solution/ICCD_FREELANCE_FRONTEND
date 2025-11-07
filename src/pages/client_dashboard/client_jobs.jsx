@@ -100,11 +100,13 @@ function ClientJobs() {
 
       {/* Jobs Table */}
       {activeCount > 0 && <Jobs_table data={data} />}
-      <Pagination
-        currentPage={page}
-        totalPages={totalPages}
-        onPageChange={(newPage) => setPage(newPage)}
-      />
+      {data?.length > 0 && (
+        <Pagination
+          currentPage={page}
+          totalPages={totalPages}
+          onPageChange={(newPage) => setPage(newPage)}
+        />
+      )}
 
     </div>
   );

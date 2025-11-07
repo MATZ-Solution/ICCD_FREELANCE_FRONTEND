@@ -21,6 +21,8 @@ const schema = yup.object().shape({
     portfolioLinks: yup.string().url('Enter valid URL').required('Portfolio link is required'),
     additionalComments: yup.string(),
     acknowledgment: yup.boolean().oneOf([true], 'You must acknowledge the terms'),
+    percentage: yup.string(),
+    duration: yup.string(),
     CV: yup
         .mixed()
         .test('fileExists', 'Please upload your Resume', (value) => value?.length > 0)
@@ -38,12 +40,26 @@ const ProposalModal = ({ onClose, data, freelancerData }) => {
     const [sampleFiles, setSampleFiles] = useState([]);
     const [isDragging, setIsDragging] = useState(false);
     const [step, setStep] = useState(1);
+    const [milestonePayment, setMilestonePayment] = useState([])
 
     const { firstName, lastName, id: freelancerId, email } = freelancerData;
     const clientID = data[0]?.clientID;
     const projectID = data[0]?.id;
     const projectTitle = data[0]?.title;
     const pathName = useLocation().pathname;
+
+    const addMilestonePayment = () => {
+        const duration = watch("duration")
+        const percentage = watch("percentage")
+        setMilestonePayment([...milestonePayment, { percentage: percentage, duration: duration }])
+        setValue("duration", "")
+        setValue("percentage", "")
+    }
+
+    const removeEducation = (index) => {
+        const updatedmilestone = milestonePayment.filter((_, i) => i !== index)
+        setMilestonePayment(updatedmilestone)
+    }
 
     const {
         register,
@@ -61,12 +77,15 @@ const ProposalModal = ({ onClose, data, freelancerData }) => {
             timeUnit: 'days',
             currency: 'USD',
             paymentTerms: 'fixed',
+            percentage: "",
+            duration: ""
         },
     });
 
     const { submitProposals, isPending } = useApplyProject();
     const { submitJob } = useApplyJob();
     const acknowledgment = watch('acknowledgment');
+    const paymentTerms = watch('paymentTerms');
 
     const onSubmit = (formData) => {
         console.log('Form Data:', formData);
@@ -75,6 +94,7 @@ const ProposalModal = ({ onClose, data, freelancerData }) => {
             projectId: projectID,
             clientId: clientID,
             freelancerId: freelancerId,
+            milestonePayment: milestonePayment
         };
 
         const formDataObj = new FormData();
@@ -100,7 +120,7 @@ const ProposalModal = ({ onClose, data, freelancerData }) => {
             submitProposals(formDataObj);
             console.log('Submitted Proposal:', updateData);
         }
-        onClose();
+        // onClose();
     };
 
     const handleFileChange = (e) => {
@@ -332,6 +352,87 @@ const ProposalModal = ({ onClose, data, freelancerData }) => {
                                                 </label>
                                             ))}
                                         </div>
+                                        {paymentTerms === 'milestone' && (
+                                            <div className="mt-3">
+                                                <div>
+                                                    <label className="block font-semibold text-lg mb-2">Add Milestone Payment</label>
+                                                </div>
+                                                <div>
+                                                    <div className="space-y-3 border p-3 rounded-lg border-gray-300 mb-4">
+                                                        <div className="flex flex-col sm:flex-row gap-3">
+                                                            <input
+                                                                type="text"
+                                                                {...register('percentage')}
+                                                                placeholder="Add Percentage"
+                                                                // value={option.value || ""}
+                                                                // onChange={(e) =>
+                                                                //     setPercentage(e.target.value)
+                                                                // }
+                                                                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500"
+                                                            />
+                                                            <input
+                                                                type="text"
+                                                                {...register('duration')}
+                                                                placeholder="Add Duration"
+                                                                // value={option.value || ""}
+                                                                // onChange={(e) =>
+                                                                //     setDuration(e.target.value)
+                                                                // }
+                                                                className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500"
+                                                            />
+                                                            <button
+                                                                type="button"
+                                                                onClick={addMilestonePayment}
+                                                                className="w-full sm:w-auto px-4 py-3 bg-[#01AEAD] text-white rounded hover:bg-cyan-600"
+                                                            >
+                                                                Add
+                                                            </button>
+                                                        </div>
+                                                    </div>
+
+                                                    {/* {educationList.length > 0 && (
+                                                        <div className="space-y-2 mb-4">
+                                                            <h4 className="font-medium">Added Education:</h4>
+                                                            {educationList.map((edu, index) => (
+                                                                <div key={index} className="flex justify-between items-center bg-gray-50 p-3 rounded">
+                                                                    <span>
+                                                                        {edu.title} in {edu.major} from {edu.institution} ({edu.year})
+                                                                    </span>
+                                                                    <button
+                                                                        type="button"
+                                                                        onClick={() => removeEducation(index)}
+                                                                        className="text-red-500 hover:text-red-700 text-sm"
+                                                                    >
+                                                                        Remove
+                                                                    </button>
+                                                                </div>
+                                                            ))}
+                                                        </div>
+                                                    )}
+                                                    {errors.education && <p className="text-red-500 text-sm mt-2">{errors.education.message}</p>} */}
+                                                </div>
+                                                {milestonePayment.length > 0 && (
+                                                    <>
+                                                        {milestonePayment.map((item, index) => (
+                                                            <div key={index} className="flex justify-between items-center bg-gray-50 p-3 rounded">
+                                                                <span>
+                                                                    {item.percentage} in {item.duration}
+                                                                </span>
+                                                                <button
+                                                                    type="button"
+                                                                    onClick={() => removeEducation(index)}
+                                                                    className="text-red-500 hover:text-red-700 text-sm"
+                                                                >
+                                                                    Remove
+                                                                </button>
+                                                            </div>
+                                                        ))}
+                                                    </>
+                                                )
+
+                                                }
+                                            </div>
+                                        )}
                                         {errors.paymentTerms && <p className="text-red-500 text-sm mt-2">{errors.paymentTerms.message}</p>}
                                     </div>
                                 </div>
@@ -362,8 +463,8 @@ const ProposalModal = ({ onClose, data, freelancerData }) => {
                                             onDragLeave={handleDragLeave}
                                             onDrop={handleDrop}
                                             className={`relative flex flex-col items-center justify-center w-full px-6 py-8 border-2 border-dashed rounded-2xl cursor-pointer transition-all duration-200 ${isDragging
-                                                    ? 'border-blue-500 bg-blue-50'
-                                                    : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                                                ? 'border-blue-500 bg-blue-50'
+                                                : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
                                                 } ${fileName ? 'border-solid border-green-300 bg-green-50' : ''}`}
                                         >
                                             <input
