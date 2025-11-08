@@ -107,7 +107,7 @@ const Banner1 = () => {
                 {/* Desktop Search Button */}
                 <button
                   onClick={handleSearch}
-                  className="hidden sm:flex absolute right-2 top-1 h-12 px-5 rounded-full bg-teal-500 hover:bg-teal-600 text-white items-center gap-2 transition duration-300"
+                  className="hidden sm:flex absolute right-2 top-2 h-10 px-5 rounded-full bg-teal-500 hover:bg-teal-600 text-white items-center gap-2 transition duration-300"
                 >
                   <SearchIcon style={{ width: 25, height: 25 }} />
                   <span className="text-sm sm:text-base">Search</span>
