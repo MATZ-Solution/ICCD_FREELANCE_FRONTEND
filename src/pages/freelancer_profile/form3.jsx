@@ -359,7 +359,7 @@ export default function ProfessionalInfoStep({ placeholderConfig = defaultPlaceh
               control={control}
               render={({ field }) => (
                 <ReactSelect
-                  placeholder={placeholderConfig.occupation}
+                  placeholder="Select Primary Category"
                   value={categoryoption.find(option => option.value === field.value)}
                   onChange={(selected) => field.onChange(selected ? selected.value : "")}
                   option={categoryoption}
@@ -404,13 +404,13 @@ export default function ProfessionalInfoStep({ placeholderConfig = defaultPlaceh
           <div>
             <div className="flex flex-col border p-3 rounded-lg border-gray-300 sm:flex-row gap-3 items-stretch sm:items-center mb-4">
               <ReactSelect
-                placeholder={placeholderConfig.skill}
+                placeholder="Select Skills"
                 value={currentSkill}
                 onChange={setCurrentSkill}
                 option={skillslist}
               />
               <ReactSelect
-                placeholder={placeholderConfig.skillLevel}
+                placeholder="Select Level"
                 value={currentSkillLevel}
                 onChange={setCurrentSkillLevel}
                 option={skilllevellist}
@@ -457,7 +457,7 @@ export default function ProfessionalInfoStep({ placeholderConfig = defaultPlaceh
               control={control}
               render={({ field }) => (
                 <ReactSelect
-                  placeholder={placeholderConfig.occupation}
+                  placeholder="Select Experience"
                   value={experienceList.find(option => option.value === field.value)}
                   onChange={(selected) => field.onChange(selected ? selected.value : "")}
                   option={experienceList}
@@ -487,7 +487,7 @@ export default function ProfessionalInfoStep({ placeholderConfig = defaultPlaceh
                 /> */}
                 <input
                   type="text"
-                  placeholder={placeholderConfig.institution}
+                  placeholder="Enter Institution"
                   value={currentEducation.institution || ""}
                   onChange={(e) =>
                     setCurrentEducation({ ...currentEducation, institution: e.target.value })
@@ -503,7 +503,7 @@ export default function ProfessionalInfoStep({ placeholderConfig = defaultPlaceh
                 /> */}
                 <input
                   type="text"
-                  placeholder={placeholderConfig.country}
+                  placeholder="Enter country"
                   value={currentEducation.country || ""}
                   onChange={(e) =>
                     setCurrentEducation({ ...currentEducation, country: e.target.value })
@@ -515,7 +515,7 @@ export default function ProfessionalInfoStep({ placeholderConfig = defaultPlaceh
               <div className="flex flex-col sm:flex-row gap-3 items-stretch">
                 <input
                   type="text"
-                  placeholder={placeholderConfig.title}
+                  placeholder="Enter title"
                   value={currentEducation.title || ""}
                   onChange={(e) =>
                     setCurrentEducation({ ...currentEducation, title: e.target.value })
@@ -525,7 +525,7 @@ export default function ProfessionalInfoStep({ placeholderConfig = defaultPlaceh
 
                 <input
                   type="text"
-                  placeholder={placeholderConfig.major}
+                  placeholder="Enter major"
                   value={currentEducation.major || ""}
                   onChange={(e) =>
                     setCurrentEducation({ ...currentEducation, major: e.target.value })
@@ -535,7 +535,7 @@ export default function ProfessionalInfoStep({ placeholderConfig = defaultPlaceh
 
                 <input
                   type="text"
-                  placeholder={placeholderConfig.year}
+                  placeholder="Enter year"
                   value={currentEducation.year || ""}
                   onChange={(e) =>
                     setCurrentEducation({ ...currentEducation, year: e.target.value })

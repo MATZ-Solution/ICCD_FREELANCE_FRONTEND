@@ -271,7 +271,7 @@ export default function PersonalInfoStep() {
         </div>
 
         {/* Email */}
-        <div className="grid grid-cols-2  items-start">
+        <div className="grid grid-cols-2 gap-8 items-start">
           <div>
             <label className="block font-semibold text-lg mb-2">
               Email *
@@ -500,7 +500,7 @@ export default function PersonalInfoStep() {
         </div>
 
         {/* Submit */}
-        <div className="pt-6">
+        <div className="">
           <button
             type="submit"
             className="px-8 py-3 bg-slate-800 text-white rounded-full hover:bg-slate-900 transition-colors"

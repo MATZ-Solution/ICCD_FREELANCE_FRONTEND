@@ -218,7 +218,7 @@ export default function Portfolio() {
                 </div>
 
                 {/* Submit */}
-                <div className="pt-6">
+                <div className="">
                     <button
                         type="submit"
                         className="px-8 py-3 bg-slate-800 text-white rounded-full hover:bg-slate-900 transition-colors"
