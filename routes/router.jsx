@@ -42,8 +42,8 @@ const Post_job = lazy(() => import("../src/pages/client_dashboard/post_job"));
 const ClientOrders = lazy(() => import("../src/component/client_order/order"));
 const Gigs_details = lazy(() => import("../src/pages/client_dashboard/gigs_details"));
 const MultiStepForm = lazy(() => import("../src/pages/freelancer_profile/form1"));
-const ProfessionalInfoStep = lazy(() => import("../src/pages/freelancer_profile/form2"));
-const AccountSecurityStep = lazy(() => import("../src/pages/freelancer_profile/form3"));
+const ProfessionalInfoStep = lazy(() => import("../src/pages/freelancer_profile/form3"));
+const AccountSecurityStep = lazy(() => import("../src/pages/freelancer_profile/form4"));
 const ProjectForm = lazy(() => import("../src/pages/client_dashboard/post_project"));
 const Payment = lazy(() => import("../src/pages/payment/payment"));
 const PricingForm = lazy(() => import("../src/component/gigs_pricing_scope"));
@@ -104,6 +104,7 @@ import ManageContactform from "../src/pages/superadmin_dashboard/manage-contactf
 import MessageCheck from "../src/pages/messagesCheck";
 import GigContactMe from "../src/component/client_order/GigContactMe";
 import SuccessModal from "../src/component/SuccessModal";
+import Portfolio from "../src/pages/freelancer_profile/form2";
 
 const stripePromise = loadStripe("pk_test_51QCl1eCDh3RtIJ6XkYcN5vHd3KTO2f8enRSNv9Wx7Li0iCI7cr9khTDQx0vS5RmbazZoaECNW83FesOMwLeIgMLb00BJG4pPZR");
 
@@ -466,6 +467,16 @@ export const router = createBrowserRouter([
   },
   {
     path: "/freelancer/profile-form/2",
+    element: withSuspense(
+      <AuthRoute>
+        <MainTemplate isShowFooter={false}>
+          <Portfolio />
+        </MainTemplate>
+      </AuthRoute>
+    ),
+  },
+  {
+    path: "/freelancer/profile-form/3",
     element: withSuspense(
       <AuthRoute>
         <MainTemplate isShowFooter={false}>

@@ -12,7 +12,6 @@ import { getUserProfile } from "../../../redux/slices/userProfileSlice";
 import Button from "../../component/button";
 import ICCDError from "../../component/ICCDError";
 import ICCDLoader from "../../component/loader";
-// import { toast } from "react-toastify";
 
 const FreelancerEditProfile = () => {
 
@@ -20,9 +19,6 @@ const FreelancerEditProfile = () => {
   const profileDetails = useSelector(state => state.userProfile.userProfile)
   const { editProfile, isSuccess: isSuccProfile, isPending: isPendProfile, isError: isErrProfile, error } = useEditProfile(profileDetails.id)
 
-
-
-  console.log(editProfile)
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarType, setSidebarType] = useState(null);
 
@@ -36,49 +32,29 @@ const FreelancerEditProfile = () => {
     setSidebarType(null);
   };
 
-  // const handleSaveChanges = () => {
+  const handleSaveChanges = async () => {
+    const formData = new FormData();
 
-  //   const formData = new FormData();
-  //   for (const key in profileDetails) {
-  //     if (key === 'files') {
-  //       updateData.files.forEach((file) => {
-  //         formData.append("files", file);
-  //       });
-  //     }
-  //     else if (Array.isArray(profileDetails[key])) {
-  //       formData.append(key, JSON.stringify(profileDetails[key]));
-  //     }
-  //     else {
-  //       formData.append(key, profileDetails[key])
-  //     }
-  //   }
-  //   editProfile(formData)
-  // }
-
-    const handleSaveChanges = async () => {
-  const formData = new FormData();
-  
-  for (const key in profileDetails) {
-    if (key === "files") {
-      updateData.files.forEach((file) => {
-        formData.append("files", file);
-      });
-    } else if (Array.isArray(profileDetails[key])) {
-      formData.append(key, JSON.stringify(profileDetails[key]));
-    } else {
-      formData.append(key, profileDetails[key]);
+    for (const key in profileDetails) {
+      if (key === "files") {
+        updateData.files.forEach((file) => {
+          formData.append("files", file);
+        });
+      } else if (Array.isArray(profileDetails[key])) {
+        formData.append(key, JSON.stringify(profileDetails[key]));
+      } else {
+        formData.append(key, profileDetails[key]);
+      }
     }
-  }
-
-  try {
-    // console.log("data: ", data)
-    await editProfile(formData); // mutation
-    // toast.success("Profile updated successfully!");
-  } catch (error) {
-    // toast.error("Failed to update profile.");
-    console.error("Error updating profile:", error);
-  }
-};
+    try {
+      // console.log("data: ", data)
+      await editProfile(formData); // mutation
+      // toast.success("Profile updated successfully!");
+    } catch (error) {
+      // toast.error("Failed to update profile.");
+      console.error("Error updating profile:", error);
+    }
+  };
 
 
   const { data, isSuccess, isPending, isError, isLoading } = useGetFreelancerProfile()
@@ -92,14 +68,14 @@ const FreelancerEditProfile = () => {
   if (isLoading || isPending) {
     return <ICCDLoader />;
   }
-  if (isError || isErrProfile ) {
+  if (isError || isErrProfile) {
     return <ICCDError message={error} />;
   }
   return (
     <div className="max-w-7xl mx-auto px-4 py-6 relative">
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2 space-y-8">
-          <ProfileHeader  />
+          <ProfileHeader />
           {/* <ProfileHeader openSidebar={openSidebar} /> */}
           <AboutSection openSidebar={openSidebar} />
           <EducationSection openSidebar={openSidebar} />

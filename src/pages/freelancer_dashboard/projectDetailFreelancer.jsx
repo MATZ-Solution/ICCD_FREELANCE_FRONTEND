@@ -41,7 +41,6 @@ const ProjectDetailFreelancer = () => {
   }
 
   if (isError) {
-    console.log("error: ", error);
     return <ICCDError />;
   }
 

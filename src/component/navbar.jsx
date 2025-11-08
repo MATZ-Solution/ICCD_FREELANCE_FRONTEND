@@ -371,13 +371,13 @@ export default function Navbar() {
         {userDetails ? (
           <div className="flex items-center gap-2 relative">
             {/* Notifications */}
-            <div ref={notificationRef} className="relative">
+            {/* <div ref={notificationRef} className="relative">
               <NotificationBell
                 isShowNot={isShowNot}
                 setIsShowNot={setIsShowNot}
               />
               {isShowNot && <NotificationDropdown />}
-            </div>
+            </div> */}
 
             {/* Messages */}
             <button

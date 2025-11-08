@@ -118,7 +118,7 @@ export default function ServicePage() {
                   )}
                 </div>
                 <p className="text-gray-700 capitalize ">
-                  {freelancer?.freelancer_about_description || ""}
+                  {freelancer?.professionalSummary || ""}
                 </p>
               </div>
             </div>

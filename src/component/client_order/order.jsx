@@ -182,17 +182,16 @@ function ClientOrders() {
             data.map((item, index) => {
               const isCompleted = completedOrders.includes(item.id);
               const isDisputed = disputedOrders.includes(item.id);
-
               return (
                 <div
                   key={index}
                   className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-all duration-200 cursor-pointer group"
                   onClick={() => handleView(item.id)}
                 >
-                  <div className="flex flex-col xl:flex-row gap-6">
+                  <div className="flex flex-col sm:flex-row gap-6">
                     {/* Image Section */}
                     <div className="flex-shrink-0">
-                      <div className="w-full xl:w-48 h-32 rounded-xl overflow-hidden bg-gray-100">
+                      <div className="w-full h-30 sm:w-48 sm:h-32 rounded-xl overflow-hidden bg-gray-100">
                         <img
                           src={item.gigsImage.split(",")[0]}
                           alt="Order preview"
@@ -207,7 +206,7 @@ function ClientOrders() {
 
                     {/* Content Section */}
                     <div className="flex-1 min-w-0">
-                      <div className="grid grid-cols-1 lg:grid-cols-5  h-full">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3  lg:grid-cols-5  h-full">
                         {/* Project Details */}
                         <div className="lg:col-span-2 mt-4 space-y-3">
                           <h3 className="text-lg font-semibold text-gray-900 line-clamp-2 group-hover:text-blue-600 transition-colors">
@@ -329,11 +328,13 @@ function ClientOrders() {
           )}
         </div>
 
-        <Pagination
-          currentPage={page}
-          totalPages={totalPages}
-          onPageChange={(newPage) => setPage(newPage)}
-        />
+        {data?.length > 0 && (
+          <Pagination
+            currentPage={page}
+            totalPages={totalPages}
+            onPageChange={(newPage) => setPage(newPage)}
+          />
+        )}
 
         {/* Modals */}
         {showCompleteModal && (

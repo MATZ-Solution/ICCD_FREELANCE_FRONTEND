@@ -2,63 +2,62 @@ import { useDispatch, useSelector } from "react-redux";
 import { setUserProfile } from "../../../redux/slices/userProfileSlice";
 import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from "yup";
+import * as Yup from "yup"
 
 const AboutForm = () => {
 
   const dispatch = useDispatch()
-  const profileDetails = useSelector(state => state.userProfile.userProfile)
-  console.log("about section profile: ", profileDetails)
+  const {professionalTitle, professionalSummary} = useSelector(state => state.userProfile.userProfile)
 
-  const schema = yup.object({
-    about_tagline: yup.string().required('Skill is required'),
-    about_description: yup.string().required('Level is required')
+  const schema = Yup.object({
+    professionalTitle: Yup.string().required('Professional Title is required'),
+    professionalSummary: Yup.string().required('Professional Summary is required')
   });
 
   const { control, handleSubmit, reset, formState: { errors } } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
-      about_tagline: '',
-      about_description: ''
+      professionalTitle: professionalTitle,
+      professionalSummary: professionalSummary
     }
   });
 
   const onSubmit = (data) => {
     console.log("data: ", data)
-    dispatch(setUserProfile({ about_tagline: data.about_tagline, about_description: data.about_description}))
+    dispatch(setUserProfile({ professionalTitle: data.professionalTitle, professionalSummary: data.professionalSummary}))
   };
 
   return (
     <div className="space-y-4">
       <Controller
-        name="about_tagline"
+        name="professionalTitle"
         control={control}
-        render={({ field, fieldState: { error } }) => (
+        render={({ field }) => (
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Tagline</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Professional Title</label>
             <input
               {...field}
               type="text"
               placeholder="Enter your professional tagline"
-              className={`w-full p-3 border rounded-md ${error ? "border-red-500" : "border-gray-300"}`}
+              className={`w-full p-3 border rounded-md ${errors.professionalTitle ? "border-red-500" : "border-gray-300"}`}
             />
-            {error && <p className="text-red-500 text-sm mt-1">{error.message.about_tagline}</p>}
+            {errors.professionalTitle && <p className="text-red-500 text-sm mt-1">{errors.message.professionalTitle}</p>}
           </div>
         )}
       />
       <Controller
-        name="about_description"
+        name="professionalSummary"
         control={control}
-        render={({ field, fieldState: { error } }) => (
+        render={({ field }) => (
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Professional Summary</label>
             <textarea
               {...field}
               rows={6}
               placeholder="Tell us about yourself, your experience, and what you do..."
-              className={`w-full p-3 border rounded-md resize-none ${error ? "border-red-500" : "border-gray-300"}`}
+              className={`w-full p-3 border rounded-md resize-none ${errors.professionalSummary ? "border-red-500" : "border-gray-300"}`}
             />
-            {error && <p className="text-red-500 text-sm mt-1">{error.message.about_description}</p>}
+            {errors.professionalSummary && <p className="text-red-500 text-sm mt-1">{errors.message.professionalSummary}</p>}
           </div>
         )}
       />

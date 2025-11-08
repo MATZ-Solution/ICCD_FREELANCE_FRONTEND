@@ -15,7 +15,7 @@ function ManageGigsAndProjects() {
   const [active] = useState("Active");
   const [page, setPage] = useState(1);
   const profileDetails = useSelector((state) => state.userProfile.userProfile);
-  const { data, totalPages, isLoading, isError } = useGetGigsByUser({page: page});
+  const { data, totalPages, isLoading, isError } = useGetGigsByUser({ page: page });
 
   if (isLoading) return <ICCDLoader />;
   if (isError) return <ICCDError />;
@@ -91,11 +91,13 @@ function ManageGigsAndProjects() {
         ) : (
           <Gigs_table data={data} />
         )}
-        <Pagination
-          currentPage={page}
-          totalPages={totalPages}
-          onPageChange={(newPage) => setPage(newPage)}
-        />
+        {data?.length > 0 && (
+          <Pagination
+            currentPage={page}
+            totalPages={totalPages}
+            onPageChange={(newPage) => setPage(newPage)}
+          />
+        )}
       </div>
     </div>
   );

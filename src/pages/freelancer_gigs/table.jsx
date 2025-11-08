@@ -1,5 +1,5 @@
 import React, { useState, memo, useCallback } from "react";
-import AccountSecurityStep from "../freelancer_profile/form3";
+import AccountSecurityStep from "../freelancer_profile/form4";
 import { useNavigate } from "react-router-dom";
 
 const Table = ({ title, tabs = [], data = [] }) => {
