@@ -370,7 +370,6 @@ export default function ProfessionalInfoStep({ placeholderConfig = defaultPlaceh
           </div>
         </div>
 
-
         {/* Occupation */}
         {/* <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
           <div>
@@ -478,6 +477,55 @@ export default function ProfessionalInfoStep({ placeholderConfig = defaultPlaceh
           </div>
           <div>
             <div className="space-y-3 border p-3 rounded-lg border-gray-300 mb-4">
+              <div className="flex flex-col sm:flex-row gap-3 items-stretch">
+                <div className="w-full flex flex-col gap-2">
+                  <input
+                    type="text"
+                    placeholder="Enter program"
+                    value={currentEducation.title || ""}
+                    onChange={(e) =>
+                      setCurrentEducation({ ...currentEducation, title: e.target.value })
+                    }
+                    className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500"
+                  />
+                  <label className="text-xs text-gray-400">Example: BS, BE</label>
+                </div>
+
+                <div className="w-full flex flex-col gap-2">
+                  <input
+                    type="text"
+                    placeholder="Enter degree"
+                    value={currentEducation.major || ""}
+                    onChange={(e) =>
+                      setCurrentEducation({ ...currentEducation, major: e.target.value })
+                    }
+                    className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500"
+                  />
+                  <label className="text-xs text-gray-400">Example: Science </label>
+                </div>
+
+
+
+                {/* <ReactSelect
+                  placeholder={placeholderConfig.title}
+                  value={currentEducation.title}
+                  onChange={(selected) => setCurrentEducation({ ...currentEducation, title: selected })}
+                  option={titleList}
+                />
+                <ReactSelect
+                  placeholder={placeholderConfig.major}
+                  value={currentEducation.major}
+                  onChange={(selected) => setCurrentEducation({ ...currentEducation, major: selected })}
+                  option={majorList}
+                />
+                <ReactSelect
+                  placeholder={placeholderConfig.year}
+                  value={currentEducation.year}
+                  onChange={(selected) => setCurrentEducation({ ...currentEducation, year: selected })}
+                  option={yearList}
+                /> */}
+
+              </div>
               <div className="flex flex-col sm:flex-row gap-3">
                 {/* <ReactSelect
                   placeholder={placeholderConfig.institution}
@@ -510,29 +558,6 @@ export default function ProfessionalInfoStep({ placeholderConfig = defaultPlaceh
                   }
                   className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500"
                 />
-
-              </div>
-              <div className="flex flex-col sm:flex-row gap-3 items-stretch">
-                <input
-                  type="text"
-                  placeholder="Enter title"
-                  value={currentEducation.title || ""}
-                  onChange={(e) =>
-                    setCurrentEducation({ ...currentEducation, title: e.target.value })
-                  }
-                  className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500"
-                />
-
-                <input
-                  type="text"
-                  placeholder="Enter major"
-                  value={currentEducation.major || ""}
-                  onChange={(e) =>
-                    setCurrentEducation({ ...currentEducation, major: e.target.value })
-                  }
-                  className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500"
-                />
-
                 <input
                   type="text"
                   placeholder="Enter year"
@@ -543,24 +568,6 @@ export default function ProfessionalInfoStep({ placeholderConfig = defaultPlaceh
                   className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500"
                 />
 
-                {/* <ReactSelect
-                  placeholder={placeholderConfig.title}
-                  value={currentEducation.title}
-                  onChange={(selected) => setCurrentEducation({ ...currentEducation, title: selected })}
-                  option={titleList}
-                />
-                <ReactSelect
-                  placeholder={placeholderConfig.major}
-                  value={currentEducation.major}
-                  onChange={(selected) => setCurrentEducation({ ...currentEducation, major: selected })}
-                  option={majorList}
-                />
-                <ReactSelect
-                  placeholder={placeholderConfig.year}
-                  value={currentEducation.year}
-                  onChange={(selected) => setCurrentEducation({ ...currentEducation, year: selected })}
-                  option={yearList}
-                /> */}
                 <button
                   type="button"
                   onClick={addEducation}
@@ -569,6 +576,7 @@ export default function ProfessionalInfoStep({ placeholderConfig = defaultPlaceh
                   Add
                 </button>
               </div>
+
             </div>
 
             {educationList.length > 0 && (
@@ -728,7 +736,6 @@ export default function ProfessionalInfoStep({ placeholderConfig = defaultPlaceh
           >
             Submit
           </button>
-
         </div>
       </form>
     </div>

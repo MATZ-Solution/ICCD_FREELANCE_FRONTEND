@@ -9,6 +9,7 @@ import { Search, MoreVertical, Eye, Package, DollarSign } from "lucide-react";
 import { CheckCircle, AlertTriangle, Clock, Star } from "lucide-react";
 import { DisputeModal } from "../../component/client_order/DisputeModal";
 import ReviewModal from "../../component/ReviewModal";
+import textSlicer from "../../../functions/textSlicer";
 
 function Orders() {
   const [search, setSearch] = useState("");
@@ -119,11 +120,9 @@ function Orders() {
 
     return (
       <div
-        className={`flex items-center gap-2 ${
-          config.bg
-        } rounded-full py-2 px-4 max-w-max shadow-sm ${
-          config.pulse ? "animate-pulse" : ""
-        }`}
+        className={`flex items-center gap-2 ${config.bg
+          } rounded-full py-2 px-4 max-w-max shadow-sm ${config.pulse ? "animate-pulse" : ""
+          }`}
       >
         <IconComponent className={`w-3 h-3 ${config.text}`} />
         <span
@@ -145,7 +144,7 @@ function Orders() {
             <div className="absolute top-4 right-4 w-32 h-32 bg-white rounded-full blur-2xl"></div>
             <div className="absolute bottom-4 left-4 w-24 h-24 bg-white rounded-full blur-xl"></div>
           </div>
-          
+
           <div className="relative z-10 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6">
             <div className="flex items-center gap-4">
               <div className="bg-white/20 backdrop-blur-sm rounded-xl p-3 shadow-lg">
@@ -198,123 +197,120 @@ function Orders() {
             </p>
           </div>
         ) : (
-          <div className="space-y-4">
-            {data.map((item, index) => {
-              const isCompleted = deliveredOrders.includes(item.id);
-              const isDisputed = disputedOrders.includes(item.id);
+          <div className="overflow-x-auto rounded-2xl border border-slate-200 shadow-sm bg-white">
+            <table className="min-w-full text-sm text-left">
+              {/* Table Header */}
+              <thead className="bg-gradient-to-r from-slate-100 to-slate-200 text-slate-700 text-xs uppercase tracking-wider">
+                <tr>
+                  <th className="px-6 py-4 font-semibold">Image</th>
+                  <th className="px-6 py-4 font-semibold">Gig Details</th>
+                  <th className="px-6 py-4 font-semibold">Package</th>
+                  <th className="px-6 py-4 font-semibold">Price</th>
+                  <th className="px-6 py-4 font-semibold">Status</th>
+                  <th className="px-6 py-4 font-semibold text-center">Actions</th>
+                </tr>
+              </thead>
 
-              return (
-                <div
-                  key={item.id}
-                  className="group bg-white/80 backdrop-blur-sm hover:bg-white/95 rounded-2xl p-6 border border-white/20 transition-all duration-300 transform hover:-translate-y-1"
-                  style={{ animationDelay: `${index * 100}ms` }}
-                >
-                  <div className="flex flex-col xl:flex-row xl:items-center gap-6">
-                    {/* Image */}
-                    <div className="flex justify-center xl:justify-start xl:w-[200px]">
-                      <div className="relative rounded-xl bg-gradient-to-br from-slate-100 to-slate-200">
-                        <img
-                          src={item?.gigsImage?.split(",")[0] || order_logo}
-                          alt="Gig"
-                          onError={(e) => (e.target.src = order_logo)}
-                          className="w-40 h-24 object-cover transition-transform duration-300 group-hover:scale-105"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                      </div>
-                    </div>
+              {/* Table Body */}
+              <tbody className="divide-y divide-slate-100">
+                {data?.map((item, index) => {
+                  const isCompleted = item.status === "completed";
+                  const isDisputed = item.status === "disputed";
 
-                    {/* Info */}
-                    <div className="flex-1 justify-center items-center grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-6 xl:gap-12">
-                      <div className="space-y-2">
-                        <div className="flex items-center gap-2 text-slate-500 text-sm">
-                          <Eye className="w-4 h-4" />
-                          <span>Gig Details</span>
+                  return (
+                    <tr
+                      key={item.id}
+                      className={`transition-all duration-200 hover:bg-slate-50 ${index % 2 === 0 ? "bg-white" : "bg-slate-50/30"
+                        }`}
+                    >
+                      {/* Image */}
+                      <td className="px-6 py-4">
+                        <div className="relative w-28 h-20 rounded-lg overflow-hidden shadow-md group">
+                          <img
+                            src={item?.gigsImage?.split(",")[0] || order_logo}
+                            alt="Gig"
+                            onError={(e) => (e.target.src = order_logo)}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                          />
                         </div>
-                        <h3 className="font-semibold text-slate-800 text-md line-clamp-2">
-                          {item.gigsTitle}
-                        </h3>
-                        <div className="flex items-center gap-2 mt-2">
-                          <Package className="w-4 h-4 text-slate-400" />
-                          <span className="text-sm text-slate-600 capitalize">
-                            {item.package_type?.toLowerCase()} Package
-                          </span>
-                        </div>
-                      </div>
+                      </td>
 
-                      <div className="space-y-2">
-                        <div className="flex items-center gap-2 text-slate-500 text-sm">
-                          <DollarSign className="w-4 h-4" />
-                          <span>Order Value</span>
+                      {/* Gig Details */}
+                      <td className="px-6 py-4 ">
+                        <div className="font-medium text-slate-800 line-clamp-2 mb-1">
+                          {textSlicer(item?.gigsTitle, 40)}
+                          {/* {item.gigsTitle.length > 0 ? item?.gigsTitle?.slice(0,40) + "..." : item.gigsTitle} */}
                         </div>
-                        <div className="text-2xl font-bold bg-gradient-to-r from-green-600 to-green-500 bg-clip-text text-transparent">
+                        {/* <div className="text-slate-500 text-xs">
+                          {item.category || "No category"}
+                        </div> */}
+                      </td>
+
+                      {/* Package */}
+                      <td className="px-6 py-4 text-slate-600 capitalize text-sm">
+                        {item.package_type?.toLowerCase()} Package
+                      </td>
+
+                      {/* Order Value */}
+                      <td className="px-6 py-4 font-semibold">
+                        <span className="bg-gradient-to-r from-green-600 to-green-500 bg-clip-text text-transparent text-lg">
                           ${item.base_price}
-                        </div>
-                      </div>
+                        </span>
+                      </td>
 
-                      <div className="space-y-2">
-                        <p className="text-slate-500 text-sm">Current Status</p>
-                        {renderStatus(item.status)}
-                      </div>
+                      {/* Status */}
+                      <td className="px-6 py-4">
+                        {isCompleted ? (
+                          <span className="inline-flex items-center gap-1.5 text-emerald-600 bg-emerald-50 border border-emerald-100 px-3 py-1 rounded-lg text-xs font-medium">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="w-3.5 h-3.5"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M5 13l4 4L19 7"
+                              />
+                            </svg>
+                            Completed
+                          </span>
+                        ) : isDisputed ? (
+                          <span className="inline-flex items-center gap-1.5 text-red-600 bg-red-50 border border-red-100 px-3 py-1 rounded-lg text-xs font-medium">
+                            ⚠️ Disputed
+                          </span>
+                        ) : (
+                          renderStatus(item.status)
+                        )}
+                      </td>
 
                       {/* Actions */}
-                      <div className="flex items-center">
-                        <button
-                          onClick={() => handleView(item.id)}
-                          className="bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-xl px-6 py-3 font-medium flex items-center gap-2 hover:shadow-xl transition-all duration-200"
-                        >
-                          <Eye className="w-4 h-4" /> View Details
-                        </button>
-                      </div>
-                      <div className="flex items-center">
-                        {isCompleted ? (
-                          <div className="flex items-center text-emerald-600 gap-2 bg-emerald-50 rounded-xl px-4 py-3">
-                            <CheckCircle className="w-5 h-5" />
-                            <span className="font-medium">Completed</span>
-                          </div>
-                        ) : isDisputed ? (
-                          <div className="flex items-center text-red-600 gap-2 bg-red-50 rounded-xl px-4 py-3">
-                            <AlertTriangle className="w-5 h-5" />
-                            <span className="font-medium">Disputed</span>
-                          </div>
-                        ) : (
-                          <div className="relative">
-                            <button
-                              onClick={() =>
-                                setOpenMenuId(
-                                  openMenuId === item.id ? null : item.id
-                                )
-                              }
-                              className="p-3 rounded-xl hover:bg-slate-100 transition-colors duration-200 bg-slate-50"
-                            >
-                              <MoreVertical className="w-5 h-5 text-slate-600" />
-                            </button>
-
-                            {openMenuId === item.id && (
-                              <div className="absolute right-0 bottom-full mb-2 w-48 bg-white shadow-2xl rounded-xl border border-slate-200 z-50">
-                                <button
-                                  onClick={() => handleAction(item, "deliver")}
-                                  className="w-full text-left px-4 py-3 hover:bg-emerald-50 text-emerald-600 font-medium flex items-center gap-3"
-                                >
-                                  <CheckCircle className="w-4 h-4" /> Mark as
-                                  Delivered
-                                </button>
-                                <button
-                                  onClick={() => handleAction(item, "dispute")}
-                                  className="w-full text-left px-4 py-3 hover:bg-red-50 text-red-600 font-medium flex items-center gap-3"
-                                >
-                                  <AlertTriangle className="w-4 h-4" /> Raise
-                                  Dispute
-                                </button>
-                              </div>
-                            )}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
+                      <td className="px-6 py-4 text-center">
+                        <div className="flex justify-center gap-2">
+                          <button
+                            onClick={() => handleView(item.id)}
+                            className="text:sm bg-gradient-to-r from-blue-500 to-blue-600 hover:shadow-lg text-white px-4 py-1.5 rounded-xl font-medium transition-all duration-200 sm:text-base"
+                          >
+                            View
+                          </button>
+                          {/* <button
+                            onClick={() =>
+                              setOpenMenuId(openMenuId === item.id ? null : item.id)
+                            }
+                            className="bg-slate-100 hover:bg-slate-200 text-slate-600 px-3 py-1.5 rounded-xl text-xs font-medium transition-colors duration-200"
+                          >
+                            More
+                          </button> */}
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
           </div>
         )}
       </div>
@@ -324,9 +320,8 @@ function Orders() {
         <OrderModal onClose={handleCloseModal}>
           <div className="text-center">
             <div
-              className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 ${
-                modalType === "deliver" ? "bg-emerald-100" : "bg-red-100"
-              }`}
+              className={`w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 ${modalType === "deliver" ? "bg-emerald-100" : "bg-red-100"
+                }`}
             >
               {modalType === "deliver" ? (
                 <CheckCircle className="w-8 h-8 text-emerald-600" />
@@ -367,11 +362,10 @@ function Orders() {
               </button>
               <button
                 onClick={handleConfirmAction}
-                className={`px-6 py-3 rounded-xl text-white font-medium transition-all duration-200 transform hover:scale-105 ${
-                  modalType === "deliver"
-                    ? "bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 shadow-emerald-200"
-                    : "bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 shadow-red-200"
-                } shadow-lg hover:shadow-xl`}
+                className={`px-6 py-3 rounded-xl text-white font-medium transition-all duration-200 transform hover:scale-105 ${modalType === "deliver"
+                  ? "bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 shadow-emerald-200"
+                  : "bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 shadow-red-200"
+                  } shadow-lg hover:shadow-xl`}
               >
                 {modalType === "deliver"
                   ? "Yes, Mark Delivered"

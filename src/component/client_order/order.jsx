@@ -7,6 +7,7 @@ import {
   AlertTriangle,
   Eye,
   FileText,
+  EllipsisVertical,
   Upload,
   X,
   Package,
@@ -20,8 +21,11 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import ReviewModal from "../ReviewModal";
 import Pagination from "../pagination";
+import textSlicer from "../../../functions/textSlicer";
 
 function ClientOrders() {
+  const [action, setAction] = useState(false)
+  const [dropDownId, setDropDownId] = useState(null)
   const [showCompleteModal, setShowCompleteModal] = useState(false);
   const [showTransferModal, setShowTransferModal] = useState(false);
   const [showDisputeModal, setShowDisputeModal] = useState(false);
@@ -46,10 +50,10 @@ function ClientOrders() {
   console.log(data)
 
 
-  const handleView = () => {
+  const handleView = (id) => {
     // console.log("Viewing order:", id);
     // navigate(`/client/orderDetail/${id}`)
-    navigate(`/client/orderDetail/${data[0].orderId}`);
+    navigate(`/client/orderDetail/${id}`);
 
     // navigate to order details
   };
@@ -176,98 +180,157 @@ function ClientOrders() {
           </div>
         </div>
 
-        {/* Orders List */}
-        <div className="space-y-4  ">
-          {data?.length > 0 ? (
-            data.map((item, index) => {
-              const isCompleted = completedOrders.includes(item.id);
-              const isDisputed = disputedOrders.includes(item.id);
-              return (
-                <div
-                  key={index}
-                  className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-all duration-200 cursor-pointer group"
-                  onClick={() => handleView(item.id)}
-                >
-                  <div className="flex flex-col sm:flex-row gap-6">
-                    {/* Image Section */}
-                    <div className="flex-shrink-0">
-                      <div className="w-full h-30 sm:w-48 sm:h-32 rounded-xl overflow-hidden bg-gray-100">
+        <div className="overflow-x-auto rounded-2xl border border-slate-200 shadow-sm bg-white">
+          <table className="min-w-full text-sm text-left">
+            {/* Table Header */}
+            <thead className="bg-gradient-to-r from-slate-100 to-slate-200 text-slate-700 text-xs uppercase tracking-wider">
+              <tr>
+                <th className="px-6 py-4 font-semibold">Image</th>
+                <th className="px-6 py-4 font-semibold">Gig Details</th>
+                <th className="px-6 py-4 font-semibold">Package</th>
+                <th className="px-6 py-4 font-semibold">Price</th>
+                <th className="px-6 py-4 font-semibold">Status</th>
+                <th className="px-6 py-4 font-semibold text-center">Actions</th>
+              </tr>
+            </thead>
+
+            {/* Table Body */}
+            <tbody className="divide-y divide-slate-100">
+              {data?.map((item, index) => {
+                const isCompleted = item.status === "completed";
+                const isDisputed = item.status === "disputed";
+
+                return (
+                  <tr
+                    key={item.id}
+                    className={`transition-all duration-200 hover:bg-slate-50 ${index % 2 === 0 ? "bg-white" : "bg-slate-50/30"
+                      }`}
+                  >
+                    {/* Image */}
+                    <td className="px-6 py-4">
+                      <div className="relative w-28 h-20 rounded-lg overflow-hidden shadow-md group">
                         <img
-                          src={item.gigsImage.split(",")[0]}
-                          alt="Order preview"
-                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
-                          onError={(e) => {
-                            e.target.src =
-                              "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400&h=300&fit=crop";
-                          }}
+                          src={item?.gigsImage?.split(",")[0] || order_logo}
+                          alt="Gig"
+                          onError={(e) => (e.target.src = order_logo)}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                         />
                       </div>
-                    </div>
+                    </td>
 
-                    {/* Content Section */}
-                    <div className="flex-1 min-w-0">
-                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3  lg:grid-cols-5  h-full">
-                        {/* Project Details */}
-                        <div className="lg:col-span-2 mt-4 space-y-3">
-                          <h3 className="text-lg font-semibold text-gray-900 line-clamp-2 group-hover:text-blue-600 transition-colors">
-                            {item.gigsTitle}
-                          </h3>
-                          <div className="flex flex-col gap-4 text-sm">
-                            <div className="flex items-center gap-2">
-                              <Package className="w-4 h-4 text-gray-400" />
-                              <span className="text-gray-600">Package:</span>
-                              <span className="font-medium text-gray-900 capitalize">
-                                {item.package_type?.toLowerCase()}
-                              </span>
-                            </div>
-                            <div className="flex items-center gap-2">
-                              <span className="text-gray-600">Price:</span>
-                              <span className="font-semibold text-gray-900">
-                                ${item.base_price}
-                              </span>
-                            </div>
-                          </div>
-                        </div>
+                    {/* Gig Details */}
+                    <td className="px-6 py-4 ">
+                      <div className="font-medium text-slate-800 line-clamp-2 mb-1">
+                        {textSlicer(item?.title, 40)}
+                      </div>
+                    </td>
 
-                        {/* Status */}
-                        <div className="flex w-32 mt-4 items-start">
-                          <div>
-                            <p className="text-sm text-gray-600 mb-2">Status</p>
-                            {renderStatus(item.status)}
-                          </div>
-                        </div>
+                    {/* Package */}
+                    <td className="px-6 py-4 text-slate-600 capitalize text-sm">
+                      {item.package_type?.toLowerCase()} Package
+                    </td>
 
-                        {/* Actions */}
-                        <div>
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleView(item.id);
-                            }}
-                            className="p-4 h-12 mt-8 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-xl font-medium transition-colors flex items-center justify-center gap-2"
+                    {/* Order Value */}
+                    <td className="px-6 py-4 font-semibold">
+                      <span className="bg-gradient-to-r from-green-600 to-green-500 bg-clip-text text-transparent text-lg">
+                        ${item.base_price}
+                      </span>
+                    </td>
+
+                    {/* Status */}
+                    <td className="px-6 py-4">
+                      {isCompleted ? (
+                        <span className="inline-flex items-center gap-1.5 text-emerald-600 bg-emerald-50 border border-emerald-100 px-3 py-1 rounded-lg text-xs font-medium">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="w-3.5 h-3.5"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            strokeWidth="2"
                           >
-                            <Eye className="w-4 h-4" />
-                            View Details
-                          </button>
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M5 13l4 4L19 7"
+                            />
+                          </svg>
+                          Completed
+                        </span>
+                      ) : isDisputed ? (
+                        <span className="inline-flex items-center gap-1.5 text-red-600 bg-red-50 border border-red-100 px-3 py-1 rounded-lg text-xs font-medium">
+                          ⚠️ Disputed
+                        </span>
+                      ) : (
+                        renderStatus(item.status)
+                      )}
+                    </td>
+
+                    {/* Actions */}
+                    <td className="relative px-6 py-4 text-center">
+                      <EllipsisVertical className="cursor-pointer" onClick={() => {
+                        setAction(!action)
+                        setDropDownId(item?.orderId)
+                      }} />
+                      {(action && item.orderId === dropDownId) && (
+                        <div className={`absolute right-26 ${index === Number(data?.length - 1) ? 'bottom-14' : 'top-16'} w-48 bg-white border border-slate-200 rounded-xl shadow-lg z-50 animate-fadeIn`}>
+                          <ul className="py-2">
+                            <li>
+                              <button
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleView(item.orderId);
+                                }}
+                                className="curosr-pointer w-full flex items-center gap-3 px-4 py-2 text-sm text-slate-700 hover:bg-slate-100 transition-colors duration-150"
+                              >
+                                <span className="text-slate-500"> <Eye className="w-4 h-4" /></span>
+                                <span className="text-slate-500">View Details</span>
+                              </button>
+                            </li>
+                            <li>
+                              <button
+                                onClick={(e) => {
+                                  handleCompleteClick(item);
+                                }}
+                                className="curosr-pointer w-full flex items-center gap-3 px-4 py-2 text-sm text-slate-700 hover:bg-slate-100 transition-colors duration-150"
+                              >
+                                <span className="text-slate-500"><CheckCircle className="w-4 h-4" /></span>
+                                <span className="text-slate-500">Complete Order</span>
+                              </button>
+                            </li>
+                          </ul>
                         </div>
-                        <div>
-                          <button
-                            type="button"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleCompleteClick(item);
-                            }}
-                            className={`flex-1 p-4 mt-8  h-12 rounded-xl font-medium transition-colors flex items-center justify-center gap-2 px-4
+                      )}
+                      {/* <div className="flex justify-center gap-2">
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleView(item.id);
+                          }}
+                          className="p-4 h-12 mt-8 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-xl font-medium transition-colors flex items-center justify-center gap-2"
+                        >
+                          <Eye className="w-4 h-4" />
+                          View Details
+                        </button>
+                      </div>
+                      <div>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleCompleteClick(item);
+                          }}
+                          className={`flex-1 p-4 mt-8  h-12 rounded-xl font-medium transition-colors flex items-center justify-center gap-2 px-4
                                  bg-blue-600 hover:bg-blue-700 text-white focus:ring-2 focus:ring-offset-2 focus:ring-blue-500
                             }`}
-                          >
-                            <>
-                              <CheckCircle className="w-4 h-4" />
-                              <span>Complete Order</span>
-                            </>
-                          </button>
-
-                          {/* <button
+                        >
+                          <>
+                            <CheckCircle className="w-4 h-4" />
+                            <span>Complete Order</span>
+                          </>
+                        </button>
+                      </div> */}
+                      {/* <button
                             type="button"
                             onClick={(e) => {
                               e.stopPropagation();
@@ -302,30 +365,20 @@ function ClientOrders() {
                               </>
                             )}
                           </button> */}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              );
-            })
-          ) : (
-            <div className="text-center py-16 bg-white rounded-2xl shadow-sm border border-gray-100">
-              <div className="max-w-md mx-auto">
-                <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Search className="w-8 h-8 text-gray-400" />
-                </div>
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                  No Orders Found
-                </h3>
-                <p className="text-gray-600">
-                  {search
-                    ? `No orders match your search "${search}"`
-                    : "You haven't placed any orders yet"}
-                </p>
-              </div>
-            </div>
-          )}
+                      {/* <button
+                            onClick={() =>
+                              setOpenMenuId(openMenuId === item.id ? null : item.id)
+                            }
+                            className="bg-slate-100 hover:bg-slate-200 text-slate-600 px-3 py-1.5 rounded-xl text-xs font-medium transition-colors duration-200"
+                          >
+                            More
+                          </button> */}
+                    </td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
         </div>
 
         {data?.length > 0 && (
