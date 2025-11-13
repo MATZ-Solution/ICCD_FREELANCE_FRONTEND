@@ -46,19 +46,12 @@ const LoginController = ({ onClose, linker }) => {
       delay: 0.5,
       position: "top-[25%] right-[15%]",
     },
-
   ];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-xl bg-transparent p-4 sm:p-6 md:p-8 overflow-y-auto">
-      {/* Animated background particles */}
-  
-
+    <div className="fixed inset-0 mt-30 sm:mt-0 z-50 flex items-center justify-center backdrop-blur-xl bg-transparent p-4 sm:p-6 md:p-8 overflow-y-auto ">
       <div className="relative flex flex-col lg:flex-row h-full w-full  max-w-5xl bg-white rounded-2xl shadow-lg overflow-hidden">
-        {/* Left Banner (hidden on small screens) */}
-        {/* Left Banner (hidden on small screens) */}
         <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-[#44A4AD] via-[#2E7A81] to-[#1C4C50] relative overflow-hidden">
-          {/* Animated mesh gradient background */}
           <div className="absolute inset-0">
             <div className="absolute inset-0 bg-gradient-to-br from-[#44A4AD]/30 to-transparent animate-pulse" />
             <div
@@ -70,8 +63,6 @@ const LoginController = ({ onClose, linker }) => {
               style={{ animation: "float 10s ease-in-out infinite reverse" }}
             />
           </div>
-
-          {/* Interactive grid pattern */}
           <div className="absolute inset-0 opacity-10">
             <div
               className="absolute inset-0"
@@ -82,8 +73,6 @@ const LoginController = ({ onClose, linker }) => {
               }}
             />
           </div>
-
-          {/* Floating category cards */}
           {floatingIcons.map(({ Icon, color, delay, position }, idx) => (
             <div
               key={idx}
@@ -174,7 +163,7 @@ const LoginController = ({ onClose, linker }) => {
           <button
             onClick={handleClose}
             aria-label="Close modal"
-            className="absolute right-4 top-4 w-8 h-8 flex items-center justify-center bg-gray-200 rounded-full hover:bg-gray-300 transition"
+            className="absolute right-4 top-4 w-8 h-8 flex items-center text-black justify-center bg-gray-200 rounded-full hover:bg-gray-300 transition"
           >
             <CloseIcon style={{ fontSize: 20 }} />
           </button>

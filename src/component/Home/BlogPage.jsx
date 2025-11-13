@@ -79,7 +79,7 @@ export default function BlogPage() {
       className="bg-white rounded-xl border border-gray-200 overflow-hidden hover:border-[#47AAB3] hover:shadow-xl transition-all duration-300 cursor-pointer group hover:transform hover:scale-[1.02]"
     >
       <div className={`h-2 bg-gradient-to-r ${blog.gradient}`}></div>
-      <div className="p-6">
+      <div className="p-4 sm:p-6">
         <div className="flex items-center justify-between mb-4">
           <span className="text-xs px-3 py-1 rounded-full bg-[#47AAB3]/10 text-[#47AAB3] border border-[#47AAB3]/20 font-medium">
             {blog.category}
@@ -89,20 +89,20 @@ export default function BlogPage() {
           </div>
         </div>
         
-        <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-[#47AAB3] transition-colors">
+        <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-1 sm:mb-2 group-hover:text-[#47AAB3] transition-colors">
           {blog.title}
         </h3>
-        <p className="text-[#47AAB3] text-sm font-semibold mb-3">{blog.subtitle}</p>
-        <p className="text-gray-600 text-sm leading-relaxed mb-4">{blog.excerpt}</p>
+        <p className="text-[#47AAB3] text-sm sm:text-base font-semibold mb-2 sm:mb-3">{blog.subtitle}</p>
+        <p className="text-gray-600 text-sm sm:text-sm leading-relaxed mb-3 sm:mb-4">{blog.excerpt}</p>
         
-        <div className="flex items-center justify-between pt-4 border-t border-gray-200">
-          <div className="flex items-center space-x-4 text-xs text-gray-500">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between pt-3 border-t border-gray-200 text-xs sm:text-sm text-gray-500">
+          <div className="flex items-center space-x-2 sm:space-x-4 mb-2 sm:mb-0">
             <div className="flex items-center space-x-1">
-              <Calendar className="w-3 h-3" />
+              <Calendar className="w-3 h-3 sm:w-4 sm:h-4" />
               <span>{blog.date}</span>
             </div>
             <div className="flex items-center space-x-1">
-              <Clock className="w-3 h-3" />
+              <Clock className="w-3 h-3 sm:w-4 sm:h-4" />
               <span>{blog.readTime}</span>
             </div>
           </div>
@@ -117,53 +117,53 @@ export default function BlogPage() {
 
   const BlogDetail = ({ blog, onClose }) => (
     <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 overflow-y-auto">
-      <div className="min-h-screen py-12 px-6">
+      <div className="min-h-screen py-8 px-4 sm:px-6">
         <div className="max-w-4xl mx-auto">
           <button
             onClick={onClose}
-            className="mb-6 flex items-center space-x-2 text-gray-600 hover:text-[#47AAB3] transition-colors bg-white px-4 py-2 rounded-lg shadow-md"
+            className="mb-6 flex items-center space-x-2 text-gray-600 hover:text-[#47AAB3] transition-colors bg-white px-3 sm:px-4 py-2 rounded-lg shadow-md"
           >
             <ArrowRight className="w-4 h-4 rotate-180" />
-            <span className="font-medium">Back to Blog</span>
+            <span className="font-medium text-sm sm:text-base">Back to Blog</span>
           </button>
           
           <div className="bg-white rounded-xl border border-gray-200 shadow-2xl overflow-hidden">
-            <div className={`h-3 bg-gradient-to-r ${blog.gradient}`}></div>
+            <div className={`h-2 sm:h-3 bg-gradient-to-r ${blog.gradient}`}></div>
             
-            <div className="p-8 md:p-12">
-              <div className="flex items-center space-x-3 mb-6">
-                <span className="text-xs px-3 py-1 rounded-full bg-[#47AAB3]/10 text-[#47AAB3] border border-[#47AAB3]/20 font-medium">
+            <div className="p-6 sm:p-10 md:p-12">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-3 sm:space-y-0 sm:space-x-4 mb-6">
+                <span className="text-xs px-2 py-1 rounded-full bg-[#47AAB3]/10 text-[#47AAB3] border border-[#47AAB3]/20 font-medium">
                   {blog.category}
                 </span>
-                <div className="flex items-center space-x-4 text-sm text-gray-500">
+                <div className="flex items-center space-x-2 sm:space-x-4 text-sm text-gray-500">
                   <div className="flex items-center space-x-1">
-                    <Calendar className="w-4 h-4" />
+                    <Calendar className="w-3 h-3 sm:w-4 sm:h-4" />
                     <span>{blog.date}</span>
                   </div>
                   <div className="flex items-center space-x-1">
-                    <Clock className="w-4 h-4" />
+                    <Clock className="w-3 h-3 sm:w-4 sm:h-4" />
                     <span>{blog.readTime}</span>
                   </div>
                 </div>
               </div>
               
-              <h1 className="text-4xl font-bold text-gray-900 mb-3">{blog.title}</h1>
-              <p className="text-xl text-[#47AAB3] font-semibold mb-8">{blog.subtitle}</p>
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900 mb-2 sm:mb-3">{blog.title}</h1>
+              <p className="text-lg sm:text-xl md:text-2xl text-[#47AAB3] font-semibold mb-6 sm:mb-8">{blog.subtitle}</p>
               
               {/* Stats */}
-              <div className="grid grid-cols-3 gap-4 mb-8">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-6 sm:mb-8">
                 {blog.stats.map((stat, idx) => (
                   <div key={idx} className="bg-gradient-to-br from-[#47AAB3]/5 to-[#47AAB3]/10 rounded-lg p-4 text-center border border-[#47AAB3]/20">
-                    <div className="text-2xl font-bold text-[#47AAB3] mb-1">{stat.value}</div>
-                    <div className="text-xs text-gray-600 font-medium">{stat.label}</div>
+                    <div className="text-xl sm:text-2xl font-bold text-[#47AAB3] mb-1">{stat.value}</div>
+                    <div className="text-xs sm:text-sm text-gray-600 font-medium">{stat.label}</div>
                   </div>
                 ))}
               </div>
               
               {/* Content */}
-              <div className="space-y-6">
+              <div className="space-y-4 sm:space-y-6">
                 {blog.content.map((paragraph, idx) => (
-                  <p key={idx} className="text-gray-700 leading-relaxed text-base">
+                  <p key={idx} className="text-gray-700 leading-relaxed text-sm sm:text-base">
                     {paragraph}
                   </p>
                 ))}
@@ -179,16 +179,14 @@ export default function BlogPage() {
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-[#F3FDF9]">
       {/* Header */}
       <header className="border-b border-gray-200 bg-white/80 backdrop-blur-sm sticky top-0 z-40 shadow-sm">
-        <div className="max-w-7xl mx-auto px-6 py-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-[#47AAB3] to-[#3A9BA3] rounded-lg flex items-center justify-center shadow-md">
-                <Newspaper className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <h1 className="text-xl font-bold text-gray-900">ICCD Talent Gate</h1>
-                <p className="text-sm text-gray-600">Blog & Insights</p>
-              </div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 sm:py-6 flex items-center justify-between">
+          <div className="flex items-center space-x-3">
+            <div className="w-10 h-10 bg-gradient-to-br from-[#47AAB3] to-[#3A9BA3] rounded-lg flex items-center justify-center shadow-md">
+              <Newspaper className="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <h1 className="text-lg sm:text-xl font-bold text-gray-900">ICCD Talent Gate</h1>
+              <p className="text-xs sm:text-sm text-gray-600">Blog & Insights</p>
             </div>
           </div>
         </div>
@@ -196,22 +194,22 @@ export default function BlogPage() {
 
       {/* Hero Section */}
       <div className="bg-gradient-to-r from-[#47AAB3]/10 to-[#3A9BA3]/10 border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-6 py-16 text-center">
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-[#47AAB3] to-[#3A9BA3] rounded-2xl mb-6 shadow-lg">
-            <BookOpen className="w-10 h-10 text-white" />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-16 text-center">
+          <div className="inline-flex items-center justify-center w-16 sm:w-20 h-16 sm:h-20 bg-gradient-to-br from-[#47AAB3] to-[#3A9BA3] rounded-2xl mb-4 sm:mb-6 shadow-lg">
+            <BookOpen className="w-8 sm:w-10 h-8 sm:h-10 text-white" />
           </div>
-          <h2 className="text-4xl font-bold mb-4 bg-gradient-to-r from-[#47AAB3] to-[#5BC4CE] bg-clip-text text-transparent">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-3 sm:mb-4 bg-gradient-to-r from-[#47AAB3] to-[#5BC4CE] bg-clip-text text-transparent">
             Insights & Stories
           </h2>
-          <p className="text-gray-700 text-lg max-w-3xl mx-auto leading-relaxed">
+          <p className="text-gray-700 text-sm sm:text-base md:text-lg max-w-3xl mx-auto leading-relaxed">
             Discover how ICCD Talent Gate is transforming lives, empowering communities, and building the future of digital work across the Muslim world.
           </p>
         </div>
       </div>
 
       {/* Blog Grid */}
-      <div className="max-w-7xl mx-auto px-6 py-12">
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           {blogs.map((blog) => (
             <BlogCard
               key={blog.id}
@@ -222,13 +220,6 @@ export default function BlogPage() {
         </div>
       </div>
 
-      {/* Footer */}
-      <footer className="border-t border-gray-200 bg-white mt-12">
-        <div className="max-w-7xl mx-auto px-6 py-8 text-center text-gray-600 text-sm">
-          <p>&copy; 2025 Islamic Chamber of Commerce and Development (ICCD). All rights reserved.</p>
-          <p className="mt-2">Palestine Initiative - Empowering Digital Freelancing</p>
-        </div>
-      </footer>
 
       {/* Blog Detail Modal */}
       {selectedBlog && (

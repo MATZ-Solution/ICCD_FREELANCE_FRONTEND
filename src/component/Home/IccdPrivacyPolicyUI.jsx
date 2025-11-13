@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { Mail, Globe, FileText, ChevronDown, SunMoon, Shield, Lock, Eye, Users, Database, RefreshCw } from 'lucide-react';
+import { Mail, Globe, FileText, ChevronDown, Shield, Lock, Eye, Users, Database, RefreshCw, Menu } from 'lucide-react';
 
 export default function IccdPrivacyPolicyUI() {
   const [openSection, setOpenSection] = useState(null);
   const [dark, setDark] = useState(false);
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
 
   const toggle = (i) => setOpenSection(openSection === i ? null : i);
 
@@ -111,7 +112,7 @@ export default function IccdPrivacyPolicyUI() {
   const accentGradient = 'bg-[#46A7B5]';
 
   return (
-    <div className={`min-h-screen  transition-all duration-500`}>
+    <div className={`min-h-screen transition-all duration-500`}>
       {/* Animated background elements */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className={`absolute top-0 right-0 w-96 h-96 ${dark ? 'bg-indigo-500/10' : 'bg-indigo-500/5'} rounded-full blur-3xl`}></div>
@@ -120,42 +121,46 @@ export default function IccdPrivacyPolicyUI() {
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 py-8">
         {/* Header */}
-        <header className={`${cardBg} rounded-3xl border shadow-2xl shadow-slate-900/5 p-6 sm:p-8 mb-8`}>
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
-            <div className="flex items-start gap-5">
-              <div className={`${accentGradient} rounded-2xl p-4 shadow-lg shadow-indigo-500/20`}>
-                <Shield size={32} className="text-white" strokeWidth={1.5} />
-              </div>
-              <div>
-                <h1 className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-[#043A53] via-[#065f73] to-[#3C939D] bg-clip-text text-transparent mb-1">
-                  {policy.title}
-                </h1>
-                <p className="text-lg font-medium opacity-70">{policy.subtitle}</p>
-                <div className="flex items-center gap-2 mt-2">
-                  <div className="h-1.5 w-1.5 rounded-full bg-emerald-500"></div>
-                  <p className="text-sm opacity-60">Updated {policy.updated}</p>
-                </div>
+        <header className={`${cardBg} rounded-3xl border shadow-2xl shadow-slate-900/5 p-6 sm:p-8 mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6`}>
+          <div className="flex items-start gap-5">
+            <div className={`${accentGradient} rounded-2xl p-4 shadow-lg shadow-indigo-500/20`}>
+              <Shield size={32} className="text-white" strokeWidth={1.5} />
+            </div>
+            <div>
+              <h1 className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-[#043A53] via-[#065f73] to-[#3C939D] bg-clip-text text-transparent mb-1">
+                {policy.title}
+              </h1>
+              <p className="text-lg font-medium opacity-70">{policy.subtitle}</p>
+              <div className="flex items-center gap-2 mt-2">
+                <div className="h-1.5 w-1.5 rounded-full bg-emerald-500"></div>
+                <p className="text-sm opacity-60">Updated {policy.updated}</p>
               </div>
             </div>
+          </div>
 
-            <div className="flex items-center gap-2 flex-wrap">
-           
-             
-              <a 
-                href="mailto:privacy@iccdtalentgate.com" 
-                className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl ${accentGradient} text-white hover:scale-105 transition-all duration-200 shadow-lg shadow-indigo-500/30`}
-              >
-                <Mail size={16} />
-                <span className="text-sm font-medium">Contact</span>
-              </a>
-            </div>
+          <div className="flex items-center gap-2 flex-wrap">
+            {/* Mobile navigation toggle */}
+            <button 
+              className="sm:hidden inline-flex items-center p-2 rounded-xl bg-gray-200 "
+              onClick={() => setMobileNavOpen(!mobileNavOpen)}
+            >
+              <Menu size={20} />
+            </button>
+
+            <a 
+              href="mailto:privacy@iccdtalentgate.com" 
+              className={`hidden sm:inline-flex items-center gap-2 px-4 py-2.5 rounded-xl ${accentGradient} text-white hover:scale-105 transition-all duration-200 shadow-lg shadow-indigo-500/30`}
+            >
+              <Mail size={16} />
+              <span className="text-sm font-medium">Contact</span>
+            </a>
           </div>
         </header>
 
         {/* Main Content */}
         <div className="grid lg:grid-cols-4 gap-6">
           {/* Sidebar */}
-          <aside className={`lg:col-span-1 ${cardBg} rounded-3xl border shadow-2xl shadow-slate-900/5 p-6 h-fit lg:sticky lg:top-8`}>
+          <aside className={`lg:col-span-1 ${cardBg} rounded-3xl border shadow-2xl shadow-slate-900/5 p-6 h-fit lg:sticky lg:top-8 hidden lg:block`}>
             <div className="mb-6">
               <h3 className="text-sm font-semibold uppercase tracking-wider opacity-50 mb-3">About</h3>
               <p className="text-sm leading-relaxed opacity-80">{policy.intro}</p>
@@ -190,22 +195,44 @@ export default function IccdPrivacyPolicyUI() {
 
             <div className={`mt-6 pt-6 border-t ${dark ? 'border-slate-700' : 'border-slate-200'}`}>
               <h3 className="text-sm font-semibold uppercase tracking-wider opacity-50 mb-3">Get in Touch</h3>
-              <a 
-                className="flex items-center gap-2 text-sm mb-2 hover:underline opacity-80" 
-                href="mailto:privacy@iccdtalentgate.com"
-              >
+              <a className="flex items-center gap-2 text-sm mb-2 hover:underline opacity-80" href="mailto:privacy@iccdtalentgate.com">
                 <Mail size={14} /> privacy@iccdtalentgate.com
               </a>
-              <a 
-                className="flex items-center gap-2 text-sm hover:underline opacity-80" 
-                href="https://www.iccdtalentgate.com" 
-                target="_blank" 
-                rel="noreferrer"
-              >
+              <a className="flex items-center gap-2 text-sm hover:underline opacity-80" href="https://www.iccdtalentgate.com" target="_blank" rel="noreferrer">
                 <Globe size={14} /> www.iccdtalentgate.com
               </a>
             </div>
           </aside>
+
+          {/* Mobile Navigation Drawer */}
+          {mobileNavOpen && (
+            <div className={`${cardBg} rounded-3xl border shadow-2xl shadow-slate-900/5 p-6 mb-4 sm:hidden`}>
+              <h3 className="text-sm font-semibold uppercase tracking-wider opacity-50 mb-3">Quick Navigation</h3>
+              <nav className="space-y-1">
+                {policy.sections.map((s, i) => {
+                  const Icon = s.icon;
+                  return (
+                    <button 
+                      key={i}
+                      onClick={() => { toggle(i); setMobileNavOpen(false); }} 
+                      className={`w-full text-left px-3 py-2.5 rounded-xl transition-all duration-200 flex items-center gap-3 group ${
+                        openSection === i 
+                          ? `${dark ? 'bg-gradient-to-r from-[#44A4AD] via-[#36969E] to-[#1E7B82]' : 'bg-gradient-to-r from-[#44A4AD] via-[#36969E] to-[#1E7B82]'}` 
+                          : 'hover:bg-[#46A7B5] dark:hover:bg-[#46A7B5]'
+                      }`}
+                    >
+                      <Icon size={16} className="opacity-60" />
+                      <span className="text-sm font-medium flex-1">{s.heading}</span>
+                      <ChevronDown 
+                        size={14} 
+                        className={`transition-transform duration-200 ${openSection === i ? 'rotate-180' : ''}`} 
+                      />
+                    </button>
+                  );
+                })}
+              </nav>
+            </div>
+          )}
 
           {/* Main Content Section */}
           <section className="lg:col-span-3 space-y-4">
@@ -220,7 +247,7 @@ export default function IccdPrivacyPolicyUI() {
                 >
                   <button 
                     onClick={() => toggle(i)} 
-                    className="w-full p-6 flex items-center justify-between  transition-colors duration-200"
+                    className="w-full p-6 flex items-center justify-between transition-colors duration-200"
                   >
                     <div className="flex items-center gap-4">
                       <div className={`${accentGradient} rounded-xl p-3 shadow-lg shadow-indigo-500/20`}>
@@ -252,30 +279,6 @@ export default function IccdPrivacyPolicyUI() {
                 </article>
               );
             })}
-
-            {/* Contact CTA */}
-            <div className={`${cardBg} rounded-3xl border shadow-2xl shadow-slate-900/5 p-8 text-center`}>
-              <h3 className="text-xl font-semibold mb-3">Have Questions?</h3>
-              <p className="text-sm opacity-70 mb-6">
-                If you have any questions about this policy, our privacy team is here to help.
-              </p>
-              <div className="flex flex-wrap gap-3 justify-center">
-                <a 
-                  className={`inline-flex items-center gap-2 px-6 py-3 rounded-xl ${accentGradient} text-white hover:scale-105 transition-all duration-200 shadow-lg shadow-indigo-500/30`}
-                  href="mailto:privacy@iccdtalentgate.com"
-                >
-                  <Mail size={16} /> Email Us
-                </a>
-                <a 
-                  className={`inline-flex items-center gap-2 px-6 py-3 rounded-xl border ${cardBg} hover:scale-105 transition-all duration-200 shadow-lg`}
-                  href="https://www.iccdtalentgate.com" 
-                  target="_blank" 
-                  rel="noreferrer"
-                >
-                  <Globe size={16} /> Visit Website
-                </a>
-              </div>
-            </div>
           </section>
         </div>
 
