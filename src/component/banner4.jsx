@@ -20,22 +20,22 @@ const Banner4 = () => {
       <section className="flex flex-col items-center justify-center p-6 md:p-12 rounded-2xl bg-white shadow-lg">
         {/* Heading */}
         <div className="w-full text-center mb-10">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-black mb-8">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-semibold text-black mb-8 leading-snug">
             Make it all happen with{' '}
             <span className="text-[#01AEAD]">freelancers</span>
           </h1>
 
           {/* Topics Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 px-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 px-2 sm:px-4">
             {topic.map((item, index) => (
               <div
                 key={index}
-                className={`flex flex-col items-center justify-center gap-4 px-4 text-center ${
+                className={`flex flex-col items-center justify-center gap-4 text-center px-4 py-6 rounded-lg hover:shadow-md transition duration-300 ${
                   index !== 3 ? 'lg:border-r-2 lg:border-r-[#15A9B2]' : ''
                 }`}
               >
-                <img src={item.icon} alt={item.name} className="w-16 h-16 object-contain" />
-                <p className="text-gray-700 text-base sm:text-lg">{item.name}</p>
+                <img src={item.icon} alt={item.name} className="w-16 h-16 sm:w-20 sm:h-20 object-contain" />
+                <p className="text-gray-700 text-sm sm:text-base md:text-lg">{item.name}</p>
               </div>
             ))}
           </div>
@@ -44,7 +44,7 @@ const Banner4 = () => {
           <div className="mt-10 flex justify-center">
             <button
               onClick={() => navigate('/login')}
-              className="hidden md:flex items-center gap-3 px-6 py-3 bg-[#043A53] text-white font-semibold rounded-full shadow hover:bg-[#05929c] transition duration-300"
+              className="flex items-center gap-3 px-6 py-3 bg-[#043A53] text-white font-semibold rounded-full shadow hover:bg-[#05929c] transition duration-300 text-sm sm:text-base"
             >
               <span>Get Started Now</span>
               <EastIcon style={{ color: 'white' }} />

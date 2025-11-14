@@ -9,9 +9,7 @@ import {
   Award,
   Briefcase,
   MessageSquare,
-  Bell,
   CheckCircle,
-  Search,
 } from "lucide-react";
 
 export default function FAQPage() {
@@ -66,8 +64,7 @@ export default function FAQPage() {
       id: 3,
       icon: Briefcase,
       question: "What types of services can be offered on ICCD Talent Gate?",
-      answer:
-        "Freelancers can offer services in diverse categories, including:",
+      answer: "Freelancers can offer services in diverse categories, including:",
       list: [
         "Information Technology & Software Development",
         "Graphic Design, Multimedia & Branding",
@@ -149,23 +146,6 @@ export default function FAQPage() {
         'The platform includes a dispute resolution mechanism managed by ICCD\'s moderation team. Users can report issues through the "Report a Problem" form, and our support team will investigate promptly to ensure fair and transparent outcomes.',
       category: "Support",
     },
-    {
-      id: 11,
-      icon: Users,
-      question:
-        "Can I use ICCD Talent Gate for non-commercial or voluntary projects?",
-      answer:
-        "Yes. The platform encourages community impact projects and volunteering opportunities — especially those aligned with humanitarian, educational, or development goals within the OIC region.",
-      category: "Services",
-    },
-    {
-      id: 12,
-      icon: Bell,
-      question: "How can I stay updated on new features or opportunities?",
-      answer:
-        "Users can subscribe to the ICCD Talent Gate newsletter and follow official ICCD social media channels for announcements, training sessions, and capacity-building programs related to digital work and entrepreneurship.",
-      category: "Updates",
-    },
   ];
 
   const categories = ["All", ...new Set(faqs.map((faq) => faq.category))];
@@ -180,75 +160,52 @@ export default function FAQPage() {
     return matchesCategory && matchesSearch;
   });
 
-  const toggleFAQ = (id) => {
-    setOpenFAQ(openFAQ === id ? null : id);
-  };
+  const toggleFAQ = (id) => setOpenFAQ(openFAQ === id ? null : id);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
-      {/* Hero Section */}
+      {/* Hero */}
       <section
         id="hero"
-        className="relative py-20 px-6 bg-gradient-to-r from-[#44A4AD] via-[#36969E] to-[#1E7B82] to-teal-700 text-white overflow-hidden"
+        className="relative py-16 sm:py-20 px-4 sm:px-6 md:px-8 bg-gradient-to-r from-[#44A4AD] via-[#36969E] to-[#1E7B82] text-white"
       >
-        <div className="absolute inset-0 opacity-10">
-          <div
-            className="absolute inset-0"
-            style={{
-              backgroundImage: `url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M50 50c0-5.523 4.477-10 10-10s10 4.477 10 10-4.477 10-10 10c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10zM10 10c0-5.523 4.477-10 10-10s10 4.477 10 10-4.477 10-10 10c0 5.523-4.477 10-10 10S0 25.523 0 20s4.477-10 10-10zm10 8c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8zm40 40c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8z' /%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-            }}
-          ></div>
-        </div>
-
-        <div className="max-w-6xl mx-auto text-center relative z-10">
-          <div
-            className={`transition-all duration-1000 ${
-              isVisible("hero")
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-10"
-            }`}
-          >
-            <HelpCircle className="w-20 h-20 mx-auto mb-6 text-[#07383c]" />
-            <h1 className="text-5xl md:text-6xl font-bold mb-4">
-              Frequently Asked Questions
-            </h1>
-            <p className="text-xl md:text-2xl text-blue-100 mb-8">
-              Everything you need to know about ICCD Talent Gate
-            </p>
-          </div>
+        <div className="max-w-4xl mx-auto text-center relative z-10">
+          <HelpCircle className="w-16 h-16 sm:w-20 sm:h-20 mx-auto mb-4 sm:mb-6 text-[#07383c]" />
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-2 sm:mb-4">
+            Frequently Asked Questions
+          </h1>
+          <p className="text-md sm:text-lg md:text-xl text-blue-100 max-w-2xl mx-auto">
+            Everything you need to know about ICCD Talent Gate
+          </p>
         </div>
       </section>
 
-      {/* Search and Filter Section */}
-      <section className="py-8 px-6 bg-white shadow-md sticky top-0 z-30">
-        <div className="max-w-6xl mx-auto">
-          <div className="flex flex-col md:flex-row gap-4 items-center">
-            {/* Category Filter */}
-
-            {categories.map((category, idx) => (
-              <button
-                key={idx}
-                onClick={() => setSelectedCategory(category)}
-                className={`px-4 py-2 rounded-full font-semibold whitespace-nowrap transition-all duration-300 ${
-                  selectedCategory === category
-                    ? " bg-gradient-to-r from-[#44A4AD] via-[#2E7A81] to-[#1C4C50] text-white shadow-lg scale-105"
-                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                }`}
-              >
-                {category}
-              </button>
-            ))}
-          </div>
+      {/* Category Filter */}
+      <section className="py-4 px-4 sm:px-6 md:px-8 bg-white sticky top-0 z-30 shadow">
+        <div className="max-w-6xl mx-auto flex flex-wrap gap-2 justify-center">
+          {categories.map((category, idx) => (
+            <button
+              key={idx}
+              onClick={() => setSelectedCategory(category)}
+              className={`px-4 py-2 rounded-full font-semibold whitespace-nowrap transition-all duration-300 ${
+                selectedCategory === category
+                  ? "bg-gradient-to-r from-[#44A4AD] via-[#2E7A81] to-[#1C4C50] text-white shadow-md scale-105"
+                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+              }`}
+            >
+              {category}
+            </button>
+          ))}
         </div>
       </section>
 
-      {/* FAQs Section */}
-      <section id="faqs" className="py-16 px-6">
-        <div className="max-w-4xl mx-auto">
+      {/* FAQ List */}
+      <section id="faqs" className="py-8 px-4 sm:px-6 md:px-8">
+        <div className="max-w-4xl mx-auto space-y-4">
           {filteredFAQs.length === 0 ? (
             <div className="text-center py-16">
               <HelpCircle className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-              <p className="text-xl text-gray-500">
+              <p className="text-lg sm:text-xl text-gray-500">
                 No questions found matching your search.
               </p>
               <button
@@ -256,152 +213,127 @@ export default function FAQPage() {
                   setSearchQuery("");
                   setSelectedCategory("All");
                 }}
-                className="mt-4  bg-gradient-to-r from-[#44A4AD] via-[#2E7A81] to-[#1C4C50] hover:text-[44A4AD] font-semibold"
+                className="mt-4 px-6 py-2 rounded-full bg-gradient-to-r from-[#44A4AD] via-[#2E7A81] to-[#1C4C50] text-white font-semibold"
               >
                 Clear filters
               </button>
             </div>
           ) : (
-            <div className="space-y-4">
-              {filteredFAQs.map((faq, idx) => {
-                const Icon = faq.icon;
-                const isOpen = openFAQ === faq.id;
+            filteredFAQs.map((faq, idx) => {
+              const Icon = faq.icon;
+              const isOpen = openFAQ === faq.id;
 
-                return (
-                  <div
-                    key={faq.id}
-                    className={`transition-all duration-500 ${
-                      isVisible("faqs")
-                        ? "opacity-100 translate-y-0"
-                        : "opacity-0 translate-y-5"
-                    }`}
-                    style={{ transitionDelay: `${idx * 50}ms` }}
-                  >
-                    <div className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden">
-                      <button
-                        onClick={() => toggleFAQ(faq.id)}
-                        className="w-full px-6 py-5 flex items-start justify-between text-left hover:bg-gray-50 transition-colors"
-                      >
-                        <div className="flex items-start space-x-4 flex-1">
-                          <div
-                            className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 transition-colors ${
-                              isOpen
-                                ? "bg-gradient-to-r from-[#44A4AD] via-[#2E7A81] to-[#1C4C50]"
-                                : "bg-blue-100"
-                            }`}
-                          >
-                            <Icon
-                              className={`w-5 h-5 ${
-                                isOpen ? "text-white" : "text-[#3D949C]"
-                              }`}
-                            />
-                          </div>
-                          <div className="flex-1">
-                            <div className="flex items-center gap-2 mb-1">
-                              <span className="text-xs font-semibold text-[#3D949C] bg-blue-50 px-2 py-1 rounded-full">
-                                {faq.category}
-                              </span>
-                            </div>
-                            <h3 className="text-lg font-bold text-gray-900 pr-4">
-                              {faq.question}
-                            </h3>
-                          </div>
-                        </div>
-                        <ChevronDown
-                          className={`w-6 h-6 text-gray-400 flex-shrink-0 transition-transform duration-300 ${
-                            isOpen ? "rotate-180" : ""
+              return (
+                <div
+                  key={faq.id}
+                  className="transition-all duration-500 overflow-hidden"
+                  style={{ transitionDelay: `${idx * 50}ms` }}
+                >
+                  <div className="bg-white rounded-xl shadow-md hover:shadow-lg overflow-hidden">
+                    <button
+                      onClick={() => toggleFAQ(faq.id)}
+                      className="w-full flex items-start justify-between px-4 sm:px-6 py-4 text-left hover:bg-gray-50 transition-colors"
+                    >
+                      <div className="flex items-start space-x-4 flex-1">
+                        <div
+                          className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 transition-colors ${
+                            isOpen
+                              ? "bg-gradient-to-r from-[#44A4AD] via-[#2E7A81] to-[#1C4C50]"
+                              : "bg-blue-100"
                           }`}
-                        />
-                      </button>
-
-                      <div
-                        className={`transition-all duration-300 ease-in-out ${
-                          isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
-                        } overflow-hidden`}
-                      >
-                        <div className="px-6 pb-6 pt-2 pl-20">
-                          <p className="text-gray-700 leading-relaxed mb-3">
-                            {faq.answer}
-                          </p>
-
-                          {faq.list && (
-                            <ul className="space-y-2 mb-3">
-                              {faq.list.map((item, i) => (
-                                <li
-                                  key={i}
-                                  className="flex items-start space-x-2"
-                                >
-                                  <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
-                                  <span className="text-gray-700">{item}</span>
-                                </li>
-                              ))}
-                            </ul>
-                          )}
-
-                          {faq.note && (
-                            <p className="text-sm text-gray-500 italic">
-                              {faq.note}
-                            </p>
-                          )}
+                        >
+                          <Icon
+                            className={`w-5 h-5 ${
+                              isOpen ? "text-white" : "text-[#3D949C]"
+                            }`}
+                          />
                         </div>
+                        <div className="flex-1">
+                          <span className="text-xs font-semibold text-[#3D949C] bg-blue-50 px-2 py-0.5 rounded-full mb-1 inline-block">
+                            {faq.category}
+                          </span>
+                          <h3 className="text-sm sm:text-base md:text-lg font-bold text-gray-900">
+                            {faq.question}
+                          </h3>
+                        </div>
+                      </div>
+                      <ChevronDown
+                        className={`w-5 h-5 text-gray-400 flex-shrink-0 transition-transform duration-300 ${
+                          isOpen ? "rotate-180" : ""
+                        }`}
+                      />
+                    </button>
+
+                    <div
+                      className={`transition-all duration-300 ease-in-out overflow-hidden ${
+                        isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+                      }`}
+                    >
+                      <div className="px-4 sm:px-6 py-2 pl-16">
+                        <p className="text-gray-700 leading-relaxed mb-2 text-sm sm:text-base">
+                          {faq.answer}
+                        </p>
+                        {faq.list && (
+                          <ul className="space-y-1 mb-2">
+                            {faq.list.map((item, i) => (
+                              <li key={i} className="flex items-start space-x-2">
+                                <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-green-600 flex-shrink-0 mt-0.5" />
+                                <span className="text-gray-700 text-sm sm:text-base">
+                                  {item}
+                                </span>
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                        {faq.note && (
+                          <p className="text-xs sm:text-sm text-gray-500 italic">
+                            {faq.note}
+                          </p>
+                        )}
                       </div>
                     </div>
                   </div>
-                );
-              })}
-            </div>
+                </div>
+              );
+            })
           )}
         </div>
       </section>
 
-      {/* Still Have Questions CTA */}
+      {/* CTA */}
       <section
         id="cta"
-        className="py-20 px-6   bg-gradient-to-r from-[#44A4AD] via-[#2E7A81] to-[#1C4C50] text-white"
+        className="py-12 sm:py-16 px-4 sm:px-6 md:px-8 bg-gradient-to-r from-[#44A4AD] via-[#2E7A81] to-[#1C4C50] text-white text-center"
       >
-        <div className="max-w-4xl mx-auto text-center">
-          <div
-            className={`transition-all duration-1000 ${
-              isVisible("cta")
-                ? "opacity-100 translate-y-0"
-                : "opacity-0 translate-y-10"
-            }`}
-          >
-            <MessageSquare className="w-16 h-16 mx-auto mb-6 text-amber-400" />
-            <h2 className="text-4xl md:text-5xl font-bold mb-4">
-              Still Have Questions?
-            </h2>
-            <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-              Our support team is here to help you. Reach out and we'll get back
-              to you as soon as possible.
-            </p>
+        <MessageSquare className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-4 sm:mb-6 text-amber-400" />
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-2 sm:mb-4">
+          Still Have Questions?
+        </h2>
+        <p className="text-sm sm:text-base md:text-lg text-blue-100 max-w-2xl mx-auto mb-6 sm:mb-8">
+          Our support team is here to help you. Reach out and we'll get back to
+          you as soon as possible.
+        </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a
-                href="mailto:support@iccdfreelance.com"
-                className="bg-white text-black hover:bg-blue-50 font-bold py-4 px-10 rounded-full text-lg transition-all duration-300 transform hover:scale-105 shadow-2xl flex items-center justify-center"
-              >
-                <MessageSquare className="w-5 h-5 mr-2" />
-                Contact Support
-              </a>
-            </div>
+        <a
+          href="mailto:support@iccdfreelance.com"
+          className="inline-block bg-white text-black hover:bg-blue-50 font-bold py-3 sm:py-4 px-6 sm:px-10 rounded-full text-sm sm:text-lg transition-all duration-300 transform hover:scale-105 shadow-md sm:shadow-2xl"
+        >
+          <MessageSquare className="w-4 h-4 sm:w-5 sm:h-5 inline mr-2" />
+          Contact Support
+        </a>
 
-            <div className="mt-12 pt-8 border-t border-white border-opacity-20">
-              <div className="grid md:grid-cols-3 gap-6 text-center">
-                <div>
-                  <Shield className="w-8 h-8 mx-auto mb-2 text-[#42d7e5]" />
-                  <p className="text-sm text-blue-100">Secure Platform</p>
-                </div>
-                <div>
-                  <Users className="w-8 h-8 mx-auto mb-2 text-[#42d7e5]" />
-                  <p className="text-sm text-blue-100">Community Driven</p>
-                </div>
-                <div>
-                  <Award className="w-8 h-8 mx-auto mb-2 text-[#42d7e5]" />
-                  <p className="text-sm text-blue-100">Ethically Guided</p>
-                </div>
-              </div>
-            </div>
+        <div className="mt-8 pt-6 border-t border-white border-opacity-20 grid grid-cols-2 sm:grid-cols-3 gap-4 text-center">
+          <div>
+            <Shield className="w-6 h-6 sm:w-8 sm:h-8 mx-auto mb-1 sm:mb-2 text-[#42d7e5]" />
+            <p className="text-xs sm:text-sm text-blue-100">Secure Platform</p>
+          </div>
+          <div>
+            <Users className="w-6 h-6 sm:w-8 sm:h-8 mx-auto mb-1 sm:mb-2 text-[#42d7e5]" />
+            <p className="text-xs sm:text-sm text-blue-100">Community Driven</p>
+          </div>
+          <div>
+            <Award className="w-6 h-6 sm:w-8 sm:h-8 mx-auto mb-1 sm:mb-2 text-[#42d7e5]" />
+            <p className="text-xs sm:text-sm text-blue-100">Ethically Guided</p>
           </div>
         </div>
       </section>

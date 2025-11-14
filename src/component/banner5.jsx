@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom';
 import EastIcon from '@mui/icons-material/East';
-import { Palette, Megaphone, PenTool, Video, Code } from "lucide-react";
 
 const Banner5 = () => {
   const navigate = useNavigate();
@@ -25,19 +24,16 @@ const Banner5 = () => {
       route: '/find-talent',
     },
   ];
-  
+
   return (
-    <div className="px-6  mt-10">
+    <div className="px-4 sm:px-10 mt-10">
       <section className="flex flex-col items-center md:flex-row md:justify-between md:p-12">
         <div className="w-full text-center md:text-left mb-8 md:mb-0">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-black mb-4">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-black mb-4 leading-snug">
             Browse Talent by Category
           </h1>
-          <p className="text-lg sm:text-xl text-gray-700 mb-6">
-            Looking for work?{' '}
-            {/* <span className="text-[#15A9B2] cursor-pointer hover:underline">
-              Browse jobs
-            </span> */}
+          <p className="text-base sm:text-lg md:text-xl text-gray-700 mb-6">
+            Looking for work? Explore opportunities across various categories.
           </p>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -45,19 +41,21 @@ const Banner5 = () => {
               <div
                 key={index}
                 onClick={() => navigate(card.route)}
-                className="cursor-pointer flex flex-col items-center justify-center group rounded-xl bg-gray-100 px-6 py-6 hover:bg-[#15A9B2] hover:text-white transition-colors duration-300 shadow-md"
+                className="cursor-pointer flex flex-col items-center justify-center group rounded-xl bg-gray-100 px-6 py-6 hover:bg-[#15A9B2] hover:text-white transition-all duration-300 shadow-md text-center"
               >
-                <h2 className="text-xl sm:text-2xl font-semibold mb-2">{card.title}</h2>
-                <p className="text-gray-700 group-hover:text-white mb-4">{card.description}</p>
+                <h2 className="text-xl sm:text-2xl font-semibold mb-2 group-hover:text-white">
+                  {card.title}
+                </h2>
+                <p className="text-gray-700 group-hover:text-white mb-4 text-sm sm:text-base">
+                  {card.description}
+                </p>
                 <div className="flex items-center gap-2 text-[#15A9B2] group-hover:text-white font-medium">
-                  <span className='group-hover:text-white' >{card.linkText}</span>
+                  <span>{card.linkText}</span>
                   <EastIcon fontSize="small" />
                 </div>
               </div>
             ))}
           </div>
-
-          
         </div>
       </section>
     </div>

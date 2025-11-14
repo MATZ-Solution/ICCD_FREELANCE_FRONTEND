@@ -58,7 +58,6 @@ export default function ReportIssueForm() {
   const [showTick, setShowTick] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
-
   const {
     control,
     handleSubmit,
@@ -79,7 +78,6 @@ export default function ReportIssueForm() {
   const { addIssue, isSuccess, isPending } = useAddIssue();
 
   const onSubmit = async (data) => {
-    console.log("Form Data:", data);
     addIssue(data);
   };
 
@@ -92,27 +90,33 @@ export default function ReportIssueForm() {
   }, [isSuccess]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 p-5 flex items-center justify-center">
-      <div className="max-w-3xl w-full bg-white/90 backdrop-blur-lg rounded-2xl shadow-2xl overflow-hidden border border-gray-100">
-        <div className="text-center p-10 border-b border-gray-100 bg-gradient-to-r from-[#f8fbfb] to-[#e9f6f7]">
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-[#47AAB3] rounded-2xl mb-4 shadow-lg">
-            <AlertCircle className="w-8 h-8 text-white" />
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 p-4 sm:p-6 lg:p-10 flex items-center justify-center">
+      <div className="w-full max-w-3xl bg-white/90 backdrop-blur-lg rounded-2xl shadow-2xl overflow-hidden border border-gray-100">
+        {/* Header */}
+        <div className="text-center p-6 sm:p-10 border-b border-gray-100 bg-gradient-to-r from-[#f8fbfb] to-[#e9f6f7]">
+          <div className="inline-flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 bg-[#47AAB3] rounded-2xl mb-3 sm:mb-4 shadow-lg">
+            <AlertCircle className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
           </div>
-          <h1 className="text-4xl font-bold text-gray-900 mb-3">Report an Issue</h1>
-          <p className="text-gray-600 max-w-2xl mx-auto">
-            We're here to help. Please share the details of your issue so our team can resolve it quickly.
+          <h1 className="text-2xl sm:text-4xl font-bold text-gray-900 mb-2 sm:mb-3">
+            Report an Issue
+          </h1>
+          <p className="text-sm sm:text-base text-gray-600 max-w-xl mx-auto">
+            We're here to help. Please share the details of your issue so our
+            team can resolve it quickly.
           </p>
         </div>
 
-        <div className="p-10">
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Form */}
+        <div className="p-4 sm:p-10">
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 sm:space-y-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
+              {/* Full Name */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm sm:text-base font-medium text-gray-700 mb-1">
                   Full Name <span className="text-red-500">*</span>
                 </label>
                 <div className="relative">
-                  <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-gray-400" />
                   <Controller
                     name="fullName"
                     control={control}
@@ -120,8 +124,9 @@ export default function ReportIssueForm() {
                       <input
                         {...field}
                         type="text"
-                        className={`w-full pl-11 pr-4 py-3 border ${errors.fullName ? "border-red-300" : "border-gray-300"
-                          } rounded-xl focus:ring-2 focus:ring-[#47AAB3] outline-none transition`}
+                        className={`w-full pl-10 sm:pl-11 pr-3 sm:pr-4 py-2.5 sm:py-3 border ${
+                          errors.fullName ? "border-red-300" : "border-gray-300"
+                        } rounded-xl focus:ring-2 focus:ring-[#47AAB3] outline-none transition text-sm sm:text-base`}
                         placeholder="John Doe"
                       />
                     )}
@@ -132,12 +137,13 @@ export default function ReportIssueForm() {
                 )}
               </div>
 
+              {/* Email */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm sm:text-base font-medium text-gray-700 mb-1">
                   Email Address <span className="text-red-500">*</span>
                 </label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-gray-400" />
                   <Controller
                     name="email"
                     control={control}
@@ -145,8 +151,9 @@ export default function ReportIssueForm() {
                       <input
                         {...field}
                         type="email"
-                        className={`w-full pl-11 pr-4 py-3 border ${errors.email ? "border-red-300" : "border-gray-300"
-                          } rounded-xl focus:ring-2 focus:ring-[#47AAB3] outline-none transition`}
+                        className={`w-full pl-10 sm:pl-11 pr-3 sm:pr-4 py-2.5 sm:py-3 border ${
+                          errors.email ? "border-red-300" : "border-gray-300"
+                        } rounded-xl focus:ring-2 focus:ring-[#47AAB3] outline-none transition text-sm sm:text-base`}
                         placeholder="john@example.com"
                       />
                     )}
@@ -158,8 +165,9 @@ export default function ReportIssueForm() {
               </div>
             </div>
 
+            {/* User Role */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm sm:text-base font-medium text-gray-700 mb-1">
                 User Role <span className="text-red-500">*</span>
               </label>
               <Controller
@@ -188,10 +196,13 @@ export default function ReportIssueForm() {
                         ...base,
                         borderRadius: "0.75rem",
                         borderColor: errors.userRole ? "#fca5a5" : "#d1d5db",
-                        boxShadow: state.isFocused
-                          ? "0 0 0 2px #47AAB3"
-                          : "none",
+                        boxShadow: state.isFocused ? "0 0 0 2px #47AAB3" : "none",
                         "&:hover": { borderColor: "#47AAB3" },
+                        minHeight: "44px",
+                      }),
+                      valueContainer: (base) => ({
+                        ...base,
+                        padding: "0 8px",
                       }),
                     }}
                   />
@@ -202,12 +213,13 @@ export default function ReportIssueForm() {
               )}
             </div>
 
+            {/* Issue Type */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm sm:text-base font-medium text-gray-700 mb-1">
                 Issue Type <span className="text-red-500">*</span>
               </label>
               <div className="relative">
-                <AlertTriangle className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <AlertTriangle className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-gray-400" />
                 <Controller
                   name="issueType"
                   control={control}
@@ -217,102 +229,77 @@ export default function ReportIssueForm() {
                       options={issueOptions}
                       placeholder="Select issue type"
                       classNamePrefix="react-select"
-                      onChange={(selected) =>
-                        field.onChange(selected?.value)
-                      }
-                      value={
-                        issueOptions.find(
-                          (opt) => opt.value === field.value
-                        ) || null
-                      }
+                      onChange={(selected) => field.onChange(selected?.value)}
+                      value={issueOptions.find((opt) => opt.value === field.value) || null}
                       styles={{
                         control: (base, state) => ({
                           ...base,
                           paddingLeft: "2rem",
                           borderRadius: "0.75rem",
-                          borderColor: errors.issueType
-                            ? "#F87171"
-                            : "#D1D5DB",
-                          boxShadow: state.isFocused
-                            ? "0 0 0 2px #47AAB3"
-                            : "none",
+                          borderColor: errors.issueType ? "#F87171" : "#D1D5DB",
+                          boxShadow: state.isFocused ? "0 0 0 2px #47AAB3" : "none",
                           "&:hover": { borderColor: "#47AAB3" },
+                          minHeight: "44px",
                         }),
+                        valueContainer: (base) => ({ ...base, padding: "0 8px" }),
                       }}
                     />
                   )}
                 />
               </div>
               {errors.issueType && (
-                <p className="text-red-500 text-xs mt-1">
-                  {errors.issueType.message}
-                </p>
+                <p className="text-red-500 text-xs mt-1">{errors.issueType.message}</p>
               )}
             </div>
 
+            {/* Description */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm sm:text-base font-medium text-gray-700 mb-1">
                 Issue Description <span className="text-red-500">*</span>
               </label>
               <div className="relative">
-                <FileText className="absolute left-3 top-4 w-5 h-5 text-gray-400" />
+                <FileText className="absolute left-3 top-3 sm:top-4 w-4 h-4 sm:w-5 sm:h-5 text-gray-400" />
                 <Controller
                   name="description"
                   control={control}
                   render={({ field }) => (
                     <textarea
                       {...field}
-                      rows={5}
-                      className={`w-full pl-11 pr-4 py-3 border ${errors.description
-                          ? "border-red-300"
-                          : "border-gray-300"
-                        } rounded-xl focus:ring-2 focus:ring-[#47AAB3] outline-none resize-none`}
+                      rows={4}
+                      className={`w-full pl-10 sm:pl-11 pr-3 sm:pr-4 py-2.5 sm:py-3 border ${
+                        errors.description ? "border-red-300" : "border-gray-300"
+                      } rounded-xl focus:ring-2 focus:ring-[#47AAB3] outline-none resize-none text-sm sm:text-base`}
                       placeholder="Please describe the issue..."
-                    ></textarea>
+                    />
                   )}
                 />
               </div>
               {errors.description && (
-                <p className="text-red-500 text-xs mt-1">
-                  {errors.description.message}
-                </p>
+                <p className="text-red-500 text-xs mt-1">{errors.description.message}</p>
               )}
             </div>
 
-            {/* Priority (Radio) */}
+            {/* Priority */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm sm:text-base font-medium text-gray-700 mb-1">
                 Priority Level <span className="text-red-500">*</span>
               </label>
               <Controller
                 name="priority"
                 control={control}
                 render={({ field }) => (
-                  <div className="flex gap-6 flex-wrap">
+                  <div className="flex gap-3 sm:gap-6 flex-wrap">
                     {[
-                      {
-                        value: "low",
-                        label: "Low",
-                        color: "bg-green-50 border-green-200 text-green-700",
-                      },
-                      {
-                        value: "medium",
-                        label: "Medium",
-                        color:
-                          "bg-yellow-50 border-yellow-200 text-yellow-700",
-                      },
-                      {
-                        value: "high",
-                        label: "High",
-                        color: "bg-red-50 border-red-200 text-red-700",
-                      },
+                      { value: "low", label: "Low", color: "bg-green-50 border-green-200 text-green-700" },
+                      { value: "medium", label: "Medium", color: "bg-yellow-50 border-yellow-200 text-yellow-700" },
+                      { value: "high", label: "High", color: "bg-red-50 border-red-200 text-red-700" },
                     ].map((level) => (
                       <label
                         key={level.value}
-                        className={`flex items-center gap-3 px-5 py-3 rounded-xl border-2 cursor-pointer transition-all ${field.value === level.value
-                            ? `${level.color} border-2 shadow-md`
-                            : "bg-white border-gray-200 hover:border-gray-300"
-                          }`}
+                        className={`flex items-center gap-2 sm:gap-3 px-3 sm:px-5 py-2 sm:py-3 rounded-xl border-2 cursor-pointer transition-all ${field.value === level.value
+                          ? `${level.color} border-2 shadow-md`
+                          : "bg-white border-gray-200 hover:border-gray-300"
+                        } text-sm sm:text-base`}
                       >
                         <input
                           {...field}
@@ -321,40 +308,30 @@ export default function ReportIssueForm() {
                           checked={field.value === level.value}
                           className="w-4 h-4 accent-[#47AAB3]"
                         />
-                        <span
-                          className={`text-sm font-medium ${field.value === level.value
-                              ? ""
-                              : "text-gray-700"
-                            }`}
-                        >
-                          {level.label}
-                        </span>
+                        <span>{level.label}</span>
                       </label>
                     ))}
                   </div>
                 )}
               />
               {errors.priority && (
-                <p className="text-red-500 text-xs mt-1">
-                  {errors.priority.message}
-                </p>
+                <p className="text-red-500 text-xs mt-1">{errors.priority.message}</p>
               )}
             </div>
 
+            {/* Submit */}
             <button
               type="submit"
               disabled={isPending || showTick}
-              className={`w-full py-4 flex justify-center items-center gap-2 text-white rounded-lg text-base font-semibold transition-all shadow-lg ${showTick
-                  ? "bg-green-600 hover:bg-green-600"
-                  : "bg-gradient-to-r from-[#3b90a0] to-[#2a7080] hover:shadow-xl"
+              className={`w-full py-3 sm:py-4 flex justify-center items-center gap-2 text-white rounded-lg text-base font-semibold transition-all shadow-lg ${showTick
+                ? "bg-green-600 hover:bg-green-600"
+                : "bg-gradient-to-r from-[#3b90a0] to-[#2a7080] hover:shadow-xl"
                 }`}
             >
               {showTick ? (
                 <>
-                  <CheckCircle2 className="animate-scale-in w-6 h-6 text-white" />
-                  <span className="animate-fade-in">
-                    Submitted Successfully!
-                  </span>
+                  <CheckCircle2 className="animate-scale-in w-5 sm:w-6 h-5 sm:h-6 text-white" />
+                  <span className="animate-fade-in">Submitted Successfully!</span>
                 </>
               ) : isPending ? (
                 "Submitting..."
@@ -363,13 +340,15 @@ export default function ReportIssueForm() {
               )}
             </button>
           </form>
-
-
         </div>
       </div>
-          {showTick && (
-            <SuccessModal message='Your issue report has been received.' onClose={() => setShowModal(false)} />
-          )}
+
+      {showTick && (
+        <SuccessModal
+          message="Your issue report has been received."
+          onClose={() => setShowModal(false)}
+        />
+      )}
     </div>
   );
 }

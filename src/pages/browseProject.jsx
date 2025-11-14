@@ -7,8 +7,6 @@ import ICCDError from "../component/ICCDError";
 import useDebounce from "../../hooks/useDebounce";
 import Pagination from "../component/pagination";
 import DataLoader from "./superadmin_dashboard/DataLoader";
-
-// Lazy load Projects_table
 const Projects_table = lazy(() =>
   import("../component/client_dashboard/project_table")
 );
