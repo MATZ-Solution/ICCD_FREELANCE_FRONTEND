@@ -1,23 +1,29 @@
 import { useGetAllDisputeByClient } from "../../../api/client/dispute";
-import ICCDLoader from "../loader";
 import ICCDError from "../ICCDError";
 import DisputeLists from "../dispute/disputeLists";
 import Pagination from "../pagination";
 import { useState } from "react";
+import { AlertTriangle } from "lucide-react";
+import Header from "../client_dashboard/header";
 
 const ClientDisputeLists = () => {
+
   const [page, setPage] = useState(1);
+  const [search, setSearch] = useState("")
 
-  const { data, totalPages, isPending, isError } = useGetAllDisputeByClient({ page });
+  const { data, totalPages, isLoading, isError } = useGetAllDisputeByClient({ page });
 
-  if (isPending) return <ICCDLoader />;
   if (isError) return <ICCDError />;
 
   return (
     <div className="px-4 sm:px-6 lg:px-10 mt-6">
-      <h2 className="text-xl sm:text-2xl font-bold mb-4 text-slate-800">
-        Dispute Management
-      </h2>
+      <Header
+        icon={<AlertTriangle className="w-6 h-6 text-white" />}
+        title="Dispute Management"
+        description="Manage your dispute"
+        search={search}
+        setSearch={setSearch}
+      />
 
       {/* Dispute List */}
       <div className="overflow-x-auto">

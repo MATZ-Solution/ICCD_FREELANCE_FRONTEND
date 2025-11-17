@@ -13,6 +13,7 @@ import StarRating from "../StarRating";
 import GigContactMe from "./GigContactMe";
 
 export default function ServicePage() {
+
   const [activeNavTab, setActiveNavTab] = useState("Basic");
   // const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -29,7 +30,6 @@ export default function ServicePage() {
   const gigInfo = gig?.gigsDescription;
   const freelancer = gig?.freelancerDetails;
   // const freelancerId = freelancer?.freelancerId;
-  console.log(freelancer);
 
   // const {
   //   data: ratings,
@@ -47,7 +47,6 @@ export default function ServicePage() {
   //   freelancerId: freelancerId,
   // });
 
-  // console.log("mohis",ratings.data)
 
   // Show loader while gig data is loading
   if (isLoading) return <ICCDLoader />;
@@ -252,8 +251,6 @@ export default function ServicePage() {
           </div>
         </div>
       )}
-
-      {console.log("selectedPackage", selectedPackage)}
 
       {selectedPackage && freelancer && (
         <OrderOptions
