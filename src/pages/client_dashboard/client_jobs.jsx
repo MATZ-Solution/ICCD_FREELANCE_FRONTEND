@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Briefcase } from "lucide-react";
 import Jobs_table from "../../component/client_dashboard/job_table";
@@ -20,19 +20,23 @@ function ClientJobs() {
     page
   });
 
+  useEffect(() => {
+    setPage(1)
+  }, [search])
+
   if (isError) return <ICCDError />;
 
   return (
-    <div className="px-4 sm:px-6 lg:px-10">
+    <div className="max-w-7xl mx-auto p-4 sm:p-6">
       {/* Header Section */}
       <Header
         icon={<Briefcase className="w-6 h-6 text-white" />}
         title="Job Opportunities"
         description="Discover and manage your career opportunities"
+        placeholder="Search Jobs"
         search={search}
         setSearch={setSearch}
       />
-
       {/* Add New Job Button */}
       <div className="mt-6 flex justify-end">
         <button

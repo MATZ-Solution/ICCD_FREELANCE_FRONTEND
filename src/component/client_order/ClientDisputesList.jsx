@@ -2,7 +2,7 @@ import { useGetAllDisputeByClient } from "../../../api/client/dispute";
 import ICCDError from "../ICCDError";
 import DisputeLists from "../dispute/disputeLists";
 import Pagination from "../pagination";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { AlertTriangle } from "lucide-react";
 import Header from "../client_dashboard/header";
 
@@ -13,14 +13,19 @@ const ClientDisputeLists = () => {
 
   const { data, totalPages, isLoading, isError } = useGetAllDisputeByClient({ page });
 
+  useEffect(() => {
+    setPage(1)
+  }, [search])
+
   if (isError) return <ICCDError />;
 
   return (
-    <div className="px-4 sm:px-6 lg:px-10 mt-6">
+    <div className="max-w-7xl mx-auto p-4 sm:p-6">
       <Header
         icon={<AlertTriangle className="w-6 h-6 text-white" />}
         title="Dispute Management"
         description="Manage your dispute"
+        placeholder="Search Dispute"
         search={search}
         setSearch={setSearch}
       />

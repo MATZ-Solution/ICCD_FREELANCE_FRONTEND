@@ -1,7 +1,7 @@
 import React from 'react'
 import { Search, X } from "lucide-react";
 
-function Header({ icon, title, description, search, setSearch }) {
+function Header({ icon, title, description, placeholder, search, setSearch }) {
     return (
         <div className="flex flex-col sm:flex-row sm:justify-between mb-6 bg-gradient-to-r from-[#043A53] via-[#065f73] to-[#3C939D] rounded-md p-4 sm:p-6">
             <div className="flex items-center gap-3 mb-4 sm:mb-0">
@@ -15,7 +15,7 @@ function Header({ icon, title, description, search, setSearch }) {
             </div>
 
             {/* Search */}
-            <div className="flex justify-start sm:justify-end">
+            <div className="flex items-center justify-start sm:justify-end">
                 <div className="relative w-full sm:w-72">
                     <Search className="absolute top-2.5 left-2.5 text-gray-400 w-5 h-5" />
                     {search && (
@@ -27,7 +27,7 @@ function Header({ icon, title, description, search, setSearch }) {
                         type="text"
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
-                        placeholder="Search Orders..."
+                        placeholder={placeholder}
                         className="w-full h-10 px-9 py-2 pr-10 rounded-md border border-gray-400 bg-white focus:outline-none focus:ring-2 focus:ring-blue-300 text-sm sm:text-base"
                     />
 

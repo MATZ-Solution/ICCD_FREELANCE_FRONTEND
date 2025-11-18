@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useGetProjectsByClient } from "../../../api/client/project";
 import ICCDError from "../../component/ICCDError";
@@ -18,15 +18,20 @@ function ClientProjects() {
 
     const { data, totalPages, isError, isLoading } = useGetProjectsByClient({ search: useDebounce(search), page });
 
+    useEffect(() => {
+        setPage(1)
+    }, [search])
+
     if (isError) return <ICCDError />;
 
     return (
-        <div className="px-4 sm:px-6 lg:px-10">
+        <div className="max-w-7xl mx-auto p-4 sm:p-6">
             {/* Header */}
             <Header
                 icon={<FolderKanban className="w-6 h-6 text-white" />}
                 title="Projects Overview"
                 description="Manage and track your project portfolio"
+                placeholder="Search Projects"
                 search={search}
                 setSearch={setSearch}
             />

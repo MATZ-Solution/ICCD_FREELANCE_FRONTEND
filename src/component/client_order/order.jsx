@@ -1,4 +1,4 @@
-import { useState, memo } from "react";
+import { useState, memo, useEffect } from "react";
 import { Clock, CheckCircle, AlertTriangle, Eye, EllipsisVertical, Package } from "lucide-react";
 import { useGetOrderByClient } from "../../../api/client/order";
 import { Modal } from "./Modal";
@@ -109,6 +109,9 @@ function ClientOrders() {
     );
   };
 
+  useEffect(() => {
+    setPage(1)
+  }, [search])
   // if (isLoading) return <DataLoader />;
   if (isError)
     return (
@@ -123,15 +126,14 @@ function ClientOrders() {
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
       <div className="max-w-7xl mx-auto p-4 sm:p-6">
         {/* Header */}
-        
         <Header
           icon={<Package className="w-6 h-6 text-white" />}
           title="Order Management"
           description="Track And Manage Your Orders"
+          placeholder="Search Orders"
           search={search}
           setSearch={setSearch}
         />
-
         {/* Table */}
         {isLoading ? <DataLoader /> :
           (<div className="overflow-x-auto rounded-2xl border border-slate-200 shadow-sm bg-white">

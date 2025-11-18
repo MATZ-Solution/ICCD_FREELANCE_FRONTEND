@@ -229,7 +229,6 @@ function DisputeDetailPage({ userResponseData = [], data = [] }) {
             {/* Freelancer Action Notice */}
             {userType === "freelancer" &&
               ((userResponseData?.length === 0 ) ? (
-                userResponseData?.action && (
                   <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
                     <h2 className="text-sm p-2 font-semibold text-red-600 bg-red-50 mb-4">
                       You have only 7 days left to respond to this dispute. If no
@@ -244,7 +243,6 @@ function DisputeDetailPage({ userResponseData = [], data = [] }) {
                       Respond To The Dispute
                     </button>
                   </div>
-                )
               ) : (
                 <div className=" bg-blue-50 rounded-lg shadow-sm border border-gray-200 p-6">
                   <h2 className="text-sm capitalize p-2 font-semibold text-blue-800  mb-4">
