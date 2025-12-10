@@ -22,7 +22,7 @@ export default function Footer() {
         { label: 'Login / Register', href: '/login' },
         { label: 'Post a Project', href: '/client/post-project' },
         { label: 'Find Freelancers', href: '/find-talent' },
-        { label: 'Become a Freelancer', href: '/freelancer-profile' },
+        { label: 'Become a Freelancer', href: '/freelancer/dashboard' },
       ],
     },
     {

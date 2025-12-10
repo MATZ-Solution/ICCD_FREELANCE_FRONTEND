@@ -144,7 +144,7 @@ export const ProjectDetailClient = () => {
                         <td className="px-6 py-4">{item?.experience}</td>
                         <td className="px-6 py-4 text-right">
                           <button onClick={()=> downloadFile(item?.fileUrl, item?.name)} className="text-[#47AAB3] hover:underline text-sm">
-                            Download CV
+                            Download proposal
                           </button>
                         </td>
                       </tr>

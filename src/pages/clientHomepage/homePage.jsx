@@ -10,6 +10,8 @@ import { getUserProfile } from "../../../redux/slices/userProfileSlice";
 import useDebounce from "../../../hooks/useDebounce";
 import { useSelector } from "react-redux";
 import Pagination from "../../component/pagination";
+import DataLoader from "../superadmin_dashboard/DataLoader";
+import { formatDate } from "../../../functions/timeFormat";
 
 export default function ClientHomepage() {
   const navigate = useNavigate();
@@ -32,8 +34,6 @@ export default function ClientHomepage() {
     freelancer_id: freelancer?.id,
     page: page
   });
-
-  console.log(gigs)
 
   // Sync search state with URL changes
   useEffect(() => {
@@ -71,26 +71,8 @@ export default function ClientHomepage() {
     }
   }, [data, dispatch]);
 
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <h2 className="text-2xl font-bold text-gray-700 animate-pulse tracking-wide">
-          Loading Gigs...
-        </h2>
-      </div>
-    );
-  }
+  if (isLoading) return <DataLoader />
 
-  // Helper function to format created_at date
-  const formatDate = (dateString) => {
-    if (!dateString) return "";
-    const date = new Date(dateString);
-    return date.toLocaleDateString(undefined, {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-    });
-  };
 
   return (
     <div className="min-h-screen px-4 bg-white">
@@ -129,9 +111,8 @@ export default function ClientHomepage() {
           {/* Gig Cards Section */}
           <div className="mt-6 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {gigs?.length > 0 ? (
-              gigs.map((gig) => {
+              gigs?.map((gig) => {
                 const totalReviews = gig.reviews ? gig.reviews.length : 0;
-
                 return (
                   <GigCard
                     key={gig.id}
@@ -161,11 +142,13 @@ export default function ClientHomepage() {
               </div>
             )}
           </div>
+          {(gigs && gigs?.length > 0) && (
             <Pagination
               currentPage={page}
               totalPages={totalPages}
               onPageChange={(newPage) => setPage(newPage)}
             />
+          )}
         </main>
       </div>
     </div>

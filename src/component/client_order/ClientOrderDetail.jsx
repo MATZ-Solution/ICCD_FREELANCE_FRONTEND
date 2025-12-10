@@ -12,57 +12,18 @@ import {
 import { useSingleOrderByClient } from "../../../api/client/order";
 import { useNavigate, useParams } from "react-router-dom";
 import GigCarousel from "./GigCarousel";
+import ICCDLoader from "../loader";
+import ICCDError from "../ICCDError";
 
 const ClientOrderDetail = () => {
+
   const { id } = useParams();
   const navigate = useNavigate();
 
   const { data: orderData, isLoading, isError } = useSingleOrderByClient(id);
 
-  if (isLoading)
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
-      </div>
-    );
-
-  if (isError)
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center">
-        <div className="bg-white p-8 rounded-2xl shadow-xl border border-red-100">
-          <div className="text-red-500 text-center">
-            <div className="w-16 h-16 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-4">
-              <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
-                <path
-                  fillRule="evenodd"
-                  d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            </div>
-            <h3 className="text-lg font-semibold mb-2">Failed to load order</h3>
-            <p className="text-slate-600">Please try again later</p>
-          </div>
-        </div>
-      </div>
-    );
-
-  if (!orderData || !orderData.order)
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center">
-        <div className="bg-white p-8 rounded-2xl shadow-xl">
-          <div className="text-center">
-            <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Package className="w-8 h-8 text-slate-400" />
-            </div>
-            <h3 className="text-lg font-semibold mb-2">No order found</h3>
-            <p className="text-slate-600">
-              The order you're looking for doesn't exist
-            </p>
-          </div>
-        </div>
-      </div>
-    );
+  if (isLoading) return <ICCDLoader />
+  if (isError) return <ICCDError />
 
   const order = orderData.order;
 
@@ -140,9 +101,6 @@ const ClientOrderDetail = () => {
             /> */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
             <div className="absolute bottom-6 left-6 right-6">
-              {/* <h2 className="text-2xl font-bold text-white mb-2 drop-shadow-lg">
-                {order.title}
-              </h2> */}
               <div className="flex items-center gap-2">
                 <span
                   className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-medium border ${getStatusColor(
@@ -158,7 +116,7 @@ const ClientOrderDetail = () => {
 
           <div className="p-8">
             {/* Order Stats */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div className="grid grid-cols-1 md:grid-cols-2  gap-6 mb-8">
               <div className="bg-gradient-to-br from-blue-50 to-blue-100/50 p-4 rounded-xl border border-blue-200/50">
                 <div className="flex items-center gap-3 mb-2">
                   <div className="p-2 bg-blue-500 rounded-lg">
@@ -255,7 +213,7 @@ const ClientOrderDetail = () => {
 
             <div className="p-8 space-y-6">
               {/* Package Name & Price */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
                 <div className="bg-slate-50 rounded-xl p-6 border border-slate-200">
                   <h4 className="font-semibold text-slate-900 mb-2">
                     Package Name
@@ -299,7 +257,7 @@ const ClientOrderDetail = () => {
                 </div>
               </div>
 
-              <div className="pt-6 border-t border-slate-200">
+              {/* <div className="pt-6 border-t border-slate-200">
                 <button
                   onClick={() => navigate("/client/messages")}
                   className="w-full md:w-auto inline-flex items-center justify-center gap-3 px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold rounded-xl shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200"
@@ -307,7 +265,7 @@ const ClientOrderDetail = () => {
                   <MessageSquare className="w-5 h-5" />
                   Get Update From Freelancer
                 </button>
-              </div>
+              </div> */}
             </div>
           </div>
         )}

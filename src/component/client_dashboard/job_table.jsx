@@ -59,10 +59,9 @@ function Jobs_table({ data }) {
 
   return (
     <div className=" bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 px-6 py-8">
-      {console.log(data)}
       {/* Jobs Grid */}
-      <div className="grid gap-6 rounded-xl  md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {data.map((item) => (
+      <div className="grid gap-6 rounded-xl md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        {data?.map((item) => (
           <div
             key={item.id}
             className="group bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 cursor-pointer border border-gray-100 hover:border-gray-200 hover:-translate-y-1"
