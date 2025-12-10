@@ -105,6 +105,7 @@ import MessageCheck from "../src/pages/messagesCheck";
 import GigContactMe from "../src/component/client_order/GigContactMe";
 import SuccessModal from "../src/component/SuccessModal";
 import Portfolio from "../src/pages/freelancer_profile/form2";
+import ICCDPricingPage from "../src/component/ICCDPricingPage";
 
 const stripePromise = loadStripe("pk_test_51QCl1eCDh3RtIJ6XkYcN5vHd3KTO2f8enRSNv9Wx7Li0iCI7cr9khTDQx0vS5RmbazZoaECNW83FesOMwLeIgMLb00BJG4pPZR");
 
@@ -190,6 +191,14 @@ export const router = createBrowserRouter([
     element: withSuspense(
       <MainTemplate isShowFooter={true}>
         <FindTalent />
+      </MainTemplate>
+    ),
+  },
+  {
+    path: "/pricing",
+    element: withSuspense(
+      <MainTemplate isShowFooter={true}>
+        <ICCDPricingPage />
       </MainTemplate>
     ),
   },
