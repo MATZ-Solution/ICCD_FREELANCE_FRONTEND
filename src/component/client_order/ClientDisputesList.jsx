@@ -4,7 +4,7 @@ import DisputeLists from "../dispute/disputeLists";
 import Pagination from "../pagination";
 import { useState, useEffect } from "react";
 import { AlertTriangle } from "lucide-react";
-import Header from "../client_dashboard/header";
+import Header from "../client_dashboard/Header";
 
 const ClientDisputeLists = () => {
 
