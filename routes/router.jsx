@@ -117,7 +117,7 @@ export const router = createBrowserRouter([
       </MainTemplate >
     ),
   },
-    {
+  {
     path: "/google-callback",
     element: withSuspense(
       <MainTemplate isShowFooter={true}>
@@ -125,7 +125,7 @@ export const router = createBrowserRouter([
       </MainTemplate >
     ),
   },
-    {
+  {
     path: "/GigContactMe",
     element: withSuspense(
       <MainTemplate isShowFooter={true}>
@@ -144,7 +144,7 @@ export const router = createBrowserRouter([
       </MainTemplate>
     ),
   },
-    {
+  {
     path: "/SuccessModal",
     element: withSuspense(
       <MainTemplate isShowFooter={true}>
@@ -152,7 +152,7 @@ export const router = createBrowserRouter([
       </MainTemplate>
     ),
   },
-  
+
   {
     path: "/aboutus",
     element: withSuspense(
@@ -263,7 +263,7 @@ export const router = createBrowserRouter([
       </AuthRoute>
     ),
   },
-  
+
   {
     path: "/freelancer/manage-gigs/overview/edit/:id",
     element: withSuspense(
@@ -371,7 +371,7 @@ export const router = createBrowserRouter([
     element: withSuspense(
       <AuthRoute>
         <IsFreelancerProfile>
-          <MainTemplate isShowFooter={true}>
+          <MainTemplate isShowFooter={false}>
             <OrderDetailPage />
           </MainTemplate>
         </IsFreelancerProfile>
@@ -379,28 +379,30 @@ export const router = createBrowserRouter([
     ),
   },
 
-   {
+  {
     path: "/freelancer/DisputesList",
     element: withSuspense(
       <AuthRoute>
-          <MainTemplate isShowFooter={true}>
+        <IsFreelancerProfile>
+          <MainTemplate isShowFooter={false}>
             <FreelancerDisputeLists />
           </MainTemplate>
+        </IsFreelancerProfile>
       </AuthRoute>
     ),
   },
-    {
+  {
     path: "/freelancer/Disputes/:id",
     element: withSuspense(
       <AuthRoute>
-          <MainTemplate isShowFooter={true}>
-            <DisputeDetailPageFreelancer />
-          </MainTemplate>
+        <MainTemplate isShowFooter={true}>
+          <DisputeDetailPageFreelancer />
+        </MainTemplate>
       </AuthRoute>
     ),
   },
-   
-   
+
+
   {
     path: "/freelancer/dashboard",
     element: withSuspense(
@@ -661,7 +663,7 @@ export const router = createBrowserRouter([
       </AuthRoute>
     ),
   },
-    {
+  {
     path: "/client/orderDetail/:id",
     element: withSuspense(
       <AuthRoute>
@@ -671,7 +673,7 @@ export const router = createBrowserRouter([
       </AuthRoute>
     ),
   },
- 
+
   {
     path: "/client/projects",
     element: withSuspense(
@@ -732,23 +734,23 @@ export const router = createBrowserRouter([
       </AuthRoute>
     ),
   },
-    {
+  {
     path: "/client/DisputesList",
     element: withSuspense(
       // <AuthRoute>
-        <MainTemplate isShowFooter={false}>
-          <ClientDisputeLists />
-        </MainTemplate>
+      <MainTemplate isShowFooter={false}>
+        <ClientDisputeLists />
+      </MainTemplate>
       // </AuthRoute>
     ),
   },
-      {
+  {
     path: "/client/Disputes/:id",
     element: withSuspense(
       <AuthRoute>
-          <MainTemplate isShowFooter={true}>
-            <DisputeDetailPageClient />
-          </MainTemplate>
+        <MainTemplate isShowFooter={true}>
+          <DisputeDetailPageClient />
+        </MainTemplate>
       </AuthRoute>
     ),
   },
@@ -756,13 +758,13 @@ export const router = createBrowserRouter([
     path: "/superadmin/dashboard",
     element: withSuspense(
       // <AuthRoute>
-        <AdminTemplate isShowFooter={false}>
-          <SuperAdminDashboard />
-        </AdminTemplate>
+      <AdminTemplate isShowFooter={false}>
+        <SuperAdminDashboard />
+      </AdminTemplate>
       // </AuthRoute>
     ),
   },
-    {
+  {
     path: "/superadmin/manage-disputes",
     element: withSuspense(
       <AuthRoute>
@@ -772,7 +774,7 @@ export const router = createBrowserRouter([
       </AuthRoute>
     ),
   },
-    {
+  {
     path: "/superadmin/admindisputedetail/:id",
     element: withSuspense(
       <AuthRoute>
@@ -787,9 +789,9 @@ export const router = createBrowserRouter([
     path: "/superadmin/orders",
     element: withSuspense(
       // <AuthRoute>
-        <AdminTemplate isShowFooter={false}>
-          <SuperAdminAllOrders />
-        </AdminTemplate>
+      <AdminTemplate isShowFooter={false}>
+        <SuperAdminAllOrders />
+      </AdminTemplate>
       // </AuthRoute>
     ),
   },
@@ -797,9 +799,9 @@ export const router = createBrowserRouter([
     path: "/superadmin/orders/:orderId",
     element: withSuspense(
       // <AuthRoute>
-        <AdminTemplate isShowFooter={false}>
-          <OrderDetailPage />
-        </AdminTemplate>
+      <AdminTemplate isShowFooter={false}>
+        <OrderDetailPage />
+      </AdminTemplate>
       // </AuthRoute>
     ),
   },
@@ -807,9 +809,9 @@ export const router = createBrowserRouter([
     path: "/superadmin/manage-dispute",
     element: withSuspense(
       // <AuthRoute>
-        <AdminTemplate isShowFooter={false}>
-          <ManageDispute />
-        </AdminTemplate>
+      <AdminTemplate isShowFooter={false}>
+        <ManageDispute />
+      </AdminTemplate>
       // </AuthRoute>
     ),
   },
@@ -817,9 +819,9 @@ export const router = createBrowserRouter([
     path: "/superadmin/manage-users",
     element: withSuspense(
       // <AuthRoute>
-        <AdminTemplate isShowFooter={false}>
-          <ManageUsers />
-        </AdminTemplate>
+      <AdminTemplate isShowFooter={false}>
+        <ManageUsers />
+      </AdminTemplate>
       // </AuthRoute>
     ),
   },
@@ -827,81 +829,81 @@ export const router = createBrowserRouter([
     path: "superadmin/manage-contactform",
     element: withSuspense(
       // <AuthRoute>
-        <AdminTemplate isShowFooter={false}>
-          <ManageContactform />
-        </AdminTemplate>
+      <AdminTemplate isShowFooter={false}>
+        <ManageContactform />
+      </AdminTemplate>
       // </AuthRoute>
     ),
   },
-    {
+  {
     path: "superadmin/manage-feedbacks",
     element: withSuspense(
       // <AuthRoute>
-        <AdminTemplate isShowFooter={false}>
-          <Feedbacks />
-        </AdminTemplate>
+      <AdminTemplate isShowFooter={false}>
+        <Feedbacks />
+      </AdminTemplate>
       // </AuthRoute>
     ),
   },
-    {
+  {
     path: "/superadmin/manage-reports",
     element: withSuspense(
       // <AuthRoute>
-        <AdminTemplate isShowFooter={false}>
-          <Reports />
-        </AdminTemplate>
+      <AdminTemplate isShowFooter={false}>
+        <Reports />
+      </AdminTemplate>
       // </AuthRoute>
     ),
   },
-    {
+  {
     path: "superadmin/user/:id",
     element: withSuspense(
       // <AuthRoute>
-        <AdminTemplate isShowFooter={false}>
-          <UserDetailPage />
-        </AdminTemplate>
+      <AdminTemplate isShowFooter={false}>
+        <UserDetailPage />
+      </AdminTemplate>
       // </AuthRoute>
     ),
   },
-    {
+  {
     path: "/superadmin/Active-freelancers",
     element: withSuspense(
       // <AuthRoute>
-        <AdminTemplate isShowFooter={false}>
-          <Manage_freelancers />
-        </AdminTemplate>
+      <AdminTemplate isShowFooter={false}>
+        <Manage_freelancers />
+      </AdminTemplate>
       // </AuthRoute>
     ),
   },
-      {
+  {
     path: "/superadmin/manage-gigs",
     element: withSuspense(
       // <AuthRoute>
-        <AdminTemplate isShowFooter={false}>
-          <Manage_gigs />
-        </AdminTemplate>
+      <AdminTemplate isShowFooter={false}>
+        <Manage_gigs />
+      </AdminTemplate>
       // </AuthRoute>
     ),
   },
 
-    {
+  {
     path: "superadmin/manage-projects",
     element: withSuspense(
       // <AuthRoute>
-        <AdminTemplate isShowFooter={false}>
-          <ActiveProjects />
-        </AdminTemplate>
+      <AdminTemplate isShowFooter={false}>
+        <ActiveProjects />
+      </AdminTemplate>
       // </AuthRoute>
     ),
   },
 
-    {
+  {
     path: "/superadmin/manage-jobs",
     element: withSuspense(
       // <AuthRoute>
-        <AdminTemplate isShowFooter={false}>
-          <ActiveJobs />
-        </AdminTemplate>
+      <AdminTemplate isShowFooter={false}>
+        <ActiveJobs />
+      </AdminTemplate>
       // </AuthRoute>
     ),
   },
@@ -909,9 +911,9 @@ export const router = createBrowserRouter([
     path: "/superadmin/reviews",
     element: withSuspense(
       // <AuthRoute>
-        <AdminTemplate isShowFooter={false}>
-          <ReviewPage />
-        </AdminTemplate>
+      <AdminTemplate isShowFooter={false}>
+        <ReviewPage />
+      </AdminTemplate>
       // </AuthRoute>
     ),
   },
@@ -987,81 +989,81 @@ export const router = createBrowserRouter([
   {
     path: "/privacy-policy",
     element: withSuspense(
-        <MainTemplate isShowFooter={true}>
-          <IccdPrivacyPolicyUI />
-        </MainTemplate>
+      <MainTemplate isShowFooter={true}>
+        <IccdPrivacyPolicyUI />
+      </MainTemplate>
     ),
   },
-    {
+  {
     path: "/terms-of-service",
     element: withSuspense(
-        <MainTemplate isShowFooter={true}>
-          <TermsOfService />
-        </MainTemplate>
+      <MainTemplate isShowFooter={true}>
+        <TermsOfService />
+      </MainTemplate>
     ),
   },
 
-   {
+  {
     path: "/cookies",
     element: withSuspense(
-        <MainTemplate isShowFooter={true}>
-          <CookiePolicy />
-        </MainTemplate>
+      <MainTemplate isShowFooter={true}>
+        <CookiePolicy />
+      </MainTemplate>
     ),
   }
   ,
-   {
+  {
     path: "/CommunityGuidelines",
     element: withSuspense(
-        <MainTemplate isShowFooter={true}>
-          <CommunityGuidelines />
-        </MainTemplate>
+      <MainTemplate isShowFooter={true}>
+        <CommunityGuidelines />
+      </MainTemplate>
     ),
   },
 
-    {
+  {
     path: "/blog",
     element: withSuspense(
-        <MainTemplate isShowFooter={true}>
-          <BlogPage />
-        </MainTemplate>
+      <MainTemplate isShowFooter={true}>
+        <BlogPage />
+      </MainTemplate>
     ),
   },
   {
     path: "/report",
     element: withSuspense(
-        <MainTemplate isShowFooter={true}>
-          <ReportIssueForm />
-        </MainTemplate>
+      <MainTemplate isShowFooter={true}>
+        <ReportIssueForm />
+      </MainTemplate>
     ),
   },
-  
-    {
+
+  {
     path: "/feedback",
     element: withSuspense(
-        <MainTemplate isShowFooter={true}>
-          <FeedbackSection />
-        </MainTemplate>
+      <MainTemplate isShowFooter={true}>
+        <FeedbackSection />
+      </MainTemplate>
     ),
   },
   {
     path: "/how-it-works",
     element: withSuspense(
-        <MainTemplate isShowFooter={true}>
-          <HowItWorks />
-        </MainTemplate>
+      <MainTemplate isShowFooter={true}>
+        <HowItWorks />
+      </MainTemplate>
     ),
   },
   {
     path: "/faqs",
     element: withSuspense(
-        <MainTemplate isShowFooter={true}>
-          <FAQPage />
-        </MainTemplate>
+      <MainTemplate isShowFooter={true}>
+        <FAQPage />
+      </MainTemplate>
     ),
   },
-  
-  
+
+
   {
     path: "*",
     element: withSuspense(

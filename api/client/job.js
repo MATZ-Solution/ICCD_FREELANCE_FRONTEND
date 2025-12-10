@@ -222,16 +222,11 @@ export function useApplyJob() {
         timeout: 30000,
       }),
     onSuccess: (data) => {
-      toast.success("CV send successfully!")
+      toast.success("Job applied successfully")
 
     },
     onError: (error) => {
-      // Toast.show({
-      //     type: "error",
-      //     text1: "Error",
-      //     text2: "Failed to edit scout",
-      // });
-      toast.success("Failed to Send CV send !")
+      toast.success("Failed to applied job")
 
     },
   });

@@ -182,9 +182,10 @@ export default function JobDetailPage() {
             {/* Job Info */}
             <JobInfoCard jobData={jobData} />
             {/* Shortlisted Candidates */}
-          
+
             {/* Application Progress */}
             <ApplicationProgress
+              shortlisted={shortlistedCandidates?.length || 0}
               applications={jobProposals?.length || 0}
               totalPositions={jobData?.remaining_position}
             />
@@ -240,11 +241,10 @@ function ProposalSection({ jobProposals, shortlistedCandidates, handleAction, ac
             <button
               key={f.key}
               onClick={() => setFilter(f.key)}
-              className={`px-4 py-2 rounded-lg border transition-all duration-200 text-sm font-medium ${
-                filter === f.key
+              className={`px-4 py-2 rounded-lg border transition-all duration-200 text-sm font-medium ${filter === f.key
                   ? "bg-white text-emerald-700 border-emerald-300"
                   : "bg-white/20 text-white border-white/30 hover:bg-white/30"
-              }`}
+                }`}
             >
               {f.label}
             </button>
@@ -255,129 +255,127 @@ function ProposalSection({ jobProposals, shortlistedCandidates, handleAction, ac
       <div className="p-6">
         {filteredProposals?.length > 0 ? (
           <div className="space-y-4">
-           {filteredProposals.map((item, index) => (
-  <div
-    key={index}
-    className="flex flex-col md:flex-row md:items-center justify-between p-4 border border-gray-200 rounded-lg hover:border-emerald-300 hover:shadow-md transition-all duration-200"
-  >
-    <div className="flex items-center gap-4 mb-3 md:mb-0 flex-1">
-      <User className="w-5 h-5 text-gray-400" />
-      <div className="flex-1">
-        <h3 className="font-semibold text-gray-900">{item?.name}</h3>
-        <p className="text-sm text-gray-600 flex items-center gap-1">
-          <Briefcase className="w-3 h-3" />
-          Experience: {item?.experience} Years
-        </p>
-      </div>
-    </div>
+            {filteredProposals.map((item, index) => (
+              <div
+                key={index}
+                className="flex flex-col md:flex-row md:items-center justify-between p-4 border border-gray-200 rounded-lg hover:border-emerald-300 hover:shadow-md transition-all duration-200"
+              >
+                <div className="flex items-center gap-4 mb-3 md:mb-0 flex-1">
+                  <User className="w-5 h-5 text-gray-400" />
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-gray-900">{item?.name}</h3>
+                    <p className="text-sm text-gray-600 flex items-center gap-1">
+                      <Briefcase className="w-3 h-3" />
+                      Experience: {item?.experience} Years
+                    </p>
+                  </div>
+                </div>
 
-    <div className="flex flex-col lg:flex-row items-center gap-2">
-      {item?.status === "selected" ? (
-        <span className="inline-flex items-center gap-2 px-4 py-2 bg-green-50 text-green-700 rounded-lg border border-green-200">
-          <Check className="w-4 h-4" />
-          Shortlisted
-        </span>
-      ) : item?.status === "not selected" ? (
-        <span className="inline-flex items-center gap-2 px-4 py-2 bg-red-50 text-red-700 rounded-lg border border-red-200">
-          <XCircle className="w-4 h-4" />
-          Rejected
-        </span>
-      ) : (
-        <>
-          <button
-            onClick={() => downloadFile(item?.fileUrl, item?.name)}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-lg transition-colors duration-200 border border-emerald-200"
-          >
-            <Download className="w-4 h-4" />
-            Download CV
-          </button>
+                <div className="flex flex-col lg:flex-row items-center gap-2">
+                  {item?.status === "selected" ? (
+                    <span className="inline-flex items-center gap-2 px-4 py-2 bg-green-50 text-green-700 rounded-lg border border-green-200">
+                      <Check className="w-4 h-4" />
+                      Shortlisted
+                    </span>
+                  ) : item?.status === "not selected" ? (
+                    <span className="inline-flex items-center gap-2 px-4 py-2 bg-red-50 text-red-700 rounded-lg border border-red-200">
+                      <XCircle className="w-4 h-4" />
+                      Rejected
+                    </span>
+                  ) : (
+                    <>
+                      <button
+                        onClick={() => downloadFile(item?.fileUrl, item?.name)}
+                        className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-lg transition-colors duration-200 border border-emerald-200"
+                      >
+                        <Download className="w-4 h-4" />
+                        Download CV
+                      </button>
 
-          <button
-            onClick={() => handleAction(item, "accept")}
-            disabled={actionloading}
-            className={`inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg border transition-colors duration-200 ${
-              actionloading
-                ? "bg-green-100 text-green-500 border-green-200 cursor-not-allowed"
-                : "bg-green-50 hover:bg-green-100 text-green-700 border-green-200"
-            }`}
-          >
-            {actionloading ? (
-              <>
-                <svg
-                  className="animate-spin h-4 w-4 text-green-600"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                  />
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8v4l3.5-3.5L12 0v4a8 8 0 01-8 8z"
-                  />
-                </svg>
-                Processing...
-              </>
-            ) : (
-              <>
-                <Check className="w-4 h-4" />
-                Accept
-              </>
-            )}
-          </button>
+                      <button
+                        onClick={() => handleAction(item, "accept")}
+                        disabled={actionloading}
+                        className={`inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg border transition-colors duration-200 ${actionloading
+                            ? "bg-green-100 text-green-500 border-green-200 cursor-not-allowed"
+                            : "bg-green-50 hover:bg-green-100 text-green-700 border-green-200"
+                          }`}
+                      >
+                        {actionloading ? (
+                          <>
+                            <svg
+                              className="animate-spin h-4 w-4 text-green-600"
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                            >
+                              <circle
+                                className="opacity-25"
+                                cx="12"
+                                cy="12"
+                                r="10"
+                                stroke="currentColor"
+                                strokeWidth="4"
+                              />
+                              <path
+                                className="opacity-75"
+                                fill="currentColor"
+                                d="M4 12a8 8 0 018-8v4l3.5-3.5L12 0v4a8 8 0 01-8 8z"
+                              />
+                            </svg>
+                            Processing...
+                          </>
+                        ) : (
+                          <>
+                            <Check className="w-4 h-4" />
+                            Accept
+                          </>
+                        )}
+                      </button>
 
-          <button
-            onClick={() => handleAction(item, "rejected")}
-            disabled={actionloading}
-            className={`inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg border transition-colors duration-200 ${
-              actionloading
-                ? "bg-red-100 text-red-500 border-red-200 cursor-not-allowed"
-                : "bg-red-50 hover:bg-red-100 text-red-700 border-red-200"
-            }`}
-          >
-            {actionloading ? (
-              <>
-                <svg
-                  className="animate-spin h-4 w-4 text-red-600"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                  />
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8v4l3.5-3.5L12 0v4a8 8 0 01-8 8z"
-                  />
-                </svg>
-                Processing...
-              </>
-            ) : (
-              <>
-                <XCircle className="w-4 h-4" />
-                Reject
-              </>
-            )}
-          </button>
-        </>
-      )}
-    </div>
-  </div>
-))}
+                      <button
+                        onClick={() => handleAction(item, "rejected")}
+                        disabled={actionloading}
+                        className={`inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg border transition-colors duration-200 ${actionloading
+                            ? "bg-red-100 text-red-500 border-red-200 cursor-not-allowed"
+                            : "bg-red-50 hover:bg-red-100 text-red-700 border-red-200"
+                          }`}
+                      >
+                        {actionloading ? (
+                          <>
+                            <svg
+                              className="animate-spin h-4 w-4 text-red-600"
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                            >
+                              <circle
+                                className="opacity-25"
+                                cx="12"
+                                cy="12"
+                                r="10"
+                                stroke="currentColor"
+                                strokeWidth="4"
+                              />
+                              <path
+                                className="opacity-75"
+                                fill="currentColor"
+                                d="M4 12a8 8 0 018-8v4l3.5-3.5L12 0v4a8 8 0 01-8 8z"
+                              />
+                            </svg>
+                            Processing...
+                          </>
+                        ) : (
+                          <>
+                            <XCircle className="w-4 h-4" />
+                            Reject
+                          </>
+                        )}
+                      </button>
+                    </>
+                  )}
+                </div>
+              </div>
+            ))}
 
           </div>
         ) : shortlistedCandidates?.length > 0 ? (
@@ -467,7 +465,7 @@ function InfoItem({ icon, bg, title, value, valueClass }) {
   );
 }
 
-function ApplicationProgress({ applications, totalPositions }) {
+function ApplicationProgress({ shortlisted, applications, totalPositions }) {
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
       <div className="bg-gray-50 p-4 border-gray-300 border-b">
@@ -479,16 +477,16 @@ function ApplicationProgress({ applications, totalPositions }) {
         <div className="space-y-3">
           <div className="flex justify-between items-center">
             <span className="text-sm text-gray-600">Shortlisted Candidate</span>
-            <span className="font-semibold text-gray-900">{applications}</span>
+            <span className="font-semibold text-gray-900">{shortlisted}</span>
           </div>
           <div className="flex justify-between items-center">
             <span className="text-sm text-gray-600">Applications received</span>
             <span className="font-semibold text-gray-900">{applications}</span>
           </div>
-          <div className="flex justify-between items-center">
+          {/* <div className="flex justify-between items-center">
             <span className="text-sm text-gray-600">Positions remaining</span>
             <span className="font-semibold text-green-600">{totalPositions}</span>
-          </div>
+          </div> */}
           <div className="w-full bg-gray-200 rounded-full h-2 mt-3">
             <div
               className="bg-gradient-to-r from-blue-500 to-purple-600 h-2 rounded-full transition-all duration-500"
