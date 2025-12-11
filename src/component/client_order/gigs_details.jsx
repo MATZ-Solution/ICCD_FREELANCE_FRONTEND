@@ -11,6 +11,8 @@ import { User2 } from "lucide-react";
 import { Language } from "@mui/icons-material";
 import StarRating from "../StarRating";
 import GigContactMe from "./GigContactMe";
+import { useDispatch } from "react-redux";
+import { setRedirect } from "../../../redux/slices/redirectSlice";
 
 export default function ServicePage() {
 
@@ -18,11 +20,12 @@ export default function ServicePage() {
   // const [isModalOpen, setIsModalOpen] = useState(false);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isContactModalOpen, setIsContactModalOpen] = useState(false); 
+  const [isContactModalOpen, setIsContactModalOpen] = useState(false);
 
   const navigate = useNavigate();
   const userDetails = useSelector((state) => state.user.userDetails);
   const { id } = useParams();
+  const dispatch = useDispatch()
 
   const { data, isLoading } = useGetSingleGigs(id);
 
@@ -188,11 +191,10 @@ export default function ServicePage() {
                   <button
                     key={type}
                     onClick={() => setActiveNavTab(type)}
-                    className={`flex-1 py-4 text-center text-sm font-medium border-b-2 transition-all ${
-                      activeNavTab.toLowerCase() === type.toLowerCase()
-                        ? "border-black bg-green-50 text-black"
-                        : "border-transparent text-gray-500 hover:text-black hover:bg-gray-50"
-                    }`}
+                    className={`flex-1 py-4 text-center text-sm font-medium border-b-2 transition-all ${activeNavTab.toLowerCase() === type.toLowerCase()
+                      ? "border-black bg-green-50 text-black"
+                      : "border-transparent text-gray-500 hover:text-black hover:bg-gray-50"
+                      }`}
                   >
                     {type}
                   </button>
@@ -212,11 +214,14 @@ export default function ServicePage() {
                     />
 
                     <button
-                      onClick={() =>
-                        userDetails === null
-                          ? navigate("/login")
-                          : setIsModalOpen(true)
-                      }
+                      onClick={() => {
+                        if (userDetails) {
+                          setIsModalOpen(true)
+                        } else {
+                          navigate("/login")
+                          dispatch(setRedirect(`/client/gigs/gigs_details/${id}`))
+                        }
+                      }}
                       className="mt-4 w-full bg-black text-white py-2 rounded-lg hover:bg-gray-800 transition duration-200"
                     >
                       Continue

@@ -7,6 +7,7 @@ import ICCDLoader from "../../component/loader";
 import ICCDError from "../../component/ICCDError";
 
 export default function JobDetailPage() {
+  
   const { id } = useParams();
   const { data, isPending, isError } = useGetJobById(id);
   const { jobProposals } = getJobPropsalByClient({ id });

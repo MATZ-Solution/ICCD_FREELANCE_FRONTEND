@@ -13,6 +13,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Pagination from "../../component/pagination";
 import { oicCountries } from "../../../data/oic_contries.js";
 import useDebounce from "../../../hooks/useDebounce.jsx";
+import { useDispatch } from "react-redux";
+import { setRedirect } from "../../../redux/slices/redirectSlice.js";
 
 const JobProposalModal = lazy(() => import("../../component/JobProposalModal"));
 
@@ -27,6 +29,7 @@ function Jobs() {
   const navigate = useNavigate();
   const [selectedJobId, setSelectedJobId] = useState(null);
   const [savedJobs, setSavedJobs] = useState(new Set());
+  const dispatch = useDispatch()
 
   const locationOptions = oicCountries.map(item => ({
     value: item.country,
@@ -122,6 +125,7 @@ function Jobs() {
                 !isFreelancerPath
               ) {
                 navigate("/login");
+                dispatch(setRedirect(`/freelancer/manage-jobs`))
               } else {
                 setShow(true);
               }

@@ -9,6 +9,7 @@ import {
   Instagram,
   CheckCircle,
   Star,
+  User,
   Briefcase,
   Calendar,
   Globe,
@@ -32,15 +33,16 @@ export const ProjectDetailClient = () => {
   const { data, isSuccess, isPending, isError, isLoading } = useGetProjectsById(id)
   const { data: propData, isSuccess: propSucc, isPending: propIsPend, isError: propIsErr, isLoading: propIsLoad } = useGetProjectProposalByClient(id)
 
-  
+  const [filter, setFilter] = useState("all")
+
   console.log("props data: ", propData)
   if (isLoading || propIsLoad) {
-     return <ICCDLoader /> 
-   }
-   
-    if (isError || propIsErr) {
-       return <ICCDError /> 
-     }
+    return <ICCDLoader />
+  }
+
+  if (isError || propIsErr) {
+    return <ICCDError />
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
@@ -119,7 +121,111 @@ export const ProjectDetailClient = () => {
 
 
             {/* Proposals */}
-            <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300">
+
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+              <div className="bg-gradient-to-r from-emerald-500 to-teal-600 p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div>
+                  <h2 className="text-xl font-bold text-white">Candidate Proposals</h2>
+                  <p className="text-emerald-100 mt-1">
+                    {propData?.length || 0} candidates have applied
+                  </p>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-2">
+                  {[
+                    { key: "all", label: "All" },
+                    { key: "shortlisted", label: "Shortlisted" },
+                  ].map((f) => (
+                    <button
+                      key={f.key}
+                      onClick={() => setFilter(f.key)}
+                      className={`px-4 py-2 rounded-lg border transition-all duration-200 text-sm font-medium ${filter === f.key
+                        ? "bg-white text-emerald-700 border-emerald-300"
+                        : "bg-white/20 text-white border-white/30 hover:bg-white/30"
+                        }`}
+                    >
+                      {f.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="p-6">
+
+                <div className="space-y-4">
+                  {propData?.map((item, index) => (
+                    <div
+                      key={index}
+                      className="flex flex-col md:flex-row md:items-center justify-between p-4 border border-gray-200 rounded-lg hover:border-emerald-300 hover:shadow-md transition-all duration-200"
+                    >
+                      <div className="flex items-center gap-4 mb-3 md:mb-0 flex-1">
+                        <User className="w-5 h-5 text-gray-400" />
+                        <div className="flex-1">
+                          <h3 className="font-semibold text-gray-900">{item?.name}</h3>
+                          <p className="text-sm text-gray-600 flex items-center gap-1">
+                            <Briefcase className="w-3 h-3" />
+                            Experience: {item?.experience ? <p>{item?.experience} Years</p> : <p className="text-red-600">N/A</p>}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+
+                </div>
+
+                {/* {propData?.length > 0 ? (
+                      <div className="space-y-4">
+                        {propData?.map((item, index) => (
+                          <div
+                            key={index}
+                            className="flex flex-col md:flex-row md:items-center justify-between p-4 border border-gray-200 rounded-lg hover:border-emerald-300 hover:shadow-md transition-all duration-200"
+                          >
+                            <div className="flex items-center gap-4 mb-3 md:mb-0 flex-1">
+                              <User className="w-5 h-5 text-gray-400" />
+                              <div className="flex-1">
+                                <h3 className="font-semibold text-gray-900">{item?.name}</h3>
+                                <p className="text-sm text-gray-600 flex items-center gap-1">
+                                  <Briefcase className="w-3 h-3" />
+                                  Experience: {item?.experience} Years
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+            
+                      </div>
+                    ) : shortlistedCandidates?.length > 0 ? (
+                      <div className="space-y-4">
+                        {shortlistedCandidates.map((candidate, idx) => (
+                          <div key={idx} className="flex items-center justify-between p-3 bg-blue-50 rounded-lg border border-blue-100">
+                            <div>
+                              <p className="font-medium text-gray-900">{candidate?.name}</p>
+                              <p className="text-sm text-gray-600">{candidate?.email}</p>
+                              <p className="text-xs text-gray-500">Experience: {candidate?.experience} Years</p>
+                            </div>
+                            <button
+                              onClick={() => downloadFile(candidate?.fileUrl, candidate?.name)}
+                              className="inline-flex items-center gap-1 px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors text-sm"
+                            >
+                              <Download className="w-4 h-4" />
+                              CV
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="text-center py-12">
+                        <Users className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                        <h3 className="text-lg font-medium text-gray-900 mb-2">No Applications</h3>
+                        <p className="text-gray-600">
+                          CVs will appear here once candidates start applying.
+                        </p>
+                      </div>
+                    )} */}
+              </div>
+            </div>
+
+            {/* <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300">
               <div className="bg-gradient-to-r from-emerald-50 to-teal-50 p-6 border-b border-gray-200">
                 <h2 className="text-xl font-bold text-gray-900">Clients & Proposals</h2>
               </div>
@@ -141,7 +247,7 @@ export const ProjectDetailClient = () => {
                           <img src={item?.freelancerImg} className="w-9 h-9 rounded-full bg-gray-200"></img>
                           <span className="font-medium">{item?.name}</span>
                         </td>
-                        <td className="px-6 py-4">{item?.experience}</td>
+                        <td className="px-6 py-4">{item?.experience|| <p className="text-red-600">N/A</p>}</td>
                         <td className="px-6 py-4 text-right">
                           <button onClick={()=> downloadFile(item?.fileUrl, item?.name)} className="text-[#47AAB3] hover:underline text-sm">
                             Download proposal
@@ -157,7 +263,7 @@ export const ProjectDetailClient = () => {
                   </tbody>
                 </table>
               </div>
-            </div>
+            </div> */}
 
             {/* Deliverables */}
             <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300">
@@ -165,11 +271,11 @@ export const ProjectDetailClient = () => {
                 <h2 className="text-xl font-bold text-gray-900">Deliverables</h2>
               </div>
               <div className="p-8 space-y-6">
-               
-              <div
-  className="prose prose-sm prose-gray max-w-none break-words overflow-x-auto"
-  dangerouslySetInnerHTML={{ __html: data[0]?.deliverable }}
-/>
+
+                <div
+                  className="prose prose-sm prose-gray max-w-none break-words overflow-x-auto"
+                  dangerouslySetInnerHTML={{ __html: data[0]?.deliverable }}
+                />
 
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -238,7 +344,7 @@ export const ProjectDetailClient = () => {
               </div>
             </div>
 
-           
+
           </div>
 
           {/* Sidebar */}
@@ -273,29 +379,29 @@ export const ProjectDetailClient = () => {
                   </div>
                 )}
 
-                 {/* Skills and Freelancer Type */}
-           
-              </div>
-               <div className="grid grid-cols-1 md:grid-cols-1  mt-8 gap-8">
-              <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300">
-                <div className="bg-gradient-to-r from-yellow-50 to-orange-50 p-6 border-b border-gray-200">
-                  <h2 className="text-xl font-bold text-gray-900">Required Skills</h2>
+                {/* Skills and Freelancer Type */}
 
-                  {/* <p className="text-sm text-orange-600 font-medium mt-1">
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-1  mt-8 gap-8">
+                <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300">
+                  <div className="bg-gradient-to-r from-yellow-50 to-orange-50 p-6 border-b border-gray-200">
+                    <h2 className="text-xl font-bold text-gray-900">Required Skills</h2>
+
+                    {/* <p className="text-sm text-orange-600 font-medium mt-1">
                     You have 2 out of 3 skills required for the job
                   </p> */}
-                </div>
-                <div className="p-6">
-                  <div className="flex gap-2">
-                    {
-                      data[0]?.skills?.split(',').map((item, index) => (
-                        <span key={index} className="inline-flex  items-center px-4 py-2 rounded-full text-sm font-semibold bg-gradient-to-r from-pink-100 to-rose-100 text-pink-800 border border-pink-200">
-                          {item}
-                        </span>
-                      ))
-                    }
                   </div>
-                  {/* <div className="flex items-center gap-2">
+                  <div className="p-6">
+                    <div className="flex gap-2">
+                      {
+                        data[0]?.skills?.split(',').map((item, index) => (
+                          <span key={index} className="inline-flex  items-center px-4 py-2 rounded-full text-sm font-semibold bg-gradient-to-r from-pink-100 to-rose-100 text-pink-800 border border-pink-200">
+                            {item}
+                          </span>
+                        ))
+                      }
+                    </div>
+                    {/* <div className="flex items-center gap-2">
                     <div className="flex">
                       <Star className="w-5 h-5 text-yellow-400 fill-current" />
                       <Star className="w-5 h-5 text-yellow-400 fill-current" />
@@ -303,19 +409,19 @@ export const ProjectDetailClient = () => {
                     </div>
                     <span className="text-sm text-gray-600 font-medium">Skill Match</span>
                   </div> */}
+                  </div>
+                </div>
+                <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300">
+                  <div className="bg-gradient-to-r from-pink-50 to-rose-50 p-6 border-b border-gray-200">
+                    <h2 className="text-xl font-bold text-gray-900">Freelancer Type</h2>
+                  </div>
+                  <div className="p-6">
+                    <span className="inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold bg-gradient-to-r from-pink-100 to-rose-100 text-pink-800 border border-pink-200">
+                      {data[0]?.freelancerType}
+                    </span>
+                  </div>
                 </div>
               </div>
-              <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300">
-                <div className="bg-gradient-to-r from-pink-50 to-rose-50 p-6 border-b border-gray-200">
-                  <h2 className="text-xl font-bold text-gray-900">Freelancer Type</h2>
-                </div>
-                <div className="p-6">
-                  <span className="inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold bg-gradient-to-r from-pink-100 to-rose-100 text-pink-800 border border-pink-200">
-                    {data[0]?.freelancerType}
-                  </span>
-                </div>
-              </div>
-            </div>
 
               {/* About the Employer */}
               {/* <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300">
@@ -353,7 +459,7 @@ export const ProjectDetailClient = () => {
                 </div>
               </div> */}
 
-              
+
             </div>
           </div>
         </div>

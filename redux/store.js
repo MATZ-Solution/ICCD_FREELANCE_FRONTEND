@@ -8,6 +8,7 @@ import gigsReducer from './slices/gigsDetailSlice'
 import userProfileReducer from './slices/userProfileSlice'
 import orderReducer from "./slices/orderSlice";
 import userTypeReducer from "./slices/userType";
+import redirectSlice from './slices/redirectSlice';
 
 const persistConfig = {
   key: 'root',
@@ -19,7 +20,8 @@ const rootReducer = combineReducers({
   gigs: gigsReducer,
   order: orderReducer,
   userProfile: userProfileReducer,
-  userType: userTypeReducer
+  userType: userTypeReducer,
+  redirect: redirectSlice
   // add other reducers here
 });
 

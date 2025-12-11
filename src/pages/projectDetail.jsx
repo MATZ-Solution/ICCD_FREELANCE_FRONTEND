@@ -25,15 +25,19 @@ import { useState } from "react";
 import { useSelector } from "react-redux";
 import ICCDLoader from "../component/loader";
 import ICCDError from "../component/ICCDError";
+import { useDispatch } from "react-redux";
+import { setRedirect } from "../../redux/slices/redirectSlice";
 
 export const ProjectDetail = () => {
+
   const { id } = useParams();
+  const dispatch = useDispatch()
+  const navigate = useNavigate();
   const [show, setShow] = useState(false);
   const pathName = useLocation().pathname;
-  const navigate = useNavigate();
   const isFreelancerPath = pathName.includes("/freelancer");
-  const freelancerData = useSelector((state) => state.userProfile.userProfile);
   const { data, isLoading, isError } = useGetProjectsById(id);
+  const freelancerData = useSelector((state) => state.userProfile.userProfile);
 
   if (isLoading) return <ICCDLoader />;
   if (isError) return <ICCDError />;
@@ -214,6 +218,7 @@ export const ProjectDetail = () => {
                     !isFreelancerPath
                   ) {
                     navigate("/login");
+                    dispatch(setRedirect(`/freelancer/projects/${id}`))
                   } else {
                     setShow(true);
                   }

@@ -6,6 +6,8 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setUserDetails } from "../../redux/slices/userSlice";
 import { setUserType } from "../../redux/slices/userType";
+import { useSelector } from "react-redux";
+import { resetRedirect } from "../../redux/slices/redirectSlice";
 
 export function useCheck() {
   const { data, error, isSuccess, isPending, isError } = useQuery({
@@ -22,7 +24,7 @@ export function useCheck() {
 }
 
 export function useCheckIsFreelancer() {
-  const { data, error, isSuccess, isPending, isError } = useQuery({
+  const { data, error, isSuccess, isLoading, isError } = useQuery({
     queryKey: [API_ROUTE.freelancer.checkIsFreelancer],
     queryFn: () => api.get(API_ROUTE.freelancer.checkIsFreelancer),
     // staleTime: 7 * 24 * 60 * 60 * 1000 // 7 days
@@ -31,7 +33,7 @@ export function useCheckIsFreelancer() {
     data: data?.data?.data,
     error,
     isSuccess,
-    isPending,
+    isLoading,
     isError,
   };
 }
@@ -39,6 +41,8 @@ export function useCheckIsFreelancer() {
 export function useLogin() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const redirect = useSelector((state) => state.redirect.redirectPath);
+  console.log("redirect: ", redirect);
 
   const {
     mutate: userLogin,
@@ -51,13 +55,19 @@ export function useLogin() {
   } = useMutation({
     mutationFn: (data) => api.post(API_ROUTE.user.login, data),
     onSuccess: (response) => {
-      if (response?.data?.data?.email === 'admin@gmail.com') {
+      if (response?.data?.data?.email === "admin@gmail.com") {
         navigate("/superadmin/dashboard");
         setToken(response?.data?.token);
       } else {
         setToken(response?.data?.token);
         dispatch(setUserDetails(response?.data?.data));
-        dispatch(setUserType({ id: response?.data?.data.id, type: 'client' }))
+        dispatch(setUserType({ id: response?.data?.data.id, type: "client" }));
+        if (redirect) {
+          navigate(redirect, { replace: true });
+          dispatch(resetRedirect());
+          return;
+        }
+        // Default route
         navigate("/client");
         // if (localStorage.get("verify-otp") || localStorage.get("change_pass")) {
         //   localStorage.removeItem("verify-otp");
@@ -79,7 +89,6 @@ export function useLogin() {
 }
 
 export function useSignUp(options = {}) {
-
   const {
     mutate: userSignUp,
     isSuccess,
@@ -118,7 +127,6 @@ export function useSendOtp(options = {}) {
   } = useMutation({
     mutationFn: (data) => api.post(API_ROUTE.user.sendOtp, data),
     ...options,
-
   });
 
   return {
