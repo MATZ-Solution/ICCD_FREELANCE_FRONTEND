@@ -8,6 +8,9 @@ const Banner1 = () => {
   const navigate = useNavigate();
   const [btnState, setBtnState] = useState('find-talent');
   const [search, setSearch] = useState('');
+  
+    const [activeCategory, setActiveCategory] = useState('find-talent');
+
 
   const handleSearch = () => {
     if (search.trim()) {
@@ -81,16 +84,10 @@ const Banner1 = () => {
             <div className="flex overflow-hidden rounded-full mb-4 bg-black/50 p-1 sm:p-2">
               <button
                 onClick={() => setBtnState('find-talent')}
-                className={` ${btnState === 'find-talent' ? 'bg-white text-black' : 'text-white'} flex-1 h-10 rounded-full text-sm sm:text-base transition duration-300 cursor-pointer`}
+                className={` ${btnState === 'find-talent' ? ' text-white' : 'text-white'} flex-1 h-10 rounded-full text-sm sm:text-base transition duration-300 cursor-pointer`}
               >
-                Find Talent
-              </button>
-              <button
-                onClick={() => setBtnState('browse-jobs')}
-                className={`${btnState === 'browse-jobs' ? 'bg-white text-black' : 'text-white'} flex-1 h-10 rounded-full text-sm sm:text-base transition duration-300 cursor-pointer`}
-              >
-                Browse Job
-              </button>
+Search & Discover Talent              </button>
+        
             </div>
 
             {/* Search Bar */}
@@ -142,24 +139,58 @@ const Banner1 = () => {
         </div>
       </section>
 
-      {/* Categories Grid */}
-      <div className="mt-8 sm:mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 sm:gap-6">
-        {categories.map((cat, i) => (
-          <div
-            onClick={() => navigate(`/find-talent?search=${encodeURIComponent(cat.value)}`)}
-            key={i}
-            className="flex items-center gap-3 bg-white hover:bg-gray-50 border border-gray-200 rounded-xl p-3 sm:p-4 shadow-sm hover:shadow-md transition-all cursor-pointer"
-          >
-            <div className={`p-2 sm:p-3 rounded-lg ${cat.bg}`}>
-              {cat.icon}
+      {/* Categories Section */}
+      <div className="mt-12 sm:mt-16">
+        <div className="text-center mb-8">
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
+            Explore Categories
+          </h2>
+          <p className="text-gray-600">Find the perfect talent for your needs</p>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 sm:gap-5">
+          {categories.map((cat, i) => (
+            <div
+              key={i}
+              onClick={() => console.log('Navigate to:', cat.value)}
+              onMouseEnter={() => setActiveCategory(i)}
+              onMouseLeave={() => setActiveCategory(null)}
+              className={`group relative overflow-hidden rounded-2xl p-6 cursor-pointer transition-all duration-300 hover:scale-105 hover:shadow-2xl ${
+                activeCategory === i ? 'shadow-2xl' : 'shadow-lg'
+              }`}
+              style={{
+                background: `linear-gradient(135deg, ${activeCategory === i ? 'rgb(249 250 251)' : 'white'})`,
+                animationDelay: `${i * 0.1}s`
+              }}
+            >
+              {/* Gradient Background on Hover */}
+              <div className={`absolute inset-0 bg-gradient-to-br ${cat.bgGradient} opacity-0 group-hover:opacity-100 transition-opacity duration-300`}></div>
+              
+              {/* Content */}
+              <div className="relative z-10">
+                <div className={`inline-flex p-3 rounded-xl bg-gradient-to-br ${cat.gradient} text-white mb-4 group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
+                  {cat.icon}
+                </div>
+                <h3 className="text-base sm:text-lg font-bold text-gray-900 mb-1 group-hover:text-gray-800 transition-colors">
+                  {cat.title}
+                </h3>
+                <p className="text-sm text-gray-600 group-hover:text-gray-700 transition-colors">
+                  {cat.subtitle}
+                </p>
+              </div>
+
+              {/* Hover Arrow */}
+              <div className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transform translate-x-2 group-hover:translate-x-0 transition-all duration-300">
+                <div className={`w-8 h-8 rounded-full bg-gradient-to-br ${cat.gradient} flex items-center justify-center text-white shadow-lg`}>
+                  →
+                </div>
+              </div>
             </div>
-            <div>
-              <h3 className="text-xs sm:text-sm font-semibold text-gray-800">{cat.title}</h3>
-              <p className="text-[10px] sm:text-xs text-gray-500">{cat.subtitle}</p>
-            </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
+
+
     </div>
   );
 };
