@@ -1,7 +1,7 @@
 import { toast } from "react-toastify";
 import api from "../axios";
 import API_ROUTE from "../endPoints";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 
 // multipart form data
@@ -158,6 +158,61 @@ export function useEditProjects(id) {
     },
   });
   return { editProject, isSuccess, isPending, isError, error };
+}
+
+export function useProjectProposalAction() {
+  const queryClient = useQueryClient();
+  const {
+    mutate: updateProposalAction,
+    mutateAsync,
+    isSuccess,
+    isPending,
+    isError,
+    error,
+  } = useMutation({
+    mutationFn: async (data) => {
+      return await api.put(`${API_ROUTE.project.projectProposalAction}`, data, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: api.defaults.headers.common["Authorization"],
+        },
+        timeout: 30000,
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [API_ROUTE.project.getProjectById],
+      });
+      queryClient.invalidateQueries({
+        queryKey: [API_ROUTE.project.getProjectPropsalByClient],
+      });
+      toast.success("Project Proposal Updated Successfully");
+    },
+    onError: (message) => {
+      toast.error(message?.response?.data?.message);
+    },
+  });
+
+  return { updateProposalAction, mutateAsync, isSuccess, isPending, isError, error };
+}
+
+export function useGetProjectShortlistProposals(id) {
+
+  const { data, isSuccess, isPending, isError, isLoading } = useQuery({
+    queryKey: [API_ROUTE.project.getProjectShortListCandidate, id],
+    queryFn: async () => await api.get(`${API_ROUTE.project.getProjectShortListCandidate}/${id}`),
+    enabled: id !== undefined && id !== null 
+    // refetchOnWindowFocus: true,
+    // staleTime: 0,
+    // refetchOnMount: true,
+  });
+  return {
+    data: data?.data?.data,
+    isSuccess,
+    isPending,
+    isError,
+    isLoading,
+  };
 }
 
 
