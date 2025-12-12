@@ -5,7 +5,7 @@ import * as yup from 'yup';
 import { useApplyProject } from '../../api/client/project';
 import { useLocation } from 'react-router-dom';
 import { useApplyJob } from '../../api/client/job';
-import { X, Upload, FileText, CheckCircle, ChevronDown } from 'lucide-react';
+import { X, Upload, CheckCircle } from 'lucide-react';
 
 const schema = yup.object().shape({
     projectTitle: yup.string().required('Project title is required'),
@@ -40,7 +40,7 @@ const ProposalModal = ({ onClose, data, freelancerData }) => {
     const [sampleFiles, setSampleFiles] = useState([]);
     const [isDragging, setIsDragging] = useState(false);
     const [step, setStep] = useState(1);
-    const [milestonePayment, setMilestonePayment] = useState([])
+    const [milestonePayment, setMilestonePayment] = useState([]);
 
     const { firstName, lastName, id: freelancerId, email } = freelancerData;
     const clientID = data[0]?.clientID;
@@ -49,17 +49,19 @@ const ProposalModal = ({ onClose, data, freelancerData }) => {
     const pathName = useLocation().pathname;
 
     const addMilestonePayment = () => {
-        const duration = watch("duration")
-        const percentage = watch("percentage")
-        setMilestonePayment([...milestonePayment, { percentage: percentage, duration: duration }])
-        setValue("duration", "")
-        setValue("percentage", "")
-    }
+        const duration = watch("duration");
+        const percentage = watch("percentage");
+        if (duration && percentage) {
+            setMilestonePayment([...milestonePayment, { percentage: percentage, duration: duration }]);
+            setValue("duration", "");
+            setValue("percentage", "");
+        }
+    };
 
     const removeEducation = (index) => {
-        const updatedmilestone = milestonePayment.filter((_, i) => i !== index)
-        setMilestonePayment(updatedmilestone)
-    }
+        const updatedmilestone = milestonePayment.filter((_, i) => i !== index);
+        setMilestonePayment(updatedmilestone);
+    };
 
     const {
         register,
@@ -67,9 +69,10 @@ const ProposalModal = ({ onClose, data, freelancerData }) => {
         formState: { errors },
         setValue,
         watch,
+        trigger,
     } = useForm({
         resolver: yupResolver(schema),
-        mode: 'onBlur',
+        mode: 'onChange',
         defaultValues: {
             projectTitle: projectTitle || '',
             freelancerName: firstName + " " + lastName,
@@ -86,6 +89,41 @@ const ProposalModal = ({ onClose, data, freelancerData }) => {
     const { submitJob } = useApplyJob();
     const acknowledgment = watch('acknowledgment');
     const paymentTerms = watch('paymentTerms');
+
+    // Validate current step before moving to next
+    const validateStep = async (currentStep) => {
+        let fieldsToValidate = [];
+        
+        switch(currentStep) {
+            case 1:
+                fieldsToValidate = ['projectTitle', 'freelancerName', 'email'];
+                break;
+            case 2:
+                fieldsToValidate = ['coverLetter', 'proposedDeliverables', 'estimatedTime', 'timeUnit'];
+                break;
+            case 3:
+                fieldsToValidate = ['proposedBudget', 'currency', 'paymentTerms'];
+                break;
+            case 4:
+                fieldsToValidate = ['portfolioLinks', 'CV'];
+                break;
+            case 5:
+                fieldsToValidate = ['acknowledgment'];
+                break;
+            default:
+                return true;
+        }
+        
+        const result = await trigger(fieldsToValidate);
+        return result;
+    };
+
+    const handleNext = async () => {
+        const isValid = await validateStep(step);
+        if (isValid) {
+            setStep(step + 1);
+        }
+    };
 
     const onSubmit = (formData) => {
         console.log('Form Data:', formData);
@@ -108,14 +146,9 @@ const ProposalModal = ({ onClose, data, freelancerData }) => {
             }
         }
 
-        // sampleFiles.forEach((file) => {
-        //     formDataObj.append('sampleFiles', file);
-        // });
-
         if (pathName.includes('manage-jobs')) {
             submitJob(formDataObj);
             console.log('Submitted Proposal:', updateData);
-
         } else {
             submitProposals(formDataObj);
             console.log('Submitted Proposal:', updateData);
@@ -127,17 +160,8 @@ const ProposalModal = ({ onClose, data, freelancerData }) => {
         const file = e.target.files?.[0];
         if (file) {
             setFileName(file.name);
-            setValue('CV', Array.from(e.target.files));
+            setValue('CV', Array.from(e.target.files), { shouldValidate: true });
         }
-    };
-
-    const handleSampleFiles = (e) => {
-        const files = Array.from(e.target.files || []);
-        setSampleFiles([...sampleFiles, ...files]);
-    };
-
-    const removeSampleFile = (index) => {
-        setSampleFiles(sampleFiles.filter((_, i) => i !== index));
     };
 
     const handleDragOver = (e) => {
@@ -155,7 +179,7 @@ const ProposalModal = ({ onClose, data, freelancerData }) => {
         const files = e.dataTransfer.files;
         if (files?.[0]) {
             setFileName(files[0].name);
-            setValue('CV', Array.from(files));
+            setValue('CV', Array.from(files), { shouldValidate: true });
         }
     };
 
@@ -182,7 +206,7 @@ const ProposalModal = ({ onClose, data, freelancerData }) => {
                 {/* Progress Bar */}
                 <div className="h-1 bg-gray-200">
                     <div
-                        className="h-full  bg-gradient-to-r from-[#44A4AD] via-[#2E7A81] to-[#1C4C50] transition-all duration-300"
+                        className="h-full bg-gradient-to-r from-[#44A4AD] via-[#2E7A81] to-[#1C4C50] transition-all duration-300"
                         style={{ width: `${(step / totalSteps) * 100}%` }}
                     />
                 </div>
@@ -320,10 +344,6 @@ const ProposalModal = ({ onClose, data, freelancerData }) => {
                                                 className="w-full px-4 py-3 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-[#44A4AD] focus:border-transparent outline-none transition-all appearance-none cursor-pointer bg-white"
                                             >
                                                 <option value="USD">USD</option>
-                                                {/* <option value="EUR">EUR</option>
-                                                <option value="GBP">GBP</option>
-                                                <option value="PKR">PKR</option>
-                                                <option value="AED">AED</option>  */}
                                             </select>
                                         </div>
                                     </div>
@@ -353,7 +373,7 @@ const ProposalModal = ({ onClose, data, freelancerData }) => {
                                             ))}
                                         </div>
                                         {paymentTerms === 'milestone' && (
-                                            <div className="mt-3">
+                                            <div className="mt-4">
                                                 <div>
                                                     <label className="block font-semibold text-lg mb-2">Add Milestone Payment</label>
                                                 </div>
@@ -364,20 +384,12 @@ const ProposalModal = ({ onClose, data, freelancerData }) => {
                                                                 type="text"
                                                                 {...register('percentage')}
                                                                 placeholder="Add Percentage"
-                                                                // value={option.value || ""}
-                                                                // onChange={(e) =>
-                                                                //     setPercentage(e.target.value)
-                                                                // }
                                                                 className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500"
                                                             />
                                                             <input
                                                                 type="text"
                                                                 {...register('duration')}
                                                                 placeholder="Add Duration"
-                                                                // value={option.value || ""}
-                                                                // onChange={(e) =>
-                                                                //     setDuration(e.target.value)
-                                                                // }
                                                                 className="w-full border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500"
                                                             />
                                                             <button
@@ -390,13 +402,12 @@ const ProposalModal = ({ onClose, data, freelancerData }) => {
                                                         </div>
                                                     </div>
 
-                                                    {/* {educationList.length > 0 && (
-                                                        <div className="space-y-2 mb-4">
-                                                            <h4 className="font-medium">Added Education:</h4>
-                                                            {educationList.map((edu, index) => (
+                                                    {milestonePayment.length > 0 && (
+                                                        <div className="space-y-2">
+                                                            {milestonePayment.map((item, index) => (
                                                                 <div key={index} className="flex justify-between items-center bg-gray-50 p-3 rounded">
                                                                     <span>
-                                                                        {edu.title} in {edu.major} from {edu.institution} ({edu.year})
+                                                                        {item.percentage}% in {item.duration}
                                                                     </span>
                                                                     <button
                                                                         type="button"
@@ -409,28 +420,7 @@ const ProposalModal = ({ onClose, data, freelancerData }) => {
                                                             ))}
                                                         </div>
                                                     )}
-                                                    {errors.education && <p className="text-red-500 text-sm mt-2">{errors.education.message}</p>} */}
                                                 </div>
-                                                {milestonePayment.length > 0 && (
-                                                    <>
-                                                        {milestonePayment.map((item, index) => (
-                                                            <div key={index} className="flex justify-between items-center bg-gray-50 p-3 rounded">
-                                                                <span>
-                                                                    {item.percentage} in {item.duration}
-                                                                </span>
-                                                                <button
-                                                                    type="button"
-                                                                    onClick={() => removeEducation(index)}
-                                                                    className="text-red-500 hover:text-red-700 text-sm"
-                                                                >
-                                                                    Remove
-                                                                </button>
-                                                            </div>
-                                                        ))}
-                                                    </>
-                                                )
-
-                                                }
                                             </div>
                                         )}
                                         {errors.paymentTerms && <p className="text-red-500 text-sm mt-2">{errors.paymentTerms.message}</p>}
@@ -493,52 +483,6 @@ const ProposalModal = ({ onClose, data, freelancerData }) => {
                                         </label>
                                         {errors.CV && <p className="text-red-500 text-sm mt-2">{errors.CV.message}</p>}
                                     </div>
-
-                                    {/* <div>
-                                        <label className="block text-sm font-semibold text-gray-900 mb-3">
-                                            Work Samples (Optional)
-                                        </label>
-                                        <label className="relative flex flex-col items-center justify-center w-full px-6 py-6 border-2 border-dashed border-gray-200 rounded-2xl cursor-pointer hover:border-gray-300 hover:bg-gray-50 transition-all">
-                                            <input
-                                                type="file"
-                                                multiple
-                                                {...register('workSamples')}
-                                                onChange={handleSampleFiles}
-                                                className="hidden"
-                                            />
-                                            <Upload className="w-6 h-6 text-gray-400 mb-2" />
-                                            <p className="text-sm font-medium text-gray-900">Upload work samples</p>
-                                            <p className="text-xs text-gray-500">or click to browse</p>
-                                        </label>
-                                        {sampleFiles.length > 0 && (
-                                            <div className="mt-3 space-y-2">
-                                                {sampleFiles.map((file, idx) => (
-                                                    <div key={idx} className="flex items-center justify-between bg-gray-50 p-3 rounded-lg">
-                                                        <p className="text-sm text-gray-700 truncate">{file.name}</p>
-                                                        <button
-                                                            type="button"
-                                                            onClick={() => removeSampleFile(idx)}
-                                                            className="text-red-500 hover:text-red-700 text-sm font-medium"
-                                                        >
-                                                            Remove
-                                                        </button>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        )}
-                                    </div> */}
-
-                                    {/* <div>
-                                        <label className="block text-sm font-semibold text-gray-900 mb-2">
-                                            Additional Comments (Optional)
-                                        </label>
-                                        <textarea
-                                            {...register('additionalComments')}
-                                            className="w-full px-4 py-3 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-[#44A4AD] focus:border-transparent outline-none transition-all placeholder-gray-400 resize-none"
-                                            rows="3"
-                                            placeholder="Any additional information you'd like to share..."
-                                        />
-                                    </div> */}
                                 </div>
                             )}
 
@@ -595,8 +539,8 @@ const ProposalModal = ({ onClose, data, freelancerData }) => {
                     {step < totalSteps ? (
                         <button
                             type="button"
-                            onClick={() => setStep(step + 1)}
-                            className="flex-1 sm:flex-auto px-6 py-3  bg-gradient-to-r from-[#44A4AD] via-[#2E7A81] to-[#1C4C50] hover:from-[#2E7A81] hover:to-[#1C4C50] text-white font-semibold rounded-xl transition-all duration-200 hover:shadow-lg"
+                            onClick={handleNext}
+                            className="flex-1 sm:flex-auto px-6 py-3 bg-gradient-to-r from-[#44A4AD] via-[#2E7A81] to-[#1C4C50] hover:from-[#2E7A81] hover:to-[#1C4C50] text-white font-semibold rounded-xl transition-all duration-200 hover:shadow-lg"
                         >
                             Next
                         </button>
@@ -605,7 +549,7 @@ const ProposalModal = ({ onClose, data, freelancerData }) => {
                             type="submit"
                             onClick={handleSubmit(onSubmit)}
                             disabled={!acknowledgment || isPending}
-                            className="flex-1 sm:flex-auto px-6 py-3 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 disabled:from-gray-400 disabled:to-gray-400 text-white font-semibold rounded-xl transition-all duration-200 hover:shadow-lg active:scale-95"
+                            className="flex-1 sm:flex-auto px-6 py-3 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 disabled:from-gray-400 disabled:to-gray-400 text-white font-semibold rounded-xl transition-all duration-200 hover:shadow-lg active:scale-95 disabled:cursor-not-allowed"
                         >
                             {isPending ? 'Submitting...' : 'Submit Proposal'}
                         </button>
