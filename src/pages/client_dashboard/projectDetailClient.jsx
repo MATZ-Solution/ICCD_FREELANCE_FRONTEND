@@ -1,14 +1,6 @@
 import {
-  MapPin,
   Clock,
   Users,
-  Heart,
-  Facebook,
-  Twitter,
-  Linkedin,
-  Instagram,
-  CheckCircle,
-  Star,
   User,
   Download,
   Check,
@@ -41,18 +33,8 @@ export const ProjectDetailClient = () => {
   const { data: shortlistedCandidates, isPending: shortlistPending, isError: shortlistError } = useGetProjectShortlistProposals(id);
   const { updateProposalAction, isLoading: actionloading } = useProjectProposalAction();
 
-  const handleAction = (item, action) => {
-    updateProposalAction({
-      id: item.id,
-      name: item.name,
-      email: item.email,
-      projectName: data[0]?.title,
-      action,
-    });
-  };
-
-  if (isLoading || propIsLoad) return <ICCDLoader />
   if (isError || propIsErr) return <ICCDError />
+  if (isLoading || propIsLoad) return <ICCDLoader />
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
@@ -133,9 +115,10 @@ export const ProjectDetailClient = () => {
             {/* Proposals */}
 
             <ProposalSection
+              projectName={data[0]?.title}
               jobProposals={propData}
               shortlistedCandidates={shortlistedCandidates}
-              handleAction={handleAction}
+              updateProposalAction={updateProposalAction}
               actionloading={actionloading}
             />
 
@@ -342,14 +325,19 @@ export const ProjectDetailClient = () => {
   );
 }
 
-function ProposalSection({ jobProposals, shortlistedCandidates, handleAction, actionloading }) {
+function ProposalSection({ projectName, jobProposals, shortlistedCandidates, updateProposalAction, actionloading }) {
+
   const [filter, setFilter] = useState("all");
 
-  const filteredProposals = jobProposals?.filter((item) => {
-    if (filter === "all") return true;
-    if (filter === "shortlisted") return item?.status === "selected";
-    return true;
-  });
+  const handleAction = (item, action) => {
+    updateProposalAction({
+      id: item.id,
+      name: item.name,
+      email: item.email,
+      projectName: projectName,
+      action,
+    });
+  };
 
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
@@ -381,9 +369,10 @@ function ProposalSection({ jobProposals, shortlistedCandidates, handleAction, ac
       </div>
 
       <div className="p-6">
-        {filteredProposals?.length > 0 ? (
+
+        {(jobProposals?.length > 0 && filter === 'all') ?
           <div className="space-y-4">
-            {filteredProposals.map((item, index) => (
+            {jobProposals.map((item, index) => (
               <div
                 key={index}
                 className="flex flex-col md:flex-row md:items-center justify-between p-4 border border-gray-200 rounded-lg hover:border-emerald-300 hover:shadow-md transition-all duration-200"
@@ -504,36 +493,35 @@ function ProposalSection({ jobProposals, shortlistedCandidates, handleAction, ac
                 </div>
               </div>
             ))}
-
           </div>
-        ) : shortlistedCandidates?.length > 0 ? (
-          <div className="space-y-4">
-            {shortlistedCandidates.map((candidate, idx) => (
-              <div key={idx} className="flex items-center justify-between p-3 bg-blue-50 rounded-lg border border-blue-100">
-                <div>
-                  <p className="font-medium text-gray-900">{candidate?.name}</p>
-                  <p className="text-sm text-gray-600">{candidate?.email}</p>
-                  <p className="text-xs text-gray-500">Experience: {candidate?.experience} Years</p>
+          : (shortlistedCandidates?.length > 0 && filter === 'shortlisted') ?
+            <div className="space-y-4">
+              {shortlistedCandidates.map((candidate, idx) => (
+                <div key={idx} className="flex items-center justify-between p-3 bg-blue-50 rounded-lg border border-blue-100">
+                  <div>
+                    <p className="font-medium text-gray-900">{candidate?.name}</p>
+                    <p className="text-sm text-gray-600">{candidate?.email}</p>
+                    <p className="text-xs text-gray-500">Experience: {candidate?.experience} Years</p>
+                  </div>
+                  <button
+                    onClick={() => downloadFile(candidate?.fileUrl, candidate?.name)}
+                    className="inline-flex items-center gap-1 px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors text-sm"
+                  >
+                    <Download className="w-4 h-4" />
+                    CV
+                  </button>
                 </div>
-                <button
-                  onClick={() => downloadFile(candidate?.fileUrl, candidate?.name)}
-                  className="inline-flex items-center gap-1 px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors text-sm"
-                >
-                  <Download className="w-4 h-4" />
-                  CV
-                </button>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-12">
-            <Users className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">No Applications</h3>
-            <p className="text-gray-600">
-              CVs will appear here once candidates start applying.
-            </p>
-          </div>
-        )}
+              ))}
+            </div>
+            :
+            <div className="text-center py-12">
+              <Users className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+              <h3 className="text-lg font-medium text-gray-900 mb-2">No Applications</h3>
+              <p className="text-gray-600">
+                CVs will appear here once candidates start applying.
+              </p>
+            </div>
+        }
       </div>
     </div>
   );

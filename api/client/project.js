@@ -181,10 +181,10 @@ export function useProjectProposalAction() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [API_ROUTE.project.getProjectById],
+        queryKey: [API_ROUTE.project.getProjectPropsalByClient],
       });
       queryClient.invalidateQueries({
-        queryKey: [API_ROUTE.project.getProjectPropsalByClient],
+        queryKey: [API_ROUTE.project.getProjectShortListCandidate],
       });
       toast.success("Project Proposal Updated Successfully");
     },
