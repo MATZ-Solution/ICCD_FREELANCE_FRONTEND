@@ -1,63 +1,61 @@
-import { useNavigate } from 'react-router-dom';
-import EastIcon from '@mui/icons-material/East';
+import { Globe, Shield, Sparkles, Users, Award, Zap } from 'lucide-react';
 
 const Banner5 = () => {
-  const navigate = useNavigate();
+  const stats = [
+    { number: '10,000+', label: 'Jobs Created', icon: <Sparkles size={24} /> },
+    { number: '57', label: 'OIC Member States', icon: <Globe size={24} /> },
+    { number: '6,000+', label: 'Professionals Connected', icon: <Users size={24} /> },
+  ];
 
-  const cards = [
+  const features = [
     {
-      title: 'Browse Jobs',
-      description: 'Explore open roles and apply directly',
-      linkText: 'Job Marketplace',
-      route: '/browse-jobs',
+      icon: <Shield size={32} />,
+      title: 'Secure & Transparent',
+      description: 'Safe payment channels and verified profiles'
     },
     {
-      title: 'Browse Projects',
-      description: 'Find ready-to-start freelance projects',
-      linkText: 'Projects Board',
-      route: '/browse-projects',
+      icon: <Zap size={32} />,
+      title: 'Smart Matching',
+      description: 'AI-powered connections between talent and opportunity'
     },
     {
-      title: 'Browse Services',
-      description: 'Quick freelance tasks ready to grab',
-      linkText: 'Gig Catalog',
-      route: '/find-talent',
-    },
+      icon: <Award size={32} />,
+      title: 'Ethical Standards',
+      description: 'Fair compensation and respectful engagement'
+    }
   ];
 
   return (
-    <div className="px-4 sm:px-10 mt-10">
-      <section className="flex flex-col items-center md:flex-row md:justify-between md:p-12">
-        <div className="w-full text-center md:text-left mb-8 md:mb-0">
-          <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-black mb-4 leading-snug">
-            Browse Talent by Category
-          </h1>
-          <p className="text-base sm:text-lg md:text-xl text-gray-700 mb-6">
-            Looking for work? Explore opportunities across various categories.
-          </p>
+    <div className="px-4 sm:px-10 mt-16 mb-20">
+      
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {cards.map((card, index) => (
-              <div
-                key={index}
-                onClick={() => navigate(card.route)}
-                className="cursor-pointer flex flex-col items-center justify-center group rounded-xl bg-gray-100 px-6 py-6 hover:bg-[#15A9B2] hover:text-white transition-all duration-300 shadow-md text-center"
-              >
-                <h2 className="text-xl sm:text-2xl font-semibold mb-2 group-hover:text-white">
-                  {card.title}
-                </h2>
-                <p className="text-gray-700 group-hover:text-white mb-4 text-sm sm:text-base">
-                  {card.description}
-                </p>
-                <div className="flex items-center gap-2 text-[#15A9B2] group-hover:text-white font-medium">
-                  <span>{card.linkText}</span>
-                  <EastIcon fontSize="small" />
-                </div>
+      {/* Features Section */}
+      <section className="max-w-6xl mx-auto">
+        <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-center text-gray-800 mb-4">
+          Built on Values, Designed for Impact
+        </h2>
+        <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
+          More than a platform it's a movement for inclusive growth rooted in Islamic ethical principles
+        </p>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {features.map((feature, index) => (
+         <div className="animated-border bg-white rounded-2xl p-8 shadow-md hover:shadow-xl transition-all duration-300 group">
+
+              <div className="w-16 h-16 bg-[#215657]/10 rounded-xl flex items-center justify-center mb-6 text-[#215657] group-hover:bg-[#215657] group-hover:text-white transition-all duration-300">
+                {feature.icon}
               </div>
-            ))}
-          </div>
+              <h3 className="text-xl font-bold text-gray-800 mb-3">
+                {feature.title}
+              </h3>
+              <p className="text-gray-600 leading-relaxed">
+                {feature.description}
+              </p>
+            </div>
+          ))}
         </div>
       </section>
+
     </div>
   );
 };
