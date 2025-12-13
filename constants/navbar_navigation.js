@@ -5,8 +5,8 @@ export const navigation = [
     // { name: "Pricing", path: "/pricing" },
       { name: "Find Projects", path: "/browse-projects" },
 
-  { name: "Who We Are", path: "/aboutus" },
-  // { name: "Contact Us", href: "/contactus" },
+  { name: "About", path: "/aboutus" },
+  { name: "Contact Us", path: "/contactus" },
   // { name: "Login", path: "/login" },
 ];
 
