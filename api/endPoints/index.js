@@ -14,8 +14,9 @@ const API_ROUTE = {
     getProjectById: "/project/getProjectById",
     submitProposals: "/project/submitProposals",
     getProjectPropsalByClient: '/project/getProjectPropsalByClient',
-    editProject: '/project/editProject'
-  
+    editProject: '/project/editProject',
+    projectProposalAction: "/project/projectProposalAction",
+    getProjectShortListCandidate: "/project/getAllProject/shortlist"
   },
   job: {
     getAllJob: "/job/getAllJob",
@@ -27,9 +28,8 @@ const API_ROUTE = {
     applyjob: "/job/applyJob",
     getJobPropsalByClient: "/job/getJobPropsalByClient",
     closejob: "/job/closeJob",
-    jobProposalAction:"/job/jobProposalAction",
-    getJobShortListCandidate : "/job/getAllJobs/shortlist"
-    
+    jobProposalAction: "/job/jobProposalAction",
+    getJobShortListCandidate: "/job/getAllJobs/shortlist"
   },
   gigs: {
     getGigs: "/gigs/getGigs",
@@ -53,7 +53,6 @@ const API_ROUTE = {
     getClientDashboardData: '/client/getClientDashboardData',
     clientEditProfile: '/client/clientEditProfile'
   },
-
   superadmin: {
     getAllOrders: '/superadmin/getAllOrder',
     getAllFreelancers: '/superadmin/getAllFreelancers',
@@ -63,7 +62,6 @@ const API_ROUTE = {
     statisticData: '/superadmin/statisticData',
     getAllJobs: '/superadmin/getAllJobs',
     closeDispute: '/superadmin/closeDispute'
-
   },
   dispute: {
     getAllDisputeByClient: '/dispute/getAllDisputeByClient',
@@ -73,7 +71,7 @@ const API_ROUTE = {
     addResponseDispute: '/dispute/addResponseDispute',
     getAllDisputeById: '/dispute/getAllDisputeById',
     getAllDisputeByAdmin: '/dispute/getAllDisputeByAdmin',
-    getDisputeAdminById : '/dispute/getDisputeAdminById'
+    getDisputeAdminById: '/dispute/getDisputeAdminById'
   },
   order: {
     getAllOrderByFreelancer: '/order/getAllOrderByFreelancer',
@@ -81,9 +79,7 @@ const API_ROUTE = {
     getAllOrderByClient: '/order/getAllOrderByClient',
     getSingleOrderByClient: '/order/getSingleOrderByClient',
     getAllOrderByAdmin: '/order/getAllOrderByAdmin',
-
   },
-
   messages: {
     addMessageByUser: '/messages/addMessageByUser',
     getAllMessageByUser: '/messages/getAllMessageByUser',
@@ -97,20 +93,20 @@ const API_ROUTE = {
   rating: {
     addFreelancerRating: '/rating/addFreelancerRating',
     getFreelancerGigRatings: '/rating/getFreelancerGigRatings',
-    useFreelancerAverageRating : '/rating/getFreelancerAverageRating'
+    useFreelancerAverageRating: '/rating/getFreelancerAverageRating'
   },
   feedback: {
     getAllFeedback: '/feedback/getAllFeedback',
     addFeedback: '/feedback/addFeedback'
   },
-   issue: {
+  issue: {
     getAllIssue: '/issue/getAllIssue',
     addIssue: '/issue/addIssue'
   },
-   contact: {
+  contact: {
     getAllContacts: '/contact/getAllContacts',
     addContacts: '/contact/addContacts'
-  } 
+  }
 };
 
 export default API_ROUTE;

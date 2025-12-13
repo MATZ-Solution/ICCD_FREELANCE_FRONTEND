@@ -1,22 +1,17 @@
 import {
-  MapPin,
   Clock,
   Users,
-  Heart,
-  Facebook,
-  Twitter,
-  Linkedin,
-  Instagram,
-  CheckCircle,
-  Star,
   User,
+  Download,
+  Check,
+  XCircle,
   Briefcase,
   Calendar,
   Globe,
 } from "lucide-react"
 import { useParams } from "react-router-dom";
 import profilepic from "../../assets/freelancer_dashboard/client_img.png"
-import { useGetProjectProposalByClient, useGetProjectsById } from "../../../api/client/project";
+import { useGetProjectProposalByClient, useGetProjectsById, useGetProjectShortlistProposals, useProjectProposalAction } from "../../../api/client/project";
 import { formatSingleDate } from "../../../functions/timeFormat";
 import ProposalModal from "../../component/ProposalModal";
 import { useState } from "react";
@@ -29,20 +24,17 @@ export const ProjectDetailClient = () => {
 
   const { id } = useParams()
   let [show, setShow] = useState(false)
-  const pathName = useLocation().pathname
-  const { data, isSuccess, isPending, isError, isLoading } = useGetProjectsById(id)
-  const { data: propData, isSuccess: propSucc, isPending: propIsPend, isError: propIsErr, isLoading: propIsLoad } = useGetProjectProposalByClient(id)
-
   const [filter, setFilter] = useState("all")
 
-  console.log("props data: ", propData)
-  if (isLoading || propIsLoad) {
-    return <ICCDLoader />
-  }
+  const pathName = useLocation().pathname
 
-  if (isError || propIsErr) {
-    return <ICCDError />
-  }
+  const { data, isSuccess, isPending, isError, isLoading } = useGetProjectsById(id)
+  const { data: propData, isSuccess: propSucc, isPending: propIsPend, isError: propIsErr, isLoading: propIsLoad } = useGetProjectProposalByClient(id)
+  const { data: shortlistedCandidates, isPending: shortlistPending, isError: shortlistError } = useGetProjectShortlistProposals(id);
+  const { updateProposalAction, isLoading: actionloading } = useProjectProposalAction();
+
+  if (isError || propIsErr) return <ICCDError />
+  if (isLoading || propIsLoad) return <ICCDLoader />
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
@@ -122,148 +114,13 @@ export const ProjectDetailClient = () => {
 
             {/* Proposals */}
 
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-              <div className="bg-gradient-to-r from-emerald-500 to-teal-600 p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                <div>
-                  <h2 className="text-xl font-bold text-white">Candidate Proposals</h2>
-                  <p className="text-emerald-100 mt-1">
-                    {propData?.length || 0} candidates have applied
-                  </p>
-                </div>
-
-                <div className="flex flex-wrap items-center gap-2">
-                  {[
-                    { key: "all", label: "All" },
-                    { key: "shortlisted", label: "Shortlisted" },
-                  ].map((f) => (
-                    <button
-                      key={f.key}
-                      onClick={() => setFilter(f.key)}
-                      className={`px-4 py-2 rounded-lg border transition-all duration-200 text-sm font-medium ${filter === f.key
-                        ? "bg-white text-emerald-700 border-emerald-300"
-                        : "bg-white/20 text-white border-white/30 hover:bg-white/30"
-                        }`}
-                    >
-                      {f.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <div className="p-6">
-
-                <div className="space-y-4">
-                  {propData?.map((item, index) => (
-                    <div
-                      key={index}
-                      className="flex flex-col md:flex-row md:items-center justify-between p-4 border border-gray-200 rounded-lg hover:border-emerald-300 hover:shadow-md transition-all duration-200"
-                    >
-                      <div className="flex items-center gap-4 mb-3 md:mb-0 flex-1">
-                        <User className="w-5 h-5 text-gray-400" />
-                        <div className="flex-1">
-                          <h3 className="font-semibold text-gray-900">{item?.name}</h3>
-                          <p className="text-sm text-gray-600 flex items-center gap-1">
-                            <Briefcase className="w-3 h-3" />
-                            Experience: {item?.experience ? <p>{item?.experience} Years</p> : <p className="text-red-600">N/A</p>}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-
-                </div>
-
-                {/* {propData?.length > 0 ? (
-                      <div className="space-y-4">
-                        {propData?.map((item, index) => (
-                          <div
-                            key={index}
-                            className="flex flex-col md:flex-row md:items-center justify-between p-4 border border-gray-200 rounded-lg hover:border-emerald-300 hover:shadow-md transition-all duration-200"
-                          >
-                            <div className="flex items-center gap-4 mb-3 md:mb-0 flex-1">
-                              <User className="w-5 h-5 text-gray-400" />
-                              <div className="flex-1">
-                                <h3 className="font-semibold text-gray-900">{item?.name}</h3>
-                                <p className="text-sm text-gray-600 flex items-center gap-1">
-                                  <Briefcase className="w-3 h-3" />
-                                  Experience: {item?.experience} Years
-                                </p>
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-            
-                      </div>
-                    ) : shortlistedCandidates?.length > 0 ? (
-                      <div className="space-y-4">
-                        {shortlistedCandidates.map((candidate, idx) => (
-                          <div key={idx} className="flex items-center justify-between p-3 bg-blue-50 rounded-lg border border-blue-100">
-                            <div>
-                              <p className="font-medium text-gray-900">{candidate?.name}</p>
-                              <p className="text-sm text-gray-600">{candidate?.email}</p>
-                              <p className="text-xs text-gray-500">Experience: {candidate?.experience} Years</p>
-                            </div>
-                            <button
-                              onClick={() => downloadFile(candidate?.fileUrl, candidate?.name)}
-                              className="inline-flex items-center gap-1 px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors text-sm"
-                            >
-                              <Download className="w-4 h-4" />
-                              CV
-                            </button>
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      <div className="text-center py-12">
-                        <Users className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                        <h3 className="text-lg font-medium text-gray-900 mb-2">No Applications</h3>
-                        <p className="text-gray-600">
-                          CVs will appear here once candidates start applying.
-                        </p>
-                      </div>
-                    )} */}
-              </div>
-            </div>
-
-            {/* <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300">
-              <div className="bg-gradient-to-r from-emerald-50 to-teal-50 p-6 border-b border-gray-200">
-                <h2 className="text-xl font-bold text-gray-900">Clients & Proposals</h2>
-              </div>
-              <div className="px-4 overflow-x-auto rounded-lg">
-                <table className="min-w-full bg-white">
-                  <thead className="bg-[#47AAB3] text-white text-sm sticky top-0">
-                    <tr>
-                      <th className="px-6 py-3 text-left font-medium">Name</th>
-                      <th className="px-6 py-3 text-left font-medium">Experience</th>
-                      <th className="px-6 py-3 text-center font-medium">CVs</th>
-                      <th className="px-6 py-3"></th>
-                    </tr>
-                  </thead>
-                  <tbody className="text-sm divide-y divide-gray-200">
-                    {propData.length > 0 ? (
-                    propData?.map((item, index) => (
-                      <tr key={index} className="hover:bg-gray-50">
-                        <td className="px-6 py-4 whitespace-nowrap flex items-center gap-3">
-                          <img src={item?.freelancerImg} className="w-9 h-9 rounded-full bg-gray-200"></img>
-                          <span className="font-medium">{item?.name}</span>
-                        </td>
-                        <td className="px-6 py-4">{item?.experience|| <p className="text-red-600">N/A</p>}</td>
-                        <td className="px-6 py-4 text-right">
-                          <button onClick={()=> downloadFile(item?.fileUrl, item?.name)} className="text-[#47AAB3] hover:underline text-sm">
-                            Download proposal
-                          </button>
-                        </td>
-                      </tr>
-                    )) ) : (
-                  <tr>
-                    <td colSpan="3" className="px-6 py-4 text-center text-gray-500">
-                    No CVs have been submitted for review yet.                    </td>
-                  </tr>
-                )}
-                  </tbody>
-                </table>
-              </div>
-            </div> */}
+            <ProposalSection
+              projectName={data[0]?.title}
+              jobProposals={propData}
+              shortlistedCandidates={shortlistedCandidates}
+              updateProposalAction={updateProposalAction}
+              actionloading={actionloading}
+            />
 
             {/* Deliverables */}
             <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-300">
@@ -463,6 +320,208 @@ export const ProjectDetailClient = () => {
             </div>
           </div>
         </div>
+      </div>
+    </div>
+  );
+}
+
+function ProposalSection({ projectName, jobProposals, shortlistedCandidates, updateProposalAction, actionloading }) {
+
+  const [filter, setFilter] = useState("all");
+
+  const handleAction = (item, action) => {
+    updateProposalAction({
+      id: item.id,
+      name: item.name,
+      email: item.email,
+      projectName: projectName,
+      action,
+    });
+  };
+
+  return (
+    <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+      <div className="bg-gradient-to-r from-emerald-500 to-teal-600 p-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h2 className="text-xl font-bold text-white">Candidate Proposals</h2>
+          <p className="text-emerald-100 mt-1">
+            {jobProposals?.length || 0} candidates have applied
+          </p>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-2">
+          {[
+            { key: "all", label: "All" },
+            { key: "shortlisted", label: "Shortlisted" },
+          ].map((f) => (
+            <button
+              key={f.key}
+              onClick={() => setFilter(f.key)}
+              className={`px-4 py-2 rounded-lg border transition-all duration-200 text-sm font-medium ${filter === f.key
+                ? "bg-white text-emerald-700 border-emerald-300"
+                : "bg-white/20 text-white border-white/30 hover:bg-white/30"
+                }`}
+            >
+              {f.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="p-6">
+
+        {(jobProposals?.length > 0 && filter === 'all') ?
+          <div className="space-y-4">
+            {jobProposals.map((item, index) => (
+              <div
+                key={index}
+                className="flex flex-col md:flex-row md:items-center justify-between p-4 border border-gray-200 rounded-lg hover:border-emerald-300 hover:shadow-md transition-all duration-200"
+              >
+                <div className="flex items-center gap-4 mb-3 md:mb-0 flex-1">
+                  <User className="w-5 h-5 text-gray-400" />
+                  <div className="flex-1">
+                    <h3 className="font-semibold text-gray-900">{item?.name}</h3>
+                    <p className="text-sm text-gray-600 flex items-center gap-1">
+                      <Briefcase className="w-3 h-3" />
+                      Experience: {item?.experience} Years
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex flex-col lg:flex-row items-center gap-2">
+                  {item?.status === "selected" ? (
+                    <span className="inline-flex items-center gap-2 px-4 py-2 bg-green-50 text-green-700 rounded-lg border border-green-200">
+                      <Check className="w-4 h-4" />
+                      Shortlisted
+                    </span>
+                  ) : item?.status === "not selected" ? (
+                    <span className="inline-flex items-center gap-2 px-4 py-2 bg-red-50 text-red-700 rounded-lg border border-red-200">
+                      <XCircle className="w-4 h-4" />
+                      Rejected
+                    </span>
+                  ) : (
+                    <>
+                      <button
+                        onClick={() => downloadFile(item?.fileUrl, item?.name)}
+                        className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 rounded-lg transition-colors duration-200 border border-emerald-200"
+                      >
+                        <Download className="w-4 h-4" />
+                        Download CV
+                      </button>
+
+                      <button
+                        onClick={() => handleAction(item, "accept")}
+                        disabled={actionloading}
+                        className={`inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg border transition-colors duration-200 ${actionloading
+                          ? "bg-green-100 text-green-500 border-green-200 cursor-not-allowed"
+                          : "bg-green-50 hover:bg-green-100 text-green-700 border-green-200"
+                          }`}
+                      >
+                        {actionloading ? (
+                          <>
+                            <svg
+                              className="animate-spin h-4 w-4 text-green-600"
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                            >
+                              <circle
+                                className="opacity-25"
+                                cx="12"
+                                cy="12"
+                                r="10"
+                                stroke="currentColor"
+                                strokeWidth="4"
+                              />
+                              <path
+                                className="opacity-75"
+                                fill="currentColor"
+                                d="M4 12a8 8 0 018-8v4l3.5-3.5L12 0v4a8 8 0 01-8 8z"
+                              />
+                            </svg>
+                            Processing...
+                          </>
+                        ) : (
+                          <>
+                            <Check className="w-4 h-4" />
+                            Accept
+                          </>
+                        )}
+                      </button>
+
+                      <button
+                        onClick={() => handleAction(item, "rejected")}
+                        disabled={actionloading}
+                        className={`inline-flex items-center justify-center gap-2 px-4 py-2 rounded-lg border transition-colors duration-200 ${actionloading
+                          ? "bg-red-100 text-red-500 border-red-200 cursor-not-allowed"
+                          : "bg-red-50 hover:bg-red-100 text-red-700 border-red-200"
+                          }`}
+                      >
+                        {actionloading ? (
+                          <>
+                            <svg
+                              className="animate-spin h-4 w-4 text-red-600"
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                            >
+                              <circle
+                                className="opacity-25"
+                                cx="12"
+                                cy="12"
+                                r="10"
+                                stroke="currentColor"
+                                strokeWidth="4"
+                              />
+                              <path
+                                className="opacity-75"
+                                fill="currentColor"
+                                d="M4 12a8 8 0 018-8v4l3.5-3.5L12 0v4a8 8 0 01-8 8z"
+                              />
+                            </svg>
+                            Processing...
+                          </>
+                        ) : (
+                          <>
+                            <XCircle className="w-4 h-4" />
+                            Reject
+                          </>
+                        )}
+                      </button>
+                    </>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+          : (shortlistedCandidates?.length > 0 && filter === 'shortlisted') ?
+            <div className="space-y-4">
+              {shortlistedCandidates.map((candidate, idx) => (
+                <div key={idx} className="flex items-center justify-between p-3 bg-blue-50 rounded-lg border border-blue-100">
+                  <div>
+                    <p className="font-medium text-gray-900">{candidate?.name}</p>
+                    <p className="text-sm text-gray-600">{candidate?.email}</p>
+                    <p className="text-xs text-gray-500">Experience: {candidate?.experience} Years</p>
+                  </div>
+                  <button
+                    onClick={() => downloadFile(candidate?.fileUrl, candidate?.name)}
+                    className="inline-flex items-center gap-1 px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors text-sm"
+                  >
+                    <Download className="w-4 h-4" />
+                    CV
+                  </button>
+                </div>
+              ))}
+            </div>
+            :
+            <div className="text-center py-12">
+              <Users className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+              <h3 className="text-lg font-medium text-gray-900 mb-2">No Applications</h3>
+              <p className="text-gray-600">
+                CVs will appear here once candidates start applying.
+              </p>
+            </div>
+        }
       </div>
     </div>
   );
