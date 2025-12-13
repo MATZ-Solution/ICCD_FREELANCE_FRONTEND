@@ -534,9 +534,11 @@ export const router = createBrowserRouter([
     path: "/freelancer/projects/:id",
     element: withSuspense(
       <AuthRoute>
-        <MainTemplate isShowFooter={false}>
-          <ProjectDetailFreelancer />
-        </MainTemplate>
+        <IsFreelancerProfile>
+          <MainTemplate isShowFooter={false}>
+            <ProjectDetailFreelancer />
+          </MainTemplate>
+        </IsFreelancerProfile>
       </AuthRoute>
     ),
   },

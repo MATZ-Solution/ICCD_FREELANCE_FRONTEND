@@ -9,6 +9,23 @@ import { setUserProfile } from "../../redux/slices/userProfileSlice";
 import Success from '../../src/component/freelancer_dashboard/success';
 import { toast } from "react-toastify";
 
+
+export function useCheckFreelancer() {
+  const { data, isSuccess, isPending, isError, isLoading } = useQuery({
+    queryKey: [API_ROUTE.freelancer.checkIsFreelancer],
+    queryFn: async () => await api.get(`${API_ROUTE.freelancer.checkIsFreelancer}`),
+    staleTime: 1 * 24 * 60 * 60,
+    refetchOnWindowFocus: false,
+  });
+  return {
+    data: data?.data?.data,
+    isSuccess,
+    isPending,
+    isError,
+    isLoading,
+  };
+}
+
 export function useGetFreelDashboardData() {
    const freelancerDetails = useSelector(state=> state.userProfile.userProfile)
    const { id } = freelancerDetails

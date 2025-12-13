@@ -1,22 +1,32 @@
-import React, { useEffect } from 'react';
-import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
-import ICCDLoader from '../component/loader';
-import { useLocation } from 'react-router-dom';
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import ICCDLoader from "../component/loader";
+import { useCheckFreelancer } from "../../api/client/freelancer";
 
 function IsFreelancerProfile({ children }) {
+    
+  const navigate = useNavigate();
 
-    const navigate = useNavigate();
-    const pathName = useLocation().pathname
-    const freelancer = useSelector(state => state.userProfile.userProfile);
+  const { data, isLoading, isError } = useCheckFreelancer();
 
-    useEffect(() => {
-        console.log("is freelancer profile useEffect is called!")
-        if (!freelancer?.id) {  
-           navigate('/freelancer/profile-form/1');  
-        }
-    }, [navigate]);
+  useEffect(() => {
+    if (!isLoading && data?.length === 0) {
+      navigate("/freelancer/profile-form/1", { replace: true });
+    }
+  }, [data, isLoading, navigate]);
+
+  if (isLoading) return <ICCDLoader />;
+
+  if (isError) {
+    return <p>Something went wrong. Please try again.</p>;
+  }
+
+  // If profile exists, allow access
+  if (data?.length > 0) {
     return <>{children}</>;
+  }
+
+  return null;
 }
 
 export default IsFreelancerProfile;
